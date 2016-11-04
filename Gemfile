@@ -58,9 +58,18 @@ end
 gem 'rsolr', '~> 1.0'
 gem 'devise'
 gem 'devise-guests', '~> 0.5'
+
 group :development, :test do
   gem 'fcrepo_wrapper'
   gem 'rspec-rails'
+end
+
+group :development do
+  gem 'capistrano'
+  gem 'capistrano-bundler'
+  gem 'capistrano-passenger', '>= 0.1.1'
+  gem 'capistrano-rails'
+  gem 'capistrano-rvm'
 end
 
 gem 'hydra-role-management'
