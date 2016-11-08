@@ -66,22 +66,23 @@ body {
 }
 
 @keyframes home-slides {
-   0%{
-       background-image: image-url('homepage1.jpg');
-   }
-   10% {
-       background-image: image-url('homepage2.jpg');
-   }
-   30%{
-       background-image: image-url('homepage3.jpg');
-   }
-   50% {
-       background-image: image-url('homepage4.jpg');
-   }
-   70% {
-       background-image: image-url('homepage5.jpg');
-   }
-   90% {
+
+   0% {
        background-image: image-url('homepage1.jpg');
       }
+   20% {
+       background-image: image-url('homepage2.jpg');
+   }
+   40% {
+       background-image: image-url('homepage3.jpg');
+   }
+   60% {
+       background-image: image-url('homepage4.jpg');
+   }
+   80% {
+       background-image: image-url('homepage5.jpg');
+   }
+   100% {
+       background-image: image-url('homepage1.jpg');
+   }
 }
