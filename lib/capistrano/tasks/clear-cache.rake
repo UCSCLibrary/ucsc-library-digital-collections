@@ -2,7 +2,7 @@ namespace :ucsc_sufia_based_dams  do
   task :clear_cache do
     on roles(:app), in: :sequence, wait: 5 do
       print "Clearing cache"
-      execute "Rails.cache.clear"
+      Rails.cache.clear
     end
   end
 end
