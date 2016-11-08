@@ -1,0 +1,82 @@
+$ucsc-beige: #f5f4eb;
+$ucsc-darkbeige: darken($ucsc-beige,10%);
+$ucsc-darkblue: #2a5459;
+$ucsc-lightblue: #EEF;
+
+$header-height: 85px;
+
+a:hover {
+    background-color: $ucsc-lightblue;
+}
+
+#masthead {
+    color:$ucsc-darkblue;
+    min-height: $header-height;
+    background-color: $ucsc-darkbeige;
+    li > a {
+        color:$ucsc-darkblue;
+    }                   
+    a#logo {
+        color: $ucsc-darkblue;
+        padding-top:5px;
+    }
+
+    #vector-icon-ucsc:before {
+        content: image-url('ucsc-logo.svg');
+    }
+
+    .navbar-toggle {
+        position:absolute;
+        right:0px;
+        top:0px;
+        background-color:$ucsc-darkbeige;
+    }
+
+    .navbar-header {
+        min-height:$header-height;
+    }
+
+    .navbar-nav > .open > a {
+        background-color:darken($ucsc-darkbeige,10%);
+        color:darken($ucsc-darkblue,10%)
+    }
+
+    ul#user_utility_links li {
+        min-width:135px;
+    }
+    
+}
+
+body {
+    background-color: $ucsc-beige;
+}
+
+#home_header {
+//    background-image:none;
+    background-image: image-url('homepage1.jpg');
+    animation-name: home-slides;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-duration: 20s;
+}
+
+@keyframes home-slides {
+   0%{
+       background-image: image-url('homepage1.jpg');
+   }
+   10% {
+       background-image: image-url('homepage2.jpg');
+   }
+   30%{
+       background-image: image-url('homepage3.jpg');
+   }
+   50% {
+       background-image: image-url('homepage4.jpg');
+   }
+   70% {
+       background-image: image-url('homepage5.jpg');
+   }
+   90% {
+       background-image: image-url('homepage1.jpg');
+      }
+}
