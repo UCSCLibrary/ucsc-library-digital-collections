@@ -4,6 +4,8 @@ module CurationConcerns
   class WorkForm < Sufia::Forms::WorkForm
     self.model_class = ::Work
     self.terms += [:resource_type]
-
+    def primary_terms
+      required_fields + [:description,:identifier,:notes,:keyword]
+    end
   end
 end
