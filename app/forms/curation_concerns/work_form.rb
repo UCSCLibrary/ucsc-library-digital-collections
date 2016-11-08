@@ -5,7 +5,7 @@ module CurationConcerns
     self.model_class = ::Work
     self.terms += [:resource_type]
     def primary_terms
-      required_fields + [:description,:identifier,:notes,:keyword]
+      required_fields + [:description]
     end
   end
 end
