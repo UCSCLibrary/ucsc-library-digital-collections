@@ -56,7 +56,7 @@ body {
     background-color: $ucsc-beige;
 }
 
-#home_header,div.image-masthead {
+#home_header,div.image-masthead > div.background-container {
 //    background-image:none;
     background-image: image-url('homepage1.jpg');
     animation-name: home-slides;
