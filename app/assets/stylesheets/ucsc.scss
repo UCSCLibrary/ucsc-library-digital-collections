@@ -1,28 +1,33 @@
 $ucsc-beige: #f5f4eb;
-$ucsc-darkbeige: darken($ucsc-beige,10%);
+$ucsc-darkbeige: darken($ucsc-beige,70%);
 $ucsc-darkblue: #2a5459;
-$ucsc-lightblue: #EEF;
+$ucsc-lightblue: #AdAdBd;
 
-$header-height: 85px;
+$header-height: 40px;
 
 a:hover {
     background-color: $ucsc-lightblue;
 }
 
 #masthead {
-    color:$ucsc-darkblue;
+    color:$ucsc-lightblue;
     min-height: $header-height;
     background-color: $ucsc-darkbeige;
     li > a {
-        color:$ucsc-darkblue;
+        color:$ucsc-lightblue;
     }                   
     a#logo {
-        color: $ucsc-darkblue;
+        color: $ucsc-lightblue;
         padding-top:5px;
     }
 
-    #vector-icon-ucsc:before {
-        content: image-url('ucsc-logo.svg');
+    span.institution_name {
+        position: relative;
+        top: -40%;
+    }
+
+    #icon-ucsc:before {
+        content: image-url('ucsc-logo.png');
     }
 
     .navbar-toggle {
@@ -51,7 +56,7 @@ body {
     background-color: $ucsc-beige;
 }
 
-#home_header {
+#home_header,div.image-masthead {
 //    background-image:none;
     background-image: image-url('homepage1.jpg');
     animation-name: home-slides;
