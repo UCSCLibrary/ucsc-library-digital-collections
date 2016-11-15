@@ -1,5 +1,6 @@
 require 'resque/server'
 Rails.application.routes.draw do
+  mount BrowseEverything::Engine => '/browse'
   mount HydraHls::Engine => '/'
 
   Hydra::BatchEdit.add_routes(self)

@@ -649,6 +649,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  browse-everything
   byebug
   capistrano
   capistrano-bundler
@@ -683,4 +684,4 @@ DEPENDENCIES
   web-console
 
 BUNDLED WITH
-   1.12.5
+   1.13.6
