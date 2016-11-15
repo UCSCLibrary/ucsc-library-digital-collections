@@ -1,0 +1,27 @@
+en:
+  curation_concerns:
+    product_name: "Digital Assets"
+    institution_name:  &INSTITUTION_NAME "UC Santa Cruz"
+    division:
+      name: "Digital Library Initiatives"
+      homepage_url: "http://library.ucsc.edu/exhibits/"
+    document_language: "en"
+    institution:
+      name: "UC Santa Cruz"
+      homepage_url: "http://ucsc.edu"
+    schema_org:
+      resource_type:
+        Article: "http://schema.org/Article"
+        Audio: "http://schema.org/AudioObject"
+        Book: "http://schema.org/Book"
+        Conference Proceeding: "http://schema.org/ScholarlyArticle"
+        Course: "http://schema.org/Course"
+        Dataset: "http://schema.org/Dataset"
+        Dissertation: "http://schema.org/ScholarlyArticle"
+        Image: "http://schema.org/ImageObject"
+        Map or Cartographic Material: "http://schema.org/Map"
+        Masters Thesis: "http://schema.org/ScholarlyArticle"
+        Part of Book: "http://schema.org/Book"
+        Research Paper: "http://schema.org/ScholarlyArticle"
+        Software or Program Code: "http://schema.org/Code"
+        Video: "http://schema.org/VideoObject"
