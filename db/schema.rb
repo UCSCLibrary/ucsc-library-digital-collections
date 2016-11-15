@@ -10,7 +10,54 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161102202430) do
+ActiveRecord::Schema.define(version: 20161109012349) do
+
+  create_table "bmi_cells", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "bmi_row_id"
+    t.string   "name"
+    t.string   "value_string"
+    t.string   "value_url"
+    t.integer  "status"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.index ["bmi_row_id"], name: "index_bmi_cells_on_bmi_row_id", using: :btree
+  end
+
+  create_table "bmi_ingests", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "user_id"
+    t.string   "filename"
+    t.string   "class_name"
+    t.string   "status"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.string   "identifier"
+    t.boolean  "replace_files"
+    t.string   "name"
+    t.index ["user_id"], name: "index_bmi_ingests_on_user_id", using: :btree
+  end
+
+  create_table "bmi_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "bmi_ingest_id"
+    t.integer  "bmi_row_id"
+    t.integer  "bmi_cell_id"
+    t.string   "type"
+    t.string   "subtype"
+    t.string   "message"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.index ["bmi_cell_id"], name: "index_bmi_logs_on_bmi_cell_id", using: :btree
+    t.index ["bmi_ingest_id"], name: "index_bmi_logs_on_bmi_ingest_id", using: :btree
+    t.index ["bmi_row_id"], name: "index_bmi_logs_on_bmi_row_id", using: :btree
+  end
+
+  create_table "bmi_rows", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "bmi_ingest_id"
+    t.string   "status"
+    t.string   "text"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.index ["bmi_ingest_id"], name: "index_bmi_rows_on_bmi_ingest_id", using: :btree
+  end
 
   create_table "bookmarks", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id",                     null: false
@@ -352,6 +399,10 @@ ActiveRecord::Schema.define(version: 20161102202430) do
     t.index ["work_id"], name: "index_work_view_stats_on_work_id", using: :btree
   end
 
+  add_foreign_key "bmi_cells", "bmi_rows"
+  add_foreign_key "bmi_ingests", "users"
+  add_foreign_key "bmi_logs", "bmi_ingests"
+  add_foreign_key "bmi_rows", "bmi_ingests"
   add_foreign_key "curation_concerns_operations", "users"
   add_foreign_key "mailboxer_conversation_opt_outs", "mailboxer_conversations", column: "conversation_id", name: "mb_opt_outs_on_conversations_id"
   add_foreign_key "mailboxer_notifications", "mailboxer_conversations", column: "conversation_id", name: "notifications_on_conversation_id"

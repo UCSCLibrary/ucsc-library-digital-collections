@@ -1,0 +1,136 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+    <strong>User:</strong>
+    <%= @bmi_ingest.user_id %>
+</p>
+
+<p>
+    <strong>Filename:</strong>
+    <%= @bmi_ingest.filename %>
+</p>
+
+<p>
+    <strong>Status:</strong>
+    <%= @bmi_ingest.status %>
+</p>
+
+<p>
+    <strong>Class:</strong>
+    <%= @bmi_ingest.Class %>
+</p>
+
+<p>
+    <strong>Identifier:</strong>
+    <%= @bmi_ingest.identifier %>
+</p>
+
+<p>
+    <strong>Replace files:</strong>
+    <%= @bmi_ingest.replace_files %>
+</p>
+
+<%= link_to 'Edit', edit_bmi_ingest_path(@bmi_ingest) %> |
+<%= link_to 'Back', bmi_ingests_path %>
+
+
+<div id="unparsed-rows">
+  <h3>Unparsed Rows</h3>
+  <button class="dropdown">show/hide</button>
+  <div class="hideable">
+    <button class="dropdown">Actions</button>
+    <ul class="actions hideable">
+      <li>Retry Parsing</li>
+      <li>Edit in OpenRefine</li>
+      <li>Export as CSV</li>
+      <li>Export as XML</li>
+      <li>Cancel and Remove</li>
+    </ul>
+    <ul class="rows">
+      <li>
+        <div class="row-header">
+          <input type="checkbox" selected="selected" />
+          <label>Row 12</label>
+        </div>
+        <button  class="dropdown">show/hide</button>
+        <div class="hideable">
+          <p>Here there will be two tabs. One will include metadata from the row, with errors displayed prominently. Another will show only the errors, if there are any. A third will show all log entries related to this row.</p>
+        </div>  
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div id="pending">
+  <h3>Parsed Rows Pending Ingest</h3>
+  <button class="dropdown">show/hide</button>
+  <div class="hideable">
+    <button>Actions</button>
+    <ul class="actions">
+      <li>Ingest Now</li>
+      <li>Edit in OpenRefine</li>
+      <li>Export as CSV</li>
+      <li>Export as XML</li>
+      <li>Cancel and Remove</li>
+    </ul>
+    <ul class="rows">
+      <li>
+        <div class="row-header">
+          <label>Sample Title</label>
+          <button class="dropdown">show/hide</button>
+          <input type="checkbox" selected="selected" />
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div id = "errors">
+  <h3>Ingest Errors</h3>
+  <button class="dropdown">show/hide</button>
+  <div class="hideable">
+    <button>Actions</button>
+    <ul class="actions">
+      <li>Retry Ingest</li>
+      <li>Edit in OpenRefine</li>
+      <li>Export Metadata as CSV</li>
+      <li>Export Metadata as XML</li>
+      <li>Cancel and Remove</li>
+</li>
+</ul>
+<ul class="rows">
+  <li>
+    <div class="row-header">
+      <label>Sample Title (or unparsed row #)</label>
+      <button class="dropdown">show/hide</button>
+      <input type="checkbox" selected="selected" />
+    </div>
+
+  </li>
+</ul>
+</div>
+</div>
+
+<div id = "Complete">
+  <h3>Successfully Ingested Items</h3>
+  <button class="dropdown">show/hide</button>
+  <div class="hideable">
+    <button>Actions</button>
+    <ul class="actions">
+      <li>Export Metadata as CSV</li>
+      <li>Export Metadata as XML</li>
+      <li>Cancel and Remove</li>
+</li>
+</ul>
+<ul class="rows">
+  <li>
+    <div class="row-header">
+      <label>Sample Title</label>
+      <button class="dropdown">show/hide</button>
+      <input type="checkbox" selected="selected" />
+    </div>
+
+  </li>
+</ul>
+</div>
+</div>
