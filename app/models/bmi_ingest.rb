@@ -2,6 +2,7 @@ class BmiIngest < ApplicationRecord
   belongs_to :user
   has_many :bmi_rows
   enum status: [ :pending, :checking, :check_passed, :check_failed, :processing, :completed, :completed_with_errors, :failed ]
+  require 'csv'   
 
   def self.create_new(params)
     instance = self.new(params);
@@ -14,14 +15,54 @@ class BmiIngest < ApplicationRecord
 
   def parse
     #create log for parsing file
+    log!("ingest","parse","Parsing ingest #"+id+" filename:"+filename)
+    #this array tracks parsed records
+    parsed = []
     #validate file
-    #parse first line as header array
-    #log any errors in this parsing
-    #if valid header, loop through file lines
-    #skip any line previously parsed correctly
-    #create a row and a log entry for each line
-    #if a row parses correctly, create cells
-    #return status, error list & valid row/cell array.
+    csv_text = File.read(filename)
+    csv = CSV.parse(csv_text, :headers => true)
+    #TODO validate csv.headers 
+    # abort if this returns false
+    parseHeaders(csv.headers)
+    
+    #Create Row
+    rows = self.rows
+    csv.each do |key,value|
+      next if value.blank?
+      #skip any line previously parsed correctly
+      #loop through the existing rows for this ingest
+      this_row = nil;
+      rows.each do |row|
+        next if row.text.slice(0,1000) != text.slice(1000)
+        next if row.text.slice(0,5000) != text.slice(5000)
+        this_row = row
+      end
+      if this_row.nil?
+        this_row = self.rows.create(status: "new",text: text)
+        parsed[this_row.id] = []
+      else
+        next if this.row.status == "parsed" || this.row.status == "ingested"
+      end
+
+      #Create Cells
+      #TODO: try - catch here
+      cells = this_row.cells
+      row_data = this_row.parse
+      row_data.each do |property,value|
+        row_errors = []
+        this_cell = nil;
+        cells.each do |cell|
+          next if cell.name != property
+          next if cell.value_string != value && cell.value_url != value
+          this_cell = cell
+        end
+        if this_cell.nil?
+          this_cell = this_row.cells.create(name: property, value_string: value, status: "new")
+          parsed[this_row.id] = this_cell.id
+        end
+      end
+    end
+    return parsed
   end
 
   def setFile(uploaded_file)
@@ -50,9 +91,9 @@ class BmiIngest < ApplicationRecord
     return 0
   end
 
-  def parseHeader(headerString)
-    #return ordered array of valid predicates 
-    # or create log entry & return error message
+  def parseHeaders(headers)
+    # each should correspond to a valid property
+    # log any errors 
   end
 
   def ingest

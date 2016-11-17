@@ -1,7 +1,7 @@
 class UcscCreateWorkJob < ActiveJob::Base
   queue_as :ingest
 
-  def perform(workClass,user,attributes)
+  def perform(workClass,user,attributes, parent_id=nil)
     # Get this to work in an initializer somewhere, right?
     #CurationConcerns::CurationConcern.actor_factory = Ucsc::ActorFactory
 
@@ -15,4 +15,6 @@ class UcscCreateWorkJob < ActiveJob::Base
     # if false, error messages are:
     # work.errors.full_messages.join(' '))
   end
+
+  #todo on complete update status of parent
 end
