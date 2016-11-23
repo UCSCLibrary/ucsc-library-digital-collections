@@ -69,7 +69,7 @@ class BmiIngestsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def bmi_ingest_params
-      params.require(:bmi_ingest).permit(:id,:user_id, :filename, :status, :class_name, :identifier, :replace_files)
+      params.require(:bmi_ingest).permit(:id,:user_id, :name, :file, :class_name, :identifier, :replace_files)
 
     end
 end

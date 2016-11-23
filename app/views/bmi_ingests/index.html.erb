@@ -6,12 +6,11 @@
   <thead>
     <tr>
       <th>User</th>
-      <th>New</th>
       <th>File</th>
       <th>Status</th>
       <th>Work class</th>
-      <th>Identifier</th>
-      <th>Replace files</th>
+<!--  <th>Identifier</th>
+      <th>Replace files</th>  -->
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -20,12 +19,11 @@
     <% @bmi_ingests.each do |bmi_ingest| %>
       <tr>
         <td><%= bmi_ingest.user_id %></td>
-        <td><%= bmi_ingest.new %></td>
-        <td><%= bmi_ingest.file %></td>
+        <td><%= bmi_ingest.filename %></td>
         <td><%= bmi_ingest.status %></td>
-        <td><%= bmi_ingest.work_class %></td>
-        <td><%= bmi_ingest.identifier %></td>
-        <td><%= bmi_ingest.replace_files %></td>
+        <td><%= bmi_ingest.class %></td>
+<!--    <td><%#= bmi_ingest.identifier %></td>
+        <td><%#= bmi_ingest.replace_files %></td>  -->
         <td><%= link_to 'Show', bmi_ingest %></td>
         <td><%= link_to 'Edit', edit_bmi_ingest_path(bmi_ingest) %></td>
         <td><%= link_to 'Destroy', bmi_ingest, method: :delete, data: { confirm: 'Are you sure?' } %></td>

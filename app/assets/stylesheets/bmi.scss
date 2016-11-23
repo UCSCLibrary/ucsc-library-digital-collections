@@ -1,0 +1,31 @@
+#bmi-tabs div {
+                  
+    span.tab-title {
+        font-size: 1.2em;
+        line-height: 2em;
+        
+    }
+
+    span.tab-buttons {
+        float: right;
+        ul.hideable {
+            display:none;
+        }
+    }
+
+    ul.rows {
+        list-style:none;
+        li {
+            background-color: lightgray;
+            padding: 5px;
+            
+            position: relative;
+            button.dropdown {
+                line-height: 1em;
+                right: 8px;
+                top: 2px;
+                position: absolute;
+            }
+        }
+    }
+}

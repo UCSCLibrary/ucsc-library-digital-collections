@@ -1,6 +1,6 @@
 class BmiRow < ApplicationRecord
   belongs_to :bmi_ingest 
-  has_many :bmi_cell
+  has_many :bmi_cells
 
   def parse
     #TODO
@@ -23,32 +23,31 @@ class BmiRow < ApplicationRecord
   def createNewCells!(row_hash)
     row_hash.each do |property,value|
       row_errors = []
-      cell = self.cells.find_by(name: property, value_string: value )
+      cell = bmi_cells.find_by(name: property, value_string: value )
       if cell.nil?
-        cell = self.cells.find_by(name: property, value_url: value )
+        cell = bmi_cells.find_by(name: property, value_url: value )
       end
       if cell.nil?
         #it is a new cell
-        cell = self.cells.create(name: property, value_string: value, status: "new")
-        parsed[bmi_row.id] = bmi_cell.id
+        cell = self.bmi_cells.create(name: property, value_string: value, status: "pending")
       end
     end
   end
 
   def ingest!(user=User.first)
     #TODO THIS SHOULD NEVER DEFAULT TO ME IN PRODUCTION
-    metadata = []
-    self.cells.each do |cell|
+    metadata = {}
+    bmi_cells.each do |cell|
       if cell.name == "file" && !cell.value_string.blank?
         file = File.open(File.join(BASE_PATH,cell.value_string.blank?))
         uploaded_file = Sufia::UploadedFile.create(file: file, user: user)
         (metadata[:uploaded_files] ||= []) << uploaded_file.id if !uploaded_file.id.nil?
       else
-        (metadata[cell.name] ||= []) << cell.value_string if !call.value_string.blank?    
+        (metadata[cell.name] ||= []) << cell.value_string if !cell.value_string.blank?    
       end
     end
     #start create_work job
-    SufiaCreateWorkJob.perform_later("Work",user,metadata)
+    UcscCreateWorkJob.perform_later("Work",user,metadata)
     #update status
     status = "ingesting"
     save

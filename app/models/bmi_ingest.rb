@@ -1,23 +1,35 @@
 class BmiIngest < ApplicationRecord
   belongs_to :user
   has_many :bmi_rows
-  enum status: [ :pending, :checking, :check_passed, :check_failed, :processing, :completed, :completed_with_errors, :failed ]
+
+#  enum status: [:unparsed, :checking, :check_passed, :check_failed, :processing, :completed, :completed_with_errors, :failed ]
   require 'csv'   
 
   def self.create_new(params)
     instance = self.new(params);
-    instance.status = "pending"
+    instance.status = "unparsed"
     instance.class_name = "Work"
     instance.save
     instance.setFile(params[:file])
     instance
   end
 
+  def headers
+    return @headers if !@headers.blank?
+    csv_text = File.read(filename)
+    csv = CSV.parse(csv_text, :headers => true)
+    @headers = csv.headers
+  end
+
+  def parseChanged
+    this.rows.where(status: "edited").each do |row|
+      row.parse
+    end
+  end
+
   def parse
     #create log for parsing file
-    log!("ingest","parse","Parsing ingest #"+id+" filename:"+filename)
-    #this array tracks parsed records
-    parsed = []
+#   log!("ingest","parse","Parsing ingest #"+id+" filename:"+filename)
     #validate file
     csv_text = File.read(filename)
     csv = CSV.parse(csv_text, :headers => true)
@@ -26,69 +38,58 @@ class BmiIngest < ApplicationRecord
     parseHeaders(csv.headers)
     
     #Create Row
-    rows = self.rows
-    csv.each do |key,value|
-      next if value.blank?
-      #skip any line previously parsed correctly
-      #loop through the existing rows for this ingest
-      this_row = nil;
-      rows.each do |row|
-        next if row.text.slice(0,1000) != text.slice(1000)
-        next if row.text.slice(0,5000) != text.slice(5000)
-        this_row = row
-      end
-      if this_row.nil?
-        this_row = self.rows.create(status: "new",text: text)
-        parsed[this_row.id] = []
+    csv.each do |row|
+      #This will store the persistent row object
+      bmi_row = bmi_rows.find_by(text: row.to_s)
+      
+      if bmi_row.nil?
+         # we have no row record for this yet
+        bmi_row = bmi_rows.create(status: "unparsed",text: row.to_s)
       else
-        next if this.row.status == "parsed" || this.row.status == "ingested"
+        # we already have a row record
+        #If the row is already parsed, move to the next row
+        next if bmi_row.status == "parsed" || bmi_row.status == "ingested"
+        #otherwise we proceed with the existing row record
       end
 
       #Create Cells
-      #TODO: try - catch here
-      cells = this_row.cells
-      row_data = this_row.parse
-      row_data.each do |property,value|
-        row_errors = []
-        this_cell = nil;
-        cells.each do |cell|
-          next if cell.name != property
-          next if cell.value_string != value && cell.value_url != value
-          this_cell = cell
-        end
-        if this_cell.nil?
-          this_cell = this_row.cells.create(name: property, value_string: value, status: "new")
-          parsed[this_row.id] = this_cell.id
-        end
-      end
+      #todo try/catch here
+      #return newly parsed cells
+      new_cells = bmi_row.createNewCells!(row) 
+
+      #should be in success block of try/catch:
+      bmi_row.status = "parsed"
+      bmi_row.save
     end
-    return parsed
   end
 
   def setFile(uploaded_file)
     #save csv file to permanent location
     save_as = File.join( Rails.root, 'public', 'uploads','batch_metadata_ingests',self.id.to_s + "_" + uploaded_file.original_filename)
     File.open( save_as.to_s, 'w' ) do |file|
-      file.write( uploaded_file.read )
+      file.write( uploaded_file.read) 
     end
     self.filename = save_as
   end
 
   def numUnparsed
-#    BmiRow.find_by(bmi_ingest_id:self.id)
-    return 0
+    bmi_rows.where(status:"unparsed").count
   end
 
   def numParsed
-    return 0
+    bmi_rows.where(status:"parsed").count
   end
 
   def numErrors
-    return 0
+    bmi_rows.where(status:"error").count
+  end
+
+  def numIngesting
+    bmi_rows.where(status:"ingesting").count
   end
 
   def numIngested
-    return 0
+    bmi_rows.where(status:"ingested").count
   end
 
   def parseHeaders(headers)
@@ -98,7 +99,7 @@ class BmiIngest < ApplicationRecord
 
   def ingest
     #for each correctly parsed row
-    # issue a create work job
+    # call row.ingest!
   end
 
   def log!(type,subtype,message,row_id=null,cell_id=null)
