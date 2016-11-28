@@ -1,0 +1,31 @@
+
+    <div id="<%= div_id %>">
+        <span class="tab-title">
+            <%= title %>
+        </span>
+        <div class="status-stat"> 
+            (<%= num_rows %>)
+        </div>
+
+        <button class="select-all">Select All</button>
+        <button class="deselect-all">Select None</button>
+
+        <ul class="actions">
+            <% actions.each do |action|  %>
+            <button id="<%= action[:id]%>" disabled><%= action[:title]%></button>
+            <% end %>
+        </ul>
+
+        <ul class="rows">
+            <li>
+                <div class="row-header">
+                    <label>Sample Ingesting Title</label>
+                    <button class="dropdown">show/hide</button>
+                    <input type="checkbox"" />
+                </div>
+            </li>
+        </ul>
+
+        <button class="select-all">Select All</button>
+        <button class="deselect-all">Select None</button>
+    </div>

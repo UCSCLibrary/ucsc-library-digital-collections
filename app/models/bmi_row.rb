@@ -46,11 +46,13 @@ class BmiRow < ApplicationRecord
         (metadata[cell.name] ||= []) << cell.value_string if !cell.value_string.blank?    
       end
     end
-    #start create_work job
-    UcscCreateWorkJob.perform_later("Work",user,metadata)
+
     #update status
-    status = "ingesting"
+    self.status = "ingesting"
     save
+    #start create_work job
+    UcscCreateWorkJob.perform_later("Work",user,metadata,id)
+
     #TODO create log
   end
 
