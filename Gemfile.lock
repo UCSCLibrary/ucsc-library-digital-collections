@@ -649,7 +649,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  browse-everything
   byebug
   capistrano
   capistrano-bundler
