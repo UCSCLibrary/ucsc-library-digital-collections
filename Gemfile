@@ -73,7 +73,7 @@ group :development do
 end
 
 gem 'hydra-role-management'
-#gem 'browse-everything'
+gem 'browse-everything'
 #gem 'hydra-remote_identifier'
 
 #gem 'hydra_hls', '>= 0.0.2'
