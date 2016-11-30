@@ -1,0 +1,41 @@
+en:
+  sufia:
+    icons:
+      aerial_photo:     'fa fa-file-text-o'
+    select_type:
+      aerial_photo:
+        name:               "<%= human_name.titleize %>"
+        description:        "<%= human_name %> aerial photos"
+  simple_form:
+    labels:
+      aerial_photo:
+        city:             "City or Town"
+        feature:          "Building or Feature"
+        scale:            "Scale"
+        based_near:       "Location"
+        description:      "Abstract or Summary"
+        keyword:          "Keyword"
+        source:           "Physical Extent"
+        date_created:     "Date Created"
+        related_url:      "Related URL"
+        files:            "Upload a new version of this file from your computer"
+        collection_ids:   "Add as member of collection"
+        admin_set_id:     "Add as member of administrative set"
+
+    hints:
+      aerial_photo:
+        source: "Dimensions of the physical image"
+        resource: "Pre-defined categories to describe the type of content being uploaded, such as &quot;article&quot; or &quot;dataset.&quot;  More than one type may be selected."
+        title: "A spiffy name to aid in identifying an aerial photo."
+        keyword: "Words or phrases you select to describe what the aerial photo is about. These are used to search for content."
+        subject: "Headings or index terms describing what the aerial photo is about; these do need to conform to an existing vocabulary."
+        creator: "The person or group responsible for the aerial photo. Usually this is the author of the content. Personal names should be entered with the last name first, e.g. &quot;Smith, John.&quot;."
+        related_url: "A link to a website or other specific content (audio, video, PDF document) related to the aerial photo. An example is the URL of a research project from which the aerial photo was derived."
+        based_near: "A place name related to the aerial photo, such as its site of publication, or the city, state, or country the aerial photo contents are about. Calls upon the <a href='http://www.geonames.org'>GeoNames web service</a>."
+        contributor: "A person or group you want to recognize for playing a role in the creation of the aerial photo, but not the primary role."
+        date_created: "The date on which the aerial photo was generated."
+        description: "Free-text notes about the aerial photo. Examples include abstracts of a paper or citation information for a journal article."
+        identifier: "A unique handle identifying the aerial photo. An example would be a DOI for a journal article, or an ISBN or OCLC number for a book."
+        language: "The language of the aerial photo's content."
+        publisher: "The person or group making the aerial photo available. Generally this is the institution."
+        rights: "Licensing and distribution information governing access to the aerial photo. Select from the provided drop-down list."

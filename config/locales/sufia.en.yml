@@ -1,11 +1,11 @@
 en:
   sufia:
-    product_name:       "Sufia"
-    product_twitter_handle: "@HydraSphere"
-    institution_name:   "Institution Name"
-#    institution_name_full:   "The Institution Name"
+    product_name:       "UCSC Digital Assets"
+    product_twitter_handle: "@UCSCLibrary"
+    institution_name:   "UC Santa Cruz"
+    institution_name_full:   "University of California Santa Cruz"
     account_name:       "My Institution Account Id"
     directory:
-      suffix:           "@example.org"
+      suffix:           "@ucsc.edu"
     footer:
-      copyright_html: "<strong>Copyright &copy; 2016 Project Hydra</strong> Licensed under the Apache License, Version 2.0"
+      copyright_html: "<strong>Copyright &copy; 2016 UC Santa Cruz & The Hydra Project</strong> License currently under negotiation"

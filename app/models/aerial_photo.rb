@@ -8,4 +8,20 @@ class AerialPhoto < ActiveFedora::Base
   # Change this to restrict which works can be added as a child.
   # self.valid_child_concerns = []
   validates :title, presence: { message: 'Your work must have a title.' }
+
+  property :feature, predicate: ::RDF::Vocab::DC11.description do |index|
+    index.as :stored_searchable
+  end
+
+  property :street, predicate: ::RDF::Vocab::DC11.description do |index|
+    index.as :stored_searchable
+  end
+
+  property :city, predicate: ::RDF::Vocab::DC11.subject do |index|
+    index.as :stored_searchable, :facetable
+  end
+
+  property :scale, predicate: ::RDF::Vocab::DC11.description
+  property :coordinates, predicate: ::RDF::Vocab::DC.spatial
+
 end
