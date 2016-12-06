@@ -6,7 +6,7 @@ class BmiIngest < ApplicationRecord
   require 'csv'   
 
   def self.create_new(params)
-    instance = self.new(params);
+    instance = self.new(params.except(:file));
     instance.status = "unparsed"
     instance.class_name = "Work"
     instance.save

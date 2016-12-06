@@ -1,4 +1,5 @@
 class BmiRow < ApplicationRecord
+  BASE_PATH = "/avalon2sufia/inbox"
   belongs_to :bmi_ingest 
   has_many :bmi_cells
 
@@ -21,15 +22,17 @@ class BmiRow < ApplicationRecord
   end
 
   def createNewCells!(row_hash)
-    row_hash.each do |property,value|
+    row_hash.each do |property,values|
       row_errors = []
-      cell = bmi_cells.find_by(name: property, value_string: value )
-      if cell.nil?
-        cell = bmi_cells.find_by(name: property, value_url: value )
-      end
-      if cell.nil?
-        #it is a new cell
-        cell = self.bmi_cells.create(name: property, value_string: value, status: "pending")
+      values.split(';').each do |value|
+        cell = bmi_cells.find_by(name: property, value_string: value )
+        if cell.nil?
+          cell = bmi_cells.find_by(name: property, value_url: value )
+        end
+        if cell.nil?
+          #it is a new cell
+          cell = self.bmi_cells.create(name: property, value_string: value, status: "pending")
+        end
       end
     end
   end
@@ -39,7 +42,7 @@ class BmiRow < ApplicationRecord
     metadata = {}
     bmi_cells.each do |cell|
       if cell.name == "file" && !cell.value_string.blank?
-        file = File.open(File.join(BASE_PATH,cell.value_string.blank?))
+        file = File.open(File.join(BASE_PATH,cell.value_string))
         uploaded_file = Sufia::UploadedFile.create(file: file, user: user)
         (metadata[:uploaded_files] ||= []) << uploaded_file.id if !uploaded_file.id.nil?
       else

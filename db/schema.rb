@@ -10,16 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161109012349) do
+ActiveRecord::Schema.define(version: 20161205191439) do
 
   create_table "bmi_cells", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "bmi_row_id"
     t.string   "name"
-    t.string   "value_string"
     t.string   "value_url"
     t.integer  "status"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.text     "value_string", limit: 65535
     t.index ["bmi_row_id"], name: "index_bmi_cells_on_bmi_row_id", using: :btree
   end
 
@@ -53,9 +53,9 @@ ActiveRecord::Schema.define(version: 20161109012349) do
   create_table "bmi_rows", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "bmi_ingest_id"
     t.string   "status"
-    t.string   "text"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.text     "text",          limit: 65535
     t.index ["bmi_ingest_id"], name: "index_bmi_rows_on_bmi_ingest_id", using: :btree
   end
 
