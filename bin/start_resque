@@ -22,4 +22,4 @@ fi
 
 banner "starting resque-pool"
 #bundle exec resque-pool --daemon --environment $ENVIRONMENT --pidfile $RESQUE_POOL_PIDFILE start
-RUN_AT_EXIT_HOOKS=true TERM_CHILD=1 resque-pool --daemon --environment $ENVIRONMENT--pidfile $RESQUE_POOL_PIDFILE start
+RUN_AT_EXIT_HOOKS=true TERM_CHILD=1 resque-pool --daemon --environment $ENVIRONMENT --pidfile $RESQUE_POOL_PIDFILE start
