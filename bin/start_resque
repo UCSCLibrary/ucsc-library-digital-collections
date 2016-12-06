@@ -3,7 +3,7 @@
 # Stops and then starts resque-pool in either production or development environment 
 # script/restart_resque.sh [production|development] 
 
-RESQUE_POOL_PIDFILE="/srv/ucsc_sufia2/current/tmp/pids/resque-pool.pid"
+RESQUE_POOL_PIDFILE="./tmp/pids/resque-pool.pid"
 ENVIRONMENT=$1
 
 function banner {
@@ -21,4 +21,5 @@ if [ $ENVIRONMENT != "production" ] && [ $ENVIRONMENT != "development" ]; then
 fi
 
 banner "starting resque-pool"
-bundle exec resque-pool --daemon --environment $ENVIRONMENT --pidfile $RESQUE_POOL_PIDFILE start
+#bundle exec resque-pool --daemon --environment $ENVIRONMENT --pidfile $RESQUE_POOL_PIDFILE start
+RUN_AT_EXIT_HOOKS=true TERM_CHILD=1 resque-pool --daemon --environment $ENVIRONMENT--pidfile $RESQUE_POOL_PIDFILE start
