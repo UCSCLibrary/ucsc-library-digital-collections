@@ -1,0 +1,24 @@
+#!/bin/bash
+#
+# Stops and then starts resque-pool in either production or development environment 
+# script/restart_resque.sh [production|development] 
+
+RESQUE_POOL_PIDFILE="/srv/ucsc_sufia2/current/tmp/pids/resque-pool.pid"
+ENVIRONMENT=$1
+
+function banner {
+    echo -e "$0 ↠ $1"
+}
+
+if [ $# -eq 0 ]; then
+    echo -e "ERROR: no environment argument [production|development] provided" 
+    exit 1
+fi
+
+if [ $ENVIRONMENT != "production" ] && [ $ENVIRONMENT != "development" ]; then 
+    echo -e "ERROR: environment argument must be either [production|development] most likely this will be development for local machines and production otherwise" 
+    exit 1
+fi
+
+banner "starting resque-pool"
+bundle exec resque-pool --daemon --environment $ENVIRONMENT --pidfile $RESQUE_POOL_PIDFILE start
