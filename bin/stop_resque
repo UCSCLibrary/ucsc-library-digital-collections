@@ -27,8 +27,9 @@ if [ $ENVIRONMENT != "production" ] && [ $ENVIRONMENT != "development" ]; then
     exit 1
 fi
 
-banner "killing resque-pool"
+banner "killing resque-pool with pid file: $RESQUE_POOL_PIDFILE "
 [ -f $RESQUE_POOL_PIDFILE ] && {
     PID=$(cat $RESQUE_POOL_PIDFILE)
     kill -QUIT $PID && anywait $PID
 }
+exit 0
