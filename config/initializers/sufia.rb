@@ -1,14 +1,14 @@
 Sufia.config do |config|
-  # Injected via `rails g sufia:work Lecture`
-  config.register_curation_concern :lecture
+  # Injected via `rails g sufia:work Work`
+  config.register_curation_concern :work
   # Injected via `rails g sufia:work Course`
   config.register_curation_concern :course
+  # Injected via `rails g sufia:work Lecture`
+  config.register_curation_concern :lecture
   # Injected via `rails g sufia:work AerialPhoto`
   config.register_curation_concern :aerial_photo
   # Injected via `rails g sufia:work Flight`
   config.register_curation_concern :flight
-  # Injected via `rails g sufia:work Work`
-  config.register_curation_concern :work
   # Email recipient of messages sent via the contact form
   config.contact_email = "ethenry@ucsc.edu"
 
@@ -53,7 +53,7 @@ Sufia.config do |config|
   # config.noid_template = ".reeddeeddk"
 
   # Store identifier minter's state in a file for later replayability
-  config.minter_statefile = '/srv/ucsc_sufia2/minter-state'
+  config.minter_statefile = '/srv/ucsc_sufia/minter-state'
 
   # Specify the prefix for Redis keys:
   # config.redis_namespace = "sufia"
@@ -104,7 +104,7 @@ Sufia.config do |config|
 
   # Temporary path to hold uploads before they are ingested into FCrepo.
   # This must be a lambda that returns a Pathname
-  #  config.upload_path = ->() { Rails.root + 'tmp' + 'uploads' }
+  config.upload_path = ->() { Pathname.new("/avalon2sufia/tmp") }
 
   # Location on local file system where derivatives will be stored.
   # If you use a multi-server architecture, this MUST be a shared volume.

@@ -25,6 +25,7 @@ pickle-email-*.html
 /config/secrets.yml
 
 /public/uploads/batch_metadata_ingests/*
+/public/assets/*
 
 # dotenv
 # TODO Comment out this rule if environment variables can be committed

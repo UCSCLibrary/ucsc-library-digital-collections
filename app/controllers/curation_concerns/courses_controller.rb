@@ -6,7 +6,8 @@ module CurationConcerns
     include CurationConcerns::CurationConcernController
     # Adds Sufia behaviors to the controller.
     include Sufia::WorksControllerBehavior
-
+    
     self.curation_concern_type = Course
+    self.show_presenter = CourseShowPresenter
   end
 end

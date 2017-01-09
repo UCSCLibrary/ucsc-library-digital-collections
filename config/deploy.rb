@@ -5,7 +5,7 @@ set :repo_url, 'git@bitbucket.org:ethenry/ucsc-sufia-based-dams'
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 # Default deploy_to directory is /var/www/my_app_name
-set :deploy_to, '/srv/ucsc_sufia2'
+set :deploy_to, '/srv/ucsc_sufia'
 
 # Default value for :scm is :git
 # set :scm, :git

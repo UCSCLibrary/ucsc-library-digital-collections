@@ -13,6 +13,8 @@ module UcscSufia
       g.test_framework :rspec, :spec => true
     end
 
+    config.autoload_paths += %W(#{config.root}/app/presenters)
+
 #    This setting is now only in environments/production.rb
 #    config.active_job.queue_adapter = :resque
 

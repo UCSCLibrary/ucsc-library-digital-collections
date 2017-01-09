@@ -14,7 +14,7 @@ class UcscCreateWorkJob < ActiveJob::Base
     # Get this to work in an initializer somewhere, right?
     #CurationConcerns::CurationConcern.actor_factory = Ucsc::ActorFactory
 
-    
+    work = workClass.constantize.new
     actor = CurationConcerns::CurationConcern.actor(work,user)
     status = actor.create(attributes)
     

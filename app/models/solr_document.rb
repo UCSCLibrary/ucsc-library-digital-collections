@@ -8,8 +8,6 @@ class SolrDocument
   # Adds Sufia behaviors to the SolrDocument.
   include Sufia::SolrDocumentBehavior
 
-
-
   # self.unique_key = 'id'
 
   # Email uses the semantic field mappings below to generate the body of an email.
@@ -28,4 +26,13 @@ class SolrDocument
   # Do content negotiation for AF models. 
 
   use_extension( Hydra::ContentNegotiation )
+
+  def member_ids
+    fetch('member_ids_ssim', [])
+  end
+
+  def file_set_ids
+    fetch('file_set_ids_ssim', [])
+  end
+
 end

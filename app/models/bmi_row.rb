@@ -23,6 +23,7 @@ class BmiRow < ApplicationRecord
 
   def createNewCells!(row_hash)
     row_hash.each do |property,values|
+      next if values.nil?
       row_errors = []
       values.split(';').each do |value|
         cell = bmi_cells.find_by(name: property, value_string: value )
