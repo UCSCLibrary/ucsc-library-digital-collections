@@ -9,8 +9,8 @@ class Course < ActiveFedora::Base
   # self.valid_child_concerns = []
   validates :title, presence: { message: 'Your work must have a title.' }
 
-  def self.indexer
-    CourseIndexer
-  end
+#  def self.indexer
+#    CourseIndexer
+#  end
 
 end
