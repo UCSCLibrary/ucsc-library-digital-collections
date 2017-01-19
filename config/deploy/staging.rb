@@ -33,7 +33,8 @@ server 'digitalcollections-staging.library.ucsc.edu', user: 'sufia', roles: %w{a
 # http://capistranorb.com/documentation/getting-started/configuration/
 # Feel free to add new variables to customise your setup.
 
-
+set :default_env, { RAILS_ENV: "production" }
+set :rail_env, "production"
 
 # Custom SSH Options
 # ==================
