@@ -4,6 +4,7 @@
 # script/restart_resque.sh [production|development] 
 
 RESQUE_POOL_PIDFILE="./tmp/pids/resque-pool.pid"
+RESQUE_POOL_PATH="/home/sufia/.rvm/gems/ruby-2.3.0/bin/resque-pool"
 ENVIRONMENT=$1
 
 function banner {
@@ -24,4 +25,4 @@ fi
 
 banner "starting resque-pool"
 #bundle exec resque-pool --daemon --environment $ENVIRONMENT --pidfile $RESQUE_POOL_PIDFILE start
-RUN_AT_EXIT_HOOKS=true TERM_CHILD=1 resque-pool --daemon --environment $ENVIRONMENT --pidfile $RESQUE_POOL_PIDFILE start
+RUN_AT_EXIT_HOOKS=true TERM_CHILD=1 $RESQUE_POOL_PATH --daemon --environment $ENVIRONMENT --pidfile $RESQUE_POOL_PIDFILE start
