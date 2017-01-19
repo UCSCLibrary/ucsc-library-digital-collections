@@ -2,13 +2,13 @@ namespace :ucsc_sufia_based_dams  do
   task :stop_resque do
     on roles(:app), in: :sequence, wait: 5 do
       print "Stopping resque-pool (at path #{current_path})..."
-      execute "cd '#{current_path}'; ./bin/stop_resque #{fetch(:stage)}"
+      execute "cd '#{current_path}'; ./bin/stop_resque $RAILS_ENV"
     end
   end
   task :start_resque do
     on roles(:app), in: :sequence, wait: 5 do
       print "Starting resque-pool  (at path #{current_path})..."
-      execute "cd '#{current_path}'; ./bin/start_resque  #{fetch(:stage)}"
+      execute "cd '#{current_path}'; ./bin/start_resque  $RAILS_ENV"
     end
   end
 end
