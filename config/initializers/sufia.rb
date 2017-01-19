@@ -13,7 +13,7 @@ Sufia.config do |config|
   config.contact_email = "ethenry@ucsc.edu"
 
   # Text prefacing the subject entered in the contact form
-  config.subject_prefix = "sufia-dev Contact form:"
+  config.subject_prefix = "UCSC Digital Collections inquiry:"
 
   # How many notifications should be displayed on the dashboard
   # config.max_notifications_for_dashboard = 5
