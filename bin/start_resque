@@ -14,9 +14,11 @@ if [ $# -eq 0 ]; then
     echo -e "ERROR: no environment argument [production|development] provided" 
     exit 1
 fi
-
+if [ $ENVIRONMENT == "staging" ]; then
+    $ENVIRONMENT="production"
+fi 
 if [ $ENVIRONMENT != "production" ] && [ $ENVIRONMENT != "development" ]; then 
-    echo -e "ERROR: environment argument must be either [production|development] most likely this will be development for local machines and production otherwise" 
+    echo -e "ERROR: environment argument must be either [production|development]. Most likely this will be development for local machines and production otherwise. Staging is treated as production."
     exit 1
 fi
 
