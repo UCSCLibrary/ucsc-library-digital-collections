@@ -9,3 +9,7 @@ en:
       suffix:           "@ucsc.edu"
     footer:
       copyright_html: "<strong>Copyright &copy; 2016 UC Santa Cruz & The Hydra Project</strong> License currently under negotiation"
+  curation_concerns:
+    base:
+      metadata:
+        header: Description
