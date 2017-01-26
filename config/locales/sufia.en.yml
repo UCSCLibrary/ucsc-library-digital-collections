@@ -1,10 +1,23 @@
 en:
   sufia:
+    controls:
+      home:             "Home"
+      about:            "About"
+      help:             "Help"
+      contact:          "Contact"
     product_name:       "UCSC Digital Assets"
     product_twitter_handle: "@UCSCLibrary"
     institution_name:   "UC Santa Cruz"
     institution_name_full:   "University of California Santa Cruz"
-    account_name:       "My Institution Account Id"
+    search:
+      form:
+        q:
+          label:          "Search Collections"
+          placeholder:    "Enter search terms"
+        option:
+          all:
+            label_short:  "All"
+            label_long:   "All Collections"
     directory:
       suffix:           "@ucsc.edu"
     footer:

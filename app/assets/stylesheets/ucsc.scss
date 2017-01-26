@@ -9,13 +9,29 @@ a:hover {
     background-color: $ucsc-lightblue;
 }
 
+.image-masthead .navbar ul.dropdown-menu li > a {
+    color:$ucsc-darkblue;
+}
+
 #masthead {
+
     color:$ucsc-lightblue;
+
     min-height: $header-height;
     background-color: $ucsc-darkbeige;
-    li > a {
+    
+    li {
+        color:$ucsc-darkblue;
+    }
+    
+    li.dropdown > a {
         color:$ucsc-lightblue;
-    }                   
+    }    
+
+    li.dropdown.open > a {
+        color:$ucsc-darkblue;
+    }  
+               
     a#logo {
         color: $ucsc-lightblue;
         padding-top:5px;
@@ -42,7 +58,7 @@ a:hover {
     }
 
     .navbar-nav > .open > a {
-        background-color:darken($ucsc-darkbeige,10%);
+        background-color:lighten($ucsc-darkbeige,20%);
         color:darken($ucsc-darkblue,10%)
     }
 
@@ -58,13 +74,13 @@ body {
 
 #home_header,div.image-masthead > div.background-container {
 //    background-image:none;
-    background-image: image-url('homepage1.jpg');
+    background-image: image-url('homepage2.jpg');
     animation-name: home-slides;
     animation-timing-function: ease-in-out;
     animation-iteration-count: infinite;
     animation-duration: 20s;
 }
-
+/*
 @keyframes home-slides {
 
    0% {
@@ -86,7 +102,7 @@ body {
        background-image: image-url('homepage1.jpg');
    }
 }
-
+*/
 div.mejs-inner {
     .mejs-playlist ul.mejs {
         margin-top: 2em;
