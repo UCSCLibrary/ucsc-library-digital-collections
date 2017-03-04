@@ -4,7 +4,6 @@
   </td>
   <td class="attribute filename"><%= link_to(member.link_name, contextual_path(member, @presenter)) %></td>
   <td class="attribute date_created"><%= member.try(:date_created).first %></td>
-  <td class="attribute permission"><%= member.permission_badge %></td>
   <td>
     <%= render 'actions', member: member %>
   </td>
