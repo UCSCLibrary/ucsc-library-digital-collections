@@ -13,7 +13,7 @@
   </div>
   <div class="col-sm-4">
     <%= render "show_actions", presenter: @presenter %>
-    Last modified: <%= @presenter.date_modified %>
+    <%= "Last modified: "+@presenter.date_modified if @presenter.editor? %>
     <%= render 'representative_media', presenter: @presenter %>
     <%= render 'social_media' %>
     <%= render 'citations', presenter: @presenter %>

@@ -103,6 +103,13 @@ body {
    }
 }
 */
+
+.related-files td.thumbnail.small-thumb {
+    width: 60px;
+    margin-bottom:0px;
+    padding:0;
+}
+
 div.mejs-inner {
     .mejs-playlist ul.mejs {
         margin-top: 2em;

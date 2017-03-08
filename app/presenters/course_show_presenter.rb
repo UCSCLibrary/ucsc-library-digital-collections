@@ -1,7 +1,7 @@
 class CourseShowPresenter < Sufia::WorkShowPresenter
   def lecture_files
     lecture_files = []
-    query = ActiveFedora::SolrQueryBuilder.construct_query_for_ids(solr_document.member_ids)
+    query = ActiveFedora::SolrQueryBuilder.construct_query_for_ids(ordered_ids - file_set_ids)
     results = ActiveFedora::SolrService.instance.conn.get(
         ActiveFedora::SolrService.select_path,
         params: { fq: query})
@@ -16,4 +16,6 @@ class CourseShowPresenter < Sufia::WorkShowPresenter
     end
     lecture_files
   end
+
+
 end

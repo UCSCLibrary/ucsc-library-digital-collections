@@ -1,5 +1,5 @@
 <tr class="<%= dom_class(member) %> attributes">
-  <td class="thumbnail">
+  <td class="thumbnail <%= member.solr_document.image? ? "" : "small-thumb"%>">
     <%= render_thumbnail_tag member %>
   </td>
   <td class="attribute filename"><%= link_to(member.link_name, contextual_path(member, @presenter)) %></td>

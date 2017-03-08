@@ -1,9 +1,9 @@
-<h2><%= t('.header') %></h2>
+<h2><%= t('Lectures') %></h2>
 <% if presenter.member_presenters.present? %>
   <table class="table table-striped related-files">
     <thead>
       <tr>
-        <th><%= t('.thumbnail') %></th>
+        <th></th>
         <th><%= t('.title') %></th>
         <th><%= t('.date_created') %></th>
         <th><%= can?(:edit, presenter.id) ? t('.actions') : "" %></th>
