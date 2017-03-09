@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="<%= t("sufia.document_language") %>">
-<head>
-  <%= render "layouts/head_tag_content"%>
-</head>
+    <head>
+        <%= render "layouts/head_tag_content"%>
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
+    </head>
 
 <body>
 <%= render '/masthead' %>
@@ -10,12 +11,6 @@
 <div class="image-masthead">
   <div class="background-container" style="background-image: url('<%= Sufia.config.banner_image %>')"></div>
   <span class="background-container-gradient"></span>
-
-  <div class="container site-title-container">
-    <div class="site-title h1" style="text-align: center;">
-      <%= render "sufia/homepage/marketing" if controller_name == 'homepage' %>
-    </div>
-  </div>
 
   <nav class="navbar" role="navigation">
     <div class="container">

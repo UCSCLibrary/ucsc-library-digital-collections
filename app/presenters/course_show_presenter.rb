@@ -21,5 +21,4 @@ class CourseShowPresenter < Sufia::WorkShowPresenter
     @ordered_work_ids ||= ordered_ids - file_set_ids
   end
 
-
 end

@@ -1,56 +1,73 @@
-$ucsc-beige: #f5f4eb;
-$ucsc-darkbeige: darken($ucsc-beige,70%);
-$ucsc-darkblue: #2a5459;
-$ucsc-lightblue: #AdAdBd;
-
+$ucsc-blue: #00458c;
+$ucsc-lightblue: #326aa3;
+$ucsc-gold: #ffd700;
+$ucsc-footer-back:#c1c1c1;
+$ucsc-footer-color:#6e6e6e;
 $header-height: 40px;
 
-a:hover {
-    background-color: $ucsc-lightblue;
+
+body {
+    background-color: white;
+    font-family: 'Source Sans Pro', sans-serif;
+    a:hover {
+        color: lighten($ucsc-blue,40%)
+    }
+
+
+    .image-masthead nav.navbar {
+        background-color: $ucsc-lightblue;
+        ul.navbar-nav li > a {
+            color:$ucsc-gold;
+        }
+    }
+    nav.navbar-default {
+        background-color: $ucsc-lightblue;
+        ul.navbar-nav li > a {
+            color:$ucsc-gold;
+        }
+    }
+
+    footer div.container-fluid {
+        background-color:$ucsc-footer-back;
+        div.navbar-text {
+            color:$ucsc-footer-color;
+            a.navbar-link {
+                color: darken($ucsc-footer-color,20%);
+            }
+        }
+    }
+
 }
 
-.image-masthead .navbar ul.dropdown-menu li > a {
-    color:$ucsc-darkblue;
-}
-
-#masthead {
-
-    color:$ucsc-lightblue;
-
+nav#masthead {
+    color: $ucsc-blue;
     min-height: $header-height;
-    background-color: $ucsc-darkbeige;
-    
-    li {
-        color:$ucsc-darkblue;
-    }
-    
-    li.dropdown > a {
-        color:$ucsc-lightblue;
-    }    
+    background-color: white;
 
-    li.dropdown.open > a {
-        color:$ucsc-darkblue;
-    }  
-               
-    a#logo {
-        color: $ucsc-lightblue;
+    div.navbar-header a#logo {
         padding-top:5px;
+        
+        span#icon-ucsc:before {
+            content: image-url('ucsc-logo.jpg');
+        }
+        
+        span.institution_name {
+            color: $ucsc-blue;
+            position: relative;
+            font-weight:bold;
+            font-size:1.1em;
+            top: -40%;
+        }
     }
+    
+    ul.nav.navbar-nav {
+        li > a {
+            color:$ucsc-blue;
+        }    
 
-    span.institution_name {
-        position: relative;
-        top: -40%;
-    }
-
-    #icon-ucsc:before {
-        content: image-url('ucsc-logo.png');
-    }
-
-    .navbar-toggle {
-        position:absolute;
-        right:0px;
-        top:0px;
-        background-color:$ucsc-darkbeige;
+        li.open > a {
+            color:$ucsc-blue;
+        }  
     }
 
     .navbar-header {
@@ -58,8 +75,8 @@ a:hover {
     }
 
     .navbar-nav > .open > a {
-        background-color:lighten($ucsc-darkbeige,20%);
-        color:darken($ucsc-darkblue,10%)
+        background-color:darken(white,10%);
+        color:darken($ucsc-blue,10%)
     }
 
     ul#user_utility_links li {
@@ -68,50 +85,8 @@ a:hover {
     
 }
 
-body {
-    background-color: $ucsc-beige;
-}
-
-#home_header,div.image-masthead > div.background-container {
-//    background-image:none;
-    background-image: image-url('homepage2.jpg');
-    animation-name: home-slides;
-    animation-timing-function: ease-in-out;
-    animation-iteration-count: infinite;
-    animation-duration: 20s;
-}
-/*
-@keyframes home-slides {
-
-   0% {
-       background-image: image-url('homepage1.jpg');
-      }
-   20% {
-       background-image: image-url('homepage2.jpg');
-   }
-   40% {
-       background-image: image-url('homepage3.jpg');
-   }
-   60% {
-       background-image: image-url('homepage4.jpg');
-   }
-   80% {
-       background-image: image-url('homepage5.jpg');
-   }
-   100% {
-       background-image: image-url('homepage1.jpg');
-   }
-}
-*/
-
 .related-files td.thumbnail.small-thumb {
     width: 60px;
     margin-bottom:0px;
     padding:0;
-}
-
-div.mejs-inner {
-    .mejs-playlist ul.mejs {
-        margin-top: 2em;
-    }
 }
