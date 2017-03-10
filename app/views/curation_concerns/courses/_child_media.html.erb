@@ -1,3 +1,6 @@
+<pre>
+<%= @presenter.lecture_files %>
+</pre>
 <%= render 'playlist', file_set_ids: @presenter.lecture_files if @presenter.lecture_files.any? %>
 <%= javascript_include_tag "embed" %>
 <%= stylesheet_link_tag "embed" %>
