@@ -1,10 +1,11 @@
 #
 # To integrate your app with Google Analytics, uncomment the lines below and add your API key information.
 #
-# analytics:
+
+analytics:
    app_name: sufia-test
    app_version: 0.1
    privkey_path: /home/sufia/keys/SufiaTest-34a67d4548bd.json
    privkey_secret: 34a67d4548bd5d732e27d3e67fb84b90a0c45e3c
-   client_email: ethenry@ucsc.edu
+   client_email: sufia-test@appspot.gserviceaccount.com
 

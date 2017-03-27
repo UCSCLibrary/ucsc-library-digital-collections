@@ -4,8 +4,8 @@ en:
       flight:     'fa fa-file-text-o'
     select_type:
       flight:
-        name:               "<%= human_name.titleize %>"
-        description:        "<%= human_name %> flights"
+        name:               "Flight"
+        description:        "The digital materials created from a single flight of aerial photographs"
   simple_form:
     labels:
       flight:

@@ -1,5 +1,7 @@
 en:
   sufia:
+    dashboard:
+      create_work: "Create Work"
     controls:
       home:             "Home"
       about:            "About"

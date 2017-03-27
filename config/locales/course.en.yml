@@ -1,14 +1,14 @@
 en:
   sufia:
     icons:
-      lecture:     'fa fa-file-text-o'
+      course:     'fa fa-file-text-o'
     select_type:
-      lecture:
-        name:               "Lecture"
-        description:        "A digitized lecture, usually containing audiovisual files and/or textual transcripts"
+      course:
+        name:               "Course"
+        description:        "A digitized course which may contain lectures and documents"
   simple_form:
     labels:
-      lecture:
+      course:
         based_near:       "Location"
         description:      "Abstract or Summary"
         keyword:          "Keyword"
@@ -19,9 +19,9 @@ en:
         admin_set_id:     "Add as member of administrative set"
 
     hints:
-      lecture:
+      course:
         resource: "Pre-defined categories to describe the type of content being uploaded, such as &quot;article&quot; or &quot;dataset.&quot;  More than one type may be selected."
-        title: "A name to aide in identifying a work."
+        title: "A name to aid in identifying a work."
         keyword: "Words or phrases you select to describe what the work is about. These are used to search for content."
         subject: "Headings or index terms describing what the work is about; these do need to conform to an existing vocabulary."
         creator: "The person or group responsible for the work. Usually this is the author of the content. Personal names should be entered with the last name first, e.g. &quot;Smith, John.&quot;."
@@ -34,3 +34,4 @@ en:
         language: "The language of the work's content."
         publisher: "The person or group making the work available. Generally this is the institution."
         rights: "Licensing and distribution information governing access to the work. Select from the provided drop-down list."
+

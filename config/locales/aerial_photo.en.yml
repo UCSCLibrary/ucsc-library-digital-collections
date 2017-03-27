@@ -4,8 +4,8 @@ en:
       aerial_photo:     'fa fa-file-text-o'
     select_type:
       aerial_photo:
-        name:               "<%= human_name.titleize %>"
-        description:        "<%= human_name %> aerial photos"
+        name:               "Aerial Photo"
+        description:        "A digitized aerial photograph"
   simple_form:
     labels:
       aerial_photo:

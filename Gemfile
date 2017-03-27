@@ -49,8 +49,8 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-gem 'sufia', '7.2.0'
-gem 'flipflop', github: 'jcoyne/flipflop', branch: 'hydra'
+gem 'sufia', '7.3.0'
+
 group :development, :test do
   gem 'solr_wrapper', '>= 0.3'
 end
@@ -85,4 +85,7 @@ gem 'hydra_hls', path: "/srv/hydra_hls/"
 #gem 'equivalent-xml'
 
 gem 'sinatra', github: 'sinatra'
+
 gem 'resque-pool'
+
+gem 'blacklight_advanced_search', '~> 6.0'

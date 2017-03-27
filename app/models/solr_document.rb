@@ -35,4 +35,20 @@ class SolrDocument
     fetch('file_set_ids_ssim', [])
   end
 
+  def date_digitized
+    self[Solrizer.solr_name('date_digitized')]
+  end
+
+  def physical_format
+    self[Solrizer.solr_name('physical_format')]
+  end
+
+  def digital_extent
+    self[Solrizer.solr_name('digital_extent')]
+  end
+
+  def digital_publisher_homepage
+    self[Solrizer.solr_name('digital_publisher_homepage')]
+  end
+
 end
