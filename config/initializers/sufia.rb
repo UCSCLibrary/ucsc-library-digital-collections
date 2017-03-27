@@ -1,4 +1,6 @@
 Sufia.config do |config|
+  config.tinymce.install = :copy
+
   # Injected via `rails g sufia:work Work`
   config.register_curation_concern :work
   # Injected via `rails g sufia:work Course`
