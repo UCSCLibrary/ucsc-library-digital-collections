@@ -15,6 +15,8 @@ module UcscSufia
 
     config.autoload_paths += %W(#{config.root}/app/presenters)
 
+    config.tinymce.install = :copy
+
 #    This setting is now only in environments/production.rb
 #    config.active_job.queue_adapter = :resque
 
