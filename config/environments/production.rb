@@ -1,7 +1,7 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
-  config.tinymce.install = :copy
+  config.tinymce.install = :compile
 
   # Code is not reloaded between requests.
   config.cache_classes = true
