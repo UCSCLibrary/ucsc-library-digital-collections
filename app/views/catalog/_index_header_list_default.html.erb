@@ -1,0 +1,4 @@
+<h2>
+    <%= link_to document.title_or_label, document %>
+</h2>
+<h3><%= document.parent_course.title_or_label unless document.parent_course.nil?%></h3>
