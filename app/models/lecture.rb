@@ -10,7 +10,7 @@ class Lecture < ActiveFedora::Base
 
   validates :title, presence: { message: 'Each lecture must have a title.' }
 
-  property :date_digitized, predicate: ::RDF::Vocab::DC.modified do |index|
+  property :date_digitized, predicate: ::RDF::Vocab::DC.date do |index|
     index.as :stored_searchable
   end
 
