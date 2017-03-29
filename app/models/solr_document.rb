@@ -51,4 +51,13 @@ class SolrDocument
     self[Solrizer.solr_name('digital_publisher_homepage')]
   end
 
+  def parent_course
+    return nil if human_readable_type != "Lecture"
+    return @parent_course_solr_document unless @parent_course_solr_document.nil?
+    query = ActiveFedora::SolrQueryBuilder.construct_query_for_rel("member_ids" => id, "has_model" => "Course")
+    response = ActiveFedora::SolrService.instance.conn.get(ActiveFedora::SolrService.select_path, params: { fq: query, rows: 1})["response"]["docs"][0]
+    return nil if response.nil?
+    @parent_course_solr_document = SolrDocument.new(response)
+  end
+
 end
