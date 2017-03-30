@@ -1,5 +1,8 @@
 <h2>
     <%= link_to document.title_or_label, document %>
-    <%= document.date_created if document.human_readable_type == "Course" %>
+    <%= document.date_created.first if document.human_readable_type == "Course" and !document.date_created.empty?%>
 </h2>
-<h3><%= document.parent_course.title_or_label +" ("+ presenter.parent_course.date_created +")" unless document.parent_course.nil?%></h3>
+<h3>
+    <%= document.parent_course.title_or_label unless document.parent_course.nil? %>
+    <%= "(" + document.parent_course.date_created.first + ")" unless document.parent_course.nil? or document.parent_course.date_created.empty? %>
+</h3>

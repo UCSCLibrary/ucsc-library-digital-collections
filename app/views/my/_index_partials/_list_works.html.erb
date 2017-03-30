@@ -21,7 +21,12 @@
             <%= document.title_or_label %>
             <%= document.date_created if document.human_readable_type == "Course" %>
           <% end %>
-          <div class="parent-course-label"><%= document.parent_course.title_or_label  +" ("+ presenter.parent_course.date_created +")" unless document.parent_course.nil? %></div>
+          <%= if !document.parent_course.nil? do%>
+              <div class="parent-course-label">
+                  <%= document.parent_course.title_or_label unless document.parent_course.nil?%>
+                  <%= " (" + document.parent_course.date_created.first + ")" unless document.parent_course.nil? or document.parent.date_created.empty? %>
+              </div>
+          <%= end %>
           <br />
           <%= render_collection_links(document) %>
 
