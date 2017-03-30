@@ -19,8 +19,9 @@
               <%= t("sufia.dashboard.my.sr.show_label") %>
             </span>
             <%= document.title_or_label %>
+            <%= document.date_created if document.human_readable_type == "Course" %>
           <% end %>
-          <div class="parent-course-label"><%= document.parent_course.title_or_label unless document.parent_course.nil? %></div>
+          <div class="parent-course-label"><%= document.parent_course.title_or_label  +" ("+ presenter.parent_course.date_created +")" unless document.parent_course.nil? %></div>
           <br />
           <%= render_collection_links(document) %>
 

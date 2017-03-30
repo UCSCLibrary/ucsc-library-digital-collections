@@ -5,4 +5,4 @@
         <h1><%= title %></h1>
     <% end %>
 <% end %>
-<h3><%= presenter.parent_course.title_or_label unless presenter.parent_course.nil?%></h3>
+<h3><%= presenter.parent_course.title_or_label +" ("+ presenter.parent_course.date_created +")" unless presenter.parent_course.nil?%></h3>
