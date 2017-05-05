@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170322172932) do
+ActiveRecord::Schema.define(version: 20170426212455) do
 
   create_table "bmi_cells", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "bmi_row_id"
@@ -28,11 +28,14 @@ ActiveRecord::Schema.define(version: 20170322172932) do
     t.string   "filename"
     t.string   "class_name"
     t.string   "status"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-    t.string   "identifier"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.string   "edit_identifier"
     t.boolean  "replace_files"
     t.string   "name"
+    t.string   "relationship_identifier"
+    t.boolean  "visibility"
+    t.boolean  "notifications"
     t.index ["user_id"], name: "index_bmi_ingests_on_user_id", using: :btree
   end
 

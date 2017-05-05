@@ -5,36 +5,36 @@
 </h3>
 
 <p>
-    <strong>User:</strong>
+    <strong>Creator:</strong>
     <%= User.find(@bmi_ingest.user_id).name %>
 </p>
 
 <p>
-    <strong>Filename:</strong>
+    <strong>CSV Filename:</strong>
     <%= @bmi_ingest.filename %>
 </p>
 
 <p>
-    <strong>Status:</strong>
+    <strong>Ingest Status:</strong>
     <%= @bmi_ingest.status %>
 </p>
 
 <p>
-    <strong>Class:</strong>
+    <strong>Default Work Type:</strong>
     <%= @bmi_ingest.class_name %>
 </p>
 
-<!--
+
 <p>
-    <strong>Identifier:</strong>
-    <%= @bmi_ingest.identifier %>
+    <strong>Relationship Identifier:</strong>
+    <%= @bmi_ingest.relationship_identifier %>
 </p>
 
 <p>
     <strong>Replace files:</strong>
     <%= @bmi_ingest.replace_files %>
 </p>
--->
+
 
 <%= link_to 'Edit', edit_bmi_ingest_path(@bmi_ingest) %> |
 <%= link_to 'Back', bmi_ingests_path %>

@@ -38,16 +38,29 @@ class BmiRow < ApplicationRecord
     end
   end
 
+#special cell types:
+#file
+#relationship (parent, child)
+#relationship identifier
+#edit identifier
+#ignore
+
   def ingest!(user=User.first)
     #TODO THIS SHOULD NEVER DEFAULT TO ME IN PRODUCTION
     metadata = {}
     bmi_cells.each do |cell|
+      next if cell.value_string.blank?
+      case cell.name
+          when "file"
+            file = File.open(File.join(BASE_PATH,cell.value_string))
+            uploaded_file = Sufia::UploadedFile.create(file: file, user: user)
+            (metadata[:uploaded_files] ||= []) << uploaded_file.id if !uploaded_file.id.nil?            
+          else
+            (metadata[cell.name] ||= []) << cell.value_string if !cell.value_string.blank?    
+      end
       if cell.name == "file" && !cell.value_string.blank?
-        file = File.open(File.join(BASE_PATH,cell.value_string))
-        uploaded_file = Sufia::UploadedFile.create(file: file, user: user)
-        (metadata[:uploaded_files] ||= []) << uploaded_file.id if !uploaded_file.id.nil?
       else
-        (metadata[cell.name] ||= []) << cell.value_string if !cell.value_string.blank?    
+
       end
     end
 
@@ -58,6 +71,22 @@ class BmiRow < ApplicationRecord
     UcscCreateWorkJob.perform_later("Work",user,metadata,id)
 
     #TODO create log
+  end
+
+  def title
+    return "Untitled Row" if bmi_cells.where(:name =>"title").empty?
+    bmi_cells.where(:name => "title").first.value_string
+  end
+
+  def info
+    summary_fields = ["title","description","creator","subject","date_created","abstract"]
+    info = {}
+    bmi_cells.each do |cell|
+      if summary_fields.include? cell.name
+        info[cell.name] = cell.value_string
+      end
+    end
+    return info
   end
 
 end

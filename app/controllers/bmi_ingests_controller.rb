@@ -1,5 +1,6 @@
 class BmiIngestsController < ApplicationController
-  before_action :set_bmi_ingest, only: [:show, :edit, :update, :destroy]
+#class BmiIngestsController 
+  before_action :set_bmi_ingest, only: [:ingest_all, :info, :row_info, :show, :edit, :update, :destroy]
 
   # GET /bmi_ingests
   # GET /bmi_ingests.json
@@ -21,19 +22,38 @@ class BmiIngestsController < ApplicationController
   def edit
   end
 
+  def ingest_all
+    @bmi_ingest.bmi_rows.where(:status => "parsed").each do |row|
+      row.ingest!
+    end
+    respond_to do |format|
+      format.html {  redirect_to @bmi_ingest, notive: 'Ingests initiated.' }
+    end
+  end
+
+  def row_info
+    @row = BmiRow.find(params[:row_id])
+    render :row_details, :layout => false      
+  end
+
   # POST /bmi_ingests
   # POST /bmi_ingests.json
   def create
     @bmi_ingest = BmiIngest::create_new(bmi_ingest_params.merge(:user_id => current_user.id))
 #    @bmi_ingest.setFile(bmi_ingest_params[:file])
     respond_to do |format|
-      if @bmi_ingest.save
-        format.html { redirect_to @bmi_ingest, notice: 'Batch metadata ingest was successfully created.' }
-        format.json { render :show, status: :created, location: @bmi_ingest }
-      else
+      unless @bmi_ingest.save
         format.html {  redirect_to @bmi_ingest, error: 'Batch metadata ingest creation has failed. Contact Ned about this error.' }
         format.json { render json: @bmi_ingest.errors, status: :unprocessable_entity }
       end
+
+#      if @bmi_ingest.hasSpecLine?
+#        format.html { redirect_to @bmi_ingest, notice: 'Batch metadata ingest was successfully created.' }
+#        format.json { render :show, status: :created, location: @bmi_ingest }
+#      else
+      format.html { redirect_to edit_bmi_ingest_path(@bmi_ingest), notice: 'Batch metadata ingest was successfully created.' }
+      format.json { render :edit, status: :created, location: @bmi_ingest }       
+#      end
     end
   end
 
@@ -61,6 +81,10 @@ class BmiIngestsController < ApplicationController
     end
   end
 
+  def info
+    render json: @bmi_ingest.get_basic_info(params[:type])
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_bmi_ingest
@@ -70,6 +94,5 @@ class BmiIngestsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def bmi_ingest_params
       params.require(:bmi_ingest).permit(:id,:user_id, :name, :file, :class_name, :identifier, :replace_files)
-
     end
 end

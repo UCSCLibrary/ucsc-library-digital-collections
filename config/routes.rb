@@ -55,12 +55,15 @@ Rails.application.routes.draw do
 
   resources :bmi_ingests do
     member do
-      get :pending
-      get :ingesting
-      get :completed
+      get :row_info
+      get :info
+      get :ingest_all
+#      get :pending
+#      get :ingesting
+#      get :completed
     end
   end
-  p  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+    # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
 
 end

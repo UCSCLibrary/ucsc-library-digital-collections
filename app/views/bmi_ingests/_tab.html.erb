@@ -17,13 +17,11 @@
         </ul>
 
         <ul class="rows">
-            <li>
-                <div class="row-header">
-                    <label>Sample Ingesting Title</label>
-                    <button class="dropdown">show/hide</button>
-                    <input type="checkbox"" />
-                </div>
-            </li>
+            <% @bmi_ingest.bmi_rows.where(:status => type).each do |row| %>
+                <%= render partial: "row", locals: { 
+                    id: row.id,
+                    title: row.title } %>
+            <% end %>
         </ul>
 
         <button class="select-all">Select All</button>

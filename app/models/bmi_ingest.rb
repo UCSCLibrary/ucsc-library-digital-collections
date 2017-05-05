@@ -11,6 +11,7 @@ class BmiIngest < ApplicationRecord
     instance.class_name = "Work"
     instance.save
     instance.setFile(params[:file])
+    instance.parse
     instance
   end
 
@@ -31,10 +32,12 @@ class BmiIngest < ApplicationRecord
     #create log for parsing file
 #   log!("ingest","parse","Parsing ingest #"+id+" filename:"+filename)
     #validate file
-    csv_text = File.read(filename)
+    csv_text = parseIngestSpec(File.read(filename))
+
     csv = CSV.parse(csv_text, :headers => true)
     #TODO validate csv.headers 
     # abort if this returns false
+    # (currently does nothing)
     parseHeaders(csv.headers)
     
     #Create Row
@@ -58,7 +61,7 @@ class BmiIngest < ApplicationRecord
       new_cells = bmi_row.createNewCells!(row) 
 
       #should be in success block of try/catch:
-      bmi_row.status = "parsed"
+      bmi_row.status = "unparsed"
       bmi_row.save
     end
   end
@@ -72,8 +75,29 @@ class BmiIngest < ApplicationRecord
     self.filename = save_as
   end
 
+  def get_basic_info( type = "all" )
+    case(type)
+        when "unparsed"
+          
+        when "parsed"
+
+        when "ingesting"
+
+        when "error"
+
+        when "ingested"
+
+        when "all"
+
+        else
+
+    end
+  end
+
   def numUnparsed
-    bmi_rows.where(status:"unparsed").count
+    return bmi_rows.where(status:"unparsed").count unless bmi_rows.empty?
+    csv_text = parseIngestSpec(File.read(filename))
+    csv_text.lines.count - 1;
   end
 
   def numParsed
@@ -95,6 +119,44 @@ class BmiIngest < ApplicationRecord
   def parseHeaders(headers)
     # each should correspond to a valid property
     # log any errors 
+  end
+
+  def hasSpecLine? 
+    csv_text = File.read(filename)
+    spec = csv_text.lines.first
+    spec.downcase.include? "ingest name"
+  end
+
+  def parseIngestSpec(csv) 
+    spec = csv.lines.first
+    if !spec.downcase.include? "ingest name"
+      return csv
+    end
+    spec_elements = spec.split(",");
+    spec_elements.each do |spec_key, index|
+      next if index.odd?
+      spec_value = spec_elements[index+1]
+
+      case spec_key.downcase
+          when "ingest name"
+            this.name = spec_value
+          when "relationship identifier"
+            this.relationship_identifier = spec_value
+          when "edit identifier"
+            this.edit_identifier = spec_value
+          when "replace files"
+            this.replace_files = spec_value
+          when "visibility"
+            this.visibility = spec_value
+          when "notifications"
+            this.notifications = spec_value
+          when "ignore"
+            this.ignore = spec_value
+      end
+      this.save
+      return csv.to_a[1..-1].join
+    end
+
   end
 
   def ingest
