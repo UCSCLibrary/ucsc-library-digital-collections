@@ -8,6 +8,10 @@ class Ability
 
   # Define any customized permissions here.
   def custom_permissions
+
+    can :manage, BmiIngest
+    can :manage, BmiRow
+
     # Limits deleting objects to a the admin user
     #
     # if current_user.admin?

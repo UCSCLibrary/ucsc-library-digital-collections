@@ -53,11 +53,18 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :bmi_rows do
+    member do
+      get :row_info
+    end
+  end
   resources :bmi_ingests do
     member do
       get :row_info
       get :info
       get :ingest_all
+      post :process_row
+      get :export_csv
 #      get :pending
 #      get :ingesting
 #      get :completed
