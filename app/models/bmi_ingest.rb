@@ -15,11 +15,26 @@ class BmiIngest < ApplicationRecord
     instance
   end
 
+
+  def get_csv(row_ids = "all")
+    if row_ids == "all" || row_ids.nil? || row_ids.empty?
+      rows = bmi_rows
+    else
+      rows = row_ids.map {|id| BmiRow.find(id) }
+    end
+
+    rows.reduce(headertext) {|csv,newrow| csv+"\n"+newrow.text}
+  end
+
   def headers
     return @headers if !@headers.blank?
     csv_text = File.read(filename)
     csv = CSV.parse(csv_text, :headers => true)
     @headers = csv.headers
+  end
+
+  def headertext
+    File.read(filename).lines.first
   end
 
   def parseChanged
@@ -58,11 +73,19 @@ class BmiIngest < ApplicationRecord
       #Create Cells
       #todo try/catch here
       #return newly parsed cells
-      new_cells = bmi_row.createNewCells!(row) 
+      begin
+        new_cells = bmi_row.createNewCells!(row) 
+        rescue
+          #do not raise an exception, just log it
+          # in the future, save this associated w/row
+          Rails.logger.warn "exception parsing row: "+bmi_row.id
+          #raise
+        else
+          bmi_row.status = "parsed"
+        ensure
+          bmi_row.save
+      end
 
-      #should be in success block of try/catch:
-      bmi_row.status = "unparsed"
-      bmi_row.save
     end
   end
 
@@ -119,6 +142,7 @@ class BmiIngest < ApplicationRecord
   def parseHeaders(headers)
     # each should correspond to a valid property
     # log any errors 
+    # save header line for future re-parsing
   end
 
   def hasSpecLine? 
@@ -127,34 +151,36 @@ class BmiIngest < ApplicationRecord
     spec.downcase.include? "ingest name"
   end
 
-  def parseIngestSpec(csv) 
+  def parseIngestSpec(csv)
     spec = csv.lines.first
     if !spec.downcase.include? "ingest name"
       return csv
     end
     spec_elements = spec.split(",");
-    spec_elements.each do |spec_key, index|
+    spec_elements.each_with_index do |spec_key, index|
       next if index.odd?
       spec_value = spec_elements[index+1]
 
       case spec_key.downcase
           when "ingest name"
-            this.name = spec_value
+            write_attribute(:name,spec_value)
+          when "work type"
+            write_attribute(:work_type,spec_value)
           when "relationship identifier"
-            this.relationship_identifier = spec_value
+            write_attribute(:relationship_identifier,spec_value)
           when "edit identifier"
-            this.edit_identifier = spec_value
+            write_attribute(:edit_identifier,spec_value)
           when "replace files"
-            this.replace_files = spec_value
+            write_attribute(:replace_files, spec_value)
           when "visibility"
-            this.visibility = spec_value
+            write_attribute(:visibility, spec_value)
           when "notifications"
-            this.notifications = spec_value
+            write_attribute(:notifications, spec_value)
           when "ignore"
-            this.ignore = spec_value
+            write_attribute(:ignore, spec_value)
       end
-      this.save
-      return csv.to_a[1..-1].join
+      save
+      return csv.lines[1..-1].join
     end
 
   end

@@ -2,6 +2,7 @@ class BmiRow < ApplicationRecord
   BASE_PATH = "/avalon2sufia/inbox"
   belongs_to :bmi_ingest 
   has_many :bmi_cells
+  has_many :bmi_relationships
 
   def parse
     #TODO
@@ -41,26 +42,29 @@ class BmiRow < ApplicationRecord
 #special cell types:
 #file
 #relationship (parent, child)
-#relationship identifier
+#work type
 #edit identifier
 #ignore
 
-  def ingest!(user=User.first)
+  def ingest!(user)
     #TODO THIS SHOULD NEVER DEFAULT TO ME IN PRODUCTION
     metadata = {}
+#    work_type = @bmi_ingest.work_type
     bmi_cells.each do |cell|
       next if cell.value_string.blank?
-      case cell.name
+      case cell.name.downcase
           when "file"
             file = File.open(File.join(BASE_PATH,cell.value_string))
             uploaded_file = Sufia::UploadedFile.create(file: file, user: user)
-            (metadata[:uploaded_files] ||= []) << uploaded_file.id if !uploaded_file.id.nil?            
+            (metadata[:uploaded_files] ||= []) << uploaded_file.id if !uploaded_file.id.nil?
+          when "parent"
+          when "child"
+          when "work type"
+#todo: when @bmi_ingest.ignore
+#todo: when @bmi_ingest.edit_identifier
           else
-            (metadata[cell.name] ||= []) << cell.value_string if !cell.value_string.blank?    
-      end
-      if cell.name == "file" && !cell.value_string.blank?
-      else
-
+            (metadata[cell.name] ||= []) << cell.value_string if !cell.value_string.blank?
+    
       end
     end
 
@@ -69,7 +73,6 @@ class BmiRow < ApplicationRecord
     save
     #start create_work job
     UcscCreateWorkJob.perform_later("Work",user,metadata,id)
-
     #TODO create log
   end
 
@@ -82,7 +85,7 @@ class BmiRow < ApplicationRecord
     summary_fields = ["title","description","creator","subject","date_created","abstract"]
     info = {}
     bmi_cells.each do |cell|
-      if summary_fields.include? cell.name
+      if summary_fields.include? cell.name.downcase
         info[cell.name] = cell.value_string
       end
     end
