@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170322172932) do
+ActiveRecord::Schema.define(version: 20170508215205) do
 
   create_table "bmi_cells", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "bmi_row_id"
@@ -28,11 +28,14 @@ ActiveRecord::Schema.define(version: 20170322172932) do
     t.string   "filename"
     t.string   "class_name"
     t.string   "status"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-    t.string   "identifier"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.string   "edit_identifier"
     t.boolean  "replace_files"
     t.string   "name"
+    t.string   "relationship_identifier"
+    t.boolean  "visibility"
+    t.boolean  "notifications"
     t.index ["user_id"], name: "index_bmi_ingests_on_user_id", using: :btree
   end
 
@@ -50,12 +53,22 @@ ActiveRecord::Schema.define(version: 20170322172932) do
     t.index ["bmi_row_id"], name: "index_bmi_logs_on_bmi_row_id", using: :btree
   end
 
+  create_table "bmi_relationships", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "object_identifier"
+    t.string   "identifier_type"
+    t.string   "relationship_type"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.integer  "row_id"
+  end
+
   create_table "bmi_rows", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "bmi_ingest_id"
     t.string   "status"
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
     t.text     "text",          limit: 65535
+    t.string   "ingested_id"
     t.index ["bmi_ingest_id"], name: "index_bmi_rows_on_bmi_ingest_id", using: :btree
   end
 

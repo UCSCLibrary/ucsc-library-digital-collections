@@ -11,7 +11,19 @@ class BmiIngest < ApplicationRecord
     instance.class_name = "Work"
     instance.save
     instance.setFile(params[:file])
+    instance.parse
     instance
+  end
+
+
+  def get_csv(row_ids = "all")
+    if row_ids == "all" || row_ids.nil? || row_ids.empty?
+      rows = bmi_rows
+    else
+      rows = row_ids.map {|id| BmiRow.find(id) }
+    end
+
+    rows.reduce(headertext) {|csv,newrow| csv+"\n"+newrow.text}
   end
 
   def headers
@@ -19,6 +31,10 @@ class BmiIngest < ApplicationRecord
     csv_text = File.read(filename)
     csv = CSV.parse(csv_text, :headers => true)
     @headers = csv.headers
+  end
+
+  def headertext
+    File.read(filename).lines.first
   end
 
   def parseChanged
@@ -31,10 +47,12 @@ class BmiIngest < ApplicationRecord
     #create log for parsing file
 #   log!("ingest","parse","Parsing ingest #"+id+" filename:"+filename)
     #validate file
-    csv_text = File.read(filename)
+    csv_text = parseIngestSpec(File.read(filename))
+
     csv = CSV.parse(csv_text, :headers => true)
     #TODO validate csv.headers 
     # abort if this returns false
+    # (currently does nothing)
     parseHeaders(csv.headers)
     
     #Create Row
@@ -55,11 +73,19 @@ class BmiIngest < ApplicationRecord
       #Create Cells
       #todo try/catch here
       #return newly parsed cells
-      new_cells = bmi_row.createNewCells!(row) 
+      begin
+        new_cells = bmi_row.createNewCells!(row) 
+        rescue
+          #do not raise an exception, just log it
+          # in the future, save this associated w/row
+          Rails.logger.warn "exception parsing row: "+bmi_row.id
+          #raise
+        else
+          bmi_row.status = "parsed"
+        ensure
+          bmi_row.save
+      end
 
-      #should be in success block of try/catch:
-      bmi_row.status = "parsed"
-      bmi_row.save
     end
   end
 
@@ -72,8 +98,29 @@ class BmiIngest < ApplicationRecord
     self.filename = save_as
   end
 
+  def get_basic_info( type = "all" )
+    case(type)
+        when "unparsed"
+          
+        when "parsed"
+
+        when "ingesting"
+
+        when "error"
+
+        when "ingested"
+
+        when "all"
+
+        else
+
+    end
+  end
+
   def numUnparsed
-    bmi_rows.where(status:"unparsed").count
+    return bmi_rows.where(status:"unparsed").count unless bmi_rows.empty?
+    csv_text = parseIngestSpec(File.read(filename))
+    csv_text.lines.count - 1;
   end
 
   def numParsed
@@ -95,6 +142,47 @@ class BmiIngest < ApplicationRecord
   def parseHeaders(headers)
     # each should correspond to a valid property
     # log any errors 
+    # save header line for future re-parsing
+  end
+
+  def hasSpecLine? 
+    csv_text = File.read(filename)
+    spec = csv_text.lines.first
+    spec.downcase.include? "ingest name"
+  end
+
+  def parseIngestSpec(csv)
+    spec = csv.lines.first
+    if !spec.downcase.include? "ingest name"
+      return csv
+    end
+    spec_elements = spec.split(",");
+    spec_elements.each_with_index do |spec_key, index|
+      next if index.odd?
+      spec_value = spec_elements[index+1]
+
+      case spec_key.downcase
+          when "ingest name"
+            write_attribute(:name,spec_value)
+          when "work type"
+            write_attribute(:work_type,spec_value)
+          when "relationship identifier"
+            write_attribute(:relationship_identifier,spec_value)
+          when "edit identifier"
+            write_attribute(:edit_identifier,spec_value)
+          when "replace files"
+            write_attribute(:replace_files, spec_value)
+          when "visibility"
+            write_attribute(:visibility, spec_value)
+          when "notifications"
+            write_attribute(:notifications, spec_value)
+          when "ignore"
+            write_attribute(:ignore, spec_value)
+      end
+      save
+      return csv.lines[1..-1].join
+    end
+
   end
 
   def ingest

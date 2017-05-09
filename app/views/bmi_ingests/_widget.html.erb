@@ -6,9 +6,9 @@
                 <a href="#unparsed-rows">Unintelligible Rows (<%= @bmi_ingest.numUnparsed %>)</a>
             </li>
         <% end %>
-        <li>
+         <li>
             <a href="#parsed-rows">Awaiting Ingest (<%= @bmi_ingest.numParsed %>)</a>
-        </li>
+        </li> 
         <li>
             <a href="#currently-ingesting">Currently Ingesting (<%= @bmi_ingest.numIngesting %>)</a>
         </li>
@@ -23,164 +23,66 @@
     </ul>
 
     <% if @bmi_ingest.numUnparsed > 0 %>
-        <div id="unparsed-rows">
-            <span class="tab-title">Unintelligible Rows</span>
-            <span class="tab-buttons"> 
-                <button class="dropdown actions">Actions</button>
-                <ul class="actions hideable">
-                    <li>Retry Parsing</li>
-                    <li>Edit in OpenRefine</li>
-                    <li>Export as CSV</li>
-                    <li>Export as XML</li>
-                    <li>Cancel and Remove</li>
-                </ul>
-                <button class="dropdown">show/hide</button>
-            </span>
-            <div class="hideable">
-                <ul class="rows">
-                    <li>
-                        <div class="row-header">
-                            <input type="checkbox" selected="selected" />
-                            <label>Row 12</label>
-                        </div>
-                        <button  class="dropdown">show/hide</button>
-                        <div class="hideable">
-                            <p>Here there will be two tabs. One will include metadata from the row, with errors displayed prominently. Another will show only the errors, if there are any. A third will show all log entries related to this row.</p>
-                        </div>  
-                    </li>
-                </ul>
-            </div>
-        </div>
+        <%= render partial: "tab", locals: { 
+            type: "unparsed",
+            div_id: "unparsed-rows",
+            title: "Unintelligible Rows (Could Not Parse)",
+            num_rows: @bmi_ingest.numUnparsed,
+            actions: [{id: "parse", title: "Retry Parsing"},
+                      {id: "edit-inline", title: "Edit inline"},
+                      {id: "edit-OR", title: "Edit in OpenRefine"},
+                      {id: "export-csv", title: "Export as CSV"},
+                      {id: "export-xml", title: "Export as XML"},
+                      {id: "remove", title: "Remove"}]
+        } %>
     <% end %>
 
     <%= render partial: "tab", locals: { 
+        type: "parsed",
         div_id: "parsed-rows",
         title: "Parsed Rows Pending Ingest",
         num_rows: @bmi_ingest.numParsed,
-        actions: [{id: "ingest-now", title: "Ingest Now"},
+        actions: [{id: "ingest", title: "Ingest Now"},
                   {id: "edit-OR", title: "Edit in OpenRefine"},
                   {id: "export-csv", title: "Export as CSV"},
-                  {id: "export-xml", title: "Export as XML"}]
-        
+                  {id: "export-xml", title: "Export as XML"},
+                  {id: "remove", title: "Remove"}]    
     } %>
-<!--
-    <div id="parsed-rows">
-        <span class="tab-title">Parsed Rows Pending Ingest</span>
-        <div class="status-stat"> 
-            (<%= @bmi_ingest.numParsed %>)
-        </div>
 
-        <button class="select-all">Select All</button>
-        <button class="deselect-all">Select None</button>
 
-        <ul class="actions">
-            <button disabled>Ingest Now</button>
-            <button disabled>Edit in OpenRefine</button>
-            <button disabled>Export as CSV</button>
-            <button disabled>Export as XML</button>
-            <button disabled>Export as ttl</button>
-            <button disabled>Cancel and Remove</button>
-        </ul>
-
-        <ul class="rows">
-            <li>
-                <div class="row-header">
-                    <label>Sample Ingesting Title</label>
-                    <button class="dropdown">show/hide</button>
-                    <input type="checkbox"" />
-                </div>
-            </li>
-        </ul>
-
-        <button class="select-all">Select All</button>
-        <button class="deselect-all">Select None</button>
-    </div>
-
- -->
-
-    <div id="currently-ingesting">
-        <span class="tab-title">Rows Currently Ingesting</span>
-        <div class="status-stat"> 
-            (<%= @bmi_ingest.numIngesting %>)
-        </div>
-
-        <button class="select-all">Select All</button>
-        <button class="deselect-all">Select None</button>
-
-        <ul class="actions">
-            <button disabled>Cancel Importing</button>
-            <button disabled>Cancel and Remove</button>
-        </ul>
-
-        <ul class="rows">
-            <li>
-                <div class="row-header">
-                    <label>Sample Ingesting Title</label>
-                    <button class="dropdown">show/hide</button>
-                    <input type="checkbox"" />
-                </div>
-            </li>
-        </ul>
-
-        <button class="select-all">Select All</button>
-        <button class="deselect-all">Select None</button>
-    </div>
-
+    <%= render partial: "tab", locals: { 
+        type: "ingesting",
+        div_id: "currently-ingesting",
+        title: "Rows Currently Ingesting",
+        num_rows: @bmi_ingest.numIngesting,
+        actions: [{id: "cancel", title: "Cancel Ingest"},
+                  {id: "remove", title: "Cancel and Remove"}]
+    } %>
 
     <% if @bmi_ingest.numErrors > 0 %>
-        <div id = "error-rows">
-            <span class="tab-title">Ingest Errors</span>
-            <div class="status-stat"> 
-                (<%= @bmi_ingest.numErrors %>)
-            </div>
-            <button class="dropdown">show/hide</button>
-            <div class="hideable">
-                <button>Actions</button>
-                <ul class="actions">
-                    <button disabled>Retry Ingest</button>
-                    <button disabled>Edit in OpenRefine</button>
-                    <button disabled>Export Metadata as CSV</button>
-                    <button disabled>Export Metadata as XML</button>
-                    <button disabled>Cancel and Remove</button>
-            </li>
-                </ul>
-                <ul class="rows">
-                    <li>
-                        <div class="row-header">
-                            <label>Sample Title (or unparsed row #)</label>
-                            <button class="dropdown">show/hide</button>
-                            <input type="checkbox" selected="selected" />
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        <%= render partial: "tab", locals: { 
+            type: "error",
+            div_id: "error-rows",
+            title: "Ingest Failures",
+            num_rows: @bmi_ingest.numErrors,
+            actions: [{id: "ingest", title: "Retry Ingest"},
+                      {id: "edit-OR", title: "Edit in OpenRefine"},
+                      {id: "export-csv", title: "Export as CSV"},
+                      {id: "export-xml", title: "Export as XML"},
+                      {id: "remove", title: "Cancel and Remove"}]
+        } %>
     <% end %>
 
-    <div id = "ingested-rows">
-        <span class="tab-title">Successfully Ingested Items</span>
-        <div class="status-stat"> 
-            (<%= @bmi_ingest.numIngested %>)
-        </div>
-        <button cass="dropdown">show/hide</button>
-        <div class="hideable">
-            <button>Actions</button>
-            <ul class="actions">
-                <li>Export Metadata as CSV</li>
-                <li>Export Metadata as XML</li>
-                <li>Cancel and Remove</li>
-                </li>
-            </ul>
-            <ul class="rows">
-                <li>
-                    <div class="row-header">
-                        <label>Sample Title</label>
-                        <button class="dropdown">show/hide</button>
-                        <input type="checkbox" selected="selected" />
-                    </div>
+    <%= render partial: "tab", locals: { 
+        type: "ingested",
+        div_id: "ingested-rows",
+        title: "Successfully Ingested Items",
+        num_rows: @bmi_ingest.numIngested,
+        actions: [{id: "export-csv", title: "Export as CSV"},
+                  {id: "export-xml", title: "Export as XML"},
+                  {id: "delete", title: "Delete Items"}
+        ]
+        
+    } %>
 
-                </li>
-            </ul>
-        </div>
-    </div>
 </div>
