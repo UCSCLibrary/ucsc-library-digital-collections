@@ -44,10 +44,14 @@ class BmiIngest < ApplicationRecord
   end
 
   def parse
-    #create log for parsing file
-#   log!("ingest","parse","Parsing ingest #"+id+" filename:"+filename)
+
     #validate file
-    csv_text = parseIngestSpec(File.read(filename))
+    csv_text = File.read(filename)
+    row_index_offset = 2
+    if (hasSpecLine?)
+      csv_text = parseIngestSpec(file_text)
+      row_index_offset += 1
+    end
 
     csv = CSV.parse(csv_text, :headers => true)
     #TODO validate csv.headers 
@@ -56,13 +60,15 @@ class BmiIngest < ApplicationRecord
     parseHeaders(csv.headers)
     
     #Create Row
-    csv.each do |row|
+    csv.each do |row,index|
       #This will store the persistent row object
       bmi_row = bmi_rows.find_by(text: row.to_s)
       
       if bmi_row.nil?
          # we have no row record for this yet
-        bmi_row = bmi_rows.create(status: "unparsed",text: row.to_s)
+        bmi_row = bmi_rows.create(status: "unparsed",
+                                  text: row.to_s,
+                                  line_number: index + row_index_offset)
       else
         # we already have a row record
         #If the row is already parsed, move to the next row
@@ -97,6 +103,7 @@ class BmiIngest < ApplicationRecord
     end
     self.filename = save_as
   end
+
 
   def get_basic_info( type = "all" )
     case(type)
@@ -148,7 +155,7 @@ class BmiIngest < ApplicationRecord
   def hasSpecLine? 
     csv_text = File.read(filename)
     spec = csv_text.lines.first
-    spec.downcase.include? "ingest name"
+    return spec.downcase.include? "ingest name"
   end
 
   def parseIngestSpec(csv)

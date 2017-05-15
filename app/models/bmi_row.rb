@@ -46,23 +46,50 @@ class BmiRow < ApplicationRecord
 #edit identifier
 #ignore
 
+
   def ingest!(user)
-    #TODO THIS SHOULD NEVER DEFAULT TO ME IN PRODUCTION
     metadata = {}
-#    work_type = @bmi_ingest.work_type
+    edit_type = bmi_ingest.edit_type
     bmi_cells.each do |cell|
+      edit_existing = false;
+      edit_id = nil;
+      object_id = cell.value_string
+      work_type = bmi_ingest.work_type
+      id_type = bmi_ingest.relationship_identifier
+      if(cell.value_string.include?(":"))
+        split = cell.value_string.split(":")
+        id_type = split[0]
+        object_id = split[1]
+      end
+
       next if cell.value_string.blank?
       case cell.name.downcase
           when "file"
             file = File.open(File.join(BASE_PATH,cell.value_string))
             uploaded_file = Sufia::UploadedFile.create(file: file, user: user)
             (metadata[:uploaded_files] ||= []) << uploaded_file.id if !uploaded_file.id.nil?
-          when "parent"
-          when "child"
+
+          when "parent" || "child"
+            # This cell specifies a relationship. 
+            # Log this relationship in the database for future processing
+            bmi_relationships.build({ :relationship_type => cell.name.downcase,
+                                      :identifier_type => id_type,
+                                      :object_identifier => object_id,
+                                      :status => "incomplete"})
           when "work type"
-#todo: when @bmi_ingest.ignore
-#todo: when @bmi_ingest.edit_identifier
+            # set the work type for this item
+            # overriding the default set for the whole ingest
+            work_type = cell.value_string
+          
+          when bmi_ingest.edit_identifier
+            # we are editing an existing work
+            edit_existing = true;
+            edit_id = object_id;
+            edit_type = id_type;
+          when *(bmi_ingest.ignore.split(/[,;:]/))
+            # Ignore this i.e. do nothing
           else
+            # this is presumably a normal metadata field
             (metadata[cell.name] ||= []) << cell.value_string if !cell.value_string.blank?
     
       end
@@ -71,9 +98,18 @@ class BmiRow < ApplicationRecord
     #update status
     self.status = "ingesting"
     save
-    #start create_work job
-    UcscCreateWorkJob.perform_later("Work",user,metadata,id)
-    #TODO create log
+
+    if edit_existing
+      UcscEditWorkJob.perform_later(work_type,user,metadata,id)
+    else
+      #start create_work job
+      UcscCreateWorkJob.perform_later(work_type,user,metadata,id)
+    end
+  end
+
+  def ingested_work
+    return false if !work_id
+    work_type.camelize.constantize.find(work_id)
   end
 
   def title

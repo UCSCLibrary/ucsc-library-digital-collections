@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170508215205) do
+ActiveRecord::Schema.define(version: 20170510165500) do
 
   create_table "bmi_cells", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "bmi_row_id"
@@ -60,6 +60,7 @@ ActiveRecord::Schema.define(version: 20170508215205) do
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
     t.integer  "row_id"
+    t.string   "status"
   end
 
   create_table "bmi_rows", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -69,6 +70,7 @@ ActiveRecord::Schema.define(version: 20170508215205) do
     t.datetime "updated_at",                  null: false
     t.text     "text",          limit: 65535
     t.string   "ingested_id"
+    t.integer  "line_number"
     t.index ["bmi_ingest_id"], name: "index_bmi_rows_on_bmi_ingest_id", using: :btree
   end
 
