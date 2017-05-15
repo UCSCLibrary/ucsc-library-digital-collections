@@ -28,12 +28,14 @@ class BmiIngest < ApplicationRecord
 
   def headers
     return @headers if !@headers.blank?
+    return false if !File.exists(filename)
     csv_text = File.read(filename)
     csv = CSV.parse(csv_text, :headers => true)
     @headers = csv.headers
   end
 
   def headertext
+    return false if !File.exists(filename)
     File.read(filename).lines.first
   end
 
@@ -44,6 +46,7 @@ class BmiIngest < ApplicationRecord
   end
 
   def parse
+<<<<<<< HEAD
 
     #validate file
     csv_text = File.read(filename)
@@ -52,6 +55,13 @@ class BmiIngest < ApplicationRecord
       csv_text = parseIngestSpec(file_text)
       row_index_offset += 1
     end
+=======
+    #create log for parsing file
+#   log!("ingest","parse","Parsing ingest #"+id+" filename:"+filename)
+
+    return false if !File.exists?(filename)
+    csv_text = parseIngestSpec(File.read(filename))
+>>>>>>> b3dd59adf923e2cadcc235771d97df979002851a
 
     csv = CSV.parse(csv_text, :headers => true)
     #TODO validate csv.headers 
@@ -126,6 +136,7 @@ class BmiIngest < ApplicationRecord
 
   def numUnparsed
     return bmi_rows.where(status:"unparsed").count unless bmi_rows.empty?
+    return 0 if !File.exists?(filename)
     csv_text = parseIngestSpec(File.read(filename))
     csv_text.lines.count - 1;
   end
@@ -153,6 +164,7 @@ class BmiIngest < ApplicationRecord
   end
 
   def hasSpecLine? 
+    return false if !File.exists(filename)
     csv_text = File.read(filename)
     spec = csv_text.lines.first
     return spec.downcase.include? "ingest name"
