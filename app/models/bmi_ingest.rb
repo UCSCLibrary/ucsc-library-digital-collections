@@ -46,22 +46,13 @@ class BmiIngest < ApplicationRecord
   end
 
   def parse
-<<<<<<< HEAD
-
-    #validate file
+    return false if !File.exists?(filename)
     csv_text = File.read(filename)
     row_index_offset = 2
     if (hasSpecLine?)
       csv_text = parseIngestSpec(file_text)
       row_index_offset += 1
     end
-=======
-    #create log for parsing file
-#   log!("ingest","parse","Parsing ingest #"+id+" filename:"+filename)
-
-    return false if !File.exists?(filename)
-    csv_text = parseIngestSpec(File.read(filename))
->>>>>>> b3dd59adf923e2cadcc235771d97df979002851a
 
     csv = CSV.parse(csv_text, :headers => true)
     #TODO validate csv.headers 
