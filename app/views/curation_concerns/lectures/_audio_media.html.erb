@@ -1,5 +1,5 @@
-<% if !$presenter.file_set_ids.blank? %> 
-<%= render 'lecture_playlist', file_set_ids: @presenter.file_set_ids %>
-<%= javascript_include_tag "include_player" %>
-<%= stylesheet_link_tag "embed" %>
-<% end  %>
+<% if !@presenter.file_set_ids.blank? %> 
+    <%= render 'lecture_playlist', file_set_ids: @presenter.file_set_ids %>
+    <%= javascript_include_tag "include_player" %>
+    <%= stylesheet_link_tag "embed" %>
+<% end %>
