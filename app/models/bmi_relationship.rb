@@ -20,7 +20,7 @@ class BmiRelationship < ApplicationRecord
             wait!
           else
             objects.each do |solr_object|
-              object = solr_object["has_model_ssim"]first.constantize.find(solr_object["id"])
+              object = solr_object["has_model_ssim"].first.constantize.find(solr_object["id"])
               create_relationship!(relationship_type,subject,object)
             end
           end
@@ -28,17 +28,18 @@ class BmiRelationship < ApplicationRecord
         when "row"
           fail! unless objrow = BmiRow.find_by(ingest_id: bmi_row.bmi_ingest_id, line_number: object_identifier)
           case objrow.status
-              when "ingested"
+          when "ingested"
                 if object = objrow.ingested_work
                   create_relationship!(relationship_type,subject,object)
                 else
                   wait!
-              when "error"
-                fail!
-              when "failed"
-                fail!
-              else
-                wait!
+                end
+          when "error"
+            fail!
+          when "failed"
+            fail!
+          else
+            wait!
           end
     end
     
