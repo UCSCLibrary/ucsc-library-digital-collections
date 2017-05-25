@@ -2,7 +2,7 @@ namespace :ucsc_sufia_based_dams  do
   task :link_stream do
     on roles(:app), in: :sequence, wait: 5 do
       print "Linking stream folder..."
-      execute "ln -s /avalontosufia/derivatives #{current_path}/public/stream"
+      execute "ln -s /avalon2sufia/derivatives #{current_path}/public/stream"
     end
   end
 end
