@@ -12,5 +12,5 @@ namespace :ucsc_sufia_based_dams  do
     end
   end
 end
-after "deploy:started","ucsc_sufia_based_dams:stop_resque"
-#after "deploy:finished","ucsc_sufia_based_dams:start_resque"
+after "deploy:finished","ucsc_sufia_based_dams:stop_resque"
+after "deploy:finished","ucsc_sufia_based_dams:start_resque"
