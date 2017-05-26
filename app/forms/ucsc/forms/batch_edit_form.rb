@@ -1,6 +1,6 @@
 module Ucsc
   module Forms
-    class BatchEditForm < Sufia::Forms::WorkForm
+    class BatchEditForm < Hyrax::Forms::WorkForm
 
       # Used for drawing the fields that appear on the page
       self.terms = [:creator, :contributor, :description,
@@ -8,7 +8,7 @@ module Ucsc
                     :subject, :language, :identifier, :based_near,
                     :related_url]
       self.required_fields = []
-      self.model_class = Sufia.primary_work_type
+      self.model_class = Hyrax.primary_work_type
 
       attr_accessor :names
 

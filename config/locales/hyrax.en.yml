@@ -1,0 +1,97 @@
+en:
+  blacklight:
+    search:
+      fields:
+        facet:
+          based_near_sim: Location
+          creator_sim: Creator
+          file_format_sim: Format
+          generic_type_sim: Type
+          keyword_sim: Keyword
+          language_sim: Language
+          publisher_sim: Publisher
+          subject_sim: Subject
+        index:
+          based_near_tesim: Location
+          contributor_tesim: Contributor
+          creator_tesim: Creator
+          date_created_tesim: Date Created
+          date_modified_dtsi: Date Modified
+          date_uploaded_dtsi: Date Uploaded
+          description_tesim: Description
+          file_format_tesim: File Format
+          identifier_tesim: Identifier
+          keyword_tesim: Keyword
+          language_tesim: Language
+          publisher_tesim: Publisher
+          rights_tesim: Rights
+          subject_tesim: Subject
+        show:
+          based_near_tesim: Location
+          contributor_tesim: Contributor
+          creator_tesim: Creator
+          date_created_tesim: Date Created
+          date_modified_dtsi: Date Modified
+          date_uploaded_dtsi: Date Uploaded
+          description_tesim: Description
+          file_format_tesim: File Format
+          identifier_tesim: Identifier
+          keyword_tesim: Keyword
+          language_tesim: Language
+          publisher_tesim: Publisher
+          rights_tesim: Rights
+          subject_tesim: Subject
+          title_tesim: Title
+  hyrax:
+    product_name: "Digital Assets"
+    institution_name:  &INSTITUTION_NAME "UC Santa Cruz"
+    division:
+      name: "Digital Library Initiatives"
+      homepage_url: "http://library.ucsc.edu/exhibits/"
+    document_language: "en"
+    institution:
+      name: "UC Santa Cruz"
+      homepage_url: "http://ucsc.edu"
+    schema_org:
+      resource_type:
+        Article: "http://schema.org/Article"
+        Audio: "http://schema.org/AudioObject"
+        Book: "http://schema.org/Book"
+        Conference Proceeding: "http://schema.org/ScholarlyArticle"
+        Course: "http://schema.org/Course"
+        Dataset: "http://schema.org/Dataset"
+        Dissertation: "http://schema.org/ScholarlyArticle"
+        Image: "http://schema.org/ImageObject"
+        Map or Cartographic Material: "http://schema.org/Map"
+        Masters Thesis: "http://schema.org/ScholarlyArticle"
+        Part of Book: "http://schema.org/Book"
+        Research Paper: "http://schema.org/ScholarlyArticle"
+        Software or Program Code: "http://schema.org/Code"
+        Video: "http://schema.org/VideoObject"
+    dashboard:
+      create_work: "Create Work"
+    controls:
+      home:             "Home"
+      about:            "About"
+      help:             "Help"
+      contact:          "Contact"
+    product_name:       "Digital Collections Online"
+    product_twitter_handle: "@UCSCLibrary"
+    institution_name:   "UC Santa Cruz"
+    institution_name_full:   "University of California Santa Cruz"
+    search:
+      form:
+        q:
+          label:          "Search Collections"
+          placeholder:    "Enter search terms"
+        option:
+          all:
+            label_short:  "All"
+            label_long:   "All Collections"
+    directory:
+      suffix:           "@ucsc.edu"
+    footer:
+      copyright_html: "<strong>Copyright &copy; 2016 UC Santa Cruz & The Hydra Project</strong> License currently under negotiation"
+    base:
+      metadata:
+        header: Description

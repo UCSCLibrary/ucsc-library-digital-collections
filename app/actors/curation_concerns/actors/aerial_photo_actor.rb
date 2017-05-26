@@ -1,8 +1,8 @@
 # Generated via
 #  `rails generate curation_concerns:work AerialPhoto`
-module CurationConcerns
+module Hyrax
   module Actors
-    class AerialPhotoActor < CurationConcerns::Actors::BaseActor
+    class AerialPhotoActor < Hyrax::Actors::BaseActor
     end
   end
 end

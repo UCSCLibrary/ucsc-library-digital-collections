@@ -66,7 +66,7 @@ class BmiRow < ApplicationRecord
       case cell.name.downcase
           when "file"
             file = File.open(File.join(BASE_PATH,cell.value_string))
-            uploaded_file = Sufia::UploadedFile.create(file: file, user: user)
+            uploaded_file = Hyrax::UploadedFile.create(file: file, user: user)
             (metadata[:uploaded_files] ||= []) << uploaded_file.id if !uploaded_file.id.nil?
 
           when "parent" || "child"

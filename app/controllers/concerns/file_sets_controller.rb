@@ -1,7 +1,7 @@
 class FileSetsController < ApplicationController
   require 'digest'
-  include CurationConcerns::FileSetsControllerBehavior
-  include Sufia::Controller
-  include Sufia::FileSetsControllerBehavior
+  include Hyrax::FileSetsControllerBehavior
+  include Hyrax::Controller
+  include Hyrax::FileSetsControllerBehavior
   include HydraHls::FileSetsControllerBehavior  
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170510165500) do
+ActiveRecord::Schema.define(version: 20170525223545) do
 
   create_table "bmi_cells", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "bmi_row_id"
@@ -171,6 +171,13 @@ ActiveRecord::Schema.define(version: 20170510165500) do
     t.index ["user_id"], name: "index_file_view_stats_on_user_id", using: :btree
   end
 
+  create_table "hyrax_features", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "key",                        null: false
+    t.boolean  "enabled",    default: false, null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
   create_table "local_authorities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
   end
@@ -236,6 +243,17 @@ ActiveRecord::Schema.define(version: 20170510165500) do
     t.index ["receiver_id", "receiver_type"], name: "index_mailboxer_receipts_on_receiver_id_and_receiver_type", using: :btree
   end
 
+  create_table "minter_states", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "namespace",                default: "default", null: false
+    t.string   "template",                                     null: false
+    t.text     "counters",   limit: 65535
+    t.bigint   "seq",                      default: 0
+    t.binary   "rand",       limit: 65535
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
+    t.index ["namespace"], name: "index_minter_states_on_namespace", unique: true, using: :btree
+  end
+
   create_table "permission_template_accesses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "permission_template_id"
     t.string   "agent_type"
@@ -249,12 +267,11 @@ ActiveRecord::Schema.define(version: 20170510165500) do
   create_table "permission_templates", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "admin_set_id"
     t.string   "visibility"
-    t.string   "workflow_name",  null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.date     "release_date"
     t.string   "release_period"
-    t.index ["admin_set_id"], name: "index_permission_templates_on_admin_set_id", using: :btree
+    t.index ["admin_set_id"], name: "index_permission_templates_on_admin_set_id", unique: true, using: :btree
   end
 
   create_table "proxy_deposit_requests", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -472,13 +489,15 @@ ActiveRecord::Schema.define(version: 20170510165500) do
   end
 
   create_table "sipity_workflows", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string   "name",                              null: false
+    t.string   "name",                                 null: false
     t.string   "label"
-    t.text     "description",         limit: 65535
-    t.datetime "created_at",                        null: false
-    t.datetime "updated_at",                        null: false
+    t.text     "description",            limit: 65535
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
     t.boolean  "allows_access_grant"
-    t.index ["name"], name: "index_sipity_workflows_on_name", unique: true, using: :btree
+    t.integer  "permission_template_id"
+    t.boolean  "active"
+    t.index ["permission_template_id", "name"], name: "index_sipity_workflows_on_permission_template_and_name", unique: true, using: :btree
   end
 
   create_table "subject_local_authority_entries", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -486,13 +505,6 @@ ActiveRecord::Schema.define(version: 20170510165500) do
     t.string "lowerLabel"
     t.string "url"
     t.index ["lowerLabel"], name: "entries_by_lower_label", using: :btree
-  end
-
-  create_table "sufia_features", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string   "key",                        null: false
-    t.boolean  "enabled",    default: false, null: false
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
   end
 
   create_table "tinymce_assets", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

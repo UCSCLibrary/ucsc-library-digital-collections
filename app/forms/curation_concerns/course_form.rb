@@ -1,7 +1,7 @@
 # Generated via
 #  `rails generate curation_concerns:work Course`
-module CurationConcerns
-  class CourseForm < Sufia::Forms::WorkForm
+module Hyrax
+  class CourseForm < Hyrax::Forms::WorkForm
 
     self.model_class = ::Course
     self.terms += [:resource_type]

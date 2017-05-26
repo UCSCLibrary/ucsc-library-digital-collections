@@ -1,11 +1,10 @@
 # Generated via
 #  `rails generate curation_concerns:work Course`
 
-module CurationConcerns
+module Hyrax
   class CoursesController < ApplicationController
-    include CurationConcerns::CurationConcernController
-    # Adds Sufia behaviors to the controller.
-    include Sufia::WorksControllerBehavior
+    # Adds Hyrax behaviors to the controller.
+    include Hyrax::WorksControllerBehavior
     
     self.curation_concern_type = Course
     self.show_presenter = CourseShowPresenter

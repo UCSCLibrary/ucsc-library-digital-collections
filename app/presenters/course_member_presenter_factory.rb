@@ -1,4 +1,4 @@
-class CourseMemberPresenterFactory < CurationConcerns::MemberPresenterFactory
+class CourseMemberPresenterFactory < Hyrax::MemberPresenterFactory
   
   self.work_presenter_class = LectureShowPresenter
 

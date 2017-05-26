@@ -1,9 +1,9 @@
 # Generated via
 #  `rails generate curation_concerns:work Course`
 class Course < ActiveFedora::Base
-  include ::CurationConcerns::WorkBehavior
-  include ::CurationConcerns::BasicMetadata
-  include Sufia::WorkBehavior
+  include ::Hyrax::WorkBehavior
+  include ::Hyrax::BasicMetadata
+  include Hyrax::WorkBehavior
 
   self.human_readable_type = 'Course'
   # Change this to restrict which works can be added as a child.

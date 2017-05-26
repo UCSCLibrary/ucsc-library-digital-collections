@@ -1,5 +1,5 @@
 <div class="show-actions">
-  <% if Sufia.config.analytics and presenter.editor? %>
+  <% if Hyrax.config.analytics and presenter.editor? %>
     <%= link_to "Analytics", presenter.stats_path, id: 'stats', class: 'btn btn-default' %>
   <% end %>
   <% if presenter.editor? %>
@@ -10,11 +10,11 @@
       <% end %>
   <% end %>
   <% if presenter.display_feature_link? %>
-      <%= link_to "Feature", sufia.featured_work_path(presenter, format: :json),
+      <%= link_to "Feature", hyrax.featured_work_path(presenter, format: :json),
           data: {behavior: 'feature'}, id: 'featureLink', name: 'featureLink', class: 'btn btn-default' %>
   <% end %>
   <% if presenter.display_unfeature_link? %>
-      <%= link_to "Unfeature", sufia.featured_work_path(presenter, format: :json),
+      <%= link_to "Unfeature", hyrax.featured_work_path(presenter, format: :json),
           data: {behavior: 'unfeature'}, id: 'unfeatureLink', name: 'unfeatureLink', class: 'btn btn-default' %>
   <% end %>
 <!-- COinS hook for Zotero -->

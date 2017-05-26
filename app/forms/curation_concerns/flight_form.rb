@@ -1,7 +1,7 @@
 # Generated via
 #  `rails generate curation_concerns:work Flight`
-module CurationConcerns
-  class FlightForm < Sufia::Forms::WorkForm
+module Hyrax
+  class FlightForm < Hyrax::Forms::WorkForm
     self.model_class = ::Flight
 #    self.primary_terms += [:coordinates,:county,:physical_format]
     self.terms += [:resource_type,:coordinates,:county,:physical_format]

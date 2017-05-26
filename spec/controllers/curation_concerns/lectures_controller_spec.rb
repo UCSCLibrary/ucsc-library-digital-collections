@@ -2,7 +2,7 @@
 #  `rails generate curation_concerns:work Lecture`
 require 'rails_helper'
 
-describe CurationConcerns::LecturesController do
+describe Hyrax::LecturesController do
   it "has tests" do
     skip "Add your tests here"
   end
