@@ -1,0 +1,10 @@
+es:
+  hyrax:
+    icons:
+      lecture:     'fa fa-file-text-o'
+    select_type:
+      lecture:
+        # TODO: translate `human_name` into Spanish
+        name:               "Lecture"
+        # TODO: translate `human_name` into Spanish
+        description:        "Lecture trabajos"

@@ -1,12 +1,12 @@
 # Generated via
-#  `rails generate curation_concerns:work Course`
+#  `rails generate hyrax:work Course`
 class Course < ActiveFedora::Base
   include ::Hyrax::WorkBehavior
   include ::Hyrax::BasicMetadata
-  include Hyrax::WorkBehavior
-
-  self.human_readable_type = 'Course'
   # Change this to restrict which works can be added as a child.
+  
+  self.human_readable_type = 'Course'
+
   self.valid_child_concerns = [Lecture,Work]
 
   validates :title, presence: { message: 'Each course must have a title.' }
@@ -26,10 +26,5 @@ class Course < ActiveFedora::Base
   property :digital_publisher_homepage, predicate: ::RDF::Vocab::DC.publisher do |index|
     index.as :stored_searchable
   end
-
-  
-#  def self.indexer
-#    CourseIndexer
-#  end
 
 end

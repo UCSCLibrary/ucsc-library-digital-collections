@@ -1,14 +1,10 @@
 Hyrax.config do |config|
-  # Injected via `rails g sufia:work Work`
-  config.register_curation_concern :work
-  # Injected via `rails g sufia:work Course`
+  # Injected via `rails g hyrax:work Course`
   config.register_curation_concern :course
-  # Injected via `rails g sufia:work Lecture`
+  # Injected via `rails g hyrax:work Lecture`
   config.register_curation_concern :lecture
-  # Injected via `rails g sufia:work AerialPhoto`
-  config.register_curation_concern :aerial_photo
-  # Injected via `rails g sufia:work Flight`
-  config.register_curation_concern :flight
+  # Injected via `rails g hyrax:work Work`
+  config.register_curation_concern :work
   # Email recipient of messages sent via the contact form
 
 

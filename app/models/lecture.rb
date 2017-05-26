@@ -1,11 +1,11 @@
 # Generated via
-#  `rails generate curation_concerns:work Lecture`
+#  `rails generate hyrax:work Lecture`
 class Lecture < ActiveFedora::Base
   include ::Hyrax::WorkBehavior
   include ::Hyrax::BasicMetadata
-  include Hyrax::WorkBehavior
+  
   self.human_readable_type = 'Lecture'
-  # Change this to restrict which works can be added as a child.
+
   self.valid_child_concerns = [Work]
 
   validates :title, presence: { message: 'Each lecture must have a title.' }
