@@ -2,7 +2,7 @@
 #  `rails generate curation_concerns:work Course`
 require 'rails_helper'
 
-describe CurationConcerns::CourseForm do
+describe Hyrax::CourseForm do
   it "has tests" do
     skip "Add your tests here"
   end

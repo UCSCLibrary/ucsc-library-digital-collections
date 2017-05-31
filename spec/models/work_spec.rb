@@ -1,8 +1,8 @@
 # Generated via
-#  `rails generate curation_concerns:work Work`
+#  `rails generate hyrax:work Work`
 require 'rails_helper'
 
-describe Work do
+RSpec.describe Work do
   it "has tests" do
     skip "Add your tests here"
   end

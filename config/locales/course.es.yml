@@ -1,0 +1,10 @@
+es:
+  hyrax:
+    icons:
+      course:     'fa fa-file-text-o'
+    select_type:
+      course:
+        # TODO: translate `human_name` into Spanish
+        name:               "Course"
+        # TODO: translate `human_name` into Spanish
+        description:        "Course trabajos"

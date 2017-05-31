@@ -1,7 +1,7 @@
 # Generated via
 #  `rails generate curation_concerns:work Lecture`
-module CurationConcerns
-  class LectureForm < Sufia::Forms::WorkForm
+module Hyrax
+  class LectureForm < Hyrax::Forms::WorkForm
     self.model_class = ::Lecture
     self.terms += [:resource_type,:date_digitized,:physical_format,:digital_extent,:digital_publisher_homepage]
     self.required_fields -= [:keyword,:rights]

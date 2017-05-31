@@ -4,23 +4,17 @@ Rails.application.routes.draw do
 
   devise_for :users
 
-  mount Sufia::Engine => '/'
+  mount Hyrax::Engine => '/'
 
-  root 'sufia/homepage#index'
-  root :to => 'sufia/homepage#index'
+  root 'hyrax/homepage#index'
+  root :to => 'hyrax/homepage#index'
 
-  mount CurationConcerns::Engine, at: '/'
   resources :welcome, only: 'index'
 
-  curation_concerns_collections
   curation_concerns_basic_routes
   curation_concerns_embargo_management
   concern :exportable, Blacklight::Routes::Exportable.new
 
-
-  mount HydraHls::Engine => '/'
-
-  Hydra::BatchEdit.add_routes(self)
   mount Qa::Engine => '/authorities'
 
   # Administrative URLs

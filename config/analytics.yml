@@ -3,9 +3,10 @@
 #
 
 analytics:
-   app_name: sufia-test
+   app_name: digital-collections
    app_version: 0.1
    privkey_path: /srv/ucsc_sufia/shared/keys/digital-collections-ebde4bdd4cb2.p12
    privkey_secret: notasecret
    client_email: analytics@digital-collections-161623.iam.gserviceaccount.com
+
 

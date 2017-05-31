@@ -12,12 +12,12 @@
                     "notifications": [
                         {
                             "notification_type": "email",
-                            "name": "Sufia::Workflow::PendingReviewNotification",
+                            "name": "Hyrax::Workflow::PendingReviewNotification",
                             "to": ["approving"]
                         }
                     ],
                     "methods": [
-                        "CurationConcerns::Workflow::DeactivateObject"
+                        "Hyrax::Workflow::DeactivateObject"
                     ]
                 }, {
                     "name": "request_changes",
@@ -26,12 +26,12 @@
                     "notifications": [
                         {
                             "notification_type": "email",
-                            "name": "Sufia::Workflow::ChangesRequiredNotification",
+                            "name": "Hyrax::Workflow::ChangesRequiredNotification",
                             "to": ["approving"]
                         }
                     ],
                     "methods": [
-                        "CurationConcerns::Workflow::DeactivateObject"
+                        "Hyrax::Workflow::DeactivateObject"
                     ]
                 }, {
                     "name": "approve",
@@ -40,12 +40,12 @@
                     "notifications": [
                         {
                             "notification_type": "email",
-                            "name": "Sufia::Workflow::CompleteNotification",
+                            "name": "Hyrax::Workflow::CompleteNotification",
                             "to": ["approving"]
                         }
                     ],
                     "methods": [
-                        "CurationConcerns::Workflow::ActivateObject"
+                        "Hyrax::Workflow::ActivateObject"
                     ]
                 }, {
                     "name": "request_review",
@@ -54,7 +54,7 @@
                     "notifications": [
                         {
                             "notification_type": "email",
-                            "name": "Sufia::Workflow::PendingReviewNotification",
+                            "name": "Hyrax::Workflow::PendingReviewNotification",
                             "to": ["approving"]
                         }
                     ]

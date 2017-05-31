@@ -1,4 +1,4 @@
-class LectureShowPresenter < Sufia::WorkShowPresenter
+class LectureShowPresenter < Hyrax::WorkShowPresenter
 
   delegate :digital_extent,:parent_course, to: :solr_document  
 

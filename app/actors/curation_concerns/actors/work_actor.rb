@@ -1,8 +1,8 @@
 # Generated via
 #  `rails generate curation_concerns:work Work`
-module CurationConcerns
+module Hyrax
   module Actors
-    class WorkActor < CurationConcerns::Actors::BaseActor
+    class WorkActor < Hyrax::Actors::BaseActor
     end
   end
 end

@@ -1,7 +1,7 @@
 # Generated via
 #  `rails generate curation_concerns:work AerialPhoto`
-module CurationConcerns
-  class AerialPhotoForm < Sufia::Forms::WorkForm
+module Hyrax
+  class AerialPhotoForm < Hyrax::Forms::WorkForm
     self.model_class = ::AerialPhoto
     self.terms += [:resource_type,:feature,:street,:city,:scale,:coordinates]
     self.required_fields -= [:creator,:keyword,:rights]
