@@ -2,6 +2,6 @@
 class FileSet < ActiveFedora::Base
   include ::Hyrax::FileSetBehavior
   include Hyrax::FileSetBehavior
-  include HydraHls::FileSetBehavior
+  include SamveraHls::FileSetBehavior
 
 end
