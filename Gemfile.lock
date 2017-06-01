@@ -11,9 +11,9 @@ GIT
       tilt (~> 2.0)
 
 PATH
-  remote: /srv/hydra_hls
+  remote: /srv/samvera_hls
   specs:
-    hydra_hls (0.0.8)
+    samvera_hls (0.2.0)
       rails (>= 4.2.6)
 
 GEM
@@ -693,7 +693,6 @@ DEPENDENCIES
   devise-guests (~> 0.5)
   fcrepo_wrapper
   hydra-role-management
-  hydra_hls!
   hyrax (= 1.0.1)
   jbuilder (~> 2.5)
   jquery-rails
@@ -704,6 +703,7 @@ DEPENDENCIES
   resque-pool
   rsolr (~> 1.0)
   rspec-rails
+  samvera_hls!
   sass-rails (~> 5.0)
   sinatra!
   solr_wrapper (>= 0.3)
