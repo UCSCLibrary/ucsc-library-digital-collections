@@ -78,7 +78,7 @@ gem 'browse-everything'
 #gem 'hydra-remote_identifier'
 
 #gem 'hydra_hls', '>= 0.0.2'
-gem 'hydra_hls', path: "/srv/hydra_hls/"
+gem 'samvera_hls', path: "/srv/samvera_hls/"
 
 #gem 'ldfwrapper', github: 'boston-library/ldf-wrapper', branch: "master"
 

@@ -3,5 +3,5 @@ class FileSetsController < ApplicationController
   include Hyrax::FileSetsControllerBehavior
   include Hyrax::Controller
   include Hyrax::FileSetsControllerBehavior
-  include HydraHls::FileSetsControllerBehavior  
+  include SamveraHls::FileSetsControllerBehavior  
 end

@@ -3,9 +3,10 @@
 #
 
 analytics:
-   app_name: hyrax-test
+   app_name: digital-collections
    app_version: 0.1
-   privkey_path: /home/hyrax/keys/SufiaTest-34a67d4548bd.json
-   privkey_secret: 34a67d4548bd5d732e27d3e67fb84b90a0c45e3c
-   client_email: sufia-test@appspot.gserviceaccount.com
+   privkey_path: /srv/ucsc_sufia/shared/keys/digital-collections-ebde4bdd4cb2.p12
+   privkey_secret: notasecret
+   client_email: analytics@digital-collections-161623.iam.gserviceaccount.com
+
 
