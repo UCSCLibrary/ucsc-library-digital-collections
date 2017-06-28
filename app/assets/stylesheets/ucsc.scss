@@ -7,6 +7,14 @@ $header-height: 40px;
 
 
 body {
+
+    padding-top:0px !important;
+
+    nav#masthead {
+        position:relative;
+        display:block;
+    }
+
     background-color: white;
     font-family: 'Source Sans Pro', sans-serif;
     a:hover {

@@ -1,4 +1,4 @@
-class BmiIngest < ApplicationRecord
+class Admin::BmiIngest < ApplicationRecord
   belongs_to :user
   has_many :bmi_rows
 
@@ -20,7 +20,7 @@ class BmiIngest < ApplicationRecord
     if row_ids == "all" || row_ids.nil? || row_ids.empty?
       rows = bmi_rows
     else
-      rows = row_ids.map {|id| BmiRow.find(id) }
+      rows = row_ids.map {|id| Admin::BmiRow.find(id) }
     end
 
     rows.reduce(headertext) {|csv,newrow| csv+"\n"+newrow.text}

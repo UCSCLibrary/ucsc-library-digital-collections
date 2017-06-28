@@ -7,7 +7,7 @@ class Admin::BmiIngestsController < ApplicationController
   # GET /bmi_ingests
   # GET /bmi_ingests.json
   def index
-    @bmi_ingests = BmiIngest.all
+    @bmi_ingests = Admin::BmiIngest.all
   end
 
   # GET /bmi_ingests/1
@@ -17,7 +17,7 @@ class Admin::BmiIngestsController < ApplicationController
 
   # GET /bmi_ingests/new
   def new
-    @bmi_ingest = BmiIngest.new({:user_id => current_user.id})
+    @bmi_ingest = Admin::BmiIngest.new({:user_id => current_user.id})
   end
 
   # GET /bmi_ingests/1/edit
@@ -39,7 +39,7 @@ class Admin::BmiIngestsController < ApplicationController
           #THIS IS A DUMMY METHOD THAT ONLY 
           # MARKS THEM AS PARSED WITHOUT DOING ANYTHING!!
           params['row-id'].each do |id|
-            row = BmiRow.find(id)
+            row = Admin::BmiRow.find(id)
 #            row.createNewCells!(row.text)
             row.status="parsed"
             row.save
@@ -47,7 +47,7 @@ class Admin::BmiIngestsController < ApplicationController
 
         when 'ingest'
           params['row-id'].each do |id|
-            row = BmiRow.find(id)
+            row = Admin::BmiRow.find(id)
             row.ingest! current_user
           end
         when 'export-csv'
@@ -76,7 +76,7 @@ class Admin::BmiIngestsController < ApplicationController
   end
 
   def row_info
-    @row = BmiRow.find(params[:row_id])
+    @row = Admin::BmiRow.find(params[:row_id])
     render :row_details, :layout => false      
   end
 
@@ -84,7 +84,7 @@ class Admin::BmiIngestsController < ApplicationController
   # POST /bmi_ingests.json
   def create
     #error handling here
-    @bmi_ingest = BmiIngest::create_new(bmi_ingest_params.merge(:user_id => current_user.id))
+    @bmi_ingest = Admin::BmiIngest::create_new(bmi_ingest_params.merge(:user_id => current_user.id))
 
 #    @bmi_ingest.setFile(bmi_ingest_params[:file])
     respond_to do |format|

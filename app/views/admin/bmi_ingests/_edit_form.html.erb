@@ -1,4 +1,4 @@
-<%= form_for [:admin,@bmi_ingest] do |f| %>
+<%= form_for @bmi_ingest do |f| %>
     <% if @bmi_ingest.errors.any? %>
         <div id="error_explanation">
             <h2><%= pluralize(@bmi_ingest.errors.count, "error") %> prohibited this batch_metadata_ingest from being saved:</h2>

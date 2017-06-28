@@ -1,4 +1,4 @@
-class BmiRow < ApplicationRecord
+class Admin::BmiRow < ApplicationRecord
   BASE_PATH = "/avalon2sufia/inbox"
   belongs_to :bmi_ingest 
   has_many :bmi_cells

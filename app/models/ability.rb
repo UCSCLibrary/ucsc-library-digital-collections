@@ -9,8 +9,8 @@ class Ability
   # Define any customized permissions here.
   def custom_permissions
 
-    can :manage, BmiIngest
-    can :manage, BmiRow
+    can :manage, Admin::BmiIngest
+    can :manage, Admin::BmiRow
 
     if current_user.admin?
       can [:create, :show, :add_user, :remove_user, :index, :edit, :update, :destroy], Role

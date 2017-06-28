@@ -1,4 +1,4 @@
-class BmiRelationship < ApplicationRecord
+class Admin::BmiRelationship < ApplicationRecord
   belongs_to :bmi_row
 
   def resolve! ()
@@ -26,7 +26,7 @@ class BmiRelationship < ApplicationRecord
           end
 
         when "row"
-          fail! unless objrow = BmiRow.find_by(ingest_id: bmi_row.bmi_ingest_id, line_number: object_identifier)
+          fail! unless objrow = Admin::BmiRow.find_by(ingest_id: bmi_row.bmi_ingest_id, line_number: object_identifier)
           case objrow.status
           when "ingested"
                 if object = objrow.ingested_work
