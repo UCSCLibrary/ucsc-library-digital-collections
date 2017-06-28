@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<h3>
+    <%= @bmi_ingest.name %>
+</h3>
+
+<button id="toggle-ingest-info">More Info</button>
+<div id="ingest-info">
+    <p>
+        <strong>Creator:</strong>
+        <%= User.find(@bmi_ingest.user_id).name %>
+    </p>
+
+    <p>
+        <strong>CSV Filename:</strong>
+        <%= @bmi_ingest.filename %>
+    </p>
+
+    <p>
+        <strong>Ingest Status:</strong>
+        <%= @bmi_ingest.status %>
+    </p>
+
+    <p>
+        <strong>Default Work Type:</strong>
+        <%= @bmi_ingest.class_name %>
+    </p>
+
+
+    <p>
+        <strong>Relationship Identifier:</strong>
+        <%= @bmi_ingest.relationship_identifier %>
+    </p>
+
+    <p>
+        <strong>Replace files:</strong>
+        <%= @bmi_ingest.replace_files %>
+    </p>
+</div>
+
+<%= link_to 'Edit', edit_bmi_ingest_path(@bmi_ingest) %> |
+<%= link_to 'Back', bmi_ingests_path %>
+
+<%= render 'widget' %>

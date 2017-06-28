@@ -1,0 +1,27 @@
+<% provide :page_title, curation_concern_page_title(curation_concern) %>
+<% provide :page_header do %>
+  <h1><%= t("hyrax.works.update.header") %></h1>
+<% end %>
+
+<% workflow = Hyrax::WorkflowPresenter.new(SolrDocument.new(Work.find(params['id']).to_solr), current_ability) %>
+
+<% state = Hyrax::WorkflowPresenter.new(SolrDocument.new(Work.find(params['id']).to_solr), current_ability).state %>
+
+<% if state == "pending_offline_edits" %>
+        <div class="alert alert-warning" role="alert">
+            This file is currently being edited offline. The metadata here will be overwritten using the batch upload tool. The form below for altering metadata is diabled, because any changes made now will be erased when the batch metadata is uploaded.
+        </div>
+        <script>
+         jQuery(document).ready(function(){
+             jQuery("form.edit_work :input").prop('disabled',true)
+         });
+        </script>
+<% end %>
+<!-- 
+
+I want to add a special alert here depending on the workflow state
+but the presenter is not defined here! It seems like it is only defined in the "show" page (presenters are public facing I guess). I will have to see how to pull the workflow functionality out of the show presenter.
+
+-->
+
+<%= render 'form' %>
