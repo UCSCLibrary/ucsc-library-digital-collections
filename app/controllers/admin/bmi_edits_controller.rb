@@ -23,6 +23,24 @@ class Admin::BmiEditsController < ApplicationController
   def edit
   end
 
+  # POST /bmi_edits/export
+  # POST /bmi_edits/export.csv
+  def export
+    @bmi_edit = Admin::BmiEdit.find(params['batch_edit_id'])
+    respond_to do |format|
+      format.csv do
+        response.headers['Content-Type'] = 'text/csv'
+        response.headers['Content-Disposition'] = 'attachment; filename=batch_edit.csv'    
+        render :text => @bmi_edit.get_csv(params['ids'])
+      end
+      format.html do
+        response.headers['Content-Type'] = 'text/csv'
+        response.headers['Content-Disposition'] = 'attachment; filename=test.csv'    
+        render :text => @bmi_edit.get_csv(params['ids'])
+      end
+    end
+  end
+
   # POST /bmi_edits
   # POST /bmi_edits.json
   def create
