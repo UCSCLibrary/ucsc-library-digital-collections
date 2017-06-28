@@ -2,12 +2,12 @@
 
 <h1>Batch Metadata Ingests</h1>
 
-<%= link_to 'New Batch metadata ingest', new_bmi_ingest_path %>
+<%= link_to 'New Batch metadata ingest', new_admin_bmi_ingest_path %>
 
 <ul id="ingest-list">
 <% @bmi_ingests.each do |bmi_ingest| %>
     <li>
-  <h3 class="ingest-name"><%= link_to (bmi_ingest.name.blank? ? "Untitled" : bmi_ingest.name), bmi_ingest %></h3>  
+  <h3 class="ingest-name"><%= link_to (bmi_ingest.name.blank? ? "Untitled" : bmi_ingest.name), 'bmi_ingests/'+bmi_ingest.id.to_s %></h3>  
         <!--   <div class="ingest-data"><label for="ingest-name">Ingest Name:</label><div id="ingest-name"><%= bmi_ingest.name %></div></div>  -->      
   <div class="ingest-meta">
         <div class="ingest-datum"><label for="ingest-creator">Creator:</label><div class="ingest-creator"><%= User.find(bmi_ingest.user_id).email %></div></div>
@@ -16,8 +16,8 @@
         <!-- <div class="ingest-data"><label for="ingest-status">Ingest Status:</label><div class="ingest-status"><%= bmi_ingest.status %></div></div> -->
   </div>
         <div class="ingest-actions" >
-            <%= button_to 'Edit', edit_bmi_ingest_path(bmi_ingest), method: :get  %>
-            <%= button_to 'Delete', bmi_ingest, method: :delete, data: { confirm: 'Are you sure?' } %>   
+            <%= button_to 'Edit', edit_admin_bmi_ingest_path(bmi_ingest), method: :get  %>
+            <%= button_to 'Delete', 'admin/bmi_ingests/'+bmi_ingest.id.to_s + "/delete/", method: :delete, data: { confirm: 'Are you sure?' } %>   
         </div>
     </li>
 <% end %>

@@ -1,0 +1,17 @@
+<% provide :page_title, curation_concern_page_title(curation_concern) %>
+<% provide :page_header do %>
+  <h1><%= t("hyrax.lectures.update.header") %></h1>
+<% end %>
+
+<% workflow = Hyrax::WorkflowPresenter.new(SolrDocument.new(Lecture.find(params['id']).to_solr), current_ability) %>
+
+<h2>Workflow state = <%= Hyrax::WorkflowPresenter.new(SolrDocument.new(Lecture.find(params['id']).to_solr), current_ability).state %></h2>
+<h2>Workflow actions = <%= Hyrax::WorkflowPresenter.new(SolrDocument.new(Lecture.find(params['id']).to_solr), current_ability).actions.count %></h2>
+<!-- 
+
+I want to add a special alert here depending on the workflow state
+but the presenter is not defined here! It seems like it is only defined in the "show" page (presenters are public facing I guess). I will have to see how to pull the workflow functionality out of the show presenter.
+
+-->
+
+<%= render 'form' %>
