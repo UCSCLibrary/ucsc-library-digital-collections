@@ -46,23 +46,20 @@ class Admin::BmiRow < ApplicationRecord
 #edit identifier
 #ignore
 
-
   def ingest!(user)
     metadata = {}
-    edit_type = bmi_ingest.edit_type
-    bmi_cells.each do |cell|
-      edit_existing = false;
-      edit_id = nil;
-      object_id = cell.value_string
-      work_type = bmi_ingest.work_type
-      id_type = bmi_ingest.relationship_identifier
-      if(cell.value_string.include?(":"))
-        split = cell.value_string.split(":")
-        id_type = split[0]
-        object_id = split[1]
-      end
 
+    #presume a new work unless we hear otherwise
+    edit_id = nil;
+    work_type = bmi_ingest.work_type
+
+    bmi_cells.each do |cell|
       next if cell.value_string.blank?
+
+      #this will be the object identifier of a relationship
+      object_id = cell.value_string
+
+
       case cell.name.downcase
           when "file"
             file = File.open(File.join(BASE_PATH,cell.value_string))
@@ -72,6 +69,18 @@ class Admin::BmiRow < ApplicationRecord
           when "parent" || "child"
             # This cell specifies a relationship. 
             # Log this relationship in the database for future processing
+            id_type = bmi_ingest.relationship_identifier
+
+            # allow for cell-specific identifier types
+            # using the notation "id:a78C2d81"
+            if(cell.value_string.include?(":"))
+              split = cell.value_string.split(":")
+              id_type = split[0]
+              object_id = split[1]
+            else
+              object_id = cell.value_string              
+            end
+
             bmi_relationships.build({ :relationship_type => cell.name.downcase,
                                       :identifier_type => id_type,
                                       :object_identifier => object_id,
@@ -83,9 +92,7 @@ class Admin::BmiRow < ApplicationRecord
           
           when bmi_ingest.edit_identifier
             # we are editing an existing work
-            edit_existing = true;
-            edit_id = object_id;
-            edit_type = id_type;
+            edit_id = cell.value_string
           when *(bmi_ingest.ignore.split(/[,;:]/))
             # Ignore this i.e. do nothing
           else
@@ -99,11 +106,10 @@ class Admin::BmiRow < ApplicationRecord
     self.status = "ingesting"
     save
 
-    if edit_existing
-      UcscEditWorkJob.perform_later(work_type,user,metadata,id)
-    else
-      #start create_work job
+    if edit_id.nil?
       UcscCreateWorkJob.perform_later(work_type,user,metadata,id)
+    else
+      UcscEditWorkJob.perform_later(edit_id,work_type,user,metadata,id)]
     end
   end
 

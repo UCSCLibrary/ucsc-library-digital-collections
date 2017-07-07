@@ -20,7 +20,11 @@ Rails.application.routes.draw do
 
   # Administrative URLs
   namespace :admin do
-    resources :bmi_edits
+    resources :bmi_edits do
+      member do
+        get :export
+      end
+    end
     resources :bmi_rows do
       member do
         get :row_info

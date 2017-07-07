@@ -1,7 +1,6 @@
 class UcscCreateWorkJob < ActiveJob::Base
   queue_as :ingest
 
-
   after_perform do |job|
     row_id = BmiRow.find(job.arguments[3])
     break if row_id.nil?
@@ -10,9 +9,7 @@ class UcscCreateWorkJob < ActiveJob::Base
     row.save
   end
 
-  def perform(workClass,user,attributes,bmi_row_id=nil,parent_id=nil)
-    # Get this to work in an initializer somewhere, right?
-    #Hyrax::CurationConcern.actor_factory = Ucsc::ActorFactory
+  def perform(workClass,user,attributes,bmi_row_id=nil)
 
     work = workClass.constantize.new
     actor = Hyrax::CurationConcern.actor(work,user)

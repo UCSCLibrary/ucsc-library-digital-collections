@@ -1,6 +1,8 @@
 class Admin::BmiEditsController < ApplicationController
   before_action :set_bmi_edit, only: [:show, :edit, :update, :destroy]
 
+  load_and_authorize_resource
+
   layout 'admin'
 
   # GET /bmi_edits
@@ -26,19 +28,17 @@ class Admin::BmiEditsController < ApplicationController
   # POST /bmi_edits/export
   # POST /bmi_edits/export.csv
   def export
-    @bmi_edit = Admin::BmiEdit.find(params['batch_edit_id'])
+#    @bmi_edit = Admin::BmiEdit.find(params['batch_edit_id'])
     respond_to do |format|
-      format.csv do
-        response.headers['Content-Type'] = 'text/csv'
-        response.headers['Content-Disposition'] = 'attachment; filename=batch_edit.csv'    
-        render :text => @bmi_edit.get_csv(params['ids'])
-      end
-      format.html do
-        response.headers['Content-Type'] = 'text/csv'
-        response.headers['Content-Disposition'] = 'attachment; filename=test.csv'    
-        render :text => @bmi_edit.get_csv(params['ids'])
-      end
+      format.csv {csv_response}
+      format.html {csv_response}
     end
+  end
+
+  def csv_response
+    response.headers['Content-Type'] = 'text/csv'
+    response.headers['Content-Disposition'] = "attachment; filename=batch_edits_#{@bmi_edit.id}.csv"    
+    render :text => @bmi_edit.export_csv(current_user,params['ids'])
   end
 
   # POST /bmi_edits
