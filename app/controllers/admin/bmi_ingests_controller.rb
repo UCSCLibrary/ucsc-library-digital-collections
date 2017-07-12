@@ -1,7 +1,6 @@
 class Admin::BmiIngestsController < ApplicationController
 #  before_action :ensure_admin!
   layout 'admin'
-
   load_and_authorize_resource
 
   # GET /bmi_ingests
@@ -17,6 +16,7 @@ class Admin::BmiIngestsController < ApplicationController
 
   # GET /bmi_ingests/new
   def new
+    
     @bmi_ingest = Admin::BmiIngest.new({:user_id => current_user.id})
   end
 
@@ -134,6 +134,6 @@ class Admin::BmiIngestsController < ApplicationController
   private
     # Never trust parameters from the scary internet, only allow the white list through.
     def bmi_ingest_params
-      params.require(:bmi_ingest).permit(:id,:user_id, :name, :file, :class_name, :identifier, :replace_files)
+      params.require(:admin_bmi_ingest).permit(:id,:user_id, :name, :file, :class_name, :identifier, :replace_files)
     end
 end

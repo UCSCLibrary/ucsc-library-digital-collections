@@ -27,10 +27,38 @@
     <% end %>
   </li>
 
+  <li>
+    <%= menu.collapsable_section 'Batch Work Ingests',
+                                 icon_class: "fa fa-table",
+                                 id: 'collapseIngests',
+                                 open: false do %>
+      <%= menu.nav_link("/admin/bmi_ingests/new") do %>
+        <span class="fa fa-table"></span> New Batch Ingest
+      <% end %>
+      <%= menu.nav_link("/admin/bmi_ingests") do %>
+        <span class="fa fa-copy"></span> Track Batch Ingests
+      <% end %>
+    <% end %>
+  </li>
 
-  <%= menu.nav_link("/admin/bmi_ingests") do %>
-    <span class="fa fa-table"></span> Batch Metadata Processing
-  <% end %>
+
+  <li>
+    <%= menu.collapsable_section 'Batch Metadata Edits',
+                                 icon_class: "fa fa-table",
+                                 id: 'collapseEdits',
+                                 open: false do %>
+      <%= menu.nav_link("/admin/bmi_edits/new") do %>
+        <span class="fa fa-table"></span> Initiate Batch Edit
+      <% end %>
+      <%= menu.nav_link("/admin/bmi_edits") do %>
+        <span class="fa fa-copy"></span> Current Batch Edits
+      <% end %>
+      <%= menu.nav_link("/admin/bmi_edits?status=completed") do %>
+        <span class="fa fa-copy"></span> Completed Batch Edits
+      <% end %>
+    <% end %>
+  </li>
+
 
   <%= menu.nav_link(hyrax.admin_users_path) do %>
     <span class="fa fa-user"></span> <%= t('hyrax.admin.sidebar.users') %>

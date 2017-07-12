@@ -26,7 +26,7 @@ jQuery(document).ready(function() {
     if (rowInfoDiv.html())  {
       rowInfoDiv.html("")
     } else {
-      jQuery.get("/bmi_rows/" + id +"/row_info",function(data) {
+      jQuery.get("/admin/bmi_rows/" + id +"/row_info",function(data) {
         rowInfoDiv.html(data)
       });
     }

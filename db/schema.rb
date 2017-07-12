@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170525223545) do
+ActiveRecord::Schema.define(version: 20170712200359) do
 
   create_table "bmi_cells", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "bmi_row_id"
@@ -23,10 +23,22 @@ ActiveRecord::Schema.define(version: 20170525223545) do
     t.index ["bmi_row_id"], name: "index_bmi_cells_on_bmi_row_id", using: :btree
   end
 
+  create_table "bmi_edits", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.text     "work_ids",           limit: 65535
+    t.string   "status"
+    t.string   "user"
+    t.date     "deadline"
+    t.text     "comment",            limit: 65535
+    t.integer  "workflow_id"
+    t.integer  "workflow_action_id"
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+  end
+
   create_table "bmi_ingests", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
     t.string   "filename"
-    t.string   "class_name"
+    t.string   "work_type"
     t.string   "status"
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
@@ -36,6 +48,7 @@ ActiveRecord::Schema.define(version: 20170525223545) do
     t.string   "relationship_identifier"
     t.boolean  "visibility"
     t.boolean  "notifications"
+    t.string   "ignore"
     t.index ["user_id"], name: "index_bmi_ingests_on_user_id", using: :btree
   end
 
@@ -59,7 +72,7 @@ ActiveRecord::Schema.define(version: 20170525223545) do
     t.string   "relationship_type"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
-    t.integer  "row_id"
+    t.integer  "bmi_row_id"
     t.string   "status"
   end
 
