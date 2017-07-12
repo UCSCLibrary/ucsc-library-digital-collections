@@ -27,6 +27,10 @@ div#bmi-tabs {
 
     margin-top:15px;
 
+    div.status-stat {
+        display:inline;
+    }
+
     div {
         
         span.tab-title {
@@ -43,17 +47,33 @@ div#bmi-tabs {
         }
 
         ul.actions {
-            float:right;
+//            float:right;
         }
 
         ul.rows {
-            margin-top:10px;
+//            margin-top:10px;
+            margin: 15px auto auto auto;
+            padding: 10px 10px 10px 20px;
             list-style:none;
             li {
                 background-color: lightgray;
                 padding: 5px;
                 
                 position: relative;
+
+                label {
+                    display:inline-block;
+                }
+
+                input[type="checkbox"] {
+                    float:left;
+                    margin-right:10px
+                }
+
+                ul.row-details {
+                    margin:auto;
+                }
+
                 button.dropdown {
                     line-height: 1em;
                     right: 8px;

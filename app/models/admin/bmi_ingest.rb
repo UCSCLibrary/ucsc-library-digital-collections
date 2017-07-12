@@ -1,17 +1,25 @@
 class Admin::BmiIngest < ApplicationRecord
   belongs_to :user
   has_many :bmi_rows
+  attr_accessor :file
+
 
 #  enum status: [:unparsed, :checking, :check_passed, :check_failed, :processing, :completed, :completed_with_errors, :failed ]
   require 'csv'   
 
   def self.create_new(params)
+    Rails.logger.warn "quid pro quiddich"
+    logger.debug "quid pro quiddich"
     instance = self.new(params.except(:file));
     instance.status = "unparsed"
     instance.class_name = "Work"
     instance.save
     instance.setFile(params[:file])
-    instance.parse
+    if instance.name.starts_with? "batch_"
+      instance.parse({editing: true})
+    else
+      instance.parse
+    end
     instance
   end
 
@@ -45,12 +53,14 @@ class Admin::BmiIngest < ApplicationRecord
     end
   end
 
-  def parse
+  def parse(params={})
+    editing = params.has_key? :editing && params[:editing]
+
     return false if !File.exists?(filename)
     csv_text = File.read(filename)
     row_index_offset = 2
     if (hasSpecLine?)
-      csv_text = parseIngestSpec(file_text)
+      csv_text = parseIngestSpec(csv_text)
       row_index_offset += 1
     end
 
@@ -61,7 +71,7 @@ class Admin::BmiIngest < ApplicationRecord
     parseHeaders(csv.headers)
     
     #Create Row
-    csv.each do |row,index|
+    csv.each_with_index do |row, index|
       #This will store the persistent row object
       bmi_row = bmi_rows.find_by(text: row.to_s)
       
@@ -99,7 +109,7 @@ class Admin::BmiIngest < ApplicationRecord
   def setFile(uploaded_file)
     #save csv file to permanent location
     save_as = File.join( Rails.root, 'public', 'uploads','batch_metadata_ingests',self.id.to_s + "_" + uploaded_file.original_filename)
-    File.open( save_as.to_s, 'w' ) do |file|
+    File.open( save_as.to_s, 'wb' ) do |file|
       file.write( uploaded_file.read) 
     end
     self.filename = save_as
@@ -155,7 +165,7 @@ class Admin::BmiIngest < ApplicationRecord
   end
 
   def hasSpecLine? 
-    return false if !File.exists(filename)
+    return false if !File.exists?(filename)
     csv_text = File.read(filename)
     spec = csv_text.lines.first
     return spec.downcase.include? "ingest name"

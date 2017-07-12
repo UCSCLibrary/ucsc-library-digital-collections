@@ -90,9 +90,13 @@ class Admin::BmiRow < ApplicationRecord
             # overriding the default set for the whole ingest
             work_type = cell.value_string
           
-          when bmi_ingest.edit_identifier
-            # we are editing an existing work
-            edit_id = cell.value_string
+          when "id"
+            # I want to only use sufia id to pick out works to edit
+            # so edit_identifier can become a boolean flag
+            if !bmi_ingest.edit_identifier.blank?
+              # we are editing an existing work
+              edit_id = cell.value_string
+            end
           when *(bmi_ingest.ignore.split(/[,;:]/))
             # Ignore this i.e. do nothing
           else
@@ -109,7 +113,7 @@ class Admin::BmiRow < ApplicationRecord
     if edit_id.nil?
       UcscCreateWorkJob.perform_later(work_type,user,metadata,id)
     else
-      UcscEditWorkJob.perform_later(edit_id,work_type,user,metadata,id)]
+      UcscEditWorkJob.perform_later(edit_id,work_type,user,metadata,id)
     end
   end
 
