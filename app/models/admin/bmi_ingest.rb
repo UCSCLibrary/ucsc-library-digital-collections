@@ -12,7 +12,7 @@ class Admin::BmiIngest < ApplicationRecord
     logger.debug "quid pro quiddich"
     instance = self.new(params.except(:file));
     instance.status = "unparsed"
-    instance.class_name = "Work"
+    instance.work_type = "Work"
     instance.save
     instance.setFile(params[:file])
     if instance.name.starts_with? "batch_"
