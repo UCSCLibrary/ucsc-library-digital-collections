@@ -46,7 +46,8 @@ class Admin::BmiRow < ApplicationRecord
 #edit identifier
 #ignore
 
-  def ingest!(user)
+  def ingest!(user_email)
+    user = User.find_by_email(user_email)
     metadata = {}
 
     #presume a new work unless we hear otherwise
@@ -65,7 +66,7 @@ class Admin::BmiRow < ApplicationRecord
 
 
       case cell.name.downcase
-          when "file" || "filename"
+          when "file", "filename"
             file = File.open(File.join(BASE_PATH,cell.value_string))
             uploaded_file = Hyrax::UploadedFile.create(file: file, user: user)
             (metadata[:uploaded_files] ||= []) << uploaded_file.id if !uploaded_file.id.nil?
@@ -76,7 +77,7 @@ class Admin::BmiRow < ApplicationRecord
                                       :object_identifier => object_id,
                                       :status => "incomplete"})
 
-          when "parent" || "child"
+          when "parent", "child"
             # This cell specifies a relationship. 
             # Log this relationship in the database for future processing
             # allow for cell-specific identifier types
@@ -119,7 +120,7 @@ class Admin::BmiRow < ApplicationRecord
             # Ignore this i.e. do nothing
           else
             # this is presumably a normal metadata field
-            (metadata[cell.name] ||= []) << cell.value_string if !cell.value_string.blank?
+            (metadata[cell.name.parameterize.underscore] ||= []) << cell.value_string if !cell.value_string.blank?
     
       end
     end
@@ -129,7 +130,7 @@ class Admin::BmiRow < ApplicationRecord
     save
 
     if edit_id.nil?
-      UcscCreateWorkJob.perform_later(work_type,user,metadata,id,visibility)
+      UcscCreateWorkJob.perform_later(work_type,user.email,metadata,id,visibility)
     else
       UcscEditWorkJob.perform_later(edit_id,work_type,user,metadata,id,visibility)
     end

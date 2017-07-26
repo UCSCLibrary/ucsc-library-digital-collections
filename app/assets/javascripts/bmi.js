@@ -21,7 +21,8 @@ jQuery(document).ready(function() {
   jQuery( "#bmi-tabs" ).tabs()     
 
   jQuery("button.dropdown").click(function() {
-    var id = jQuery(this).siblings("input.row-id").val()
+//    var id = jQuery(this).siblings("input.row-id").val()
+    var id = jQuery(this).attr("data-row-id")
     var rowInfoDiv = jQuery(this).parent().siblings(".row-info")
     if (rowInfoDiv.html())  {
       rowInfoDiv.html("")

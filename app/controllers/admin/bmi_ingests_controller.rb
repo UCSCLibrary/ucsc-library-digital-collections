@@ -59,7 +59,7 @@ class Admin::BmiIngestsController < ApplicationController
     end
 
     respond_to do |format|    
-      format.html {  redirect_to @bmi_ingest, notice: 'Action Processed: '+params['row-id'].first }
+      format.html {  redirect_to @bmi_ingest, notice: "Bulk "+params['process-action']+" completed"}
     end
   end
 
@@ -68,12 +68,12 @@ class Admin::BmiIngestsController < ApplicationController
       format.csv do
         response.headers['Content-Type'] = 'text/csv'
         response.headers['Content-Disposition'] = 'attachment; filename=test.csv'    
-        render :text => @bmi_ingest.get_csv(params['rows'])
+        render :text => @bmi_ingest.get_csv(params['row-id'])
       end
       format.html do
         response.headers['Content-Type'] = 'text/csv'
         response.headers['Content-Disposition'] = 'attachment; filename=test.csv'    
-        render :text => @bmi_ingest.get_csv(params['rows'])
+        render :text => @bmi_ingest.get_csv(params['row-id'])
       end
     end
   end
