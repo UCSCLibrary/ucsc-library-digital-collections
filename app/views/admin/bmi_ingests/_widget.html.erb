@@ -29,10 +29,10 @@
             title: "Unintelligible Rows (Could Not Parse)",
             num_rows: @bmi_ingest.numUnparsed,
             actions: [{id: "parse", title: "Retry Parsing"},
-                      {id: "edit-inline", title: "Edit inline"},
-                      {id: "edit-OR", title: "Edit in OpenRefine"},
+                      {id: "edit-inline", title: "Edit inline", disabled: true},
+                      {id: "edit-OR", title: "Edit in OpenRefine", disabled: true},
                       {id: "export-csv", title: "Export as CSV"},
-                      {id: "export-xml", title: "Export as XML"},
+                      {id: "export-xml", title: "Export as XML", disabled: true},
                       {id: "remove", title: "Remove"}]
         } %>
     <% end %>
@@ -43,9 +43,9 @@
         title: "Parsed Rows Pending Ingest",
         num_rows: @bmi_ingest.numParsed,
         actions: [{id: "ingest", title: "Ingest Now"},
-                  {id: "edit-OR", title: "Edit in OpenRefine"},
+                  {id: "edit-OR", title: "Edit in OpenRefine", disabled: true},
                   {id: "export-csv", title: "Export as CSV"},
-                  {id: "export-xml", title: "Export as XML"},
+                  {id: "export-xml", title: "Export as XML", disabled: true},
                   {id: "remove", title: "Remove"}]    
     } %>
 
@@ -66,9 +66,9 @@
             title: "Ingest Failures",
             num_rows: @bmi_ingest.numErrors,
             actions: [{id: "ingest", title: "Retry Ingest"},
-                      {id: "edit-OR", title: "Edit in OpenRefine"},
+                      {id: "edit-OR", title: "Edit in OpenRefine", disabled: true},
                       {id: "export-csv", title: "Export as CSV"},
-                      {id: "export-xml", title: "Export as XML"},
+                      {id: "export-xml", title: "Export as XML", disabled: true},
                       {id: "remove", title: "Cancel and Remove"}]
         } %>
     <% end %>
@@ -79,8 +79,8 @@
         title: "Successfully Ingested Items",
         num_rows: @bmi_ingest.numIngested,
         actions: [{id: "export-csv", title: "Export as CSV"},
-                  {id: "export-xml", title: "Export as XML"},
-                  {id: "delete", title: "Delete Items"}
+                  {id: "export-xml", title: "Export as XML", disabled: true},
+                  {id: "delete", title: "Delete Items", disabled: true}
         ]
         
     } %>

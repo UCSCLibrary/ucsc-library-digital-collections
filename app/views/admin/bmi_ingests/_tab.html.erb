@@ -17,7 +17,13 @@
 
                 <ul class="actions">
                     <% actions.each do |action|  %>
-                        <button type="button" id="<%= action[:id]%>" name="action" value="<%= action[:id]%>" ><%= action[:title]%></button>
+                        <button type="button" 
+                                id="<%= action[:id]%>" 
+                                name="action" 
+                                value="<%= action[:id]%>" 
+                                <%= 'disabled="disabled"' if action[:disabled] %>
+                                >
+                            <%= action[:title]%></button>
                     <% end %>
                 </ul>
 

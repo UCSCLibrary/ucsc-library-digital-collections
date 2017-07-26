@@ -51,8 +51,11 @@ class Admin::BmiIngestsController < ApplicationController
             row.ingest! current_user
           end
         when 'export-csv'
-          
+          export_csv
+          return          
         when 'remove'
+# TODO write this (delete row and delete item if ingested)
+          
     end
 
     respond_to do |format|    

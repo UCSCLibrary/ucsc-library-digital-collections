@@ -8,8 +8,6 @@ class Admin::BmiIngest < ApplicationRecord
   require 'csv'   
 
   def self.create_new(params)
-    Rails.logger.warn "quid pro quiddich"
-    logger.debug "quid pro quiddich"
     instance = self.new(params.except(:file));
     instance.status = "unparsed"
     instance.work_type = "Work"
@@ -31,7 +29,7 @@ class Admin::BmiIngest < ApplicationRecord
       rows = row_ids.map {|id| Admin::BmiRow.find(id) }
     end
 
-    rows.reduce(headertext) {|csv,newrow| csv+"\n"+newrow.text}
+    rows.reduce(headertext) {|csv,newrow| csv+newrow.text}
   end
 
   def headers
@@ -43,8 +41,10 @@ class Admin::BmiIngest < ApplicationRecord
   end
 
   def headertext
-    return false if !File.exists(filename)
-    File.read(filename).lines.first
+    return false if !File.exists?(filename)
+    headertext = File.read(filename).lines.first
+    headertext += File.read(filename).lines.second if hasSpecLine?
+    headertext
   end
 
   def parseChanged

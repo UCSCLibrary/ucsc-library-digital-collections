@@ -25,6 +25,12 @@ ul#ingest-list {
 
 div#bmi-tabs {
 
+    button[disabled] {
+        cursor: default;
+        color: gray;
+        opacity: 0.7;
+    }
+
     margin-top:15px;
 
     div.status-stat {
