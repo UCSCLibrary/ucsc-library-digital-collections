@@ -21,9 +21,8 @@ class UcscEditWorkJob < ActiveJob::Base
 
   end
 
-  def perform(workClass,user,attributes,bmi_row_id=nil)
-    # Get this to work in an initializer somewhere, right?
-    #Hyrax::CurationConcern.actor_factory = Ucsc::ActorFactory
+  def perform(workClass,user,attributes,bmi_row_id=nil,visibility=nil)
+    
 
 #    work = workClass.constantize.new
 #    actor = Hyrax::CurationConcern.actor(work,user)

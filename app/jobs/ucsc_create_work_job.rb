@@ -9,7 +9,7 @@ class UcscCreateWorkJob < ActiveJob::Base
     row.save
   end
 
-  def perform(workClass,user,attributes,bmi_row_id=nil)
+  def perform(workClass,user,attributes,bmi_row_id=nil,visibility="private")
 
     work = workClass.constantize.new
     actor = Hyrax::CurationConcern.actor(work,user)

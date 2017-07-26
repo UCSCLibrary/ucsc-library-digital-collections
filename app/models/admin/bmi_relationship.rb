@@ -6,7 +6,15 @@ class Admin::BmiRelationship < ApplicationRecord
     wait! unless subject = bmi_row.ingested_work
 
     case identifier_type
+        when "title"
+          collection = Collection.find(object_identifier)
+          collection.add_member(subject.id)
+          collection.save
         when "id"
+          #TODO This will fail for relationships between
+          # different work types!!!
+          # Fix it by using ActiveFedora functions to find
+          # work by ID across work types (I think this is possible).
           if object = bmi_row.work_type.camelize.constantize.find(object_identifier)
             create_relationship!(relationship_type,subject,object)
           else

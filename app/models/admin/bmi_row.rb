@@ -52,6 +52,8 @@ class Admin::BmiRow < ApplicationRecord
     #presume a new work unless we hear otherwise
     edit_id = nil;
     work_type = bmi_ingest.work_type
+    id_type = bmi_ingest.relationship_identifier
+    visibility = bmi_ingest.visibility
 
     bmi_cells.each do |cell|
       next if cell.value_string.blank?
@@ -59,18 +61,24 @@ class Admin::BmiRow < ApplicationRecord
       #this will be the object identifier of a relationship
       object_id = cell.value_string
 
+      ignore = bmi_ingest.ignore.nil? ? "" : bmi_ingest.ignore
+
 
       case cell.name.downcase
-          when "file"
+          when "file" || "filename"
             file = File.open(File.join(BASE_PATH,cell.value_string))
             uploaded_file = Hyrax::UploadedFile.create(file: file, user: user)
             (metadata[:uploaded_files] ||= []) << uploaded_file.id if !uploaded_file.id.nil?
 
+          when "collection title"
+            bmi_relationships.build({ :relationship_type => 'collection',
+                                      :identifier_type => 'title',
+                                      :object_identifier => object_id,
+                                      :status => "incomplete"})
+
           when "parent" || "child"
             # This cell specifies a relationship. 
             # Log this relationship in the database for future processing
-            id_type = bmi_ingest.relationship_identifier
-
             # allow for cell-specific identifier types
             # using the notation "id:a78C2d81"
             if(cell.value_string.include?(":"))
@@ -90,6 +98,16 @@ class Admin::BmiRow < ApplicationRecord
             # overriding the default set for the whole ingest
             work_type = cell.value_string
           
+          when "visibility"
+            # set the work type for this item
+            # overriding the default set for the whole ingest
+            visibility = cell.value_string
+
+          when "relationship identifier type"
+            # set the work type for this item
+            # overriding the default set for the whole ingest
+            id_type = cell.value_string
+            
           when "id"
             # I want to only use sufia id to pick out works to edit
             # so edit_identifier can become a boolean flag
@@ -97,7 +115,7 @@ class Admin::BmiRow < ApplicationRecord
               # we are editing an existing work
               edit_id = cell.value_string
             end
-          when *(bmi_ingest.ignore.split(/[,;:]/))
+          when *(ignore.split(/[,;:]/))
             # Ignore this i.e. do nothing
           else
             # this is presumably a normal metadata field
@@ -111,9 +129,9 @@ class Admin::BmiRow < ApplicationRecord
     save
 
     if edit_id.nil?
-      UcscCreateWorkJob.perform_later(work_type,user,metadata,id)
+      UcscCreateWorkJob.perform_later(work_type,user,metadata,id,visibility)
     else
-      UcscEditWorkJob.perform_later(edit_id,work_type,user,metadata,id)
+      UcscEditWorkJob.perform_later(edit_id,work_type,user,metadata,id,visibility)
     end
   end
 
