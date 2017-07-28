@@ -5,17 +5,20 @@ class Admin::BmiRelationship < ApplicationRecord
 
     wait! unless subject = bmi_row.ingested_work
 
+    work_type = (relationship_type.downcase == "collection") ? "Collection" : bmi_row.work_type
+
     case identifier_type
         when "title"
-          collection = Collection.find(object_identifier)
-          collection.add_member(subject.id)
-          collection.save
+#          TODO replace this with solr query for speed
+          objects = work_type.camelize.constantize.where(title: object_identifier)
+          fail! if objects.empty?
+          create_relationship!(relationship_type,subject,objects.first)
         when "id"
           #TODO This will fail for relationships between
           # different work types!!!
-          # Fix it by using ActiveFedora functions to find
-          # work by ID across work types (I think this is possible).
-          if object = bmi_row.work_type.camelize.constantize.find(object_identifier)
+          # Fix it by Solr to find
+          # work by ID and then figure out work type (I think this is possible).
+          if object = work_type.camelize.constantize.find(object_identifier)
             create_relationship!(relationship_type,subject,object)
           else
             wait!
@@ -61,6 +64,10 @@ class Admin::BmiRelationship < ApplicationRecord
         when "child"
           object.ordered_members << subject
           object.save
+        when "collection"
+          object.add_member(subject.id)
+          object.save
+          
     end
     write_attribute(:status,"complete")
     save

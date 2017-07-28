@@ -3,11 +3,13 @@ class Admin::BmiIngest < ApplicationRecord
   has_many :bmi_rows
   attr_accessor :file
 
-
 #  enum status: [:unparsed, :checking, :check_passed, :check_failed, :processing, :completed, :completed_with_errors, :failed ]
   require 'csv'   
 
   def self.create_new(params)
+
+    raise NameError, "What the hell is a subject.lc?!?", caller
+
     instance = self.new(params.except(:file));
     instance.status = "unparsed"
     instance.work_type = "Work"
@@ -20,7 +22,6 @@ class Admin::BmiIngest < ApplicationRecord
     end
     instance
   end
-
 
   def get_csv(row_ids = "all")
     if row_ids == "all" || row_ids.nil? || row_ids.empty?
@@ -55,6 +56,7 @@ class Admin::BmiIngest < ApplicationRecord
 
   def parse(params={})
     editing = params.has_key? :editing && params[:editing]
+    editIdentifier = "id" if editing
 
     return false if !File.exists?(filename)
     csv_text = File.read(filename)
@@ -159,6 +161,12 @@ class Admin::BmiIngest < ApplicationRecord
   end
 
   def parseHeaders(headers)
+    specialHeaders = []
+    headers.each do |header|
+      return true unless specialHeaders.include?(header)
+      return true unless work_type.constantize.new.send(header).nil?
+      throw new Exception()
+    end
     # each should correspond to a valid property
     # log any errors 
     # save header line for future re-parsing
