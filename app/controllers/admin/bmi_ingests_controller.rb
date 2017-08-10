@@ -16,7 +16,6 @@ class Admin::BmiIngestsController < ApplicationController
 
   # GET /bmi_ingests/new
   def new
-    
     @bmi_ingest = Admin::BmiIngest.new({:user_id => current_user.id})
   end
 
@@ -86,10 +85,9 @@ class Admin::BmiIngestsController < ApplicationController
   # POST /bmi_ingests
   # POST /bmi_ingests.json
   def create
-    #error handling here
+    
     @bmi_ingest = Admin::BmiIngest::create_new(bmi_ingest_params.merge(:user_id => current_user.id))
 
-#    @bmi_ingest.setFile(bmi_ingest_params[:file])
     respond_to do |format|
       unless @bmi_ingest.save
         format.html {  redirect_to @bmi_ingest, error: 'Batch metadata ingest creation has failed. Contact Ned about this error.' }
@@ -104,6 +102,8 @@ class Admin::BmiIngestsController < ApplicationController
       format.json { render :edit, status: :created, location: @bmi_ingest }       
       end
     end
+  rescue NameError => exception
+    handle_parse_error exception
   end
 
   # PATCH/PUT /bmi_ingests/1
@@ -132,6 +132,13 @@ class Admin::BmiIngestsController < ApplicationController
 
   def info
     render json: @bmi_ingest.get_basic_info(params[:type])
+  end
+
+
+  def handle_parse_error(exception)
+    logger.error("Error parsing BMI ingest: #{exception.inspect}")
+    flash[:error] = 'Error parsing csv file: '+exception.to_s
+    redirect_to action: "index"
   end
 
   private

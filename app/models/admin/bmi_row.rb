@@ -64,15 +64,20 @@ class Admin::BmiRow < ApplicationRecord
 
       ignore = bmi_ingest.ignore.nil? ? "" : bmi_ingest.ignore
 
-
       case cell.name.downcase
           when "file", "filename"
             file = File.open(File.join(BASE_PATH,cell.value_string))
             uploaded_file = Hyrax::UploadedFile.create(file: file, user: user)
             (metadata[:uploaded_files] ||= []) << uploaded_file.id if !uploaded_file.id.nil?
 
-          when "collection title"
+          when "collection title","collection"
             bmi_relationships.build({ :relationship_type => 'collection',
+                                      :identifier_type => 'title',
+                                      :object_identifier => object_id,
+                                      :status => "incomplete"})
+
+          when "collection id"
+            bmi_relationships.build({ :relationship_type => 'collection_id',
                                       :identifier_type => 'title',
                                       :object_identifier => object_id,
                                       :status => "incomplete"})
@@ -110,12 +115,15 @@ class Admin::BmiRow < ApplicationRecord
             id_type = cell.value_string
             
           when "id"
-            # I want to only use sufia id to pick out works to edit
+            # I want to only use id to pick out works to edit
             # so edit_identifier can become a boolean flag
-            if !bmi_ingest.edit_identifier.blank?
+           if bmi_ingest.edit_identifier == "id"
               # we are editing an existing work
               edit_id = cell.value_string
-            end
+           else
+             
+
+           end
           when *(ignore.split(/[,;:]/))
             # Ignore this i.e. do nothing
           else
