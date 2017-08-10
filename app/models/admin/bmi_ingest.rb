@@ -60,7 +60,7 @@ class Admin::BmiIngest < ApplicationRecord
     csv_text = File.read(filename)
     row_index_offset = 2
     if (hasSpecLine?)
-      csv_text = parseIngestSpec(csv_text)
+      csv_text = parseSpecLine(csv_text)
       row_index_offset += 1
     end
 
@@ -95,6 +95,7 @@ class Admin::BmiIngest < ApplicationRecord
         rescue
           #do not raise an exception, just log it
           # in the future, save this associated w/row
+          bmi_row.status = "error"
           Rails.logger.warn "exception parsing row: "+bmi_row.id
           #raise
         else
@@ -115,30 +116,10 @@ class Admin::BmiIngest < ApplicationRecord
     self.filename = save_as
   end
 
-
-  def get_basic_info( type = "all" )
-    case(type)
-        when "unparsed"
-          
-        when "parsed"
-
-        when "ingesting"
-
-        when "error"
-
-        when "ingested"
-
-        when "all"
-
-        else
-
-    end
-  end
-
   def numUnparsed
     return bmi_rows.where(status:"unparsed").count unless bmi_rows.empty?
-    return 0 if !File.exists?(filename)
-    csv_text = parseIngestSpec(File.read(filename))
+    return 0 if filename.blank? or !File.exists?(filename)
+    csv_text = parseSpecLine(File.read(filename))
     csv_text.lines.count - 1;
   end
 
@@ -171,7 +152,7 @@ class Admin::BmiIngest < ApplicationRecord
     return spec.downcase.include? "ingest name"
   end
 
-  def parseIngestSpec(csv)
+  def parseSpecLine(csv)
     spec = csv.lines.first
     if !spec.downcase.include? "ingest name"
       return csv
@@ -179,7 +160,7 @@ class Admin::BmiIngest < ApplicationRecord
     spec_elements = spec.split(",");
     spec_elements.each_with_index do |spec_key, index|
       next if index.odd?
-      spec_value = spec_elements[index+1]
+      spec_value = spec_elements[index+1].strip
 
       case spec_key.downcase
           when "ingest name"
