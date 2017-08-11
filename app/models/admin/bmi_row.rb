@@ -78,7 +78,7 @@ class Admin::BmiRow < ApplicationRecord
 
           when "collection id"
             bmi_relationships.build({ :relationship_type => 'collection_id',
-                                      :identifier_type => 'title',
+                                      :identifier_type => 'id',
                                       :object_identifier => object_id,
                                       :status => "incomplete"})
 
