@@ -88,6 +88,11 @@ class CatalogController < ApplicationController
     config.add_index_field solr_name("embargo_release_date", :stored_sortable, type: :date), label: "Embargo release date", helper_method: :human_readable_date
     config.add_index_field solr_name("lease_expiration_date", :stored_sortable, type: :date), label: "Lease expiration date", helper_method: :human_readable_date
 
+    config.add_index_field solr_name("date_digitized", :stored_searchable, type: :date), label: "Date Digitized", helper_method: :human_readable_date
+    config.add_index_field solr_name("physical_format", :stored_searchable), label: "Physical Format"
+    config.add_index_field solr_name("digital_extent", :stored_searchable), label: "Digital Extent"
+    config.add_index_field solr_name("digital_publisher_homepage", :stored_searchable), label: "Digital Publisher Homepage"
+
     # solr fields to be displayed in the show (single result) view
     #   The ordering of the field names is the order of the display
     config.add_show_field solr_name("title", :stored_searchable), label: "Title"
