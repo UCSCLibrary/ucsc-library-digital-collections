@@ -5,8 +5,6 @@
 
 <% workflow = Hyrax::WorkflowPresenter.new(SolrDocument.new(Lecture.find(params['id']).to_solr), current_ability) %>
 
-<h2>Workflow state = <%= Hyrax::WorkflowPresenter.new(SolrDocument.new(Lecture.find(params['id']).to_solr), current_ability).state %></h2>
-<h2>Workflow actions = <%= Hyrax::WorkflowPresenter.new(SolrDocument.new(Lecture.find(params['id']).to_solr), current_ability).actions.count %></h2>
 <!-- 
 
 I want to add a special alert here depending on the workflow state
