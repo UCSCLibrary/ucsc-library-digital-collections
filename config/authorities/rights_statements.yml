@@ -35,3 +35,7 @@ terms:
 - id: http://rightsstatements.org/vocab/NKC/1.0/
   term: "No Known Copyright"
   active: true
+- id: http://www.europeana.eu/portal/rights/rr-r.html
+  term: "Europeana Forbidden"
+  active: true
+
