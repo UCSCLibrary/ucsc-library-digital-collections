@@ -1,4 +1,5 @@
-class UcscCreateWorkJob <  Hyrax::ApplicationJob
+#class UcscCreateWorkJob < Hyrax::ApplicationJob
+class UcscCreateWorkJob < ActiveJob::Base
   queue_as :ingest
 
   after_perform do |job|
