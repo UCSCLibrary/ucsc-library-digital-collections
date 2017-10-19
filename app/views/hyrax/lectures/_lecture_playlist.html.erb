@@ -1,10 +1,25 @@
-<% playlistOptions =  ', "alwaysShowControls": "true","loop":true,"shuffle" : false,"playlist":true,"playlistposition": "bottom"'  %>
 
+<% playlistOptions =  file_set_ids.count > 1 ? ',
+                         "showPlaylist": false,
+                         "autoClosePlaylist": true,
+                         "currentMessage": "now playing: ",
+                         "features": ["playpause", 
+                                      "current", 
+                                      "progress", 
+                                      "duration", 
+                                      "tracks", 
+                                      "volume", 
+                                      "fullscreen",
+                                      "playlist",
+                                      "nexttrack", 
+                                      "prevtrack", 
+                                      "shuffle", 
+                                      "loop"]' : ""%>
 <audio controls="controls"
        class="hls_media mejs__player"
        preload="auto"
        data-mejsoptions='{"pluginPath": "/mejs/",
-                         "audioWidth": "100%"<%= playlistOptions if file_set_ids.count > 1 %>}'>
+                         "audioWidth": "100%"<%= playlistOptions %>}'>
 
     <% file_set_ids.each do |file_set_id| %>
         <source src="<%= File.join(request.base_url,"file_set",file_set_id,"hls.m3u8") %>" type="application/x-mpegurl"/>
