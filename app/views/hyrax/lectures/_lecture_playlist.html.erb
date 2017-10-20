@@ -1,5 +1,6 @@
 
-<% playlistOptions =  file_set_ids.count > 1 ? ',
+<% isPlaylist = file_set_ids.count > 1 %>
+<% playlistOptions =  ',
                          "showPlaylist": false,
                          "autoClosePlaylist": true,
                          "currentMessage": "now playing: ",
@@ -11,18 +12,18 @@
                                       "volume", 
                                       "fullscreen",
                                       "playlist",
-                                      "nexttrack", 
                                       "prevtrack", 
+                                      "nexttrack", 
                                       "shuffle", 
-                                      "loop"]' : ""%>
+                                      "loop"]'%>
 <audio controls="controls"
-       class="hls_media mejs__player"
+       class="hls_media mejs__player <%= "playlist" if isPlaylist %>"
        preload="auto"
        data-mejsoptions='{"pluginPath": "/mejs/",
-                         "audioWidth": "100%"<%= playlistOptions %>}'>
+                         "audioWidth": "100%"<%= playlistOptions if isPlaylist %>}'>
 
     <% file_set_ids.each do |file_set_id| %>
-        <source src="<%= File.join(request.base_url,"file_set",file_set_id,"hls.m3u8") %>" type="application/x-mpegurl"/>
+        <source src="<%= File.join(request.base_url,"file_set",file_set_id,"hls.m3u8") %>" title="<%= file_set_id[:title]%>" type="application/x-mpegurl"/>
     <%end %>
         Your browser does not support the audio tag.
 </audio>
