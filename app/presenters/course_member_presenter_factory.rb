@@ -24,7 +24,7 @@ class CourseMemberPresenterFactory < Hyrax::MemberPresenterFactory
       i=1 #index for lectures with multiple audio files
       lecture.file_set_ids.each do |file_set_id|
         track_title = lecture.title.first
-        track_title += " i" if lecture.file_set_ids.count > 1
+        track_title += " #{i}" if lecture.file_set_ids.count > 1
         lecture_files += [{id: file_set_id, title: track_title}]
       end
     end
