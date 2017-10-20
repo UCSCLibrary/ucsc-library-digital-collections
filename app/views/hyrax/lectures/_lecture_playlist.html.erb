@@ -1,7 +1,6 @@
 
 <% isPlaylist = file_set_ids.count > 1 %>
 <% playlistOptions =  ',
-                         "showPlaylist": false,
                          "autoClosePlaylist": true,
                          "currentMessage": "now playing: ",
                          "features": ["playpause", 
@@ -20,6 +19,7 @@
        class="hls_media mejs__player"
        preload="auto"
        data-mejsoptions='{"pluginPath": "/mejs/",
+                         "showPlaylist": false, 
                          "audioWidth": "100%"<%= playlistOptions if isPlaylist %>}'>
 
     <% i = 1 %>
