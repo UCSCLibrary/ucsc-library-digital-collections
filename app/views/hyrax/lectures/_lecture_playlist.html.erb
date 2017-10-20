@@ -19,7 +19,7 @@
        class="hls_media mejs__player"
        preload="auto"
        data-mejsoptions='{"pluginPath": "/mejs/",
-                         "showPlaylist": false, 
+                         "showPlaylist": <%= isPlaylist ? "true" : "false" %>, 
                          "audioWidth": "100%"<%= playlistOptions if isPlaylist %>}'>
 
     <% i = 1 %>
