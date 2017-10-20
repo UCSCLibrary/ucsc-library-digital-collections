@@ -1,10 +1,11 @@
 
-<button id="playlist-toggle" style="display:none; background:black; border:none;color:lightgray; right:0px;top:0px;margin-right:10px;margin-top:10px;position:absolute;" class="mejs__button" onclick="jQuery('.hls_media').toggleClass('playlist_hidden')">▲/▼</button>
+<button id="playlist-toggle" style="display:none; background:transparent; border:none;color:lightgray; right:0px;top:0px;margin-right:10px;width:35px;position:absolute;" class="mejs__button" onclick="jQuery('.hls_media').toggleClass('playlist_hidden')">▲▼</button>
 
 <script>
- $( document ).ready(function(){
+ $( window ).load(function(){
      toggleButton = $('button#playlist-toggle');
      toggleButton.appendTo('.mejs__playlist-current');
+     toggleButton.show();
  })
 </script>
 
