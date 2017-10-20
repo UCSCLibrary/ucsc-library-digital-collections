@@ -1,6 +1,6 @@
 class LectureShowPresenter < Hyrax::WorkShowPresenter
 
-  delegate :digital_extent,:parent_course, to: :solr_document  
+  delegate :file_set_ids,:digital_extent,:parent_course, to: :solr_document 
 
   def creator
     return solr_document.creator unless solr_document.creator.nil?
@@ -25,10 +25,6 @@ class LectureShowPresenter < Hyrax::WorkShowPresenter
   def date_digitized
     return solr_document.date_digitized unless solr_document.date_digitized.nil?
     parent_course.date_digitized unless parent_course.nil?
-  end
-
-  def file_set_ids
-    solr_document.file_set_ids
   end
 
   def representative_id

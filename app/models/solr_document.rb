@@ -31,7 +31,7 @@ class SolrDocument
     fetch('member_ids_ssim', [])
   end
 
-  def file_set_ids
+  def file_set_ids    
     fetch('file_set_ids_ssim', [])
   end
 
