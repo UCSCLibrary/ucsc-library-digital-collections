@@ -1,5 +1,5 @@
 <audio controls="controls"
-       class="hls_media mejs__player playlist"
+       class="hls_media mejs__player"
        preload="auto"
        data-mejsoptions='{"pluginPath": "/mejs/",
                          "alwaysShowControls": "true",
@@ -19,8 +19,8 @@
                                       "nexttrack", 
                                       "shuffle", 
                                       "loop"]}'>
-    <% lecture_files.each do |lecture| %>
-        <source src="<%= File.join(request.base_url,"file_set",lecture[:id],"hls.m3u8") %>" title="<%= lecture[:title]%>" type="application/x-mpegurl"
+    <% file_set_ids.each do |file_set_id| %>
+        <source src="<%= File.join(request.base_url,"file_set",file_set_id[:id],"hls.m3u8") %>" title="<%= file_set_id[:title]%>" type="application/x-mpegurl"
 />
     <%end %>
         Your browser does not support the audio tag.

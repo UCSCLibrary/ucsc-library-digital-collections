@@ -5,8 +5,12 @@ $ucsc-footer-back:#c1c1c1;
 $ucsc-footer-color:#6e6e6e;
 $header-height: 40px;
 
-
 body {
+
+    .hls_media {
+        margin-top:25px;
+        min-height: auto !important;
+    }
 
 //    padding-top:0px !important;
 
