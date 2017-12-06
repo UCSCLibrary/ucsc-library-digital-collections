@@ -27,5 +27,5 @@ RSpec.describe Admin::BmiIngest, type: :model do
 
   end
 
-  pending "add more test beyond nominal to #{__FILE__}"
+#  pending "add more test beyond nominal to #{__FILE__}"
 end
