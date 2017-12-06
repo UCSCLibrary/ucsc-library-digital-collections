@@ -50,7 +50,7 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 #gem 'sufia', '7.3.0'
-gem 'hyrax', '1.0.1'
+gem 'hyrax', '2'
 
 group :development, :test do
   gem 'solr_wrapper', '>= 0.3'
