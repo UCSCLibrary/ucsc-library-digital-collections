@@ -2,7 +2,7 @@
 #  `rails generate hyrax:work Lecture`
 class Lecture < ActiveFedora::Base
   include ::Hyrax::WorkBehavior
-  include ::Hyrax::BasicMetadata
+
   
   self.human_readable_type = 'Lecture'
 
@@ -26,5 +26,7 @@ class Lecture < ActiveFedora::Base
     index.as :stored_searchable
   end
 
+
+  include ::Hyrax::BasicMetadata
 
 end

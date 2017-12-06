@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170712200359) do
+ActiveRecord::Schema.define(version: 20171206201625) do
 
   create_table "bmi_cells", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "bmi_row_id"
@@ -102,12 +102,13 @@ ActiveRecord::Schema.define(version: 20170712200359) do
   create_table "checksum_audit_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "file_set_id"
     t.string   "file_id"
-    t.string   "version"
-    t.integer  "pass"
+    t.string   "checked_uri"
     t.string   "expected_result"
     t.string   "actual_result"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.boolean  "passed"
+    t.index ["checked_uri"], name: "index_checksum_audit_logs_on_checked_uri", using: :btree
     t.index ["file_set_id", "file_id"], name: "by_file_set_id_and_file_id", using: :btree
   end
 
@@ -191,16 +192,18 @@ ActiveRecord::Schema.define(version: 20170712200359) do
     t.datetime "updated_at",                 null: false
   end
 
-  create_table "local_authorities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string "name"
-  end
-
-  create_table "local_authority_entries", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "local_authority_id"
-    t.string  "label"
-    t.string  "uri"
-    t.index ["local_authority_id", "label"], name: "entries_by_term_and_label", using: :btree
-    t.index ["local_authority_id", "uri"], name: "entries_by_term_and_uri", using: :btree
+  create_table "job_io_wrappers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "user_id"
+    t.integer  "uploaded_file_id"
+    t.string   "file_set_id"
+    t.string   "mime_type"
+    t.string   "original_name"
+    t.string   "path"
+    t.string   "relation"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.index ["uploaded_file_id"], name: "index_job_io_wrappers_on_uploaded_file_id", using: :btree
+    t.index ["user_id"], name: "index_job_io_wrappers_on_user_id", using: :btree
   end
 
   create_table "mailboxer_conversation_opt_outs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -321,9 +324,11 @@ ActiveRecord::Schema.define(version: 20170712200359) do
     t.integer  "local_authority_id"
     t.string   "label"
     t.string   "uri"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.string   "lower_label",        limit: 256
     t.index ["local_authority_id"], name: "index_qa_local_authority_entries_on_local_authority_id", using: :btree
+    t.index ["lower_label", "local_authority_id"], name: "index_qa_local_authority_entries_on_lower_label_and_authority", using: :btree
     t.index ["uri"], name: "index_qa_local_authority_entries_on_uri", unique: true, using: :btree
   end
 
@@ -591,6 +596,7 @@ ActiveRecord::Schema.define(version: 20170712200359) do
     t.string   "arkivo_subscription"
     t.binary   "zotero_token",           limit: 65535
     t.string   "zotero_userid"
+    t.string   "preferred_locale"
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
@@ -624,6 +630,6 @@ ActiveRecord::Schema.define(version: 20170712200359) do
   add_foreign_key "mailboxer_notifications", "mailboxer_conversations", column: "conversation_id", name: "notifications_on_conversation_id"
   add_foreign_key "mailboxer_receipts", "mailboxer_notifications", column: "notification_id", name: "receipts_on_notification_id"
   add_foreign_key "permission_template_accesses", "permission_templates"
-  add_foreign_key "qa_local_authority_entries", "local_authorities"
+  add_foreign_key "qa_local_authority_entries", "qa_local_authorities", column: "local_authority_id"
   add_foreign_key "uploaded_files", "users"
 end
