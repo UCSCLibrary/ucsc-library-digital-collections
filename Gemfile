@@ -77,8 +77,8 @@ gem 'hydra-role-management'
 gem 'browse-everything'
 #gem 'hydra-remote_identifier'
 
-#gem 'hydra_hls', '>= 0.0.2'
 gem 'samvera_hls', path: "/srv/samvera_hls/"
+gem 'scooby_snacks', path: "/srv/scooby_snacks/"
 
 #gem 'ldfwrapper', github: 'boston-library/ldf-wrapper', branch: "master"
 

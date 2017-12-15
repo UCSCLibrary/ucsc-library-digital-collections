@@ -4,7 +4,7 @@ RSpec.describe Work do
 
   before do
     @usr = User.create!({email:"test@test.test",password:"testpass"})
-    @wrk = Work.new({title: ["test title"],
+    @wrk = Work.new({title: "test title",
                      depositor: @usr.email})
   end
 
@@ -16,7 +16,11 @@ RSpec.describe Work do
   it "can accept more complex metadata" do
     @wrk.description = ["a test description","another test description"]
     expect !@wrk.description.nil?
-    #TODO add more test metadata fields here
+    @wrk.accessionNumber= "11006b"
+    @wrk.donorProvenance= ["some donor or provenance"]
+    @wrk.dateCreated= ["2017-01-01"]
+    @wrk.language= ["eng"]
+    @wrk.keyword= ["test"]
   end
 
   it "can be saved with complex metadata" do
@@ -26,6 +30,11 @@ RSpec.describe Work do
 
   it "persists edited metadata after saving" do
     expect !@wrk.description.nil?
+    expect !@wrk.accessionNumber.nil?
+    expect !@wrk.donorProvenance.nil?
+    expect !@wrk.dateCreated.nil?
+    expect !@wrk.language.nil?
+    expect !@wrk.keyword.nil?
   end
 
 end

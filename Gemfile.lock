@@ -16,6 +16,11 @@ PATH
     samvera_hls (0.2.0)
       rails (>= 4.2.6)
 
+PATH
+  remote: /srv/scooby_snacks
+  specs:
+    scooby_snacks (0.1.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -796,6 +801,7 @@ DEPENDENCIES
   rspec-rails
   samvera_hls!
   sass-rails (~> 5.0)
+  scooby_snacks!
   sinatra!
   solr_wrapper (>= 0.3)
   spring

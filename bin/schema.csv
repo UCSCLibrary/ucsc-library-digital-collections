@@ -1,0 +1,28 @@
+required,property name,definition,predicate,vocabularies,encoding,label,dublin core mapping,multiple
+true,title,The title of the resource.,DC:title,,,Title,dc:title,false
+,titleAlternative,An alternative name for the resource.,DC:alternative,,,,dc:title,
+,creator,A person or organization responsible for creating the resource.,DC:creator,"NAF, ULAN, Local",,Creator,dc:creator,
+,contributor,A person or organization responsible for making contributions to the resource.,DC:contributor,"NAF, ULAN, Local",,Contributor,dc:contributor,
+true,publisher,An entity responsible for making the resource available.,DC:publisher,,,Digital Publisher & Contact Info,dc:publisher,false
+,publisherHomepage,,foaf:homepage,,,,,false
+,description,An account of the resource.,DC:description,,,Description,dc:description,
+,language,A language of the resource.,DC:language,ISO 639-2,,Language,dc:language,
+true,resourceType,"General nature or type of the resource (e.g., image, text, etc.). Does not capture aboutness. ",DC:type,DCMIType,,Type,dc:type,
+,rightsHolder,A person or organization owning or managing rights over the resource.,DC:rightsHolder,"NAF, Local",,Rights Holder,dc:rightsHolder,
+true,rightStatement,Information about rights held in and over the resource expressed in general terms (i.e. boilerplate statements).,DC:rights,,,Copyright Statement OR Copyright Status,dc:rights,
+,accessRights,Information about who can access the resource or an indication of its security status.,DC:accessRights,,,Access Rights,dc:rights,
+,license,"An associated license for the object (i.e. Creative Commons license, software licenses, etc.). Defines use/reuse of resources.",DC:license,,,Rights License,dc:rights,
+,collection,A related resource in which the described resource is physically or logically included.,DC:isPartOf,,,Collection Title,dc:relation,
+,series,A related resource in which the described resource is physically or logically included.,opaque:seriesName,,,Series Title,dc:relation,
+,dateCreated,Date of creation of the original resource.,DC:date,,W3CDTF,Date Created ,dc:date,
+,datePublished,"Date of formal issuance (e.g., publication) of the resource.",DC:issued,,W3CDTF,Date Published ,dc:date,
+,dateModified,"Date on which the resource was changed, i.e., digitized.",DC:modified,,W3CDTF,Date Digitized,dc:date,
+,subjectTopic,The topic of the resource.,DC:subject,"LCSH, Local",,Subject,dc:subject,
+,subjectName,A name of the person that the resource is about.,foaf:name,"NAF, ULAN, Local",,Subject,dc:subject,
+,subjectPlace,Spatial characteristics of the resource.,DC:spatial,"LCSH, GNIS, Local",,Subject,dc:subject,
+,subjectTemporal,Temporal characteristics of the resource.,DC:temporal,"AAT, Local",,Subject,dc:subject,
+,genreForm,"The genre, form, and/or physical characteristics of the resource being described. The material or physical carrier of the resource. Does not capture aboutness.",DC:medium,"AAT, Local",,Format,dc:format,
+,physicalDescription,"Description or statement indicating the extent, size, or duration of the original, physical resource for digitized content.",DC:extent,,,Physical Description,dc:source,
+,keyword,Keywords (i.e. non-standard terms) assigned to the resource.,http://schema.org/keywords,,,Keywords,dc:subject,
+,accessionNumber,An archival accession number for the resource.,DC:identifier,,,Accession Number,dc:identifier,false
+,collectionCallNumber,The identifier for the collection to which the resource belongs.,http://schema.org/identifier,,,Collection Call Number,dc:source,

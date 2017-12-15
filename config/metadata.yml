@@ -1,0 +1,379 @@
+#-------------------
+# Other Schema Files
+#-------------------
+# This section specifies other configuration files that contain
+# metadata information. Each other metadata file may contain 
+# any information that would be valid in this file. Schema information
+# from all files is merged together.
+# When possible, information from all files is combined. For example, 
+# if a property is defined in one file, it cannot be un-defined in 
+# another file, though more options can be added.
+# Some options associated with properties can be defined in one file
+# and overwritten by another. Options like this include 'required'
+# and 'multiple'. 
+# Other options must be defined only once per property
+# and cannot be overwritten. These include "predicate" and "definition". 
+
+
+# NO OTHER SCHEMA FILES USED 
+
+
+#-------------------
+# Property Settings
+#-------------------
+# This section defines every metadata property that can be used 
+# in the system. Individual work types may override some settings 
+# defined here. Predicates for each property should be defined
+# here, and cannot be overridden once defined.
+
+properties:
+
+  default:
+    definition: "This property has not yet been documented."
+    usage_note: "This is the default usage note for a metadata property. If you are seeing this in an active application, you need to define a usage note for your property."
+    usage_warning: 
+    required: false
+    multiple: true
+    primary: false
+    hidden: false
+    work_title: false
+    input: scalar
+    range: literal
+    facet_limit: 5
+    index_as: stored_searchable
+    search_field: false
+    sort_field: false
+    input_as: text
+
+  title:
+    definition: "The title of the resource."
+    usage_note: "Enter only the primary title of the resource. All other titles should be entered under Alternative Title."
+    predicate: "DC:title"
+    label: "Title"
+    required: true
+    multiple: false
+    primary: true
+    work_title: true
+    index_itemprop: name
+    index_if: false
+    search_field: true
+
+  accessionNumber:
+    definition: "An archival accession number for the resource."
+    dublin core mapping: "DC:identifier"
+    label: "Accession Number"
+    predicate: "DC:identifier"
+    primary: true
+    multiple: false
+
+
+  titleAlternative:
+    definition: "An alternative title for the resource."
+    usage_note: "All titles for this work other than the primary title should be listed here"
+    label: "Alternative Title"
+    primary: true
+    predicate: "DC:alternative"
+    search_field: true
+
+  creator:
+    definition: "A person or organization responsible for creating the resource."
+    predicate: "DC:creator"
+    range: "Agent"
+    vocabularies: "NAF, ULAN, UcscAgents"
+    primary: true
+    required: true
+    facet: true
+    index_itemprop: creator
+    search_field: true
+    input: select_autosuggest_text
+
+  contributor:
+    definition: "A person or organization responsible for making contributions to the resource."
+    predicate: "DC:contributor"
+    range: "Agent"
+    vocabularies: "NAF, ULAN, UcscAgents"
+    facet: true
+    index_itemprop: contributor
+    search_field: true
+    input: select_autosuggest_text
+
+#  publisher:
+#    predicate: "DC:publisher"
+#    range: "Agent"
+#    facet: true
+#    multiple: false
+#    index_itemprop: publisher
+#    search_field: true
+#  
+#  publisher_homepage:
+#    definition: "The URL of the publisher's homepage."
+#    multiple: 'false'
+#    predicate: FOAF:homepage
+#    search_field: true
+  
+  resourceType:
+    definition: 'General nature or type of the resource (e.g., image, text, etc.). Does not capture aboutness. '
+    dublin core mapping: dc:type
+    label: Type
+    predicate: DC:type
+    required: 'true'
+    vocabularies: DCMIType
+    facet: true
+    input: select_dropdown
+  
+  rightStatement:
+    definition: Information about rights held in and over the resource expressed in general terms (i.e. boilerplate statements).
+    dublin core mapping: dc:rights
+    label: Copyright Statement OR Copyright Status
+    predicate: DC:rights
+    required: 'true'
+  
+  rightsHolder:
+    definition: A person or organization owning or managing rights over the resource.
+    dublin core mapping: dc:rightsHolder
+    label: Rights Holder
+    predicate: DC:rightsHolder
+    vocabularies: NAF, UcscAgents
+    input: select_autosuggest_text
+  
+  series:
+    definition: A related resource in which the described resource is physically or logically included.
+    dublin core mapping: dc:relation
+    label: Series Title
+    predicate: opaque:seriesName
+  
+  subjectName:
+    definition: A name of the person that the resource is about.
+    dublin core mapping: dc:subject
+    label: Subject (People)
+    predicate: FOAF:name
+    vocabularies: NAF, ULAN, UcscAgents
+    facet: true
+    input: select_autosuggest_text
+  
+  subjectPlace:
+    definition: Spatial characteristics of the resource.
+    dublin core mapping: dc:subject
+    label: Subject (Place)
+    predicate: DC:spatial
+    vocabularies: LCSH, GNIS, UcscPlaces
+    facet: true
+    search_field: true
+    input: select_autosuggest_text
+  
+  subjectTemporal:
+    definition: Temporal characteristics of the resource.
+    dublin core mapping: dc:subject
+    label: Subject (Time)
+    predicate: DC:temporal
+    vocabularies: AAT, UcscTimes
+    facet: true
+    input: select_autosuggest_text
+  
+  subjectTopic:
+    definition: The topic of the resource.
+    dublin core mapping: dc:subject
+    label: Subject (Topic)
+    predicate: DC:subject
+    vocabularies: LCSH, UcscTopics
+    index_itemprop: about
+    facet: true
+    search_field: true
+    input: select_autosuggest_text
+  
+  dateCreated:
+    definition: Date of creation of the original resource.
+    dublin core mapping: dc:date
+    encoding: W3CDTF
+    label: 'Date Created'
+    predicate: DC:date
+    index_type: date
+    index_helper_method: human_readable_date
+    index_itemprop: dateCreated
+    sort_field: true
+    input: datepicker
+  
+  dateModified:
+    definition: Date on which the resource was changed, i.e., digitized.
+    dublin core mapping: dc:date
+    encoding: W3CDTF
+    label: Date Digitized
+    predicate: DC:modified
+    index_type: date
+    index_helper_method: human_readable_date
+    index_itemprop: dateModified
+    input: datepicker
+  
+  datePublished:
+    definition: Date of formal issuance (e.g., publication) of the resource.
+    dublin core mapping: dc:date
+    encoding: W3CDTF
+    label: 'Date Published'
+    predicate: DC:issued
+    index_type: date
+    index_helper_method: human_readable_date
+    index_itemprop: datePublished
+    sort_field: true
+    input: datepicker
+  
+  description:
+    definition: An account of the resource.
+    dublin core mapping: dc:description
+    label: Description
+    predicate: DC:description
+    index_itemprop: "description"
+    index_helper_method: "iconify_auto_link"
+    search_field: true
+  
+  genreForm:
+    definition: The genre, form, and/or physical characteristics of the resource being described. The material or physical carrier of the resource. Does not capture aboutness.
+    dublin core mapping: dc:format
+    label: Format
+    predicate: DC:medium
+    vocabularies: AAT, UcscGenres
+    facet: true
+    input: select_autosuggest_text
+  
+  keyword:
+    definition: Keywords (i.e. non-standard terms) assigned to the resource.
+    dublin core mapping: dc:subject
+    label: Keyword
+    predicate: schema:keywords
+    facet: true
+    index_itemprop: keywords
+    search_field: true
+  
+  language:
+    definition: A language of the resource.
+    dublin core mapping: dc:language
+    label: Language
+    predicate: DC:language
+    encoding: ISO 639-2
+    facet: true
+    itemprop: inLanguage
+  
+  license:
+    definition: An associated license for the object (i.e. Creative Commons license, software licenses, etc.). Defines use/reuse of resources.
+    dublin core mapping: dc:rights
+    label: Rights License
+    predicate: DC:license
+  
+  physicalDescription:
+    definition: Description or statement indicating the extent, size, or duration of the original, physical resource for digitized content.
+    dublin core mapping: dc:source
+    label: Physical Description
+    predicate: DC:extent
+    search_field: true
+  
+  accessRights:
+    definition: Information about who can access the resource or an indication of its security status.
+    dublin core mapping: dc:rights
+    label: Access Rights
+    predicate: DC:accessRights
+    
+#  collection:
+#    definition: A related resource in which the described resource is physi#cally or logically included.
+#    dublin core mapping: dc:relation
+#    label: Collection Title
+#    predicate: DC:isPartOf
+#    facet: true
+  
+  collectionCallNumber:
+    definition: The identifier for the collection to which the resource belongs.
+    dublin core mapping: dc:source
+    label: Collection Call Number
+    predicate: schema:identifier
+
+  donorProvenance:
+    definition: "A statement of any changes in ownership and custody of the resource since its creation that are significant for its authenticity, integrity, and interpretation."
+    dublin core mapping: DC:provenance
+    label: Donor/Provenance
+    predicate: DC:provenance
+
+  boxFolderItemCallNumber:
+    definition: "A call number, shelf mark or similar label of an item."
+    dublin core mapping: DC:identifier
+    label: Physical Location
+    predicate:  purlOnt:holding#label
+
+
+#-------------------
+# Class Settings
+#-------------------
+# This sections defines classes of nested objects defined in 
+# the system that are not PCDM works. These may be used as the objects
+# of predicates, and may have their own predicates applied.  
+# Here, we define which properties are available to each Class.
+
+#classes:
+#  Agent:
+#    parent: "ActiveTripes::Resource"
+#    rdf_label: "::RDF::Vocab::FOAF.Agent"
+#    properties: 
+#      local_label:
+#        definition: "If set, this is a local label for this agent to be indexed and displayed instead of any label fetched from remote authority"
+#        predicate: 'skos:altLabel'
+#
+#-------------------
+# Work Type Settings
+#-------------------
+# Here we define metadata settings based on work type.
+# This section specifies which properties (defined above)
+# may be applied to each work type, and may specify display
+# settings such as "required" or "hidden".
+# 
+# In the future, this may be extended to actually define 
+# the work types for the application here.
+
+
+work_types:
+  work:
+    properties:
+      title:
+      titleAlternative:
+        primary: true
+#      creator:
+#      contributor:
+#      publisher:
+#      publisher_homepage:
+        primary: true
+      description:
+        primary: true
+      language:
+      resourceType:
+      rightsHolder:
+      rightStatement:
+      accessRights:
+      license:
+      collection:
+      series:
+      dateCreated:
+      datePublished:
+      dateModified:
+      subjectTopic:
+      subjectName:
+      subjectPlace:
+      subjectTemporal:
+      genreForm:
+      physicalDescription:
+      keyword:
+      accessionNumber:
+      collectionCallNumber:
+      donorProvenance:
+      boxFolderItemCallNumber:
+  lecture:
+  course:
+  gdao_work:
+
+#-------------------
+# RDF Namespaces
+#-------------------
+# Here we can define additional namespaces for rdf predicates.
+# The most common namespaces are predefined by the system, but
+# this allows us to define more.
+
+namespaces:
+  edm: "http://www.europeana.eu/schemas/edm/"
+  opaque: "http://opaquenamespace.org/ns/"
+  schema: "http://schema.org/"
+  purlOnt: "http://purl.org/ontology/"

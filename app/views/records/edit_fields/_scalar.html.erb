@@ -1,0 +1,12 @@
+<%# options[:as] = :multi_value if f.object.multiple? key %>
+<% as = f.object.multiple?(key) ? :multi_value : :string %>
+<% options = {as: as, 
+              required: f.object.required?(key),
+              input_html: { class: 'form-control', 
+                  multiple: f.object.multiple?(key) } } %>
+<% options[:label] = property["label"] if !property["label"].blank? %>
+<% options[:hint] = property["definition"] if !property["definition"].blank? %>
+<%= f.input key, options %>
+
+
+

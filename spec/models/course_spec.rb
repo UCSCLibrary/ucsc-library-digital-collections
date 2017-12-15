@@ -6,7 +6,7 @@ RSpec.describe Course do
 
   before do
     @usr = User.create!({email:"test@test.test",password:"testpass"})
-    @crs = Work.new({title: ["test title"],
+    @crs = Work.new({title: "test title",
                      depositor: @usr.email})
   end
 
