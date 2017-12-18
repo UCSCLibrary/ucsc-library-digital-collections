@@ -1,4 +1,14 @@
-<% as = f.object.multiple?(key) ? :multi_value : :string %>
-<%= f.input key, as: as, required: f.object.required?(key),
-  input_html: { class: 'form-control', multiple: f.object.multiple?(key) }
-%>
+<% options[:as] = :select %>
+<% options[:include_blank] = :true %>
+<% options[:item_helper] = method(:include_current_value) %>
+
+<% vocab = property['vocabulary'] %>
+<% vocab ||= property['vocabularies'].first unless property['vocabularies'].nil? %>
+<% vocab = {"auth" => "local", "subauth" => vocab} if vocab.type_of? string %>
+<% options[:collection] =  Hyrax::QaSelectService.new(vocab["subauthority"]).select_all_options%>
+
+<% Raise StandardError unless vocab['authority'].downcase == "local" or vocab["authority"].downcase == "ucsc" %>
+
+<%= f.input key, options %>
+
+<% end %>

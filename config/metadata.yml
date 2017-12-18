@@ -79,7 +79,13 @@ properties:
     definition: "A person or organization responsible for creating the resource."
     predicate: "DC:creator"
     range: "Agent"
-    vocabularies: "NAF, ULAN, UcscAgents"
+    vocabularies: 
+      - authority: loc
+        subauthority: names
+      - authority: getty
+        subauthority: ulan
+      - authority: local
+        subauthority: agents
     primary: true
     required: true
     facet: true
@@ -91,7 +97,13 @@ properties:
     definition: "A person or organization responsible for making contributions to the resource."
     predicate: "DC:contributor"
     range: "Agent"
-    vocabularies: "NAF, ULAN, UcscAgents"
+    vocabularies: 
+      - authority: loc
+        subauthority: names
+      - authority: getty
+        subauthority: ulan
+      - authority: local
+        subauthority: agents
     facet: true
     index_itemprop: contributor
     search_field: true
@@ -117,7 +129,9 @@ properties:
     label: Type
     predicate: DC:type
     required: 'true'
-    vocabularies: DCMIType
+    vocabulary: 
+      authority: local
+      subauthority: dcmi_types
     facet: true
     input: select_dropdown
   
@@ -133,7 +147,11 @@ properties:
     dublin core mapping: dc:rightsHolder
     label: Rights Holder
     predicate: DC:rightsHolder
-    vocabularies: NAF, UcscAgents
+    vocabularies: 
+      - authority: loc
+        subauthority: names
+      - authority: local
+        subauthority: agents
     input: select_autosuggest_text
   
   series:
@@ -147,7 +165,13 @@ properties:
     dublin core mapping: dc:subject
     label: Subject (People)
     predicate: FOAF:name
-    vocabularies: NAF, ULAN, UcscAgents
+    vocabularies:
+      - authority: loc
+        subauthority: names
+      - authority: getty
+        subauthority: ulan 
+      - authority: local
+        subauthority: agents        
     facet: true
     input: select_autosuggest_text
   
@@ -156,7 +180,13 @@ properties:
     dublin core mapping: dc:subject
     label: Subject (Place)
     predicate: DC:spatial
-    vocabularies: LCSH, GNIS, UcscPlaces
+    vocabularies: 
+      - authority: loc
+        subauthority: geographic_areas
+      - authority: usgs
+        subauthority: gnis
+      - authority: local
+        subauthority: places
     facet: true
     search_field: true
     input: select_autosuggest_text
@@ -166,7 +196,11 @@ properties:
     dublin core mapping: dc:subject
     label: Subject (Time)
     predicate: DC:temporal
-    vocabularies: AAT, UcscTimes
+    vocabularies: 
+      - authority: getty
+        subauthority: aat
+      - authority: local
+        subauthority: time_periods
     facet: true
     input: select_autosuggest_text
   
@@ -175,7 +209,11 @@ properties:
     dublin core mapping: dc:subject
     label: Subject (Topic)
     predicate: DC:subject
-    vocabularies: LCSH, UcscTopics
+    vocabularies: 
+      - authority: loc
+        subauthority: subjects
+      - authority: local
+        subauthority: topics
     index_itemprop: about
     facet: true
     search_field: true
@@ -191,7 +229,7 @@ properties:
     index_helper_method: human_readable_date
     index_itemprop: dateCreated
     sort_field: true
-    input: datepicker
+    input: date
   
   dateModified:
     definition: Date on which the resource was changed, i.e., digitized.
@@ -202,7 +240,7 @@ properties:
     index_type: date
     index_helper_method: human_readable_date
     index_itemprop: dateModified
-    input: datepicker
+    input: date
   
   datePublished:
     definition: Date of formal issuance (e.g., publication) of the resource.
@@ -214,7 +252,7 @@ properties:
     index_helper_method: human_readable_date
     index_itemprop: datePublished
     sort_field: true
-    input: datepicker
+    input: date
   
   description:
     definition: An account of the resource.
@@ -225,12 +263,16 @@ properties:
     index_helper_method: "iconify_auto_link"
     search_field: true
   
-  genreForm:
-    definition: The genre, form, and/or physical characteristics of the resource being described. The material or physical carrier of the resource. Does not capture aboutness.
+  Format:
+    definition: The form, and/or physical characteristics of the resource being described. The material or physical carrier of the resource. Does not capture aboutness.
     dublin core mapping: dc:format
     label: Format
     predicate: DC:medium
-    vocabularies: AAT, UcscGenres
+    vocabularies: 
+      - authority: getty
+        subauthority: aat
+      - authority: local
+        subauthority: formats
     facet: true
     input: select_autosuggest_text
   
@@ -248,9 +290,12 @@ properties:
     dublin core mapping: dc:language
     label: Language
     predicate: DC:language
-    encoding: ISO 639-2
+    vocabulary:
+      - authority: loc
+      - subauthority: languages
     facet: true
     itemprop: inLanguage
+    input: select_dropdown
   
   license:
     definition: An associated license for the object (i.e. Creative Commons license, software licenses, etc.). Defines use/reuse of resources.

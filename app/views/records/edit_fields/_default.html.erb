@@ -2,7 +2,11 @@
 <% unless property.nil?  %>
     <% input_type = property['input'] %>
     <% input_type = 'scalar' if input_type == "default" %>
-    <%= render partial: "records/edit_fields/#{input_type}", locals: {property: property, f: f, key: key}  %>
-<% else %>
-    <%# "model_name: #{curation_concern.model_name.to_s.downcase}, key: #{key}, propertes: #{ScoobySnacks::METADATA_SCHEMA['work_types'][curation_concern.model_name.to_s.downcase]['properties']['title']}"%>  
+    <% options = {
+        required: f.object.required?(key),
+        input_html: { class: 'form-control', 
+            multiple: f.object.multiple?(key) }} %>
+    <% options[:label] = property["label"] if !property["label"].blank? %>
+    <% options[:hint] = property["definition"] if !property["definition"].blank? %>
+    <%= render partial: "records/edit_fields/#{input_type}", locals: {property: property, f: f, key: key, options: options}  %>
 <% end %>
