@@ -1,6 +1,6 @@
-class SelectAutosuggestText < MultiValueInput
+class AutosuggestInput < MultiValueInput
 
-  private
+#  private
   
   def build_field(value, index)
 
@@ -111,6 +111,7 @@ class SelectAutosuggestText < MultiValueInput
     @collection ||= begin
                       val = object[attribute_name]
                       col = val.respond_to?(:to_ary) ? val.to_ary : val
+                      col ||= {}
                       col.reject { |value| value.to_s.strip.blank? }
                     end
   end

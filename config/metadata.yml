@@ -91,7 +91,7 @@ properties:
     facet: true
     index_itemprop: creator
     search_field: true
-    input: select_autosuggest_text
+    input: autosuggest
 
   contributor:
     definition: "A person or organization responsible for making contributions to the resource."
@@ -107,7 +107,7 @@ properties:
     facet: true
     index_itemprop: contributor
     search_field: true
-    input: select_autosuggest_text
+    input: autosuggest
 
 #  publisher:
 #    predicate: "DC:publisher"
@@ -133,7 +133,8 @@ properties:
       authority: local
       subauthority: dcmi_types
     facet: true
-    input: select_dropdown
+    input: dropdown
+    multiple: false
   
   rightStatement:
     definition: Information about rights held in and over the resource expressed in general terms (i.e. boilerplate statements).
@@ -152,7 +153,7 @@ properties:
         subauthority: names
       - authority: local
         subauthority: agents
-    input: select_autosuggest_text
+    input: autosuggest
   
   series:
     definition: A related resource in which the described resource is physically or logically included.
@@ -173,7 +174,7 @@ properties:
       - authority: local
         subauthority: agents        
     facet: true
-    input: select_autosuggest_text
+    input: autosuggest
   
   subjectPlace:
     definition: Spatial characteristics of the resource.
@@ -189,7 +190,7 @@ properties:
         subauthority: places
     facet: true
     search_field: true
-    input: select_autosuggest_text
+    input: autosuggest
   
   subjectTemporal:
     definition: Temporal characteristics of the resource.
@@ -202,7 +203,7 @@ properties:
       - authority: local
         subauthority: time_periods
     facet: true
-    input: select_autosuggest_text
+    input: autosuggest
   
   subjectTopic:
     definition: The topic of the resource.
@@ -217,7 +218,7 @@ properties:
     index_itemprop: about
     facet: true
     search_field: true
-    input: select_autosuggest_text
+    input: autosuggest
   
   dateCreated:
     definition: Date of creation of the original resource.
@@ -274,7 +275,7 @@ properties:
       - authority: local
         subauthority: formats
     facet: true
-    input: select_autosuggest_text
+    input: autosuggest
   
   keyword:
     definition: Keywords (i.e. non-standard terms) assigned to the resource.
@@ -295,7 +296,7 @@ properties:
       - subauthority: languages
     facet: true
     itemprop: inLanguage
-    input: select_dropdown
+    input: dropdown
   
   license:
     definition: An associated license for the object (i.e. Creative Commons license, software licenses, etc.). Defines use/reuse of resources.
@@ -341,23 +342,6 @@ properties:
     label: Physical Location
     predicate:  purlOnt:holding#label
 
-
-#-------------------
-# Class Settings
-#-------------------
-# This sections defines classes of nested objects defined in 
-# the system that are not PCDM works. These may be used as the objects
-# of predicates, and may have their own predicates applied.  
-# Here, we define which properties are available to each Class.
-
-#classes:
-#  Agent:
-#    parent: "ActiveTripes::Resource"
-#    rdf_label: "::RDF::Vocab::FOAF.Agent"
-#    properties: 
-#      local_label:
-#        definition: "If set, this is a local label for this agent to be indexed and displayed instead of any label fetched from remote authority"
-#        predicate: 'skos:altLabel'
 #
 #-------------------
 # Work Type Settings
@@ -377,10 +361,10 @@ work_types:
       title:
       titleAlternative:
         primary: true
-#      creator:
-#      contributor:
-#      publisher:
-#      publisher_homepage:
+      creator:
+      contributor:
+      publisher:
+      publisher_homepage:
         primary: true
       description:
         primary: true

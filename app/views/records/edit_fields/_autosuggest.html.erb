@@ -1,0 +1,15 @@
+<%# TODO NEXT what exactly should go in these slots and how do I format it from what I have?%>
+<% options = default_options %>
+
+<% authority_select = property['vocabularies'].map{|voc| [voc['authority'].titleize+" "+voc['subauthority'].titleize, "/authorities/search/#{voc['authority']}/#{voc['subauthority']}"]}  %>
+
+<% data = {'autocomplete-url' => authority_select.first.last,
+           'autocomplete' => key,
+           'authority-select' => authority_select} %>
+<%# options[:as] = property['input'].to_sym %>
+<% options[:as] = :autosuggest %>
+<% options[:input_html] = {class: "form-control #{key.to_s.underscore}-input",data: data} %>
+
+<%# options[:wrapper_html] = {data: data} %>
+
+<%= f.input key, options %>

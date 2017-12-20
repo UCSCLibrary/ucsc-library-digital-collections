@@ -8,5 +8,5 @@
             multiple: f.object.multiple?(key) }} %>
     <% options[:label] = property["label"] if !property["label"].blank? %>
     <% options[:hint] = property["definition"] if !property["definition"].blank? %>
-    <%= render partial: "records/edit_fields/#{input_type}", locals: {property: property, f: f, key: key, options: options}  %>
+    <%= render partial: "records/edit_fields/#{input_type}", locals: {property: property, f: f, key: key, default_options: options}  %>
 <% end %>
