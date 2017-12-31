@@ -2,6 +2,23 @@ class AutosuggestInput < MultiValueInput
 
 #  private
   
+  def input(wrapper_options)
+    @rendered_first_element = false
+    input_html_classes.unshift('string')
+    input_html_options[:name] ||= "#{object_name}[#{attribute_name}][]"
+    
+    puts "yo"
+    puts "collection: #{collection}"
+
+    outer_wrapper do
+      buffer_each(collection) do |value, index|
+        inner_wrapper do
+          build_field(value, index)
+        end
+      end
+    end
+  end
+
   def build_field(value, index)
 
     options = input_html_options.dup
@@ -18,6 +35,9 @@ class AutosuggestInput < MultiValueInput
     @rendered_first_element = true
 
     authority_picker(options) + text_field(options) + hidden_id_field(value, index) + destroy_widget(attribute_name, index)
+
+    puts "Test thing!!!"
+
   end
 
 
@@ -33,7 +53,7 @@ class AutosuggestInput < MultiValueInput
 
   def authority_picker(options)
     @builder.input(attribute_name.to_s + "_authority", 
-                   as: :dummy_select, 
+                   as: :vocab_select, 
                    collection: options[:data]['authority-select'],
                    include_blank: false, 
                    label: false,
@@ -111,7 +131,7 @@ class AutosuggestInput < MultiValueInput
     @collection ||= begin
                       val = object[attribute_name]
                       col = val.respond_to?(:to_ary) ? val.to_ary : val
-                      col ||= {}
+#                      col = [Ucsc::ControlledResource.new()] if col.empty?
                       col.reject { |value| value.to_s.strip.blank? }
                     end
   end
