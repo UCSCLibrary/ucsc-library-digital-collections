@@ -41,6 +41,7 @@ properties:
     search_field: false
     sort_field: false
     input_as: text
+    class_name: Ucsc::ControlledResource
 
   title:
     definition: "The title of the resource."
