@@ -11,7 +11,7 @@ class Work < ActiveFedora::Base
   self.human_readable_type = 'Work'
 
   def save
-    all_controlled_properties.each do |property|
+    controlled_properties.each do |property|
       attributes = []
       props =  self.send(property)
       props = Array(props) if !props.kind_of?(Array)
@@ -28,7 +28,11 @@ class Work < ActiveFedora::Base
 
   def fix_loc_id loc_id
     split = loc_id.split('/')
-    "http://id.loc.gov/authorities/#{split[-2]}/#{split[-1]}"
+    if split[-2] == "authorities"
+      "http://id.loc.gov/authorities/#{split[-1]}"
+    else
+      "http://id.loc.gov/authorities/#{split[-2]}/#{split[-1]}"
+    end
   end
 
 end

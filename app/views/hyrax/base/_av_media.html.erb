@@ -1,0 +1,7 @@
+<% if @presenter.all_av_files.count > 1 %>
+    <%= render 'playlist', file_set_ids: @presenter.all_av_files  %>
+<% else %>
+    <%= render 'single_player', file_set_ids: @presenter.all_av_files.first if @presenter.all_av_files.any? %>
+<% end %>
+<%= javascript_include_tag "include_player" %>
+<%= stylesheet_link_tag "embed" %>

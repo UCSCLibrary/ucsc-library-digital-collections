@@ -58,4 +58,12 @@ class SolrDocument
     @parent_course_solr_document = SolrDocument.new(response)
   end
 
+  def parent_work
+    return @parent_work_solr_document unless @parent_work_solr_document.nil?
+    query = ActiveFedora::SolrQueryBuilder.construct_query_for_rel("member_ids" => id, "has_model" => "Work")
+    response = ActiveFedora::SolrService.instance.conn.get(ActiveFedora::SolrService.select_path, params: { fq: query, rows: 1})["response"]["docs"][0]
+    return nil if response.nil?
+    @parent_work_solr_document = SolrDocument.new(response)
+  end
+
 end

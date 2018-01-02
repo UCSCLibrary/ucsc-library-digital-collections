@@ -30,15 +30,12 @@ properties:
 
   default:
     definition: "This property has not yet been documented."
-    usage_note: "This is the default usage note for a metadata property. If you are seeing this in an active application, you need to define a usage note for your property."
-    usage_warning: 
     required: false
     multiple: true
     primary: false
     hidden: false
     work_title: false
     input: scalar
-    range: literal
     facet_limit: 5
     index_as: stored_searchable
     search_field: false
