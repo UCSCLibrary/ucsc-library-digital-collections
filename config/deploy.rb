@@ -1,5 +1,5 @@
 set :application, 'ucsc_dams'
-set :repo_url, 'git@bitbucket.org:ethenry/ucsc-sufia-based-dams'
+set :repo_url, 'git@github.com:UCSCLibrary/ucsc-library-digital-collections.git'
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
