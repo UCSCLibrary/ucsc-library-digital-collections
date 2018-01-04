@@ -1,10 +1,14 @@
 class BulkMetadata::Row < ApplicationRecord
-  self.table_name = "bmi_rows"
+  self.table_name = "bulk_meta_rows"
 
   BASE_PATH = "/avalon2sufia/inbox"
   belongs_to :ingest 
   has_many :cells
   has_many :relationships
+
+  def schema
+    ScoobySnacks::METADATA_SCHEMA["work_types"][ingest.work_type]
+  end
 
   def parse
     #TODO
@@ -28,13 +32,13 @@ class BulkMetadata::Row < ApplicationRecord
       next if values.nil?
       row_errors = []
       values.split(';').each do |value|
-        cell = cells.find_by(name: property, value_string: value )
-        if cell.nil?
+
+        if schema["properties"][property]["controlled"]
           cell = cells.find_by(name: property, value_url: value )
-        end
-        if cell.nil?
-          #it is a new cell
-          cell = self.cells.create(name: property, value_string: value, status: "pending")
+          cell ||= self.cells.create(name: property, value: value, status: "pending")
+        else
+          cell = cells.find_by(name: property, value: value )
+          cell ||= self.cells.create(name: property, value_url: value, status: "pending") 
         end
       end
     end
@@ -56,31 +60,30 @@ class BulkMetadata::Row < ApplicationRecord
     work_type = ingest.work_type
     id_type = ingest.relationship_identifier
     visibility = ingest.visibility
-    labels = ScoobySnacks::METADATA_SCHEMA["work_types"][work_type]["labels"]
 
     wrk = work_type.camelize.constantize.new
 
     cells.each do |cell|
-      next if cell.value_string.blank?
+      next if cell.value.blank?
 
       ignore = ingest.ignore.nil? ? "" : ingest.ignore
 
       case cell.name.downcase
           when "file", "filename"
-            file = File.open(File.join(BASE_PATH,cell.value_string))
+            file = File.open(File.join(BASE_PATH,cell.value))
             uploaded_file = Hyrax::UploadedFile.create(file: file, user: user)
             (metadata[:uploaded_files] ||= []) << uploaded_file.id if !uploaded_file.id.nil?
 
           when "collection title","collection"
             relationships.build({ :relationship_type => 'collection',
                                       :identifier_type => 'title',
-                                      :object_identifier => cell.value_string,
+                                      :object_identifier => cell.value,
                                       :status => "incomplete"})
 
           when "collection id"
             relationships.build({ :relationship_type => 'collection_id',
                                       :identifier_type => 'id',
-                                      :object_identifier => cell.value_string,
+                                      :object_identifier => cell.value,
                                       :status => "incomplete"})
 
           when "parent", "child"
@@ -88,12 +91,12 @@ class BulkMetadata::Row < ApplicationRecord
             # Log this relationship in the database for future processing
             # allow for cell-specific identifier types
             # using the notation "id:a78C2d81"
-            if(cell.value_string.include?(":"))
-              split = cell.value_string.split(":")
+            if(cell.value.include?(":"))
+              split = cell.value.split(":")
               id_type = split[0]
               object_id = split[1]
             else
-              object_id = cell.value_string              
+              object_id = cell.value              
             end
 
             relationships.build({ :relationship_type => cell.name.downcase,
@@ -103,24 +106,24 @@ class BulkMetadata::Row < ApplicationRecord
           when "work type"
             # set the work type for this item
             # overriding the default set for the whole ingest
-            work_type = cell.value_string
+            work_type = cell.value
           
           when "visibility"
             # set the work type for this item
             # overriding the default set for the whole ingest
-            visibility = cell.value_string
+            visibility = cell.value
 
           when "relationship identifier type"
             # set the work type for this item
             # overriding the default set for the whole ingest
-            id_type = cell.value_string
+            id_type = cell.value
             
           when "id"
             # I want to only use id to pick out works to edit
             # so edit_identifier can become a boolean flag
            if ingest.edit_identifier == "id"
               # we are editing an existing work
-              edit_id = cell.value_string
+              edit_id = cell.value
            else
              
 
@@ -133,10 +136,16 @@ class BulkMetadata::Row < ApplicationRecord
             # if the cell name is not a valid metadata element, 
             # check if it is the label of a valid element
             property_name = cell.name.parameterize.underscore
-            if labels[property_name] && !wrk.responds_to?(property_name)
-              property_name = labels[property_name] 
+            if schema["labels"][property_name] && !wrk.responds_to?(property_name)
+              property_name = schema["labels"][property_name] 
             end
-            (metadata[cell.name.parameterize.underscore] ||= []) << cell.value_string if !cell.value_string.blank?
+
+            if schema["properties"][property_name]["controlled"]
+              value = cell.value_url ? cell.value_url : cell.value
+              metadata["#{cell.name.parameterize.underscore}_attributes"] = metadata["#{cell.name.parameterize.underscore}_ids"].map{|id| {id: id.to_s}}.push({id: value}) 
+            else
+              (metadata[cell.name.parameterize.underscore] ||= []) << cell.value_string if !cell.value_string.blank?
+            end
     
       end
     end
@@ -167,7 +176,7 @@ class BulkMetadata::Row < ApplicationRecord
     info = {}
     cells.each do |cell|
       if summary_fields.include? cell.name.downcase
-        info[cell.name] = cell.value_string
+        info[cell.name] = cell.value
       end
     end
     return info

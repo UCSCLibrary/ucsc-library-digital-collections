@@ -1,5 +1,5 @@
 class BulkMetadata::Edit < ApplicationRecord
-  self.table_name = "bmi_edits"
+  self.table_name = "bulk_meta_edits"
   
   def self.create_new(params,user)
     instance = self.new(params.except(:ids));

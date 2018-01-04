@@ -1,5 +1,5 @@
 class BulkMetadata::Relationship < ApplicationRecord
-  self.table_name = "bmi_relationship"
+  self.table_name = "bulk_meta_relationship"
 
   belongs_to :row
 

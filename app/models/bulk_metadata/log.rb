@@ -1,5 +1,5 @@
 class BulkMetadata::Log < ApplicationRecord
-  self.table_name = "bmi_logs"
+  self.table_name = "bulk_meta_logs"
 
   belongs_to :ingest
   belongs_to :row  

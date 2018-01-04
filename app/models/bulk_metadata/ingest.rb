@@ -1,5 +1,5 @@
 class BulkMetadata::Ingest < ApplicationRecord
-  self.table_name = "bmi_ingests"
+  self.table_name = "bulk_meta_ingests"
 
   belongs_to :user
   has_many :rows
