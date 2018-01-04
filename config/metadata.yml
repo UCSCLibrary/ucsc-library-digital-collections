@@ -62,7 +62,7 @@ properties:
     label: "Accession Number"
     predicate: "DC:identifier"
     primary: true
-    multiple: false
+#    multiple: false
 
   alternateIdentifier:
     definition: "Other unique identifiers associated with the resource (ARK, etc)"
@@ -137,7 +137,7 @@ properties:
       subauthority: dcmi_types
     facet: true
     input: dropdown
-    multiple: false
+#    multiple: false
   
   rightStatement:
     definition: Information about rights held in and over the resource expressed in general terms (i.e. boilerplate statements).
