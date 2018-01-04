@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Work ids:</strong>
+  <%= @edit.work_ids %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @edit.status %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @edit.user %>
+</p>
+
+<p>
+  <strong>Deadline:</strong>
+  <%= @edit.deadline %>
+</p>
+
+<p>
+  <strong>Comment:</strong>
+  <%= @edit.comment %>
+</p>
+
+<p>
+  <strong>Workflow:</strong>
+  <%= @edit.workflow_id %>
+</p>
+
+<p>
+  <strong>Workflow action:</strong>
+  <%= @edit.workflow_action_id %>
+</p>
+
+<%= link_to 'Edit', edit_bulk_metadata_edit_path(@edit) %> |
+<%= link_to 'Back', bulk_metadata_edits_path %>

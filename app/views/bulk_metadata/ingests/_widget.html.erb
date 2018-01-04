@@ -1,0 +1,88 @@
+
+<div id="bmi-tabs">
+    <ul>
+        <% if @ingest.numUnparsed > 0 %>
+            <li>
+                <a href="#unparsed-rows">Unintelligible Rows (<%= @ingest.numUnparsed %>)</a>
+            </li>
+        <% end %>
+         <li>
+            <a href="#parsed-rows">Awaiting Ingest (<%= @ingest.numParsed %>)</a>
+        </li> 
+        <li>
+            <a href="#currently-ingesting">Currently Ingesting (<%= @ingest.numIngesting %>)</a>
+        </li>
+        <% if @ingest.numErrors > 0 %>
+            <li>
+                <a href="#error-rows">Ingest Errors (<%= @ingest.numErrors %>)</a>
+            </li>
+        <% end %>
+        <li>
+            <a href="#ingested-rows">Ingested Rows (<%= @ingest.numIngested %>)</a>
+        </li>
+    </ul>
+
+    <% if @ingest.numUnparsed > 0 %>
+        <%= render partial: "tab", locals: { 
+            type: "unparsed",
+            div_id: "unparsed-rows",
+            title: "Unintelligible Rows (Could Not Parse)",
+            num_rows: @ingest.numUnparsed,
+            actions: [{id: "parse", title: "Retry Parsing"},
+                      {id: "edit-inline", title: "Edit inline", disabled: true},
+                      {id: "edit-OR", title: "Edit in OpenRefine", disabled: true},
+                      {id: "export-csv", title: "Export as CSV"},
+                      {id: "export-xml", title: "Export as XML", disabled: true},
+                      {id: "remove", title: "Remove"}]
+        } %>
+    <% end %>
+
+    <%= render partial: "tab", locals: { 
+        type: "parsed",
+        div_id: "parsed-rows",
+        title: "Parsed Rows Pending Ingest",
+        num_rows: @ingest.numParsed,
+        actions: [{id: "ingest", title: "Ingest Now"},
+                  {id: "edit-OR", title: "Edit in OpenRefine", disabled: true},
+                  {id: "export-csv", title: "Export as CSV"},
+                  {id: "export-xml", title: "Export as XML", disabled: true},
+                  {id: "remove", title: "Remove"}]    
+    } %>
+
+
+    <%= render partial: "tab", locals: { 
+        type: "ingesting",
+        div_id: "currently-ingesting",
+        title: "Rows Currently Ingesting",
+        num_rows: @ingest.numIngesting,
+        actions: [{id: "cancel", title: "Cancel Ingest"},
+                  {id: "remove", title: "Cancel and Remove"}]
+    } %>
+
+    <% if @ingest.numErrors > 0 %>
+        <%= render partial: "tab", locals: { 
+            type: "error",
+            div_id: "error-rows",
+            title: "Ingest Failures",
+            num_rows: @ingest.numErrors,
+            actions: [{id: "ingest", title: "Retry Ingest"},
+                      {id: "edit-OR", title: "Edit in OpenRefine", disabled: true},
+                      {id: "export-csv", title: "Export as CSV"},
+                      {id: "export-xml", title: "Export as XML", disabled: true},
+                      {id: "remove", title: "Cancel and Remove"}]
+        } %>
+    <% end %>
+
+    <%= render partial: "tab", locals: { 
+        type: "ingested",
+        div_id: "ingested-rows",
+        title: "Successfully Ingested Items",
+        num_rows: @ingest.numIngested,
+        actions: [{id: "export-csv", title: "Export as CSV"},
+                  {id: "export-xml", title: "Export as XML", disabled: true},
+                  {id: "delete", title: "Delete Items", disabled: true}
+        ]
+        
+    } %>
+
+</div>

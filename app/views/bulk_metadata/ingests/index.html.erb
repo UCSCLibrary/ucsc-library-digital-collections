@@ -1,0 +1,27 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Batch Metadata Ingests</h1>
+
+<%= link_to 'New Batch metadata ingest', new_bulk_metadata_ingest_path %>
+
+<ul id="ingest-list">
+<% @ingests.each do |ingest| %>
+    <li>
+  <h3 class="ingest-name"><%= link_to (ingest.name.blank? ? "Untitled" : ingest.name), 'bulk_metadata/ingests/'+ingest.id.to_s %></h3>  
+        <!--   <div class="ingest-data"><label for="ingest-name">Ingest Name:</label><div id="ingest-name"><%= ingest.name %></div></div>  -->      
+  <div class="ingest-meta">
+        <div class="ingest-datum"><label for="ingest-creator">Creator:</label><div class="ingest-creator"><%= User.find(ingest.user_id).email %></div></div>
+        <div class="ingest-datum"><label for="ingest-date-created">Date Created:</label><div class="ingest-date-created"><%= ingest.created_at.strftime("%b %d, %Y") %></div></div>
+        <div class="ingest-datum"><label for="ingest-file">CSV Filename:</label><div class="ingest-file"><%= ingest.filename.split("/").last if !ingest.filename.nil? %></div></div>
+        <!-- <div class="ingest-data"><label for="ingest-status">Ingest Status:</label><div class="ingest-status"><%= ingest.status %></div></div> -->
+  </div>
+        <div class="ingest-actions" >
+            <%= button_to 'Edit', edit_bulk_metadata_ingest_path(ingest), method: :get  %>
+            <%= button_to 'Delete', 'bulk_metadata/ingests/'+ingest.id.to_s + "/delete/", method: :delete, data: { confirm: 'Are you sure?' } %>   
+        </div>
+    </li>
+<% end %>
+
+</ul>
+
+

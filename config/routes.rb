@@ -18,18 +18,18 @@ Rails.application.routes.draw do
   mount Qa::Engine => '/authorities'
 
   # Administrative URLs
-  namespace :admin do
-    resources :bmi_edits do
+  namespace :bulk_metadata do
+    resources :edits do
       member do
         get :export
       end
     end
-    resources :bmi_rows do
+    resources :rows do
       member do
         get :row_info
       end
     end
-    resources :bmi_ingests do
+    resources :ingests do
       member do
         get :row_info
         get :info
@@ -41,11 +41,15 @@ Rails.application.routes.draw do
         #      get :completed
       end
     end
-    # Job monitoring
+  end
+
+  # Job monitoring
+  namespace :admin do
     constraints ResqueAdmin do
       mount Resque::Server, at: 'queues'
     end
   end
+  
   
   mount Blacklight::Engine => '/'
   

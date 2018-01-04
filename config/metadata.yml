@@ -49,7 +49,7 @@ properties:
     predicate: "DC:title"
     label: "Title"
     required: true
-    multiple: false
+#    multiple: false
     primary: true
     work_title: true
     index_itemprop: name
@@ -64,6 +64,11 @@ properties:
     primary: true
     multiple: false
 
+  alternateIdentifier:
+    definition: "Other unique identifiers associated with the resource (ARK, etc)"
+    dublin core mapping: "DC:identifier"
+    label: "Other Identifiers"
+    predicate: "Bibframe:identifier"
 
   titleAlternative:
     definition: "An alternative title for the resource."
