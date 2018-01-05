@@ -22,12 +22,13 @@ jQuery(document).ready(function() {
 
   jQuery("button.dropdown").click(function() {
 //    var id = jQuery(this).siblings("input.row-id").val()
-    var id = jQuery(this).attr("data-row-id")
+    
+    var row_id = jQuery(this).attr("data-row-id")
     var rowInfoDiv = jQuery(this).parent().siblings(".row-info")
     if (rowInfoDiv.html())  {
       rowInfoDiv.html("")
     } else {
-      jQuery.get("/bulk_metadata/rows/" + id +"/row_info",function(data) {
+      jQuery.get("/bulk_metadata/row_info/"+row_id,function(data) {
         rowInfoDiv.html(data)
       });
     }
