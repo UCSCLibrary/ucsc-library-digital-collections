@@ -29,9 +29,9 @@ Rails.application.routes.draw do
         get :row_info
       end
     end
+    get "row_info/:row_id", to: "ingests#row_info", as: 'row_info'
     resources :ingests do
       member do
-        get :row_info
         get :info
         get :ingest_all
         post :process_row

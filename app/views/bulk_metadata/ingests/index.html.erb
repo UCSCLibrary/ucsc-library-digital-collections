@@ -7,7 +7,7 @@
 <ul id="ingest-list">
 <% @ingests.each do |ingest| %>
     <li>
-  <h3 class="ingest-name"><%= link_to (ingest.name.blank? ? "Untitled" : ingest.name), 'bulk_metadata/ingests/'+ingest.id.to_s %></h3>  
+  <h3 class="ingest-name"><%= link_to (ingest.name.blank? ? "Untitled" : ingest.name), bulk_metadata_ingest_path(ingest) %></h3>  
         <!--   <div class="ingest-data"><label for="ingest-name">Ingest Name:</label><div id="ingest-name"><%= ingest.name %></div></div>  -->      
   <div class="ingest-meta">
         <div class="ingest-datum"><label for="ingest-creator">Creator:</label><div class="ingest-creator"><%= User.find(ingest.user_id).email %></div></div>
@@ -17,7 +17,7 @@
   </div>
         <div class="ingest-actions" >
             <%= button_to 'Edit', edit_bulk_metadata_ingest_path(ingest), method: :get  %>
-            <%= button_to 'Delete', 'bulk_metadata/ingests/'+ingest.id.to_s + "/delete/", method: :delete, data: { confirm: 'Are you sure?' } %>   
+            <%= button_to 'Delete', bulk_metadata_ingest_path(ingest), method: :delete, data: { confirm: 'Are you sure?' } %>   
         </div>
     </li>
 <% end %>

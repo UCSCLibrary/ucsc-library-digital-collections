@@ -25,7 +25,7 @@ class BulkMetadata::IngestsController < ApplicationController
 
   def ingest_all
     @ingest.rows.where(:status => "parsed").each do |row|
-      row.ingest!
+      row.ingest! current_user.email
     end
     respond_to do |format|
       format.html {  redirect_to @ingest, notice: 'Ingests initiated.' }
@@ -47,7 +47,7 @@ class BulkMetadata::IngestsController < ApplicationController
         when 'ingest'
           params['row-id'].each do |id|
             row = BulkMetadata::Row.find(id)
-            row.ingest! current_user
+            row.ingest! current_user.email
           end
         when 'export-csv'
           export_csv

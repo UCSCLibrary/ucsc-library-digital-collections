@@ -33,12 +33,12 @@ class BulkMetadata::Row < ApplicationRecord
       row_errors = []
       values.split(';').each do |value|
 
-        if schema["properties"][property]["controlled"]
+        if schema["properties"][property] && schema["properties"][property]["controlled"]
           cell = cells.find_by(name: property, value_url: value )
-          cell ||= self.cells.create(name: property, value: value, status: "pending")
+          cell ||= self.cells.create(name: property, value_url: value, value: value, status: "pending")
         else
           cell = cells.find_by(name: property, value: value )
-          cell ||= self.cells.create(name: property, value_url: value, status: "pending") 
+          cell ||= self.cells.create(name: property, value: value, status: "pending") 
         end
       end
     end
@@ -144,7 +144,7 @@ class BulkMetadata::Row < ApplicationRecord
               value = cell.value_url ? cell.value_url : cell.value
               metadata["#{cell.name.parameterize.underscore}_attributes"] = metadata["#{cell.name.parameterize.underscore}_ids"].map{|id| {id: id.to_s}}.push({id: value}) 
             else
-              (metadata[cell.name.parameterize.underscore] ||= []) << cell.value_string if !cell.value_string.blank?
+              (metadata[cell.name.parameterize.underscore] ||= []) << cell.value if !cell.value.blank?
             end
     
       end
@@ -155,7 +155,7 @@ class BulkMetadata::Row < ApplicationRecord
     save
 
     if edit_id.nil?
-      UcscCreateWorkJob.perform_later(work_type,user.email,metadata,id,visibility)
+      UcscCreateWorkJob.perform_later(work_type,user_email,metadata,id,visibility)
     else
       UcscEditWorkJob.perform_later(edit_id,work_type,user,metadata,id,visibility)
     end
@@ -168,7 +168,7 @@ class BulkMetadata::Row < ApplicationRecord
 
   def title
     return "Untitled Row" if cells.where(:name =>"title").empty?
-    cells.where(:name => "title").first.value_string
+    cells.where(:name => "title").first.value
   end
 
   def info

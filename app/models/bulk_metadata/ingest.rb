@@ -100,7 +100,7 @@ class BulkMetadata::Ingest < ApplicationRecord
           #do not raise an exception, just log it
           # in the future, save this associated w/row
           row.status = "error"
-          Rails.logger.warn "exception parsing row: "+row.id
+          Rails.logger.warn "exception parsing row: "+row.id.to_s
           #raise
         else
           row.status = "parsed"
