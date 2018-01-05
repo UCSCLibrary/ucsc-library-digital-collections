@@ -7,7 +7,11 @@ RSpec.describe Hyrax::WorksController do
   let(:main_app) { Rails.application.routes.url_helpers }
   let(:hyrax) { Hyrax::Engine.routes.url_helpers }
   let(:user) { create(:user) }
-  let(:work) { create(:work, user: user) }
+  let(:work) { create(:work) }
+
+  before do 
+    sign_in user 
+  end
 
   describe '#new' do
     context 'my work' do
@@ -22,9 +26,11 @@ RSpec.describe Hyrax::WorksController do
       end
     end
   end
-#
+
 #  describe '#edit' do
 #    context 'my own private work' do
+#      let(:work) { create(:private_work, user: user) }
+#
 #      it 'shows me the page and sets breadcrumbs' do
 #        expect(controller).to receive(:add_breadcrumb).with("Home", root_path(locale: 'en'))
 #        expect(controller).to receive(:add_breadcrumb).with("Administration", hyrax.dashboard_path(locale: 'en'))
@@ -32,14 +38,14 @@ RSpec.describe Hyrax::WorksController do
 #        expect(controller).to receive(:add_breadcrumb).with(work.title.first, main_app.hyrax_work_path(work.id, locale: 'en'))
 #        expect(controller).to receive(:add_breadcrumb).with('Edit', main_app.edit_hyrax_work_path(work.id))
 #
-#        get :edit, params: { id: work.id }
+#        get :edit, params: { id: work. }
 #        expect(response).to be_success
 #        expect(assigns[:form]).to be_kind_of Hyrax::GenericWorkForm
 #        expect(response).to render_template("layouts/hyrax/dashboard")
 #      end
 #    end
 #  end
-
+#
 #
 #  describe '#show' do
 #    before do

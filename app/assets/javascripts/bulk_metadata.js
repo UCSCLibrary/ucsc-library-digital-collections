@@ -18,7 +18,7 @@ jQuery(document).ready(function() {
     jQuery("div#ingest-info").toggle();
   });
 
-  jQuery( "#bmi-tabs" ).tabs()     
+  jQuery( "#bulk-meta-tabs" ).tabs()     
 
   jQuery("button.dropdown").click(function() {
 //    var id = jQuery(this).siblings("input.row-id").val()
@@ -27,7 +27,7 @@ jQuery(document).ready(function() {
     if (rowInfoDiv.html())  {
       rowInfoDiv.html("")
     } else {
-      jQuery.get("/admin/bmi_rows/" + id +"/row_info",function(data) {
+      jQuery.get("/bulk_metadata/rows/" + id +"/row_info",function(data) {
         rowInfoDiv.html(data)
       });
     }

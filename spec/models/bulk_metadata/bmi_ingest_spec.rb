@@ -1,11 +1,11 @@
 # coding: utf-8
 require 'rails_helper'
 
-RSpec.describe Admin::BmiIngest, type: :model do
+RSpec.describe BulkMetadata::Ingest, type: :model do
 
   context "When creating a brand new ingest" do       
     it "there should be zero rows of any status." do 
-      ingest = Admin::BmiIngest.new
+      ingest = BulkMetadata::Ingest.new
       expect(ingest.numParsed).to eq 0
       expect(ingest.numUnparsed).to eq 0
       expect(ingest.numErrors).to eq 0
@@ -14,7 +14,7 @@ RSpec.describe Admin::BmiIngest, type: :model do
   end
 
   context "When parsing a csv file with in ingest specification line" do       
-    ingest = Admin::BmiIngest.new
+    ingest = BulkMetadata::Ingest.new
       it "the spec line should be recognized and the name should be populated from it" do
         ingest.filename = Rails.root.join "spec/fixtures/files/sample_ingest_specline.csv"
         expect(ingest.hasSpecLine?).to eq true

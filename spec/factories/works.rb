@@ -18,7 +18,8 @@ FactoryBot.define do
       end
     end
 
-    title "Test title"
+#    title "Test title"
+    title ["Test title"]
     visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
 
     after(:build) do |work, evaluator|
@@ -54,20 +55,24 @@ FactoryBot.define do
 
     factory :work_with_one_child do
       before(:create) do |work, evaluator|
-        work.ordered_members << FactoryBot.create(:work, user: evaluator.user, title: 'A Contained Work')
+        work.ordered_members << FactoryBot.create(:work, user: evaluator.user, title: ['A Contained Work'])
+#        work.ordered_members << FactoryBot.create(:work, user: evaluator.user, title: 'A Contained Work')
       end
     end
 
     factory :work_with_two_children do
       before(:create) do |work, evaluator|
-        work.ordered_members << FactoryBot.create(:work, user: evaluator.user, title: 'A Contained Work', id: "BlahBlah1")
-        work.ordered_members << FactoryBot.create(:work, user: evaluator.user, title: 'Another Contained Work', id: "BlahBlah2")
+        work.ordered_members << FactoryBot.create(:work, user: evaluator.user, title: ['A Contained Work'], id: "BlahBlah1")
+#        work.ordered_members << FactoryBot.create(:work, user: evaluator.user, title: 'A Contained Work', id: "BlahBlah1")
+        work.ordered_members << FactoryBot.create(:work, user: evaluator.user, title: ['Another Contained Work'], id: "BlahBlah2")
+#        work.ordered_members << FactoryBot.create(:work, user: evaluator.user, title: 'Another Contained Work', id: "BlahBlah2")
       end
     end
 
     factory :work_with_representative_file do
       before(:create) do |work, evaluator|
         work.ordered_members << FactoryBot.create(:file_set, user: evaluator.user, title: ['A Contained FileSet'])
+#        work.ordered_members << FactoryBot.create(:file_set, user: evaluator.user, title: 'A Contained FileSet')
         work.representative_id = work.members[0].id
       end
     end
@@ -112,7 +117,8 @@ FactoryBot.define do
 
   # Doesn't set up any edit_users
   factory :work_without_access, class: Work do
-    title 'Test title'
+    title ['Test title']
+#    title 'Test title'
     depositor { FactoryBot.create(:user).user_key }
   end
 end

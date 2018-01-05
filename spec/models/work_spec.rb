@@ -4,7 +4,8 @@ RSpec.describe Work do
   
   before do
     @usr = User.create!({email:"test@test.test",password:"testpass"})
-    @wrk = Work.new({title: "test title",
+#    @wrk = Work.new({title: "test title",
+    @wrk = Work.new({title: ["test title"],
                      depositor: @usr.email})
   end
 
@@ -15,7 +16,8 @@ RSpec.describe Work do
 
   it "can accept more complex metadata" do
     @wrk.description = ["a test description","another test description"]
-    @wrk.accessionNumber= "11006b"
+#    @wrk.accessionNumber= "11006b"
+    @wrk.accessionNumber= ["11006b"]
     @wrk.donorProvenance= ["some donor or provenance"]
     @wrk.dateCreated= ["2017-01-01"]
     @wrk.language= ["eng"]
