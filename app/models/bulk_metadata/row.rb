@@ -1,4 +1,5 @@
 class BulkMetadata::Row < ApplicationRecord
+
   self.table_name = "bulk_meta_rows"
 
   BASE_PATH = "/avalon2sufia/inbox"
@@ -7,7 +8,7 @@ class BulkMetadata::Row < ApplicationRecord
   has_many :relationships
 
   def schema
-    ScoobySnacks::METADATA_SCHEMA["work_types"][ingest.work_type]
+    ScoobySnacks::METADATA_SCHEMA["work_types"][ingest.work_type.downcase]
   end
 
   def parse
@@ -28,6 +29,8 @@ class BulkMetadata::Row < ApplicationRecord
   end
 
   def createNewCells!(row_hash)
+    puts "work_type: #{ingest.work_type}"
+    puts "schema: #{schema.to_s}"
     row_hash.each do |property,values|
       next if values.nil?
       row_errors = []
@@ -140,9 +143,12 @@ class BulkMetadata::Row < ApplicationRecord
               property_name = schema["labels"][property_name] 
             end
 
+            next unless schema["properties"][property_name]
+
             if schema["properties"][property_name]["controlled"]
               value = cell.value_url ? cell.value_url : cell.value
-              metadata["#{cell.name.parameterize.underscore}_attributes"] = metadata["#{cell.name.parameterize.underscore}_ids"].map{|id| {id: id.to_s}}.push({id: value}) 
+              metadata["#{cell.name.parameterize.underscore}_attributes"] ||= []
+              metadata["#{cell.name.parameterize.underscore}_attributes"] << {id: value}
             else
               (metadata[cell.name.parameterize.underscore] ||= []) << cell.value if !cell.value.blank?
             end
@@ -162,8 +168,12 @@ class BulkMetadata::Row < ApplicationRecord
   end
 
   def ingested_work
-    return false if !work_id
-    work_type.camelize.constantize.find(work_id)
+    return false if !@work_id
+    work_type.camelize.constantize.find(@work_id)
+  end
+
+  def set_work_id(work_id)
+    @work_id = work_id
   end
 
   def title

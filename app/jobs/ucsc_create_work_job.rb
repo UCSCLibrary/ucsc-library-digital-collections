@@ -3,10 +3,6 @@ class UcscCreateWorkJob < ActiveJob::Base
   queue_as :ingest
 
   after_perform do |job|
-    row = BulkMetadata::Row.find(job.arguments[3])
-    break if row.nil?
-    row.status = "ingested"
-    row.save
 
     # attempt to resolve all of the relationships defined in this row    
     row.relationships.each do |relationship|
@@ -22,26 +18,27 @@ class UcscCreateWorkJob < ActiveJob::Base
 
   def perform(workClass,user_email,attributes,row_id=nil,visibility="private")
     
-    # CURRENT ISSUES:
-    #  - metadata seems to come back with files in it,
-    #      screwing things up
-    #  - there is an admin set / workflow problem here
-    #      it looks for and fails to find default one
-
     #hack for now, default admin set doesn't work
     # TODO make this a required ingest option 
     # with optional override
     # AND fix default admin set workflow
-    attributes[:admin_set_id] = AdminSet.all.second.id
+
+#    attributes[:admin_set_id] =  ? AdminSet.first.id : AdminSet.all.second.id
+
     work = workClass.constantize.new
     user = User.find_by_email(user_email)
     ability = Ability.new(user)
-    actor = Hyrax::ActorFactory.build(work,ability)    
-    status = actor.create(attributes)
+    env = Hyrax::Actors::Environment.new(work, ability, attributes)
+    status = Hyrax::CurationConcern.actor.create env 
 
-#    current_ability = Ability.new(User.find_by_email(user))
-#    env = Hyrax::Actors::Environment.new(work, current_ability, attributes)
-#    status = work_actor.create(env)
+    if( status != "error") #change this to an actual error check
+      row = BulkMetadata::Row.find(row_id)
+      unless row.nil?
+        row.set_work_id(work.id)
+        row.status = "ingested"
+        row.save
+      end
+    end
     
     #TODO log success or failure
     # status is true or false
@@ -52,9 +49,4 @@ class UcscCreateWorkJob < ActiveJob::Base
   end
 
 
-  private
-
-  def work_actor
-    Hyrax::CurationConcern.actor
-  end
 end

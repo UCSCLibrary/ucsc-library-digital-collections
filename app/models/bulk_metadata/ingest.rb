@@ -96,12 +96,13 @@ class BulkMetadata::Ingest < ApplicationRecord
       #return newly parsed cells
       begin
         new_cells = row.createNewCells!(row_text) 
-        rescue
+        rescue => error
           #do not raise an exception, just log it
           # in the future, save this associated w/row
           row.status = "error"
-          Rails.logger.warn "exception parsing row: "+row.id.to_s
-          #raise
+          Rails.logger.error "Exception parsing row: "+row.id.to_s
+          Rails.logger.error "Parsing exception "+error.inspect
+#          raise
         else
           row.status = "parsed"
         ensure
