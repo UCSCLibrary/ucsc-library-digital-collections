@@ -5,7 +5,10 @@ class BulkMetadata::Relationship < ApplicationRecord
 
   def resolve! ()
 
-    wait! unless subject = row.ingested_work
+    unless subject = row.ingested_work
+      wait!
+      return
+    end
 
     work_type = (relationship_type.downcase == "collection") ? "Collection" : row.work_type
 
