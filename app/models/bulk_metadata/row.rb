@@ -160,6 +160,12 @@ class BulkMetadata::Row < ApplicationRecord
     self.status = "ingesting"
     save
 
+    asets = AdminSet.where({title: "Bulk Ingest Set"})
+    unless metadata[:admin_set_id] or asets.empty?
+      metadata[:admin_set_id] = asets.first.id
+    end
+
+
     if edit_id.nil?
       UcscCreateWorkJob.perform_later(work_type,user_email,metadata,id,visibility)
     else

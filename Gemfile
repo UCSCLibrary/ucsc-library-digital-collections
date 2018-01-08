@@ -91,5 +91,8 @@ gem 'scooby_snacks', path: "/srv/scooby_snacks/"
 gem 'sinatra', github: 'sinatra'
 
 gem 'resque-pool'
+gem 'sidekiq'
+gem 'capistrano-sidekiq', github: 'seuros/capistrano-sidekiq'
+
 
 gem 'blacklight_advanced_search', '~> 6.0'

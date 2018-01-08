@@ -26,11 +26,6 @@ class UcscCreateWorkJob < ActiveJob::Base
     # with optional override
     # AND fix default admin set workflow
 
-    asets = AdminSet.where({title: "Bulk Ingest Set"})
-    unless attributes[:admin_set_id] or asets.empty?
-      attributes[:admin_set_id] = asets.first.id
-    end
-
     work = workClass.constantize.new
     user = User.find_by_email(user_email)
     ability = Ability.new(user)

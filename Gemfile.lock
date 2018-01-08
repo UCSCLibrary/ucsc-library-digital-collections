@@ -1,4 +1,12 @@
 GIT
+  remote: git://github.com/seuros/capistrano-sidekiq.git
+  revision: c850e17288b612fa0d4defd732b886cf1ab2a7b2
+  specs:
+    capistrano-sidekiq (0.20.0)
+      capistrano (>= 3.9.0)
+      sidekiq (>= 3.4)
+
+GIT
   remote: git://github.com/sinatra/sinatra.git
   revision: 62e2f0d966acd491a44267881e6cd623b6c8945a
   specs:
@@ -196,6 +204,7 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     concurrent-ruby (1.0.5)
+    connection_pool (2.2.1)
     crass (1.0.3)
     daemons (1.2.5)
     declarative (0.0.10)
@@ -703,6 +712,11 @@ GEM
       rdf-xsd (~> 2.2)
       sparql (~> 2.2)
       sxp (~> 1.0)
+    sidekiq (5.0.5)
+      concurrent-ruby (~> 1.0)
+      connection_pool (~> 2.2, >= 2.2.0)
+      rack-protection (>= 1.5.0)
+      redis (>= 3.3.4, < 5)
     signet (0.8.1)
       addressable (~> 2.3)
       faraday (~> 0.9)
@@ -802,6 +816,7 @@ DEPENDENCIES
   capistrano-passenger (>= 0.1.1)
   capistrano-rails
   capistrano-rvm
+  capistrano-sidekiq!
   capybara
   coffee-rails (~> 4.2)
   devise
@@ -823,6 +838,7 @@ DEPENDENCIES
   samvera_hls!
   sass-rails (~> 5.0)
   scooby_snacks!
+  sidekiq
   sinatra!
   solr_wrapper (>= 0.3)
   spring

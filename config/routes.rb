@@ -1,4 +1,5 @@
-require 'resque/server'
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
 
   mount BrowseEverything::Engine => '/browse'
@@ -43,13 +44,8 @@ Rails.application.routes.draw do
     end
   end
 
-  # Job monitoring
-  namespace :admin do
-    constraints ResqueAdmin do
-      mount Resque::Server, at: 'queues'
-    end
-  end
-  
+#  mount Sidekiq::Web => '/sidekiq' unless Rails.env.production?
+  mount Sidekiq::Web => '/sidekiq' 
   
   mount Blacklight::Engine => '/'
   

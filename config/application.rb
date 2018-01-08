@@ -22,8 +22,7 @@ module UcscHyrax
       Hyrax::FileSetsController.prepend SamveraHls::FileSetsControllerBehavior  
     end
 
-#    This setting is now only in environments/production.rb
-#    config.active_job.queue_adapter = :resque
+    config.active_job.queue_adapter = :sidekiq
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
