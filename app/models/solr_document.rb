@@ -6,6 +6,9 @@ class SolrDocument
   # Adds Hyrax behaviors to the SolrDocument.
   include Hyrax::SolrDocumentBehavior
 
+  # Adds ScoobySnacks metadata attribute definitions
+  include ScoobySnacks::SolrBehavior
+
   # self.unique_key = 'id'
 
   # Email uses the semantic field mappings below to generate the body of an email.
