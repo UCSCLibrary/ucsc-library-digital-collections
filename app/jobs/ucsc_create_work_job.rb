@@ -1,9 +1,12 @@
+require 'hydra/access_controls'
+require 'hyrax/workflow/activate_object'
+
 #class UcscCreateWorkJob < Hyrax::ApplicationJob
 class UcscCreateWorkJob < ActiveJob::Base
   queue_as :ingest
 
   after_perform do |job|
-
+    row = BulkMetadata::Row.find(job.arguments[3])
     # attempt to resolve all of the relationships defined in this row    
     row.relationships.each do |relationship|
       relationship.resolve!
@@ -23,7 +26,10 @@ class UcscCreateWorkJob < ActiveJob::Base
     # with optional override
     # AND fix default admin set workflow
 
-#    attributes[:admin_set_id] =  ? AdminSet.first.id : AdminSet.all.second.id
+    asets = AdminSet.where({title: "Bulk Ingest Set"})
+    unless attributes[:admin_set_id] or asets.empty?
+      attributes[:admin_set_id] = asets.first.id
+    end
 
     work = workClass.constantize.new
     user = User.find_by_email(user_email)
