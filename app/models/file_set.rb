@@ -35,6 +35,6 @@ class FileSet < ActiveFedora::Base
     ]
   end
   
-  delegate :derivative_url to: :file_set_derivatives_service
+  delegate :derivative_url, to: :file_set_derivatives_service
 
 end
