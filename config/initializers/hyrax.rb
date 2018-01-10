@@ -109,6 +109,39 @@ Hyrax.config do |config|
   # The default is true.
   config.work_requires_files = false
 
+  # Enable IIIF image service. This is required to use the
+  # UniversalViewer-ified show page
+  #
+  # If you have run the riiif generator, an embedded riiif service
+  # will be used to deliver images via IIIF. If you have not, you will
+  # need to configure the following other configuration values to work
+  # with your image server:
+  #
+  #   * iiif_image_url_builder
+  #   * iiif_info_url_builder
+  #   * iiif_image_compliance_level_uri
+  #   * iiif_image_size_default
+  #
+  # Default is false
+  # config.iiif_image_server = false
+
+  # Returns a URL that resolves to an image provided by a IIIF image server
+  # config.iiif_image_url_builder = lambda do |file_id, base_url, size|
+  #   "#{base_url}/downloads/#{file_id.split('/').first}"
+  # end
+
+  # Returns a URL that resolves to an info.json file provided by a IIIF image server
+  # config.iiif_info_url_builder = lambda do |_, _|
+  #   ""
+  # end
+
+  # Returns a URL that indicates your IIIF image server compliance level
+  # config.iiif_image_compliance_level_uri = 'http://iiif.io/api/image/2/level2.json'
+
+  # Returns a IIIF image size default
+  # config.iiif_image_size_default = '600,'
+
+
   # Should a button with "Share my work" show on the front page to all users (even those not logged in)?
 #  config.display_share_button_when_not_logged_in = false
 
@@ -121,6 +154,11 @@ Hyrax.config do |config|
   # The banner image. Should be 5000px wide by 1000px tall
   # config.banner_image = 'https://cloud.githubusercontent.com/assets/92044/18370978/88ecac20-75f6-11e6-8399-6536640ef695.jpg'
   # config.banner_image = ''
+
+
+  # image server
+
+
 
   # Temporary paths to hold uploads before they are ingested into FCrepo
   # These must be lambdas that return a Pathname. Can be configured separately
@@ -144,7 +182,7 @@ Hyrax.config do |config|
   config.upload_path = ->() { Pathname.new("/avalon2sufia/tmp") }  
 
   # Should the media display partial render a download link?
-  config.display_media_download_link = false
+  config.display_media_download_link = true
 
   # A configuration point for changing the behavior of the license service
   #   @see Hyrax::LicenseService for implementation details

@@ -17,7 +17,6 @@ module UcscHyrax
 
     config.tinymce.install = :copy
 
-
     config.to_prepare do
       Hyrax::FileSetsController.prepend SamveraHls::FileSetsControllerBehavior  
     end

@@ -46,6 +46,9 @@ Rails.application.routes.draw do
 
 #  mount Sidekiq::Web => '/sidekiq' unless Rails.env.production?
   mount Sidekiq::Web => '/sidekiq' 
+
+#  soon! so soon...
+#  mount Riiif::Engine => 'images', as: :riiif if Hyrax.config.iiif_image_server?
   
   mount Blacklight::Engine => '/'
   

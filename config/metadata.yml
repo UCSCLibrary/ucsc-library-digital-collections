@@ -139,7 +139,7 @@ properties:
     input: dropdown
 #    multiple: false
   
-  rightStatement:
+  rightsStatement:
     definition: Information about rights held in and over the resource expressed in general terms (i.e. boilerplate statements).
     dublin core mapping: dc:rights
     label: Copyright Statement OR Copyright Status
@@ -374,7 +374,7 @@ work_types:
       language:
       resourceType:
       rightsHolder:
-      rightStatement:
+      rightsStatement:
       accessRights:
       license:
       collection:

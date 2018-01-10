@@ -47,12 +47,12 @@ class BulkMetadata::Row < ApplicationRecord
     end
   end
 
-#special cell types:
-#file
-#relationship (parent, child)
-#work type
-#edit identifier
-#ignore
+  #special cell types:
+  #file
+  #relationship (parent, child)
+  #work type
+  #edit identifier
+  #ignore
 
   def ingest!(user_email)
     user = User.find_by_email(user_email)
@@ -72,93 +72,95 @@ class BulkMetadata::Row < ApplicationRecord
       ignore = ingest.ignore.nil? ? "" : ingest.ignore
 
       case cell.name.downcase
-          when "file", "filename"
-            file = File.open(File.join(BASE_PATH,cell.value))
-            uploaded_file = Hyrax::UploadedFile.create(file: file, user: user)
-            (metadata[:uploaded_files] ||= []) << uploaded_file.id if !uploaded_file.id.nil?
+      when "file", "filename"
+        file = File.open(File.join(BASE_PATH,cell.value))
+        uploaded_file = Hyrax::UploadedFile.create(file: file, user: user)
+        (metadata[:uploaded_files] ||= []) << uploaded_file.id if !uploaded_file.id.nil?
 
-          when "collection title","collection"
-            relationships.build({ :relationship_type => 'collection',
-                                      :identifier_type => 'title',
-                                      :object_identifier => cell.value,
-                                      :status => "incomplete"})
+      when "collection title","collection"
+        relationships.build({ :relationship_type => 'collection',
+                              :identifier_type => 'title',
+                              :object_identifier => cell.value,
+                              :status => "incomplete"})
 
-          when "collection id"
-            relationships.build({ :relationship_type => 'collection_id',
-                                      :identifier_type => 'id',
-                                      :object_identifier => cell.value,
-                                      :status => "incomplete"})
+      when "collection id"
+        relationships.build({ :relationship_type => 'collection_id',
+                              :identifier_type => 'id',
+                              :object_identifier => cell.value,
+                              :status => "incomplete"})
 
-          when "parent", "child"
-            # This cell specifies a relationship. 
-            # Log this relationship in the database for future processing
-            # allow for cell-specific identifier types
-            # using the notation "id:a78C2d81"
-            if(cell.value.include?(":"))
-              split = cell.value.split(":")
-              id_type = split[0]
-              object_id = split[1]
-            else
-              object_id = cell.value              
-            end
+      when "parent", "child"
+        # This cell specifies a relationship. 
+        # Log this relationship in the database for future processing
+        # allow for cell-specific identifier types
+        # using the notation "id:a78C2d81"
+        if(cell.value.include?(":"))
+          split = cell.value.split(":")
+          id_type = split[0]
+          object_id = split[1]
+        else
+          object_id = cell.value              
+        end
 
-            relationships.build({ :relationship_type => cell.name.downcase,
-                                      :identifier_type => id_type,
-                                      :object_identifier => object_id,
-                                      :status => "incomplete"})
-          when "work type"
-            # set the work type for this item
-            # overriding the default set for the whole ingest
-            work_type = cell.value
+        relationships.build({ :relationship_type => cell.name.downcase,
+                              :identifier_type => id_type,
+                              :object_identifier => object_id,
+                              :status => "incomplete"})
+      when "work type"
+        # set the work type for this item
+        # overriding the default set for the whole ingest
+        work_type = cell.value
+        
+      when "visibility"
+        # set the work type for this item
+        # overriding the default set for the whole ingest
+        visibility = cell.value
+
+      when "relationship identifier type"
+        # set the work type for this item
+        # overriding the default set for the whole ingest
+        id_type = cell.value
+        
+      when "id"
+        # I want to only use id to pick out works to edit
+        # so edit_identifier can become a boolean flag
+        if ingest.edit_identifier == "id"
+          # we are editing an existing work
+          edit_id = cell.value
+        else
           
-          when "visibility"
-            # set the work type for this item
-            # overriding the default set for the whole ingest
-            visibility = cell.value
+        end
+      when *(ignore.split(/[,;:]/))
+      # Ignore this i.e. do nothing
+      else
+        # this is presumably a normal metadata field
 
-          when "relationship identifier type"
-            # set the work type for this item
-            # overriding the default set for the whole ingest
-            id_type = cell.value
-            
-          when "id"
-            # I want to only use id to pick out works to edit
-            # so edit_identifier can become a boolean flag
-           if ingest.edit_identifier == "id"
-              # we are editing an existing work
-              edit_id = cell.value
-           else
-             
+        # if the cell name is not a valid metadata element, 
+        # check if it is the label of a valid element
+        property_name = format_param_name(cell.name)
+        if schema["labels"][property_name] && !wrk.responds_to?(property_name)
+          property_name = schema["labels"][property_name] 
+        end
 
-           end
-          when *(ignore.split(/[,;:]/))
-            # Ignore this i.e. do nothing
-          else
-            # this is presumably a normal metadata field
+        next unless schema["properties"][property_name]
 
-            # if the cell name is not a valid metadata element, 
-            # check if it is the label of a valid element
-            property_name = cell.name.parameterize.underscore
-            if schema["labels"][property_name] && !wrk.responds_to?(property_name)
-              property_name = schema["labels"][property_name] 
-            end
 
-            next unless schema["properties"][property_name]
-
-            if schema["properties"][property_name]["controlled"]
-              value = cell.value_url ? cell.value_url : cell.value
-              metadata["#{cell.name.parameterize.underscore}_attributes"] ||= []
-              metadata["#{cell.name.parameterize.underscore}_attributes"] << {id: value}
-            else
-              (metadata[cell.name.parameterize.underscore] ||= []) << cell.value if !cell.value.blank?
-            end
-    
+        if schema["properties"][property_name]["controlled"]
+          value = cell.value_url ? cell.value_url : cell.value
+          metadata["#{property_name}_attributes"] ||= []
+          metadata["#{property_name}_attributes"] << {id: value.strip}
+        else
+          (metadata[property_name] ||= []) << cell.value.strip if !cell.value.blank?
+        end
       end
     end
 
     #update status
     self.status = "ingesting"
     save
+
+    puts "metadata:"
+    puts metadata.to_s
 
     asets = AdminSet.where({title: "Bulk Ingest Set"})
     unless metadata[:admin_set_id] or asets.empty?
@@ -171,6 +173,10 @@ class BulkMetadata::Row < ApplicationRecord
     else
       UcscEditWorkJob.perform_later(edit_id,work_type,user,metadata,id,visibility)
     end
+  end
+
+  def format_param_name(name)
+    name.titleize.gsub(/\s+/, "").camelcase(:lower)
   end
 
   def ingested_work

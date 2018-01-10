@@ -3,6 +3,7 @@
 <%= presenter.attribute_to_html(:accession_number) %>
 <%= presenter.attribute_to_html(:collection_call_number) %>
 <%= presenter.attribute_to_html(:creator, render_as: :faceted) %>
+<%= presenter.attribute_to_html(:creator_label, render_as: :faceted) %>
 <%= presenter.attribute_to_html(:contributor, render_as: :faceted) %>
 <%= presenter.attribute_to_html(:subject, render_as: :faceted) %>
 <%= presenter.attribute_to_html(:publisher, render_as: :faceted) %>

@@ -1,5 +1,3 @@
 terms:
-  - id: testagent1
-    term: "test agent 1"
-  - id: testagent2
-    term: "test agent 2"
+  - id: uc_regents
+    term: "Regents of the University of California"
