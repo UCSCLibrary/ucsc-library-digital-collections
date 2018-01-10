@@ -4,4 +4,37 @@ class FileSet < ActiveFedora::Base
   include Hyrax::FileSetBehavior
   include SamveraHls::FileSetBehavior
 
+  def create_derivatives(filename)
+    # create hls derivatives instead of normal ones 
+    # for audio or video
+    return if create_hls_derivatives(filename)
+    
+    if self.image?
+      Hydra::Derivatives::ImageDerivatives.create(filename, outputs: image_outputs)
+    else
+      # This is the behavior I am overwriting
+      # (this method was previously delegated to
+      # file_set_derivatives_service)
+      file_set_derivatives_service.create_derivatives(filename)
+    end
+  end
+
+  def image_outputs
+    [{ label: :thumbnail, 
+       format: 'jpg', 
+       size: '200x150>', 
+       url: derivative_url('thumbnail') },
+     { label: :medium, 
+       format: 'jpg', 
+       size: '400x>', 
+       url: derivative_url('medium') },
+     { label: :large, 
+       format: 'jpg', 
+       size: '800x>', 
+       url: derivative_url('large') }
+    ]
+  end
+  
+  delegate :derivative_url to: :file_set_derivatives_service
+
 end
