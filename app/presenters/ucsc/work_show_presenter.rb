@@ -16,6 +16,7 @@ module Ucsc
     delegate :member_av_files, :ordered_work_ids, to: :member_presenter_factory
 
     def representative_presenter
+      return nil unless representative_id
       file_set = FileSet.find(representative_id)
       return nil unless file_set
       solr_doc = SolrDocument.new(file_set.to_solr)

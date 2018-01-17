@@ -33,12 +33,15 @@ module Ucsc
     end
 
     def fetch_remote_label(resource)
-        Rails.logger.info "Fetching #{resource.rdf_subject} from the authorative source. (this is slow)"
-        resource.fetch(headers: { 'Accept'.freeze => default_accept_header })
-      rescue IOError, SocketError => e
-        # IOError could result from a 500 error on the remote server
-        # SocketError results if there is no server to connect to
-        Rails.logger.error "Unable to fetch #{resource.rdf_subject} from the authorative source.\n#{e.message}"
+      #TODO right now it only fetches the label once per resource. 
+      # it should be able to re-index on command.
+      return if resource.rdf_label != resource.id
+      Rails.logger.info "Fetching #{resource.rdf_subject} from the authorative source. (this is slow)"
+      resource.fetch(headers: { 'Accept'.freeze => default_accept_header })
+    rescue IOError, SocketError => e
+      # IOError could result from a 500 error on the remote server
+      # SocketError results if there is no server to connect to
+      Rails.logger.error "Unable to fetch #{resource.rdf_subject} from the authorative source.\n#{e.message}"
     end
 
     def default_accept_header
