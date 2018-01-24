@@ -1,4 +1,6 @@
-<% property = ScoobySnacks::METADATA_SCHEMA['work_types'][curation_concern.model_name.to_s.downcase]['properties'][key.to_s] %>
+<% wrk = (defined? curation_concern) ? curation_concern : @collection %>
+<% schema = ScoobySnacks::METADATA_SCHEMA['work_types'][wrk.model_name.to_s.downcase] %>
+<% property = schema['properties'][key.to_s] unless schema.nil? %>
 <% unless property.nil?  %>
     <% input_type = property['input'] %>
     <% input_type = 'scalar' if input_type == "default" %>
