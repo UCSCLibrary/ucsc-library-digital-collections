@@ -182,7 +182,8 @@ Hyrax.config do |config|
   config.upload_path = ->() { Pathname.new("/avalon2sufia/tmp") }  
 
   # Should the media display partial render a download link?
-  config.display_media_download_link = true
+ #  config.display_media_download_link = true
+  config.display_media_download_link = false
 
   # A configuration point for changing the behavior of the license service
   #   @see Hyrax::LicenseService for implementation details
