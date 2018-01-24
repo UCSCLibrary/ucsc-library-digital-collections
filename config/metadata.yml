@@ -393,6 +393,34 @@ work_types:
       collectionCallNumber:
       donorProvenance:
       boxFolderItemCallNumber:
+  collection:
+    properties:
+      title:
+      titleAlternative:
+        primary: true
+      creator:
+      contributor:
+      publisher:
+      publisher_homepage:
+        primary: true
+      description:
+        primary: true
+      language:
+      resourceType:
+      rightsHolder:
+      rightsStatement:
+      accessRights:
+      license:
+      dateCreated:
+      datePublished:
+      dateModified:
+      subjectTopic:
+      subjectName:
+      subjectPlace:
+      subjectTemporal:
+      keyword:
+      collectionCallNumber:
+      donorProvenance:
   lecture:
   course:
   gdao_work:
