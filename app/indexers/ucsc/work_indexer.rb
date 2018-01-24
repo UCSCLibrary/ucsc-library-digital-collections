@@ -35,7 +35,7 @@ module Ucsc
     def fetch_remote_label(resource)
       #TODO right now it only fetches the label once per resource. 
       # it should be able to re-index on command.
-      return if resource.rdf_label != resource.id
+      return unless resource.rdf_label.include? resource.id
       Rails.logger.info "Fetching #{resource.rdf_subject} from the authorative source. (this is slow)"
       resource.fetch(headers: { 'Accept'.freeze => default_accept_header })
     rescue IOError, SocketError => e
