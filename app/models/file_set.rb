@@ -4,6 +4,8 @@ class FileSet < ActiveFedora::Base
   include Hyrax::FileSetBehavior
   include SamveraHls::FileSetBehavior
 
+  Hydra::Derivatives.output_file_service = Ucsc::PersistDerivatives
+
   def create_derivatives(filename)
     # create hls derivatives instead of normal ones 
     # for audio or video
@@ -17,6 +19,10 @@ class FileSet < ActiveFedora::Base
       # file_set_derivatives_service)
       file_set_derivatives_service.create_derivatives(filename)
     end
+  end
+  
+  def derivative_path_factory
+    Ucsc::DerivativePath
   end
 
   def image_outputs
@@ -35,6 +41,35 @@ class FileSet < ActiveFedora::Base
     ]
   end
   
-  delegate :derivative_url, to: :file_set_derivatives_service
+#  delegate :derivative_url, to: :file_set_derivatives_service
+  
+  def derivative_url(destination_name = nil)
+    if destination_name.nil?
+      @deriv_url ||= derivative_dir.gsub(Hyrax.config.derivatives_path,"")
+      return @deriv_url
+    end
+    if image_derivative_names.include? destination_name
+      path = derivative_path_factory.derivative_path_for_reference(self,destination_name)
+      URI("file://#{path}").to_s
+    else
+      file_set_derivatives_service.derivative_url(destination_name)
+    end
+  end
+
+    def cleanup_derivatives
+      derivative_path_factory.derivatives_for_reference(file_set).each do |path|
+        FileUtils.rm_f(path)
+      end
+    end
+
+    def derivative_path_factory
+      Ucsc::DerivativePath
+    end
+
+  private
+
+  def image_derivative_names
+    ['small','medium','large','square','fullsize']
+  end
 
 end
