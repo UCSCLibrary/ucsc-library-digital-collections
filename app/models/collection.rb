@@ -4,12 +4,4 @@ class Collection < ActiveFedora::Base
   # You can replace these metadata if they're not suitable
   include Hyrax::BasicMetadata
 
-  property :publisher_website, predicate: ::RDF::Vocab::DC11.publisher
-  property :rights_holder, predicate: ::RDF::Vocab::DC.rights do |index|
-    index.as :stored_searchable, :facetable
-  end
-  property :rights, predicate: ::RDF::Vocab::DC.rightsHolder do |index|
-    index.as :stored_searchable, :facetable
-  end
-
 end
