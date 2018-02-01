@@ -113,7 +113,11 @@ class AutosuggestInput < MultiValueInput
     if value.is_a? String
       options[:value] = retrieve_label(value)
     else
-      value.fetch()
+      begin
+        value.fetch()
+      rescue
+        options[:value] = value.id
+      end
       options[:value] = value.rdf_label.first.to_s || "Unable to fetch label for #{value.rdf_subject}"
     end
     options[:readonly] = true
