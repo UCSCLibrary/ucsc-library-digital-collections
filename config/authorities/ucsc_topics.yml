@@ -1,5 +1,67 @@
 terms:
-  - id: testtopic1
-    term: "test topic 1"
-  - id: testtopic2
-    term: "test topic 2"
+  - id: 1967_commencement
+    term: 1967 Commencement
+  - id: 1968_commencement
+    term: 1968 Commencement
+  - id: 1969_commencement
+    term: 1969 Commencement
+  - id: 1970_commencement
+    term: 1970 Commencement
+  - id: 1971_commencement
+    term: 1971 Commencement
+  - id: 1973_commencement
+    term: 1973 Commencement
+  - id: 1975_commencement
+    term: 1975 Commencement
+  - id: 1977_commencement
+    term: 1977 Commencement
+  - id: 1978_commencement
+    term: 1978 Commencement
+  - id: 1979_commencement
+    term: 1979 Commencement
+  - id: 1985_commencement
+    term: 1985 Commencement
+  - id: 1986_commencement
+    term: 1986 Commencement
+  - id: 1988_commencement
+    term: 1988 Commencement
+  - id: 1990_commencement
+    term: 1990 Commencement
+  - id: 1996_commencement
+    term: 1996 Commencement
+  - id: 1997_commencement
+    term: 1997 Commencement
+  - id: 1999_commencement
+    term: 1999 Commencement
+  - id: 2002_commencement
+    term: 2002 Commencement
+  - id: 2003_commencement
+    term: 2003 Commencement
+  - id: campus_grounds
+    term: Campus grounds
+  - id: city_views
+    term: City views
+  - id: construction_views
+    term: Construction views
+  - id: demchenry_inauguration
+    term: Dean E. McHenry Inauguration
+  - id: interior_views
+    term: Interior views
+  - id: long_lab_dedication
+    term: Joseph M. Long Marine Lab Dedication - December 1, 1978
+  - id: palomar_observatory_sky_survey
+    term: Palomar Observatory Sky Survey
+  - id: perspective_drawings
+    term: Perspective drawings
+  - id: publicity_photos
+    term: Publicity photos
+  - id: rbstevens_inauguration
+    term: Robert B. Stevens Inauguration
+  - id: rlsinsheimer_inauguration
+    term: Robert L. Sinsheimer Inauguration
+  - id: societies_buildings
+    term: Societies' buildings
+  - id: stunt_diving
+    term: Stunt diving
+  - id: ucsc_pioneer_class
+    term: UCSC Pioneer Class
