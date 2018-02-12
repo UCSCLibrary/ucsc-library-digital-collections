@@ -8,7 +8,6 @@ import AuthoritySelect from 'hyrax/authority_select'
 export default class MultiControlledVocabulary extends FieldManager {
 
   constructor(element, paramKey) {
-    console.log("iparamkey: "+paramKey)
     let options = {
       /* callback to run after add is called */
       add:    null,
@@ -29,10 +28,9 @@ export default class MultiControlledVocabulary extends FieldManager {
 
       labelControls:      true,
     }
+    console.log("options: "+options)
     super(element, options)
     this.paramKey = paramKey
-
-
     this.fieldName = this.element.data('field-name')
     this.searchUrl = this.element.data('autocompleteUrl')
     this.authorities = this.element.data('authority-select')
@@ -42,6 +40,7 @@ export default class MultiControlledVocabulary extends FieldManager {
   // Overrides FieldManager in order to avoid doing a clone of the existing field
   createNewField($activeField) {
     let $newField = this._newFieldTemplate()
+    console.log("new field: "+$newField.html())
     this._addBehaviorsToInput($newField)
     this.element.trigger("managed_field:add", $newField);
     return $newField
@@ -77,7 +76,7 @@ export default class MultiControlledVocabulary extends FieldManager {
 //        "<input class=\"string {{class}} optional form-control {{paramKey}}_{{name}} form-control multi-text-field\" name=\"{{paramKey}}[{{name}}_attributes][{{index}}][hidden_label]\" value=\"\" id=\"{{paramKey}}_{{name}}_attributes_{{index}}_hidden_label\" data-attribute=\"{{name}}\" type=\"text\">" +
 //        "<input name=\"{{paramKey}}[{{name}}_attributes][{{index}}][id]\" value=\"\" id=\"{{paramKey}}_{{name}}_attributes_{{index}}_id\" type=\"hidden\" data-id=\"remote\">" +
 //        "<input name=\"{{paramKey}}[{{name}}_attributes][{{index}}][_destroy]\" id=\"{{paramKey}}_{{name}}_attributes_{{index}}__destroy\" value=\"\" data-destroy=\"true\" type=\"hidden\"></li>"
-    return ""
+    return "<p>test?</p>"
   }
 
   _template(args) {
