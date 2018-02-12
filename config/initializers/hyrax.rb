@@ -1,4 +1,6 @@
 Hyrax.config do |config|
+
+
   # Injected via `rails g hyrax:work Course`
   config.register_curation_concern :course
   # Injected via `rails g hyrax:work Lecture`
@@ -250,3 +252,5 @@ Date::DATE_FORMATS[:standard] = "%m/%d/%Y"
 Qa::Authorities::Local.register_subauthority('subjects', 'Qa::Authorities::Local::TableBasedAuthority')
 Qa::Authorities::Local.register_subauthority('languages', 'Qa::Authorities::Local::TableBasedAuthority')
 Qa::Authorities::Local.register_subauthority('genres', 'Qa::Authorities::Local::TableBasedAuthority')
+
+Qa::Authorities::Geonames.username = 'UCSC_Library_DI'
