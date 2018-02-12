@@ -96,4 +96,5 @@ gem 'capistrano-sidekiq', github: 'seuros/capistrano-sidekiq'
 
 
 gem 'blacklight_advanced_search', '~> 6.0'
+gem 'blacklight_oai_provider', path: '/srv/blacklight_oai_provider'
 gem 'riiif', '~> 1.1'

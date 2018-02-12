@@ -19,6 +19,14 @@ GIT
       tilt (~> 2.0)
 
 PATH
+  remote: /srv/blacklight_oai_provider
+  specs:
+    blacklight_oai_provider (6.0.0.pre1)
+      blacklight (~> 6.0)
+      oai (~> 0.4)
+      rails (>= 4.2, < 6)
+
+PATH
   remote: /srv/samvera_hls
   specs:
     samvera_hls (0.2.0)
@@ -270,6 +278,8 @@ GEM
       multipart-post (>= 1.2, < 3)
     faraday-encoding (0.0.4)
       faraday
+    faraday_middleware (0.12.2)
+      faraday (>= 0.7.4, < 1.0)
     fcrepo_wrapper (0.9.0)
       ruby-progressbar
     ffi (1.9.18)
@@ -524,6 +534,10 @@ GEM
     noid (0.9.0)
     nokogiri (1.8.1)
       mini_portile2 (~> 2.3.0)
+    oai (0.4.0)
+      builder (>= 3.1.0)
+      faraday
+      faraday_middleware
     oauth (0.5.3)
     oauth2 (1.4.0)
       faraday (>= 0.8, < 0.13)
@@ -812,6 +826,7 @@ PLATFORMS
 
 DEPENDENCIES
   blacklight_advanced_search (~> 6.0)
+  blacklight_oai_provider!
   browse-everything
   byebug
   capistrano
