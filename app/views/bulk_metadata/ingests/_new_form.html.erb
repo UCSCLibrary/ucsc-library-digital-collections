@@ -1,0 +1,29 @@
+<%= form_for @ingest do |f| %>
+    <% if @ingest.errors.any? %>
+        <div id="error_explanation">
+            <h2><%= pluralize(@ingest.errors.count, "error") %> prohibited this batch_metadata_ingest from being saved:</h2>
+
+            <ul>
+                <% @ingest.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                <% end %>
+            </ul>
+        </div>
+    <% end %>
+
+    <div class="field">
+        <%= f.label :name %><br>
+        <div class="fieldnote">Type a memorable, unique name for your batch ingest. You will use this name to track the progress of your ingest.</div>
+        <%= f.text_field :name %>
+    </div>
+
+    <div class="field">
+        <%= f.label :file %><br>\
+        <div class="fieldnote">Choose the csv file containing metadata to ingest.</div>
+        <%= f.file_field :file %>
+    </div>
+
+    <div class="actions">
+        <%= f.submit %>
+    </div>
+<% end %>

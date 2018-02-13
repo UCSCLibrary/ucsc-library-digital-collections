@@ -1,0 +1,4 @@
+<% options = default_options %>
+<% options[:as] = f.object.multiple?(key) ? :multi_value : :string %>
+<% options[:input_html][:class] += " date" %>
+<%= f.input key, options %>

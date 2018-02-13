@@ -1,13 +1,22 @@
-
-<%= presenter.attribute_to_html(:creator, render_as: :faceted) %>
+<%= presenter.attribute_to_html(:alternativeTitle, label: "Alternative Title:") %>
+<%= presenter.attribute_to_html(:date_modified, label: "Date Modified:") %>
+<%= presenter.attribute_to_html(:accession_number, label: "Accession Number") %>
+<%= presenter.attribute_to_html(:collection_call_number, label: "Collection Call Number") %>
+<%= presenter.attribute_to_html(:creator_label, render_as: :faceted, label: "Creator") %>
 <%= presenter.attribute_to_html(:contributor, render_as: :faceted) %>
-<%= presenter.attribute_to_html(:subject, render_as: :faceted) %>
-<%= presenter.attribute_to_html(:publisher, render_as: :faceted) %>
+<%= presenter.attribute_to_html(:subject_label, render_as: :faceted, label: "Subject") %>
+<%= presenter.attribute_to_html(:publisher_label, render_as: :faceted, label: "Publisher") %>
+
+<%= presenter.attribute_to_html(:resourceType, render_as: :faceted, label: "Resource Type") %>
+<%= presenter.attribute_to_html(:rightsStatement, label: "Rights Statement") %>
+<%= presenter.attribute_to_html(:access_rights, label: "Access Rights") %>
+<%= presenter.attribute_to_html(:series, render_as: :faceted) %>
+<%= presenter.attribute_to_html(:physicalDescription, render_as: :faceted, label: "Physical Description") %>
+<%= presenter.attribute_to_html(:donorProvenance, label: "Donor / Provenance" ) %>
+<%= presenter.attribute_to_html(:physicalLocation, render_as: :faceted, label: "Physical Location") %>
 <%= presenter.attribute_to_html(:language, render_as: :faceted) %>
 <%= presenter.attribute_to_html(:identifier, render_as: :linked, search_field: 'identifier_tesim') %>
 <%= presenter.attribute_to_html(:keyword, render_as: :faceted) %>
-<%= presenter.attribute_to_html(:date_created, render_as: :linked, search_field: 'date_created_tesim') %>
-<%= presenter.attribute_to_html(:based_near, render_as: :faceted) %>
-<%= presenter.attribute_to_html(:related_url, render_as: :external_link) %>
-<%= presenter.attribute_to_html(:resource_type, render_as: :faceted) %>
-<%= presenter.attribute_to_html(:source) %>
+<%= presenter.attribute_to_html(:dateCreated, render_as: :linked, search_field: 'date_created_tesim', label: "Date Created") %>
+<%= presenter.attribute_to_html(:dateDigitized, label: "Date Digitized:") %>
+<%= presenter.attribute_to_html(:datePublished, label: "Date Published:") %>

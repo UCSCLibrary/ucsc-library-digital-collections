@@ -15,10 +15,12 @@
 //= require jquery-ui
 //= require dataTables/jquery.dataTables
 //= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
-//= require turbolinks//
+//= require turbolinks
 // Required by Blacklight
 //= require blacklight/blacklight
 
-//= require_tree .
+//= require_directory .
 //= require hyrax
+//= require_tree ./hyrax
+
 //= require browse_everything

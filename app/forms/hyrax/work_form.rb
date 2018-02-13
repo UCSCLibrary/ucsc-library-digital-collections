@@ -3,6 +3,12 @@
 module Hyrax
   class WorkForm < Hyrax::Forms::WorkForm
     self.model_class = ::Work
-    self.terms += [:resource_type]
+    
+    include ScoobySnacks::WorkFormBehavior
+
+    self.terms.each do |term|
+      delegate term, to: :model
+    end
+
   end
 end

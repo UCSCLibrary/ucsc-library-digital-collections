@@ -10,82 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170712200359) do
-
-  create_table "bmi_cells", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer  "bmi_row_id"
-    t.string   "name"
-    t.string   "value_url"
-    t.integer  "status"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
-    t.text     "value_string", limit: 65535
-    t.index ["bmi_row_id"], name: "index_bmi_cells_on_bmi_row_id", using: :btree
-  end
-
-  create_table "bmi_edits", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.text     "work_ids",           limit: 65535
-    t.string   "status"
-    t.string   "user"
-    t.date     "deadline"
-    t.text     "comment",            limit: 65535
-    t.integer  "workflow_id"
-    t.integer  "workflow_action_id"
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
-  end
-
-  create_table "bmi_ingests", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer  "user_id"
-    t.string   "filename"
-    t.string   "work_type"
-    t.string   "status"
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
-    t.string   "edit_identifier"
-    t.boolean  "replace_files"
-    t.string   "name"
-    t.string   "relationship_identifier"
-    t.boolean  "visibility"
-    t.boolean  "notifications"
-    t.string   "ignore"
-    t.index ["user_id"], name: "index_bmi_ingests_on_user_id", using: :btree
-  end
-
-  create_table "bmi_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer  "bmi_ingest_id"
-    t.integer  "bmi_row_id"
-    t.integer  "bmi_cell_id"
-    t.string   "type"
-    t.string   "subtype"
-    t.string   "message"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-    t.index ["bmi_cell_id"], name: "index_bmi_logs_on_bmi_cell_id", using: :btree
-    t.index ["bmi_ingest_id"], name: "index_bmi_logs_on_bmi_ingest_id", using: :btree
-    t.index ["bmi_row_id"], name: "index_bmi_logs_on_bmi_row_id", using: :btree
-  end
-
-  create_table "bmi_relationships", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string   "object_identifier"
-    t.string   "identifier_type"
-    t.string   "relationship_type"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
-    t.integer  "bmi_row_id"
-    t.string   "status"
-  end
-
-  create_table "bmi_rows", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer  "bmi_ingest_id"
-    t.string   "status"
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
-    t.text     "text",          limit: 65535
-    t.string   "ingested_id"
-    t.integer  "line_number"
-    t.index ["bmi_ingest_id"], name: "index_bmi_rows_on_bmi_ingest_id", using: :btree
-  end
+ActiveRecord::Schema.define(version: 20180104161318) do
 
   create_table "bookmarks", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id",                     null: false
@@ -99,15 +24,79 @@ ActiveRecord::Schema.define(version: 20170712200359) do
     t.index ["user_id"], name: "index_bookmarks_on_user_id", using: :btree
   end
 
+  create_table "bulk_meta_cells", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "row_id"
+    t.string   "name"
+    t.string   "value_url"
+    t.integer  "status"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.text     "value",      limit: 65535
+    t.index ["row_id"], name: "index_bulk_meta_cells_on_row_id", using: :btree
+  end
+
+  create_table "bulk_meta_ingests", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "user_id"
+    t.string   "filename"
+    t.string   "work_type"
+    t.string   "status"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.string   "edit_identifier"
+    t.boolean  "replace_files"
+    t.string   "name"
+    t.string   "relationship_identifier"
+    t.boolean  "visibility"
+    t.boolean  "notifications"
+    t.string   "ignore"
+    t.index ["user_id"], name: "index_bulk_meta_ingests_on_user_id", using: :btree
+  end
+
+  create_table "bulk_meta_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "ingest_id"
+    t.integer  "row_id"
+    t.integer  "cell_id"
+    t.string   "type"
+    t.string   "subtype"
+    t.string   "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cell_id"], name: "index_bulk_meta_logs_on_cell_id", using: :btree
+    t.index ["ingest_id"], name: "index_bulk_meta_logs_on_ingest_id", using: :btree
+    t.index ["row_id"], name: "index_bulk_meta_logs_on_row_id", using: :btree
+  end
+
+  create_table "bulk_meta_relationships", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "object_identifier"
+    t.string   "identifier_type"
+    t.string   "relationship_type"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.integer  "row_id"
+    t.string   "status"
+  end
+
+  create_table "bulk_meta_rows", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "ingest_id"
+    t.string   "status"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.text     "text",        limit: 65535
+    t.string   "ingested_id"
+    t.integer  "line_number"
+    t.index ["ingest_id"], name: "index_bulk_meta_rows_on_ingest_id", using: :btree
+  end
+
   create_table "checksum_audit_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "file_set_id"
     t.string   "file_id"
-    t.string   "version"
-    t.integer  "pass"
+    t.string   "checked_uri"
     t.string   "expected_result"
     t.string   "actual_result"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.boolean  "passed"
+    t.index ["checked_uri"], name: "index_checksum_audit_logs_on_checked_uri", using: :btree
     t.index ["file_set_id", "file_id"], name: "by_file_set_id_and_file_id", using: :btree
   end
 
@@ -191,16 +180,18 @@ ActiveRecord::Schema.define(version: 20170712200359) do
     t.datetime "updated_at",                 null: false
   end
 
-  create_table "local_authorities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string "name"
-  end
-
-  create_table "local_authority_entries", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "local_authority_id"
-    t.string  "label"
-    t.string  "uri"
-    t.index ["local_authority_id", "label"], name: "entries_by_term_and_label", using: :btree
-    t.index ["local_authority_id", "uri"], name: "entries_by_term_and_uri", using: :btree
+  create_table "job_io_wrappers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "user_id"
+    t.integer  "uploaded_file_id"
+    t.string   "file_set_id"
+    t.string   "mime_type"
+    t.string   "original_name"
+    t.string   "path"
+    t.string   "relation"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.index ["uploaded_file_id"], name: "index_job_io_wrappers_on_uploaded_file_id", using: :btree
+    t.index ["user_id"], name: "index_job_io_wrappers_on_user_id", using: :btree
   end
 
   create_table "mailboxer_conversation_opt_outs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -321,9 +312,11 @@ ActiveRecord::Schema.define(version: 20170712200359) do
     t.integer  "local_authority_id"
     t.string   "label"
     t.string   "uri"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.string   "lower_label",        limit: 256
     t.index ["local_authority_id"], name: "index_qa_local_authority_entries_on_local_authority_id", using: :btree
+    t.index ["lower_label", "local_authority_id"], name: "index_qa_local_authority_entries_on_lower_label_and_authority", using: :btree
     t.index ["uri"], name: "index_qa_local_authority_entries_on_uri", unique: true, using: :btree
   end
 
@@ -591,6 +584,7 @@ ActiveRecord::Schema.define(version: 20170712200359) do
     t.string   "arkivo_subscription"
     t.binary   "zotero_token",           limit: 65535
     t.string   "zotero_userid"
+    t.string   "preferred_locale"
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
@@ -615,15 +609,15 @@ ActiveRecord::Schema.define(version: 20170712200359) do
     t.index ["work_id"], name: "index_work_view_stats_on_work_id", using: :btree
   end
 
-  add_foreign_key "bmi_cells", "bmi_rows"
-  add_foreign_key "bmi_ingests", "users"
-  add_foreign_key "bmi_logs", "bmi_ingests"
-  add_foreign_key "bmi_rows", "bmi_ingests"
+  add_foreign_key "bulk_meta_cells", "bulk_meta_rows", column: "row_id"
+  add_foreign_key "bulk_meta_ingests", "users"
+  add_foreign_key "bulk_meta_logs", "bulk_meta_ingests", column: "ingest_id"
+  add_foreign_key "bulk_meta_rows", "bulk_meta_ingests", column: "ingest_id"
   add_foreign_key "curation_concerns_operations", "users"
   add_foreign_key "mailboxer_conversation_opt_outs", "mailboxer_conversations", column: "conversation_id", name: "mb_opt_outs_on_conversations_id"
   add_foreign_key "mailboxer_notifications", "mailboxer_conversations", column: "conversation_id", name: "notifications_on_conversation_id"
   add_foreign_key "mailboxer_receipts", "mailboxer_notifications", column: "notification_id", name: "receipts_on_notification_id"
   add_foreign_key "permission_template_accesses", "permission_templates"
-  add_foreign_key "qa_local_authority_entries", "local_authorities"
+  add_foreign_key "qa_local_authority_entries", "qa_local_authorities", column: "local_authority_id"
   add_foreign_key "uploaded_files", "users"
 end

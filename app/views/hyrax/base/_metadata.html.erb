@@ -1,9 +1,38 @@
-<h2><%= t('.header') %></h2>
+<!-- <h2><%= t('.header') %></h2> -->
 <table class="table table-striped <%= dom_class(presenter) %> attributes" <%= presenter.microdata_type_to_html %>>
    <tbody>
-    <%= render 'attribute_rows', presenter: presenter %>
+    <%= render 'primary_attribute_rows', presenter: presenter %>
+  </tbody>
+</table>
+
+<button class="more-metadata" onclick="jQuery('.more-metadata').toggle()">Show More</button>
+<div class="more-metadata" style="display:none">
+<table class="table table-striped <%= dom_class(presenter) %> attributes" <%= presenter.microdata_type_to_html %>>
+   <tbody>
+    <%= render 'secondary_attribute_rows', presenter: presenter %>
+
     <%= presenter.attribute_to_html(:embargo_release_date, render_as: :date) %>
     <%= presenter.attribute_to_html(:lease_expiration_date, render_as: :date) %>
 
-  </tbody>
+   </tbody>
 </table>
+
+<% if can? :edit, Work %>
+    <table class="table table-striped <%= dom_class(presenter) %> attributes" <%= presenter.microdata_type_to_html %>>
+        <tbody>
+            <%= render 'tertiary_attribute_rows', presenter: presenter %>
+        </tbody>
+    </table>
+<% end %>
+
+<button id="hide-more-metadata" onclick="jQuery('.more-metadata').toggle()">Show less</button>
+</div>
+
+<script>
+
+function toggleMoreMetadata() {
+    jQuery('#more-metadata').toggle;
+    jQuery('#show-more-metadata').toggle;
+}
+
+</script>

@@ -1,0 +1,304 @@
+---
+terms:
+- id: 1201_shaffer_road
+  term: 1201 Shaffer Road
+- id: 2300_delaware_avenue
+  term: 2300 Delaware Avenue
+- id: 250_natural_bridges_drive
+  term: 250 Natural Bridges Drive
+- id: academic_resource_center
+  term: Academic Resource Center
+- id: ano_nuevo_state_reserve_calif
+  term: Ano Nuevo State Reserve (Calif.)
+- id: arboretum
+  term: Arboretum
+- id: astronomy_shop_a
+  term: Astronomy Shop A
+- id: astronomy_shop_b
+  term: Astronomy Shop B
+- id: barn_g
+  term: Barn G
+- id: barn_theater
+  term: Barn Theater
+- id: bay_tree_bookstore_university_of_california_santa_cruz
+  term: Bay Tree Bookstore (University of California, Santa Cruz)
+- id: bay_tree_building
+  term: Bay Tree Building
+- id: beach_hill_santa_cruz_calif
+  term: Beach Hill (Santa Cruz, Calif.)
+- id: big_creek_reserve
+  term: Big Creek Reserve
+- id: biomedical_sciences
+  term: Biomedical Sciences
+- id: blacksmith_shop
+  term: Blacksmith Shop
+- id: bonny_doon
+  term: Bonny Doon
+- id: bonny_doon_santa_cruz_county_calif
+  term: Bonny Doon (Santa Cruz County, Calif.)
+- id: bug_shop
+  term: Bug Shop
+- id: camper_park
+  term: Camper Park
+- id: campus_fleet_garage_and_tsm_office
+  term: Campus Fleet Garage and TSM Office
+- id: capitola_municipal_wharf
+  term: Capitola Municipal Wharf
+- id: cardiff_house_women_s_center
+  term: Cardiff House Women's Center
+- id: carriage_house
+  term: Carriage House
+- id: center_for_adaptive_optics
+  term: Center for Adaptive Optics
+- id: center_for_agroecology_sustainable_food_systems
+  term: Center for Agroecology & Sustainable Food Systems
+- id: central_heating_plant
+  term: Central Heating Plant
+- id: chadwick_garden
+  term: Chadwick Garden
+- id: classroom_unit
+  term: Classroom Unit
+- id: coastal_biology_building
+  term: Coastal Biology Building
+- id: college_nine
+  term: College Nine
+- id: college_ten
+  term: College Ten
+- id: communications_building
+  term: Communications Building
+- id: cook_house
+  term: Cook House
+- id: cooling_towers
+  term: Cooling Towers
+- id: core_west_parking_structure
+  term: Core West Parking Structure
+- id: cowell_beach
+  term: Cowell Beach
+- id: cowell_beach_santa_cruz_calif
+  term: Cowell Beach (Santa Cruz, Calif.)
+- id: cowell_college
+  term: Cowell College
+- id: cowell_ranch_santa_cruz_calif
+  term: Cowell Ranch (Santa Cruz, Calif.)
+- id: cowell_student_health_center
+  term: Cowell Student Health Center
+- id: crown_college
+  term: Crown College
+- id: crown_merrill_apartments_buildings
+  term: Crown-Merrill Apartments Buildings
+- id: digital_arts_research_center
+  term: Digital Arts Research Center
+- id: earth_marine_sciences
+  term: Earth & Marine Sciences
+- id: east_field
+  term: East Field
+- id: east_field_house
+  term: East Field House
+- id: elena_baskin_art_buildings
+  term: Elena Baskin Art Buildings
+- id: emergency_response_center
+  term: Emergency Response Center
+- id: engineering_building_2
+  term: Engineering Building 2
+- id: fair_avenue_storage
+  term: Fair Avenue Storage
+- id: family_student_housing
+  term: Family Student Housing
+- id: fieldhouse_west
+  term: Fieldhouse West
+- id: fire_house
+  term: Fire House
+- id: flatiron_building_santa_cruz_calif
+  term: Flatiron Building (Santa Cruz, Calif.)
+- id: fort_ord_flight_simulator
+  term: Fort Ord Flight Simulator
+- id: gamelan_studio
+  term: Gamelan Studio
+- id: graduate_student_commons
+  term: Graduate Student Commons
+- id: graduate_student_housing
+  term: Graduate Student Housing
+- id: graham_hill_scotts_valley_calif
+  term: Graham Hill (Scotts Valley, Calif.)
+- id: granary
+  term: Granary
+- id: great_meadow
+  term: Great Meadow
+- id: h_barn
+  term: H Barn
+- id: hagar_court_offices
+  term: Hagar Court Offices
+- id: hahn_art_facility
+  term: Hahn Art Facility
+- id: hahn_student_services
+  term: Hahn Student Services
+- id: hay_barn
+  term: Hay Barn
+- id: humanities_social_sciences_building
+  term: Humanities & Social Sciences Building
+- id: interdisciplinary_sciences_building
+  term: Interdisciplinary Sciences Building
+- id: jack_baskin_engineering_auditorium
+  term: Jack Baskin Engineering Auditorium
+- id: jack_baskin_engineering_building
+  term: Jack Baskin Engineering Building
+- id: kerr_hall
+  term: Kerr Hall
+- id: kiosk_for_east_entrance
+  term: Kiosk for East Entrance
+- id: kresge_college
+  term: Kresge College
+- id: laureate_court_apartment_buildings
+  term: Laureate Court Apartment Buildings
+- id: lick_observatory
+  term: Lick Observatory
+- id: lighthouse_field_state_beach_santa_cruz_calif
+  term: Lighthouse Field State Beach (Santa Cruz, Calif.)
+- id: liquid_propane_gas_building
+  term: Liquid Propane Gas Building
+- id: live_oak_santa_cruz_county_calif
+  term: Live Oak (Santa Cruz County, Calif.)
+- id: lml_william_t_doyle_research_building
+  term: LML William T. Doyle Research Building
+- id: long_marine_lab
+  term: Long Marine Lab
+- id: lower_east_field
+  term: Lower East Field
+- id: lower_quarry
+  term: Lower Quarry
+- id: lower_west_field
+  term: Lower West Field
+- id: main_beach_santa_cruz_calif
+  term: Main Beach (Santa Cruz, Calif.)
+- id: mary_porter_sesnon_art_gallery
+  term: Mary Porter Sesnon Art Gallery
+- id: mbest_headquarters_center_buildings
+  term: MBEST Headquarters Center Buildings
+- id: mchenry_library
+  term: McHenry Library
+- id: media_theater
+  term: Media Theater
+- id: merrill_college
+  term: Merrill College
+- id: music_center
+  term: Music Center
+- id: natural_sciences_2
+  term: Natural Sciences 2
+- id: oakes_college
+  term: Oakes College
+- id: office_of_physical_education_recreation_and_sports
+  term: Office of Physical Education, Recreation and Sports
+- id: office_of_physical_education_recreation_and_sports
+  term: Office of Physical Education, Recreation, and Sports
+- id: pacific_avenue_santa_cruz_calif
+  term: Pacific Avenue (Santa Cruz, Calif.)
+- id: pacific_garden_mall_santa_cruz_calif
+  term: Pacific Garden Mall (Santa Cruz, Calif.)
+- id: pasatiempo_santa_cruz_county_calif
+  term: Pasatiempo (Santa Cruz County, Calif.)
+- id: performing_arts_building
+  term: Performing Arts Building
+- id: physical_plant
+  term: Physical Plant
+- id: physical_sciences_building
+  term: Physical Sciences Building
+- id: pleasure_point_santa_cruz_calif
+  term: Pleasure Point (Santa Cruz, Calif.)
+- id: porter_college
+  term: Porter College
+- id: powder_house
+  term: Powder House
+- id: quarry_plaza
+  term: Quarry Plaza
+- id: rachel_carson_college
+  term: Rachel Carson College
+- id: ranch_view_terrace
+  term: Ranch View Terrace
+- id: receiving_barn
+  term: Receiving Barn
+- id: redwood_grove_apartment_buildings
+  term: Redwood Grove Apartment Buildings
+- id: san_lorenzo_park_santa_cruz_calif
+  term: San Lorenzo Park (Santa Cruz, Calif.)
+- id: san_onofre_state_beach_san_clemente_calif
+  term: San Onofre State Beach (San Clemente, Calif.)
+- id: santa_cruz_beach_boardwalk
+  term: Santa Cruz Beach Boardwalk
+- id: santa_cruz_municipal_wharf
+  term: Santa Cruz Municipal Wharf
+- id: santa_cruz_small_craft_harbor
+  term: Santa Cruz Small Craft Harbor
+- id: science_and_engineering_library
+  term: Science and Engineering Library
+- id: scotts_valley_center
+  term: Scotts Valley Center
+- id: seabright_state_beach_santa_cruz_calif
+  term: Seabright State Beach (Santa Cruz, Calif.)
+- id: shop_office_building
+  term: Shop Office Building
+- id: shop_stores_and_eh_s
+  term: Shop Stores and EH&S
+- id: sign_shop
+  term: Sign Shop
+- id: silicon_valley_campus
+  term: Silicon Valley Campus
+- id: sinsheimer_laboratories
+  term: Sinsheimer Laboratories
+- id: sinsheimer_stanley_festival_glen
+  term: Sinsheimer-Stanley Festival Glen
+- id: social_sciences_1
+  term: Social Sciences 1
+- id: social_sciences_2
+  term: Social Sciences 2
+- id: steamer_lane_santa_cruz_calif
+  term: Steamer Lane (Santa Cruz, Calif.)
+- id: stevenson_college
+  term: Stevenson College
+- id: stone_house
+  term: Stone House
+- id: student_music_east_kzsc_radio_station
+  term: Student Music East-KZSC Radio Station
+- id: student_union
+  term: Student Union
+- id: student_union_building
+  term: Student Union Building
+- id: student_union_redwood_building
+  term: Student Union/Redwood Building
+- id: the_village
+  term: The Village
+- id: theater_arts_area
+  term: Theater Arts Area
+- id: theater_arts_center
+  term: Theater Arts Center
+- id: theater_barn
+  term: Theater Barn
+- id: thimann_laboratories
+  term: Thimann Laboratories
+- id: thimann_lecture_hall
+  term: Thimann Lecture Hall
+- id: thimann_receiving_building
+  term: Thimann Receiving Building
+- id: transmitter_building_kzsc_radio_station_tower
+  term: Transmitter Building KZSC Radio Station Tower
+- id: transportation_and_parking_services_storage_barn
+  term: Transportation and Parking Services Storage Barn
+- id: twin_lakes_state_beach_santa_cruz_calif
+  term: Twin Lakes State Beach (Santa Cruz, Calif.)
+- id: uco_lick_labs
+  term: UCO/Lick Labs
+- id: university_center
+  term: University Center
+- id: university_house
+  term: University House
+- id: upper_quarry_amphitheater
+  term: Upper Quarry Amphitheater
+- id: village_housing
+  term: Village Housing
+- id: visual_arts_research_facility
+  term: Visual Arts Research Facility
+- id: west_field_house
+  term: West Field House
+- id: whole_earth_restaurant
+  term: Whole Earth Restaurant
+- id: younger_lagoon_santa_cruz_calif
+  term: Younger Lagoon (Santa Cruz, Calif.)

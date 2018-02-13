@@ -4,4 +4,72 @@ class FileSet < ActiveFedora::Base
   include Hyrax::FileSetBehavior
   include SamveraHls::FileSetBehavior
 
+  Hydra::Derivatives.output_file_service = Ucsc::PersistDerivatives
+
+  def create_derivatives(filename)
+    # create hls derivatives instead of normal ones 
+    # for audio or video
+    return if create_hls_derivatives(filename)
+    
+    if self.image?
+      Hydra::Derivatives::ImageDerivatives.create(filename, outputs: image_outputs)
+    else
+      # This is the behavior I am overwriting
+      # (this method was previously delegated to
+      # file_set_derivatives_service)
+      file_set_derivatives_service.create_derivatives(filename)
+    end
+  end
+  
+  def derivative_path_factory
+    Ucsc::DerivativePath
+  end
+
+  def image_outputs
+    [{ label: :thumbnail, 
+       format: 'jpg', 
+       size: '200x150>', 
+       url: derivative_url('thumbnail') },
+     { label: :medium, 
+       format: 'jpg', 
+       size: '400x>', 
+       url: derivative_url('medium') },
+     { label: :large, 
+       format: 'jpg', 
+       size: '800x>', 
+       url: derivative_url('large') }
+    ]
+  end
+  
+#  delegate :derivative_url, to: :file_set_derivatives_service
+  
+  def derivative_url(destination_name = nil)
+    if destination_name.nil?
+      @deriv_url ||= derivative_dir.gsub(Hyrax.config.derivatives_path,"")
+      return @deriv_url
+    end
+    if image_derivative_names.include? destination_name
+      path = derivative_path_factory.derivative_path_for_reference(self,destination_name)
+      URI("file://#{path}").to_s
+    else
+      file_set_derivatives_service.derivative_url(destination_name)
+    end
+  end
+
+    def cleanup_derivatives
+      derivative_path_factory.derivatives_for_reference(file_set).each do |path|
+        FileUtils.rm_f(path)
+      end
+    end
+
+    def derivative_path_factory
+      Ucsc::DerivativePath
+    end
+
+  private
+
+  def image_derivative_names
+    ['small','medium','large','square','fullsize']
+  end
+
 end

@@ -1,0 +1,14 @@
+<% wrk = (defined? curation_concern) ? curation_concern : @collection %>
+<% schema = ScoobySnacks::METADATA_SCHEMA['work_types'][wrk.model_name.to_s.downcase] %>
+<% property = schema['properties'][key.to_s] unless schema.nil? %>
+<% unless property.nil?  %>
+    <% input_type = property['input'] %>
+    <% input_type = 'scalar' if input_type == "default" %>
+    <% options = {
+        required: f.object.required?(key),
+        input_html: { class: 'form-control', 
+            multiple: f.object.multiple?(key) }} %>
+    <% options[:label] = property["label"] if !property["label"].blank? %>
+    <% options[:hint] = property["definition"] if !property["definition"].blank? %>
+    <%= render partial: "records/edit_fields/#{input_type}", locals: {property: property, f: f, key: key, default_options: options}  %>
+<% end %>

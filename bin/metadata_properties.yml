@@ -1,0 +1,162 @@
+accessRights:
+  definition: Information about who can access the resource or an indication of its
+    security status.
+  dublin core mapping: dc:rights
+  label: Access Rights
+  predicate: DC:accessRights
+accessionNumber:
+  definition: An archival accession number for the resource.
+  dublin core mapping: dc:identifier
+  label: Accession Number
+  multiple: 'false'
+  predicate: DC:identifier
+collection:
+  definition: A related resource in which the described resource is physically or
+    logically included.
+  dublin core mapping: dc:relation
+  label: Collection Title
+  predicate: DC:isPartOf
+collectionCallNumber:
+  definition: The identifier for the collection to which the resource belongs.
+  dublin core mapping: dc:source
+  label: Collection Call Number
+  predicate: http://schema.org/identifier
+contributor:
+  definition: A person or organization responsible for making contributions to the
+    resource.
+  dublin core mapping: dc:contributor
+  label: Contributor
+  predicate: DC:contributor
+  vocabularies: NAF, ULAN, Local
+creator:
+  definition: A person or organization responsible for creating the resource.
+  dublin core mapping: dc:creator
+  label: Creator
+  predicate: DC:creator
+  vocabularies: NAF, ULAN, Local
+dateCreated:
+  definition: Date of creation of the original resource.
+  dublin core mapping: dc:date
+  encoding: W3CDTF
+  label: 'Date Created '
+  predicate: DC:date
+dateModified:
+  definition: Date on which the resource was changed, i.e., digitized.
+  dublin core mapping: dc:date
+  encoding: W3CDTF
+  label: Date Digitized
+  predicate: DC:modified
+datePublished:
+  definition: Date of formal issuance (e.g., publication) of the resource.
+  dublin core mapping: dc:date
+  encoding: W3CDTF
+  label: 'Date Published '
+  predicate: DC:issued
+description:
+  definition: An account of the resource.
+  dublin core mapping: dc:description
+  label: Description
+  predicate: DC:description
+genreForm:
+  definition: The genre, form, and/or physical characteristics of the resource being
+    described. The material or physical carrier of the resource. Does not capture
+    aboutness.
+  dublin core mapping: dc:format
+  label: Format
+  predicate: DC:medium
+  vocabularies: AAT, Local
+keyword:
+  definition: Keywords (i.e. non-standard terms) assigned to the resource.
+  dublin core mapping: dc:subject
+  label: Keywords
+  predicate: http://schema.org/keywords
+language:
+  definition: A language of the resource.
+  dublin core mapping: dc:language
+  label: Language
+  predicate: DC:language
+  vocabularies: ISO 639-2
+license:
+  definition: An associated license for the object (i.e. Creative Commons license,
+    software licenses, etc.). Defines use/reuse of resources.
+  dublin core mapping: dc:rights
+  label: Rights License
+  predicate: DC:license
+physicalDescription:
+  definition: Description or statement indicating the extent, size, or duration of
+    the original, physical resource for digitized content.
+  dublin core mapping: dc:source
+  label: Physical Description
+  predicate: DC:extent
+publisher:
+  definition: An entity responsible for making the resource available.
+  dublin core mapping: dc:publisher
+  label: Digital Publisher & Contact Info
+  multiple: 'false'
+  predicate: DC:publisher
+  required: 'true'
+publisherHomepage:
+  multiple: 'false'
+  predicate: foaf:homepage
+resourceType:
+  definition: 'General nature or type of the resource (e.g., image, text, etc.). Does
+    not capture aboutness. '
+  dublin core mapping: dc:type
+  label: Type
+  predicate: DC:type
+  required: 'true'
+  vocabularies: DCMIType
+rightStatement:
+  definition: Information about rights held in and over the resource expressed in
+    general terms (i.e. boilerplate statements).
+  dublin core mapping: dc:rights
+  label: Copyright Statement OR Copyright Status
+  predicate: DC:rights
+  required: 'true'
+rightsHolder:
+  definition: A person or organization owning or managing rights over the resource.
+  dublin core mapping: dc:rightsHolder
+  label: Rights Holder
+  predicate: DC:rightsHolder
+  vocabularies: NAF, Local
+series:
+  definition: A related resource in which the described resource is physically or
+    logically included.
+  dublin core mapping: dc:relation
+  label: Series Title
+  predicate: opaque:seriesName
+subjectName:
+  definition: A name of the person that the resource is about.
+  dublin core mapping: dc:subject
+  label: Subject
+  predicate: foaf:name
+  vocabularies: NAF, ULAN, Local
+subjectPlace:
+  definition: Spatial characteristics of the resource.
+  dublin core mapping: dc:subject
+  label: Subject
+  predicate: DC:spatial
+  vocabularies: LCSH, GNIS, Local
+subjectTemporal:
+  definition: Temporal characteristics of the resource.
+  dublin core mapping: dc:subject
+  label: Subject
+  predicate: DC:temporal
+  vocabularies: AAT, Local
+subjectTopic:
+  definition: The topic of the resource.
+  dublin core mapping: dc:subject
+  label: Subject
+  predicate: DC:subject
+  vocabularies: LCSH, Local
+title:
+  definition: The title of the resource.
+  dublin core mapping: dc:title
+  label: Title
+  multiple: 'false'
+  predicate: DC:title
+  required: 'true'
+titleAlternative:
+  definition: An alternative name for the resource.
+  dublin core mapping: dc:title
+  predicate: DC:alternative

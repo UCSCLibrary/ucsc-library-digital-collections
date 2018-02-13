@@ -12,9 +12,9 @@ class Ability
 
     if current_user.admin?
       can [:create, :show, :add_user, :remove_user, :index, :edit, :update, :destroy], Role
-      can :manage, Admin::BmiRow
-      can :manage, Admin::BmiIngest
-      can :manage, Admin::BmiEdit
+      can :manage, BulkMetadata::Row
+      can :manage, BulkMetadata::Ingest
+      can :manage, BulkMetadata::Edit
     end
 
     # Limits deleting objects to a the admin user

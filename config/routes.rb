@@ -1,5 +1,7 @@
-require 'resque/server'
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
+  concern :oai_provider, BlacklightOaiProvider::Routes.new
 
   mount BrowseEverything::Engine => '/browse'
 
@@ -13,26 +15,27 @@ Rails.application.routes.draw do
   resources :welcome, only: 'index'
 
   curation_concerns_basic_routes
-  curation_concerns_embargo_management
   concern :exportable, Blacklight::Routes::Exportable.new
 
   mount Qa::Engine => '/authorities'
 
+  mount SamveraHls::Engine => '/'
+
   # Administrative URLs
-  namespace :admin do
-    resources :bmi_edits do
+  namespace :bulk_metadata do
+    resources :edits do
       member do
         get :export
       end
     end
-    resources :bmi_rows do
+    resources :rows do
       member do
         get :row_info
       end
     end
-    resources :bmi_ingests do
+    get "row_info/:row_id", to: "ingests#row_info", as: 'row_info'
+    resources :ingests do
       member do
-        get :row_info
         get :info
         get :ingest_all
         post :process_row
@@ -42,17 +45,21 @@ Rails.application.routes.draw do
         #      get :completed
       end
     end
-    # Job monitoring
-    constraints ResqueAdmin do
-      mount Resque::Server, at: 'queues'
-    end
   end
+
+#  mount Sidekiq::Web => '/sidekiq' unless Rails.env.production?
+  mount Sidekiq::Web => '/sidekiq' 
+
+#  soon! so soon...
+#  mount Riiif::Engine => 'images', as: :riiif if Hyrax.config.iiif_image_server?
   
   mount Blacklight::Engine => '/'
   
   concern :searchable, Blacklight::Routes::Searchable.new
 
   resource :catalog, only: [:index], as: 'catalog', path: '/catalog', controller: 'catalog' do
+    concerns :oai_provider
+
     concerns :searchable
   end
 

@@ -50,7 +50,7 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 #gem 'sufia', '7.3.0'
-gem 'hyrax', '1.0.1'
+gem 'hyrax', '2'
 
 group :development, :test do
   gem 'solr_wrapper', '>= 0.3'
@@ -63,6 +63,9 @@ gem 'devise-guests', '~> 0.5'
 group :development, :test do
   gem 'fcrepo_wrapper'
   gem 'rspec-rails'
+  gem 'factory_bot_rails'
+  gem 'rails-controller-testing'
+  gem 'capybara'
 end
 
 group :development do
@@ -77,8 +80,8 @@ gem 'hydra-role-management'
 gem 'browse-everything'
 #gem 'hydra-remote_identifier'
 
-#gem 'hydra_hls', '>= 0.0.2'
 gem 'samvera_hls', path: "/srv/samvera_hls/"
+gem 'scooby_snacks', path: "/srv/scooby_snacks/"
 
 #gem 'ldfwrapper', github: 'boston-library/ldf-wrapper', branch: "master"
 
@@ -88,5 +91,10 @@ gem 'samvera_hls', path: "/srv/samvera_hls/"
 gem 'sinatra', github: 'sinatra'
 
 gem 'resque-pool'
+gem 'sidekiq'
+gem 'capistrano-sidekiq', github: 'seuros/capistrano-sidekiq'
+
 
 gem 'blacklight_advanced_search', '~> 6.0'
+gem 'blacklight_oai_provider', '>= 6.0.0'
+gem 'riiif', '~> 1.1'

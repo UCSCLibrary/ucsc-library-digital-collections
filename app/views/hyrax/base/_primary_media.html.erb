@@ -1,0 +1,11 @@
+<% if (av_files = @presenter.all_av_files).any? %>
+    <% if av_files.count == 1 %>
+        <%= render 'single_player', file_set_ids: av_files.first  %>
+    <% else %>
+        <%= render 'playlist', file_set_ids: av_files  %>
+    <% end %>
+    <%= javascript_include_tag "include_player" %>
+    <%= stylesheet_link_tag "embed" %>
+<% elsif @presenter.representative_id %>
+    <%= image_tag download_path(FileSet.find(@presenter.representative_id),file: 'medium'), class: "primary-media",role: "presentation"%>
+<% end %>

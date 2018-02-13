@@ -6,7 +6,7 @@ class CourseShowPresenter < Hyrax::WorkShowPresenter
   private
   
   def member_presenter_factory
-        CourseMemberPresenterFactory.new(solr_document, current_ability, request)
+    CourseMemberPresenterFactory.new(solr_document, current_ability, request)
   end
 
 end

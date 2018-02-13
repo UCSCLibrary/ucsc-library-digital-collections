@@ -17,8 +17,11 @@ module UcscHyrax
 
     config.tinymce.install = :copy
 
-#    This setting is now only in environments/production.rb
-#    config.active_job.queue_adapter = :resque
+    config.to_prepare do
+      Hyrax::FileSetsController.prepend SamveraHls::FileSetsControllerBehavior  
+    end
+
+    config.active_job.queue_adapter = :sidekiq
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers

@@ -1,0 +1,3 @@
+<% options = default_options %>
+<% options[:as] = f.object.multiple?(key) ? :multi_value : :string %>
+<%= f.input key, options %>

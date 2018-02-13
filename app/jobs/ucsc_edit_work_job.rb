@@ -2,26 +2,25 @@ class UcscEditWorkJob < ActiveJob::Base
   queue_as :ingest
 
   after_perform do |job|
-    row_id = BmiRow.find(job.arguments[3])
-    break if row_id.nil?
-    row = BmiRow.find(row_id)
+    row = BulkMetadata::Row.find(job.arguments[3])
+    break if row.nil?
     row.status = "ingested"
     row.save
-
-    # attempt to resolve all of the relationships defined in this row
-    row.bmi_relationships.each do |relationship|
+ 
+    # attempt to resolve all of the relationships defined in this row    
+    row.relationships.each do |relationship|
       relationship.resolve!
     end
-
     # attempt to resolve each dangling (objectless) relationship using
+    
     # this row as a potential object
-    BmiRelationship.where(:status => "objectless").each do |relationship|
+    BulkMetadata::Relationship.where(:status => "objectless").each do |relationship|
       relationship.resolve! row.id
     end
 
   end
 
-  def perform(workClass,user,attributes,bmi_row_id=nil,visibility=nil)
+  def perform(workClass,user,attributes,row_id=nil,visibility=nil)
     
 
 #    work = workClass.constantize.new
