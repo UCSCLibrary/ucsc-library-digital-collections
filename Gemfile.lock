@@ -19,14 +19,6 @@ GIT
       tilt (~> 2.0)
 
 PATH
-  remote: /srv/blacklight_oai_provider
-  specs:
-    blacklight_oai_provider (6.0.0.pre1)
-      blacklight (~> 6.0)
-      oai (~> 0.4)
-      rails (>= 4.2, < 6)
-
-PATH
   remote: /srv/samvera_hls
   specs:
     samvera_hls (0.2.0)
@@ -155,6 +147,10 @@ GEM
     blacklight_advanced_search (6.3.1)
       blacklight (~> 6.0, >= 6.0.1)
       parslet
+    blacklight_oai_provider (6.0.0)
+      blacklight (~> 6.0)
+      oai (~> 0.4)
+      rails (>= 4.2, < 6)
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
@@ -826,7 +822,7 @@ PLATFORMS
 
 DEPENDENCIES
   blacklight_advanced_search (~> 6.0)
-  blacklight_oai_provider!
+  blacklight_oai_provider (>= 6.0.0)
   browse-everything
   byebug
   capistrano
