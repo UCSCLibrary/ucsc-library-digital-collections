@@ -55,12 +55,13 @@ module Ucsc
       Rails.logger.info "Fetching #{resource.rdf_subject} from the authorative source. (this is slow)"
       if resource.id.include? "ucsc.edu" 
         url = resource.id.gsub("digital-collections.library.ucsc.edu","localhost")
+        Rails.logger.debug("Fetching label from QA url: #{url}")
         label = JSON.parse(Net::HTTP.get_response(URI.parse(url)).body)["term"]
       else
         resource.fetch(headers: { 'Accept'.freeze => default_accept_header })
         return resource.rdf_label.first.to_s
       end
-    rescue IOError, SocketError => e
+    rescue Exception => e
       # IOError could result from a 500 error on the remote server
       # SocketError results if there is no server to connect to
       Rails.logger.error "Unable to fetch #{resource.rdf_subject} from the authorative source.\n#{e.message}"
