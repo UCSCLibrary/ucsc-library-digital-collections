@@ -73,9 +73,15 @@ class BulkMetadata::Row < ApplicationRecord
 
       case cell.name.downcase
       when "file", "filename"
-        file = File.open(File.join(BASE_PATH,cell.value))
-        uploaded_file = Hyrax::UploadedFile.create(file: file, user: user)
-        (metadata[:uploaded_files] ||= []) << uploaded_file.id if !uploaded_file.id.nil?
+        begin
+          file = File.open(File.join(BASE_PATH,cell.value))
+          uploaded_file = Hyrax::UploadedFile.create(file: file, user: user)
+          (metadata[:uploaded_files] ||= []) << uploaded_file.id if !uploaded_file.id.nil?
+        rescue
+          self.status = "Error: Cannot open file"
+          self.save
+          return false
+        end
 
       when "collection title","collection"
         relationships.build({ :relationship_type => 'collection',
@@ -159,14 +165,10 @@ class BulkMetadata::Row < ApplicationRecord
     self.status = "ingesting"
     save
 
-    puts "metadata:"
-    puts metadata.to_s
-
     asets = AdminSet.where({title: "Bulk Ingest Set"})
     unless metadata[:admin_set_id] or asets.empty?
       metadata[:admin_set_id] = asets.first.id
     end
-
 
     if edit_id.nil?
       UcscCreateWorkJob.perform_later(work_type,user_email,metadata,id,visibility)
