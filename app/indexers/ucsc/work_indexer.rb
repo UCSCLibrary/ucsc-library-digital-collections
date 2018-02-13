@@ -14,12 +14,16 @@ module Ucsc
         solr_doc[label_field(property)] = []
         solr_doc[Solrizer.solr_name(property)] = []
 
+
+        # resolve from QA endpoints!
+
         object[property] = Array(object[property]) if !object[property].kind_of?(Array)
         object[property].each do |val|
           case val
           when ActiveTriples::Resource
-            fetch_remote_label(val)
-            solr_doc[label_field(property)] << val.rdf_label.first.to_s
+            label = get_existing_index(object) unless needs_indexing?(object)
+            label = fetch_remote_label(val) if label.nil?
+            solr_doc[label_field(property)] << label
             solr_doc[Solrizer.solr_name(property)] << val.id
           when String
             solr_doc[label_field(property)] = val
@@ -32,16 +36,35 @@ module Ucsc
       solr_doc
     end
 
+    def needs_indexing?(obj)
+      return true if obj.last_reconciled.nil? or obj.date_modified.nil?
+      return true if obj.last_reconciled < 6.months.ago
+#      return true if obj.last_reconciled < 2.hours.ago
+      return true if obj.last_reconciled < obj.date_modified
+    end
+
+    def get_existing_index(obj,property)
+      query = ActiveFedora::SolrQueryBuilder.construct_query_for_ids([obj.id])
+      solr_response = ActiveFedora::SolrService.get(query)
+      sd = SolrDocument.new(solr_response['response']['docs'].first, solr_response)
+      label = sd[label_field(property)]
+    end
+
+
     def fetch_remote_label(resource)
-      #TODO right now it only fetches the label once per resource. 
-      # it should be able to re-index on command.
-      return unless resource.rdf_label.include? resource.id
       Rails.logger.info "Fetching #{resource.rdf_subject} from the authorative source. (this is slow)"
-      resource.fetch(headers: { 'Accept'.freeze => default_accept_header })
+      if resource.id.include? "ucsc.edu" 
+        url = resource.id.gsub("digital-collections.library.ucsc.edu","localhost")
+        label = JSON.parse(Net::HTTP.get_response(URI.parse(url)).body)["term"]
+      else
+        resource.fetch(headers: { 'Accept'.freeze => default_accept_header })
+        return resource.rdf_label.first.to_s
+      end
     rescue IOError, SocketError => e
       # IOError could result from a 500 error on the remote server
       # SocketError results if there is no server to connect to
       Rails.logger.error "Unable to fetch #{resource.rdf_subject} from the authorative source.\n#{e.message}"
+      return "Cannot find term"
     end
 
     def default_accept_header
