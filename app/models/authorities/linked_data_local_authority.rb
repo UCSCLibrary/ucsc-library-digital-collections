@@ -1,2 +1,0 @@
-module Authorities
-  class LinkedDataLocal < 
