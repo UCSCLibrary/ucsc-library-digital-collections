@@ -3,7 +3,6 @@ require 'sidekiq/web'
 Rails.application.routes.draw do
   concern :oai_provider, BlacklightOaiProvider::Routes.new
 
-
   mount BrowseEverything::Engine => '/browse'
 
   devise_for :users
@@ -19,6 +18,8 @@ Rails.application.routes.draw do
   concern :exportable, Blacklight::Routes::Exportable.new
 
   mount Qa::Engine => '/authorities'
+
+  mount SamveraHls::Engine => '/'
 
   # Administrative URLs
   namespace :bulk_metadata do
