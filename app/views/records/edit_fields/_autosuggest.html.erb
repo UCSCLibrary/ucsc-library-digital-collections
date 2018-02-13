@@ -8,6 +8,6 @@
 <%# options[:as] = property['input'].to_sym %>
 <% options[:as] = :autosuggest %>
 <% options[:input_html] = {class: "form-control #{key.to_s.underscore}-input", data: data} %>
-<% options[:wrapper_html] = {data: data.merge!({'field-name' => key}) %>
+<% options[:wrapper_html] = {data: data.merge!({'field-name' => key})} %>
 
 <%= f.input key, options %>
