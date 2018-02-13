@@ -118,6 +118,12 @@ properties:
     input: autosuggest
     DPLA: DC:contributor
 
+  originalPublisher:
+    predicate: MODS:publisher
+    definition: The name of the entity that published, printed, distributed, released, issued, or produced the resource.
+    label: Original Publisher
+    DPLA: MODS:publisher
+  
   publisher:
     predicate: "DC:publisher"
     label: "Digital Publicher & Contact Info"
@@ -125,7 +131,7 @@ properties:
     core: true
     DPLA: DC:publisher
   
-  publisher_homepage:
+  publisherHomepage:
     definition: "The URL of the publisher's homepage."
 #    multiple: false
     predicate: FOAF:homepage
@@ -169,7 +175,7 @@ properties:
   
   scale:
     definition: Ratio of the dimensions of a form contained or embodied in a resource to the dimensions of the entity it represents, e.g., for images or cartographic resources.
-    predicate: Bibframe:scale
+    predicate: BF2:scale
 
   series:
     definition: A related resource in which the described resource is physically or logically included.
@@ -193,7 +199,7 @@ properties:
     definition: Cartographic data that identifies characteristics of the resource, such as coordinates, projection, etc.
     DC mapping: dc:relation
     label: Coordinates
-    predicate: Bibframe:cartographicAttributes
+    predicate: BF2:cartographicAttributes
   
   subjectName:
     definition: A name of the person that the resource is about.
@@ -382,7 +388,7 @@ properties:
     definition: Classification number in any scheme.
     DC mapping: dc:source
     label: Call Number
-    predicate: Bibframe:classification
+    predicate: BF2:classification
     core: true
     display_area: brief
 
@@ -436,7 +442,7 @@ work_types:
       creator:
       contributor:
       publisher:
-      publisher_homepage:
+      publisherHomepage:
         primary: true
       description:
         primary: true
@@ -444,24 +450,32 @@ work_types:
       resourceType:
       rightsHolder:
       rightsStatement:
+      scale:
+      source:
+      staffNote:
       accessRights:
       license:
       collection:
       series:
+      coordinates:
       dateCreated:
+      dateCreatedFake:
       datePublished:
-      dateModified:
+      dateDigitized:
       subjectTopic:
       subjectName:
       subjectPlace:
       subjectTemporal:
       genre:
+      masterFilename:
+      originalPublisher:
       physicalDescription:
       keyword:
       accessionNumber:
       collectionCallNumber:
       donorProvenance:
-      boxFolderItemCallNumber:
+      boxFolder:
+      itemCallNumber:
   collection:
     properties:
       title:
@@ -470,7 +484,7 @@ work_types:
       creator:
       contributor:
       publisher:
-      publisher_homepage:
+      publisherHomepage:
         primary: true
       description:
         primary: true
