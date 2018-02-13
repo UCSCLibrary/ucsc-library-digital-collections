@@ -34,6 +34,8 @@ properties:
     multiple: true
     primary: false
     hidden: false
+    display_area: more
+    core: false
     work_title: false
     input: scalar
     facet_limit: 5
@@ -51,32 +53,31 @@ properties:
     required: true
 #    multiple: false
     primary: true
+    core: true
+    display_area: work_title
     work_title: true
     index_itemprop: name
     index_if: false
     search_field: true
+    DPLA: DC:alternative
 
   accessionNumber:
     definition: "An archival accession number for the resource."
-    dublin core mapping: "DC:identifier"
+    DC mapping: "DC:identifier"
     label: "Accession Number"
+    display_area: staff
+    core: true
     predicate: "DC:identifier"
     primary: true
 #    multiple: false
 
-  alternateIdentifier:
-    definition: "Other unique identifiers associated with the resource (ARK, etc)"
-    dublin core mapping: "DC:identifier"
-    label: "Other Identifiers"
-    predicate: "Bibframe:identifier"
-
   titleAlternative:
     definition: "An alternative title for the resource."
     usage_note: "All titles for this work other than the primary title should be listed here"
-    label: "Alternative Title"
-    primary: true
+    label: "Variant Title"
     predicate: "DC:alternative"
     search_field: true
+    DPLA: DC:alternative
 
   creator:
     definition: "A person or organization responsible for creating the resource."
@@ -90,11 +91,13 @@ properties:
       - authority: local
         subauthority: agents
     primary: true
-    required: true
+#    required: true
     facet: true
     index_itemprop: creator
     search_field: true
     input: autosuggest
+    core: true
+    DPLA: DC:creator
 
   contributor:
     definition: "A person or organization responsible for making contributions to the resource."
@@ -110,28 +113,30 @@ properties:
     facet: true
     index_itemprop: contributor
     search_field: true
+    core: true
+    display_area: more
     input: autosuggest
+    DPLA: DC:contributor
 
-#  publisher:
-#    predicate: "DC:publisher"
-#    range: "Agent"
-#    facet: true
+  publisher:
+    predicate: "DC:publisher"
+    label: "Digital Publicher & Contact Info"
 #    multiple: false
-#    index_itemprop: publisher
-#    search_field: true
-#  
-#  publisher_homepage:
-#    definition: "The URL of the publisher's homepage."
-#    multiple: 'false'
-#    predicate: FOAF:homepage
-#    search_field: true
+    core: true
+    DPLA: DC:publisher
+  
+  publisher_homepage:
+    definition: "The URL of the publisher's homepage."
+#    multiple: false
+    predicate: FOAF:homepage
+    core: true
   
   resourceType:
     definition: 'General nature or type of the resource (e.g., image, text, etc.). Does not capture aboutness. '
-    dublin core mapping: dc:type
     label: Type
+    search_field: true
     predicate: DC:type
-    required: 'true'
+    required: true
     vocabulary: 
       authority: local
       subauthority: dcmi_types
@@ -141,15 +146,17 @@ properties:
   
   rightsStatement:
     definition: Information about rights held in and over the resource expressed in general terms (i.e. boilerplate statements).
-    dublin core mapping: dc:rights
-    label: Copyright Statement OR Copyright Status
+    DC mapping: dc:rights
+    label: Copyright Statement
     predicate: DC:rights
     required: 'true'
+    core: true
+    DPLA: DC:rights
   
   rightsHolder:
     definition: A person or organization owning or managing rights over the resource.
-    dublin core mapping: dc:rightsHolder
-    label: Rights Holder
+    DC mapping: dc:rightsHolder
+    label: Copyright Holder
     predicate: DC:rightsHolder
     vocabularies: 
       - authority: loc
@@ -157,16 +164,40 @@ properties:
       - authority: local
         subauthority: agents
     input: autosuggest
+    core: true
+    DPLA: DC:rights
   
+  scale:
+    definition: Ratio of the dimensions of a form contained or embodied in a resource to the dimensions of the entity it represents, e.g., for images or cartographic resources.
+    predicate: Bibframe:scale
+
   series:
     definition: A related resource in which the described resource is physically or logically included.
-    dublin core mapping: dc:relation
     label: Series Title
     predicate: opaque:seriesName
+    search_field: true
+  
+  source:
+    definition: A related resource from which the described resource is derived. (Use to record previous publication information, i.e. the place of publication and publisher name for physical resources).
+    display_area: staff
+    predicate: DC:source
+    search_field: true
+  
+  staffNote:
+    definition: Textual information about the resource. This property is used when no type is specified. 
+    label: Staff Note
+    display_area: staff
+    predicate: MODS:note
+  
+  coordinates:
+    definition: Cartographic data that identifies characteristics of the resource, such as coordinates, projection, etc.
+    DC mapping: dc:relation
+    label: Coordinates
+    predicate: Bibframe:cartographicAttributes
   
   subjectName:
     definition: A name of the person that the resource is about.
-    dublin core mapping: dc:subject
+    DC mapping: dc:subject
     label: Subject (People)
     predicate: FOAF:name
     vocabularies:
@@ -178,10 +209,11 @@ properties:
         subauthority: agents        
     facet: true
     input: autosuggest
+    core: true
   
   subjectPlace:
     definition: Spatial characteristics of the resource.
-    dublin core mapping: dc:subject
+    DC mapping: dc:subject
     label: Subject (Place)
     predicate: DC:spatial
     vocabularies: 
@@ -194,10 +226,13 @@ properties:
     facet: true
     search_field: true
     input: autosuggest
+    core: true
+    DPLA: DC:subject
   
   subjectTemporal:
     definition: Temporal characteristics of the resource.
-    dublin core mapping: dc:subject
+    DC mapping: dc:subject
+    search_field: true
     label: Subject (Time)
     predicate: DC:temporal
     vocabularies: 
@@ -207,10 +242,12 @@ properties:
         subauthority: time_periods
     facet: true
     input: autosuggest
+    core: true
+    DPLA: DC:subject
   
   subjectTopic:
     definition: The topic of the resource.
-    dublin core mapping: dc:subject
+    DC mapping: dc:subject
     label: Subject (Topic)
     predicate: DC:subject
     vocabularies: 
@@ -222,10 +259,11 @@ properties:
     facet: true
     search_field: true
     input: autosuggest
+    core: true
+    DPLA: DC:subject
   
   dateCreated:
     definition: Date of creation of the original resource.
-    dublin core mapping: dc:date
     encoding: W3CDTF
     label: 'Date Created'
     predicate: DC:date
@@ -234,10 +272,16 @@ properties:
     index_itemprop: dateCreated
     sort_field: true
     input: date
-  
-  dateModified:
+    core: true    
+    DPLA: DC:date
+
+  dateCreatedDisplay:
+    definition: Textual representation of the creation date (temporary fix)
+    label: 'Date Created'
+    predicate: MODS:dateCreated
+
+  dateDigitized:
     definition: Date on which the resource was changed, i.e., digitized.
-    dublin core mapping: dc:date
     encoding: W3CDTF
     label: Date Digitized
     predicate: DC:modified
@@ -248,7 +292,6 @@ properties:
   
   datePublished:
     definition: Date of formal issuance (e.g., publication) of the resource.
-    dublin core mapping: dc:date
     encoding: W3CDTF
     label: 'Date Published'
     predicate: DC:issued
@@ -260,16 +303,16 @@ properties:
   
   description:
     definition: An account of the resource.
-    dublin core mapping: dc:description
     label: Description
     predicate: DC:description
     index_itemprop: "description"
     index_helper_method: "iconify_auto_link"
     search_field: true
+    DPLA: dc:description
   
-  Format:
+  physicalFormat:
     definition: The form, and/or physical characteristics of the resource being described. The material or physical carrier of the resource. Does not capture aboutness.
-    dublin core mapping: dc:format
+    DC mapping: dc:medium
     label: Format
     predicate: DC:medium
     vocabularies: 
@@ -279,10 +322,11 @@ properties:
         subauthority: formats
     facet: true
     input: autosuggest
+    core: true
+    DPLA: DC:format
   
   keyword:
     definition: Keywords (i.e. non-standard terms) assigned to the resource.
-    dublin core mapping: dc:subject
     label: Keyword
     predicate: schema:keywords
     facet: true
@@ -291,7 +335,7 @@ properties:
   
   language:
     definition: A language of the resource.
-    dublin core mapping: dc:language
+    DC mapping: dc:language
     label: Language
     predicate: DC:language
     vocabulary:
@@ -300,49 +344,74 @@ properties:
     facet: true
     itemprop: inLanguage
     input: dropdown
+    core: true
+    DPLA: DC:language
   
   license:
     definition: An associated license for the object (i.e. Creative Commons license, software licenses, etc.). Defines use/reuse of resources.
-    dublin core mapping: dc:rights
     label: Rights License
     predicate: DC:license
   
+  masterFilename:
+    definition: "The name of the file (usually attached to this work) that is considered the master digital file to represent the work."
+    predicate: EBUCore:filename
+    core: true
+    label: Master File Name
+    display_area: staff
+  
   physicalDescription:
     definition: Description or statement indicating the extent, size, or duration of the original, physical resource for digitized content.
-    dublin core mapping: dc:source
     label: Physical Description
     predicate: DC:extent
-    search_field: true
   
   accessRights:
     definition: Information about who can access the resource or an indication of its security status.
-    dublin core mapping: dc:rights
+    core: true
     label: Access Rights
     predicate: DC:accessRights
+    DPLA: dc:rights
     
 #  collection:
 #    definition: A related resource in which the described resource is physi#cally or logically included.
-#    dublin core mapping: dc:relation
+#    DC mapping: dc:relation
 #    label: Collection Title
 #    predicate: DC:isPartOf
 #    facet: true
   
+  itemCallNumber:
+    definition: Classification number in any scheme.
+    DC mapping: dc:source
+    label: Call Number
+    predicate: Bibframe:classification
+    core: true
+    display_area: brief
+
   collectionCallNumber:
     definition: The identifier for the collection to which the resource belongs.
-    dublin core mapping: dc:source
-    label: Collection Call Number
+    DC mapping: dc:source
+    label: Call Number
     predicate: schema:identifier
+    core: true
+    display_area: brief
 
   donorProvenance:
     definition: "A statement of any changes in ownership and custody of the resource since its creation that are significant for its authenticity, integrity, and interpretation."
-    dublin core mapping: DC:provenance
+    DC mapping: DC:provenance
     label: Donor/Provenance
     predicate: DC:provenance
 
-  boxFolderItemCallNumber:
-    definition: "A call number, shelf mark or similar label of an item."
-    dublin core mapping: DC:identifier
-    label: Physical Location
+  genre:
+    definition: "A genre term designates the style or technique of the intellectual content of textual materials or, for graphic materials, aspects such as vantage point, intended purpose, characteristics of the creator, publication status, or method  of representation. Does not capture aboutness. Ex. lectures; underground dance music."
+    vocabulary:
+      - authority: loc
+      - subauthority: languages
+    predicate:  MODS:subjectGenre
+
+  boxFolder:
+    definition: "A call number, shelf mark or similar label of an item. Format \"Box X, Folder Y\"."
+    label: "Call Number"
+    usage note: "Format: \"Box X, Folder Y\"."
+    DC mapping: DC:identifier
     predicate:  purlOnt:holding#label
 
 #
@@ -386,7 +455,7 @@ work_types:
       subjectName:
       subjectPlace:
       subjectTemporal:
-      genreForm:
+      genre:
       physicalDescription:
       keyword:
       accessionNumber:
