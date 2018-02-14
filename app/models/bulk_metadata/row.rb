@@ -94,10 +94,13 @@ class BulkMetadata::Row < ApplicationRecord
         end
 
       when "collection id"
-        relationships.build({ :relationship_type => 'collection_id',
-                              :identifier_type => 'id',
-                              :object_identifier => cell.value,
-                              :status => "incomplete"})
+        if (col = find_collection(cell.value))
+          (metadata[:member_of_collection_ids] ||= []) << col.id
+        else
+          relationships.build({ :relationship_type => 'collection_id',
+                                :identifier_type => 'id',
+                                :object_identifier => cell.value,
+                                :status => "incomplete"})
 
       when "parent", "child"
         # This cell specifies a relationship. 
