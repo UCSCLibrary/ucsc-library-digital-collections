@@ -101,6 +101,7 @@ class BulkMetadata::Row < ApplicationRecord
                                 :identifier_type => 'id',
                                 :object_identifier => cell.value,
                                 :status => "incomplete"})
+        end
 
       when "parent", "child"
         # This cell specifies a relationship. 
