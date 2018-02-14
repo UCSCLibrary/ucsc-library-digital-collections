@@ -192,7 +192,7 @@ class BulkMetadata::Row < ApplicationRecord
   def find_collection(collection)
     cols = Collection.where(id: collection)
     cols += Collection.where(title: collection)
-    return cols.first unless cols.empty
+    return cols.first unless cols.empty?
     return false
   end
 
