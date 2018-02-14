@@ -84,10 +84,14 @@ class BulkMetadata::Row < ApplicationRecord
         end
 
       when "collection title","collection"
-        relationships.build({ :relationship_type => 'collection',
-                              :identifier_type => 'title',
-                              :object_identifier => cell.value,
-                              :status => "incomplete"})
+        if (col = find_collection(cell.value))
+          (metadata[:member_of_collection_ids] ||= []) << col.id
+        else
+          relationships.build({ :relationship_type => 'collection',
+                                :identifier_type => 'title',
+                                :object_identifier => cell.value,
+                                :status => "incomplete"})
+        end
 
       when "collection id"
         relationships.build({ :relationship_type => 'collection_id',
@@ -179,6 +183,13 @@ class BulkMetadata::Row < ApplicationRecord
 
   def format_param_name(name)
     name.titleize.gsub(/\s+/, "").camelcase(:lower)
+  end
+
+  def find_collection(collection)
+    cols = Collection.where(id: collection)
+    cols += Collection.where(title: collection)
+    return cols.first unless cols.empty
+    return false
   end
 
   def ingested_work
