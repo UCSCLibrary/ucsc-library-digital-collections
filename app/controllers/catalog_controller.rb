@@ -19,6 +19,24 @@ class CatalogController < ApplicationController
   end
 
   configure_blacklight do |config|
+
+    config.oai = {
+      provider: {
+        repository_name: 'UC Santa Cruz Library Digital Collections',
+        repository_url: 'http://digitalcollections.library.ucsc.edu/catalog/oai',
+        record_prefix: 'oai:ucsc',
+        admin_email: 'ethenry@ucsc.edu',
+        sample_id: 'q811kj606'
+      },
+      document: {
+        limit: 25,            # number of records returned with each request, default: 15
+        set_fields: [        # ability to define ListSets, optional, default: nil
+#          { label: 'title', solr_field: 'title_tesim' },
+          { label: 'accession', solr_field: solr_name('accession_number') }
+        ]
+      }
+    }
+
     config.view.gallery.partials = [:index_header, :index]
     config.view.masonry.partials = [:index]
     config.view.slideshow.partials = [:index]

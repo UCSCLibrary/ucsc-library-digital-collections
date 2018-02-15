@@ -59,7 +59,7 @@ properties:
     index_itemprop: name
     index_if: false
     search_field: true
-    DPLA: DC:alternative
+    DPLA: DC:title
 
   accessionNumber:
     definition: "An archival accession number for the resource."
