@@ -1,3 +1,6 @@
+require 'ucsc/oai/record_header_extensions'
+require 'socket'
+
 Hyrax.config do |config|
 
 
@@ -254,3 +257,49 @@ Qa::Authorities::Local.register_subauthority('languages', 'Qa::Authorities::Loca
 Qa::Authorities::Local.register_subauthority('genres', 'Qa::Authorities::Local::TableBasedAuthority')
 
 Qa::Authorities::Geonames.username = 'UCSC_Library_DI'
+
+
+Rails.application.config.to_prepare do
+  OAI::Provider::Response::RecordResponse.class_eval do
+    
+    def header_for(record)
+      param = Hash.new
+      param[:status] = 'deleted' if deleted?(record)
+      @builder.header param do
+        @builder.identifier identifier_for(record)
+        @builder.type record.human_readable_type
+        @builder.datestamp timestamp_for(record)
+        @builder.isShownAt persistent_url(record)
+        @builder.object object_for(record)
+
+        record.collection_ids.each do |id|
+          @builder.isPartOf id
+        end
+
+        sets_for(record).each do |set|
+          @builder.setSpec set.spec
+        end
+      end
+    end
+    
+    private
+    
+    def identifier_for(record)
+      record.id
+    end
+
+    def persistent_url(record)
+      "#{root_url}/records/#{record.id}"
+    end
+
+    def object_for(record)
+      root_url  + record.thumbnail_path.gsub("thumbnail","large")
+    end
+
+    def root_url
+      "https://"+Socket.gethostname
+    end
+
+  end
+#  OAI::Provider::Response::RecordResponse.include Ucsc::Oai::RecordHeaderExtensions
+end
