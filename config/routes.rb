@@ -65,6 +65,8 @@ Rails.application.routes.draw do
 
   mount Hydra::RoleManagement::Engine => '/'
 
+  get '/records/:id' => 'records#show'
+
   resources :solr_documents, only: [:show], path: '/catalog', controller: 'catalog' do
     concerns :exportable
   end

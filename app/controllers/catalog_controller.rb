@@ -2,7 +2,7 @@ class CatalogController < ApplicationController
   include Hydra::Catalog
   include Hydra::Controller::ControllerBehavior  
   include BlacklightOaiProvider::Controller
-  
+
 #  include BlacklightAdvancedSearch::Controller
 
   # This filter applies the hydra access controls
@@ -30,10 +30,7 @@ class CatalogController < ApplicationController
       },
       document: {
         limit: 25,            # number of records returned with each request, default: 15
-        set_fields: [        # ability to define ListSets, optional, default: nil
-#          { label: 'title', solr_field: 'title_tesim' },
-          { label: 'accession', solr_field: solr_name('accession_number') }
-        ]
+        set_fields: []        # ability to define ListSets, optional, default: nil
       }
     }
 
