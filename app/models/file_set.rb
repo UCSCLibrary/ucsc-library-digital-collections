@@ -32,11 +32,11 @@ class FileSet < ActiveFedora::Base
        url: derivative_url('thumbnail') },
      { label: :medium, 
        format: 'jpg', 
-       size: '400x>', 
+       size: '500x500>', 
        url: derivative_url('medium') },
      { label: :large, 
        format: 'jpg', 
-       size: '800x>', 
+       size: '1000x1000>', 
        url: derivative_url('large') }
     ]
   end
