@@ -8,7 +8,7 @@ class RecordsController < ApplicationController
     else
       url = "/concerns/#{record.class}/#{record.id}"
     end
-    redirect_to(url), status: 301
+    redirect_to url, status: 301
   end
 
 end
