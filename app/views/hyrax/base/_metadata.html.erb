@@ -6,26 +6,20 @@
 </table>
 
 <button class="more-metadata" onclick="jQuery('.more-metadata').toggle()">Show More</button>
+
 <div class="more-metadata" style="display:none">
-<table class="table table-striped <%= dom_class(presenter) %> attributes" <%= presenter.microdata_type_to_html %>>
-   <tbody>
-    <%= render 'secondary_attribute_rows', presenter: presenter %>
-
-    <%= presenter.attribute_to_html(:embargo_release_date, render_as: :date) %>
-    <%= presenter.attribute_to_html(:lease_expiration_date, render_as: :date) %>
-
-   </tbody>
-</table>
-
-<% if can? :edit, Work %>
     <table class="table table-striped <%= dom_class(presenter) %> attributes" <%= presenter.microdata_type_to_html %>>
         <tbody>
-            <%= render 'tertiary_attribute_rows', presenter: presenter %>
+            <%= render 'secondary_attribute_rows', presenter: presenter %>
+
+            <%= render 'tertiary_attribute_rows', presenter: presenter if can? :edit, Work %>
+
+            <%= presenter.attribute_to_html(:embargo_release_date, render_as: :date) %>
+            <%= presenter.attribute_to_html(:lease_expiration_date, render_as: :date) %>
         </tbody>
     </table>
-<% end %>
 
-<button id="hide-more-metadata" onclick="jQuery('.more-metadata').toggle()">Show less</button>
+    <button id="hide-more-metadata" onclick="jQuery('.more-metadata').toggle()">Show less</button>
 </div>
 
 <script>
