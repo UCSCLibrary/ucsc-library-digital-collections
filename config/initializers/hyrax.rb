@@ -1,4 +1,3 @@
-require 'ucsc/oai/record_header_extensions'
 require 'socket'
 
 Hyrax.config do |config|
