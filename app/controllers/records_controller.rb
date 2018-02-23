@@ -6,7 +6,7 @@ class RecordsController < ApplicationController
     if record.class.to_s == "Collection"
       url = "/collections/#{record.id}"
     else
-      url = "/concerns/#{record.class}/#{record.id}"
+      url = "/concern/#{record.class.to_s.downcase.pluralize}/#{record.id}"
     end
     redirect_to url, status: 301
   end
