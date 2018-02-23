@@ -7,5 +7,5 @@
     <%= javascript_include_tag "include_player" %>
     <%= stylesheet_link_tag "embed" %>
 <% elsif @presenter.representative_id %>
-    <%= image_tag download_path(FileSet.find(@presenter.representative_id),file: 'medium'), class: "primary-media",role: "presentation"%>
+    <%= image_tag download_path(FileSet.find(@presenter.representative_id),file: 'large'), class: "primary-media",role: "presentation"%>
 <% end %>
