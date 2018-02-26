@@ -7,6 +7,13 @@ $header-height: 40px;
 
 body {
 
+    p#splash-message {
+        font-size: 1.2em;
+        max-width: 600px;
+        margin: auto auto 40px auto;
+        text-align-last: center;
+    }
+
     div.autosuggest ul {
         padding-left:0px;
     }
