@@ -259,6 +259,14 @@ Qa::Authorities::Geonames.username = 'UCSC_Library_DI'
 
 
 Rails.application.config.to_prepare do
+
+  # never display the "share your work" button on the homepage
+  Hyrax::HomepagePresenter.class_eval do
+    def display_share_button?
+      false
+    end
+  end
+
   OAI::Provider::Response::RecordResponse.class_eval do
     
     def header_for(record)
