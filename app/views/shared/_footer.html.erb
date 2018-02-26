@@ -6,7 +6,9 @@
     </div>
     <div class="navbar-right">
       <div class="navbar-text text-right">
-        <p>A service of <a href="http://library.ucsc.edu/" class="navbar-link" target="_blank">UC Santa Cruz Library</a>.</p>
+        <p>A service of <a style="margin-right:25px" href="http://library.ucsc.edu/" class="navbar-link" target="_blank">UC Santa Cruz Library.</a>  
+            <%= link_to t(:'hyrax.pages.tabs.terms_page'), hyrax.terms_path %>
+        </p>
         <p><%= t('hyrax.footer.copyright_html') %></p>
       </div>
     </div>
