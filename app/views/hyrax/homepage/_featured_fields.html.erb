@@ -3,10 +3,9 @@
   <%= truncate(featured.title.first, length: 128, separator: ' ') %>
 </h3>
 <div>
-  <span class="sr-only">File type</span>
-  <%= link_to_facet_list(featured.resource_type, 'resource_type', '') %>
+  <%= featured.description.first %>
 </div>
 <div>
-  <span class="sr-only">Keywords</span>
-  <%= link_to_facet_list(featured.keyword, 'keyword', '') %>
+    <span class="sr-only">Date Created</span>
+    <%= featured.date_created.first %>
 </div>
