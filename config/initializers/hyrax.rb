@@ -260,6 +260,15 @@ Qa::Authorities::Geonames.username = 'UCSC_Library_DI'
 
 Rails.application.config.to_prepare do
 
+  Hyrax::ContactForm.class_eval do
+    def self.issue_types_for_locale
+      [
+        "Reporting a Problem",
+        "General Inquiry or Request"
+      ]
+    end
+  end
+
   # never display the "share your work" button on the homepage
   Hyrax::HomepagePresenter.class_eval do
     def display_share_button?
