@@ -1,3 +1,4 @@
+require 'scooby_snacks/blacklight_configuration'
 class CatalogController < ApplicationController
   include Hydra::Catalog
   include Hydra::Controller::ControllerBehavior  
@@ -19,6 +20,8 @@ class CatalogController < ApplicationController
   end
 
   configure_blacklight do |config|
+
+    include ScoobySnacks::CatalogControllerBehavior
 
     config.oai = {
       provider: {
@@ -67,9 +70,6 @@ class CatalogController < ApplicationController
     config.index.thumbnail_field = 'thumbnail_path_ss'
 
 
-    include ScoobySnacks::CatalogControllerBehavior
-
-
     # solr fields that will be treated as facets by the blacklight application
     #   The ordering of the field names is the order of the display
 #    config.add_facet_field solr_name("human_readable_type", :facetable), label: "Type", limit: 5
@@ -91,9 +91,10 @@ class CatalogController < ApplicationController
 
     # ----
     # replaced by scoobysnacks
+    # Wait, this isn't working?
     # ------
 
-
+    ScoobySnacks::BlacklightConfiguration.add_index_fields(config)
 
     config.add_index_field solr_name("file_format", :stored_searchable), label: "File Format", link_to_search: solr_name("file_format", :facetable)
     config.add_index_field solr_name("identifier", :stored_searchable), label: "Identifier", helper_method: :index_field_link, field_name: 'identifier'
