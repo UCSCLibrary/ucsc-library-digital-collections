@@ -73,10 +73,18 @@ body {
         }
     }
     
-    .document .metadata {
-        max-height: 185px;
-        overflow-y: auto;
-        overflow-x: hidden;
+    li.document {
+        h2 {
+            clear:left;
+        }
+        div.list-thumbnail {
+            margin-bottom: 20px;
+        }
+        .metadata {
+            max-height: 185px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
     }
 
     footer {
