@@ -72,17 +72,25 @@ body {
             color:$ucsc-gold;
         }
     }
-
-    footer div.container-fluid {
-        background-color:$ucsc-footer-back;
-        div.navbar-text {
-            color:$ucsc-footer-color;
-            a.navbar-link {
-                color: darken($ucsc-footer-color,20%);
-            }
-        }
+    
+    .document .metadata {
+        max-height: 185px;
+        overflow-y: auto;
+        overflow-x: hidden;
     }
 
+    footer {
+        margin-top:20px;
+        div.container-fluid {
+            background-color:$ucsc-footer-back;
+            div.navbar-text {
+                color:$ucsc-footer-color;
+                a.navbar-link {
+                    color: darken($ucsc-footer-color,20%);
+                }
+            }            
+        }
+    }
 }
 
 nav#masthead {
