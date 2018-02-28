@@ -1,0 +1,9 @@
+<div class="permalink">
+    <div class="permalink-heading">
+        Permanent Link:
+    </div>
+    <p>
+        <% url = request.protocol + request.host + "/records/" + presenter.id %>
+        <%= link_to(url,url) %>
+    </p>
+</div>
