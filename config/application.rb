@@ -14,6 +14,7 @@ module UcscHyrax
     end
 
     config.autoload_paths += %W(#{config.root}/app/presenters)
+    config.autoload_paths += %W(#{config.root}/lib)
 
     config.tinymce.install = :copy
 

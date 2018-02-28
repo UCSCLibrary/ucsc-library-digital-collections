@@ -1,4 +1,3 @@
-require 'ucsc/breadcrumbs_for_works'
 module Hyrax
   class LecturesController < ApplicationController
     # Adds Hyrax behaviors to the controller.
