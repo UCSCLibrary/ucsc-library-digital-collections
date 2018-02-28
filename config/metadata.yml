@@ -514,8 +514,18 @@ work_types:
       collectionCallNumber:
       donorProvenance:
   lecture:
+      title:
+      description:
+      dateCreated:
   course:
+      title:
+      description:
+      dateCreated:
   gdao_work:
+      title:
+      description:
+      dateCreated:
+
 
 #-------------------
 # RDF Namespaces
