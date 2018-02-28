@@ -9,4 +9,11 @@ class CourseShowPresenter < Hyrax::WorkShowPresenter
     CourseMemberPresenterFactory.new(solr_document, current_ability, request)
   end
 
+  def language
+    lang = solr_document.language unless solr_document.language.empty?
+    lang = "English" if lang == "eng"
+    return lang
+  end
+
+
 end

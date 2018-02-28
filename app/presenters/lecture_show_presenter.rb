@@ -13,8 +13,10 @@ class LectureShowPresenter < Hyrax::WorkShowPresenter
   end
 
   def language
-    return solr_document.language unless solr_document.language.empty?
-    parent_course.language unless parent_course.nil?
+    lang = parent_course.language unless parent_course.nil?
+    lang = solr_document.language unless solr_document.language.empty?
+    lang = "English" if lang == "eng"
+    return lang
   end
 
   def physical_format
