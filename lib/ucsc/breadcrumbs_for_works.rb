@@ -13,7 +13,7 @@ module Ucsc
       end
 
       unless (crs = presenter.solr_document.parent_course).nil?
-        add_breadcrumb col.title, "/records/#{crs_id}"
+        add_breadcrumb crs.title, "/records/#{crs.id}"
         hide_breadcrumbs = false;
       end
 
