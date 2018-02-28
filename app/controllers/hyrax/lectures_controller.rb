@@ -1,11 +1,11 @@
-# Generated via
-#  `rails generate hyrax:work Lecture`
-
+require 'ucsc/breadcrumbs_for_works'
 module Hyrax
   class LecturesController < ApplicationController
     # Adds Hyrax behaviors to the controller.
     include Hyrax::WorksControllerBehavior
     include Hyrax::BreadcrumbsForWorks
+    include Ucsc::BreadcrumbsForWorks
+
     self.curation_concern_type = ::Lecture
     self.show_presenter = LectureShowPresenter
   end
