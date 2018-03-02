@@ -36,6 +36,22 @@ body {
         }
     }
 
+    .mejs__playlist-selected, .mejs-playlist-selected {
+        background-color: #FECB45;
+    }
+
+    .mejs__playlist-selector-list-item, .mejs-playlist-selector-list-item {
+        background-color: #ddd;
+    }
+
+    .mejs__playlist-selector-list, .mejs-playlist-selector-list {
+        color: black;
+        border: 1px solid #7A7A7A;
+    }
+
+    
+
+
     img.primary-media {
         max-width: 100%
     }
