@@ -1,5 +1,5 @@
 
-<button id="playlist-toggle" style="display:none; background:transparent; border:none;color:lightgray; right:0px;top:0px;margin-right:10px;width:35px;position:absolute;" class="mejs__button" onclick="jQuery('.hls_media').toggleClass('playlist_hidden')">▲▼</button>
+<button id="playlist-toggle" style="display:none; background:transparent; border:none;color:lightgray; right:0px;top:0px;margin-right:10px;width:35px;position:absolute;" class="mejs__button" onclick="jQuery('.hls_media').toggleClass('playlist_hidden').toggleClass('playlist_shown')">▲▼</button>
 
 <script>
  $( window ).load(function(){
@@ -10,7 +10,7 @@
 </script>
 
 <audio controls="controls"
-       class="hls_media mejs__player playlist_hidden"
+       class="hls_media mejs__player playlist_shown"
        preload="auto"
        data-mejsoptions='{"pluginPath": "/mejs/",
                          "alwaysShowControls": "true",
