@@ -18,6 +18,10 @@ body {
         padding-left:0px;
     }
 
+    #documents .document {
+        max-width: 34%;
+    }
+
     .input-group {
         select.vocab_select.form-control{
             margin-right: 5px;
@@ -83,7 +87,28 @@ body {
             color:$ucsc-gold;
         }
     }
-    
+  
+    div.form-group.multi_controlled_vocabulary {
+        ul {
+            padding-left: 5px;
+            li {
+                width: 100%;
+                label {
+                    font-weight: 400;
+                }
+                div.auth-select-div {
+                    padding-right: 10px;
+                    max-width: 40%;
+                    line-height: 0;
+                    float: left;
+                }
+                input.multi_controlled_vocabulary {
+                    width: 60%;
+                }
+            }
+        }
+    }
+  
     li.document {
         h2 {
             clear:left;

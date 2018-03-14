@@ -38,6 +38,10 @@ class CatalogController < ApplicationController
     }
 
     config.view.gallery.partials = [:index_header, :index]
+    config.view.gallery.default = true
+#    config.gallery.title_only_by_default = true
+
+    config.view.list.default = false
     config.view.masonry.partials = [:index]
     config.view.slideshow.partials = [:index]
 
@@ -53,9 +57,6 @@ class CatalogController < ApplicationController
 
     config.search_builder_class = Hyrax::CatalogSearchBuilder
 
-    # Show gallery view
-    config.view.gallery.partials = [:index_header, :index]
-    config.view.slideshow.partials = [:index]
 
     ## Default parameters to send to solr for all search-like requests. See also SolrHelper#solr_search_params
     config.default_solr_params = {
@@ -96,10 +97,10 @@ class CatalogController < ApplicationController
 
     ScoobySnacks::BlacklightConfiguration.add_index_fields(config)
 
-    config.add_index_field solr_name("file_format", :stored_searchable), label: "File Format", link_to_search: solr_name("file_format", :facetable)
-    config.add_index_field solr_name("identifier", :stored_searchable), label: "Identifier", helper_method: :index_field_link, field_name: 'identifier'
-    config.add_index_field solr_name("embargo_release_date", :stored_sortable, type: :date), label: "Embargo release date", helper_method: :human_readable_date
-    config.add_index_field solr_name("lease_expiration_date", :stored_sortable, type: :date), label: "Lease expiration date", helper_method: :human_readable_date
+#    config.add_index_field solr_name("file_format", :stored_searchable), label: "File Format", link_to_search: solr_name("file_format", :facetable)
+#    config.add_index_field solr_name("identifier", :stored_searchable), label: "Identifier", helper_method: :index_field_link, field_name: 'identifier'
+#    config.add_index_field solr_name("embargo_release_date", :stored_sortable, type: :date), label: "Embargo release date", helper_method: :human_readable_date
+#    config.add_index_field solr_name("lease_expiration_date", :stored_sortable, type: :date), label: "Lease expiration date", helper_method: :human_readable_date
 
 
     # solr fields to be displayed in the show (single result) view

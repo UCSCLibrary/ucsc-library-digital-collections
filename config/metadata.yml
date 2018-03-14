@@ -96,7 +96,7 @@ properties:
     facet: true
     index_itemprop: creator
     search_field: true
-    input: autosuggest
+    input: multi_controlled_vocabulary
     core: true
     OAI: DC:creator
 
@@ -150,7 +150,7 @@ properties:
     facet: true
     input: dropdown
 #    multiple: false
-    search_result_display: true
+#    search_result_display: true
   
   rightsStatement:
     definition: Information about rights held in and over the resource expressed in general terms (i.e. boilerplate statements).
@@ -218,7 +218,7 @@ properties:
     facet: true
     input: autosuggest
     core: true
-    search_result_display: true
+#    search_result_display: true
   
   subjectPlace:
     definition: Spatial characteristics of the resource.
@@ -237,7 +237,7 @@ properties:
     input: autosuggest
     core: true
     OAI: DC:subject
-    search_result_display: true
+#    search_result_display: true
   
   subjectTemporal:
     definition: Temporal characteristics of the resource.
@@ -254,7 +254,7 @@ properties:
     input: autosuggest
     core: true
     OAI: DC:subject
-    search_result_display: true
+#    search_result_display: true
   
   subjectTopic:
     definition: The topic of the resource.
@@ -272,7 +272,7 @@ properties:
     input: autosuggest
     core: true
     OAI: DC:subject
-    search_result_display: true
+#    search_result_display: true
   
   dateCreated:
     definition: Date of creation of the original resource.
@@ -322,7 +322,7 @@ properties:
     index_helper_method: "iconify_auto_link"
     search_field: true
     OAI: dc:description
-    search_result_display: true
+#    search_result_display: true
   
   physicalFormat:
     definition: The form, and/or physical characteristics of the resource being described. The material or physical carrier of the resource. Does not capture aboutness.
@@ -346,7 +346,7 @@ properties:
     facet: true
     index_itemprop: keywords
     search_field: true
-    search_result_display: true
+#    search_result_display: true
   
   language:
     definition: A language of the resource.
