@@ -17,13 +17,21 @@ body {
             padding-left: 8px;
             padding-right: 8px;
 
-            .thumbnail .caption {
-                dl.document-metadata.dl-horizontal.dl-invert {
-                    display:none;
-                }
+            .thumbnail {
 
-                .documentHeader .index-document-functions {
-                    display: none;
+                border: none;
+
+                .caption {
+                    
+                    padding: 0;
+
+                    dl.document-metadata.dl-horizontal.dl-invert {
+                        display:none;
+                    }
+
+                    .documentHeader .index-document-functions {
+                        display: none;
+                    }
                 }
             }
         }
