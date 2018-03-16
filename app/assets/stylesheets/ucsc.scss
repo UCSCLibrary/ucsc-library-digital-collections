@@ -10,25 +10,18 @@ body {
 
     div#documents.gallery {
         clear:left;
-        
         .document {
             min-width: 230px;
             -webkit-flex: 1 0 230px;
             padding-left: 8px;
             padding-right: 8px;
-
             .thumbnail {
-
                 border: none;
-
                 .caption {
-                    
                     padding: 0;
-
                     dl.document-metadata.dl-horizontal.dl-invert {
                         display:none;
                     }
-
                     .documentHeader .index-document-functions {
                         display: none;
                     }
