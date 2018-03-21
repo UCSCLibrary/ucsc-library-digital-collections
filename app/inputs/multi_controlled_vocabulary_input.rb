@@ -1,11 +1,11 @@
-class AutosuggestInput < ControlledVocabularyInput
+class MultiControlledVocabularyInput < ControlledVocabularyInput
 #  private
   
-#  def build_field(value, index)
+  def build_field(value, index)
 #    options = input_html_options.dup
 #    authority_picker(options[:data]['authority-select']) + super
-#    "<h1>test</h1>" + super(value, index)
-#  end
+    super(value, index)
+  end
  
 #  def authority_picker(options)
 #    @builder.input(attribute_name.to_s + "_auth_select", 

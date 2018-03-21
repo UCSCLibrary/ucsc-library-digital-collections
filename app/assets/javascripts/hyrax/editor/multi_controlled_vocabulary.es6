@@ -1,10 +1,10 @@
 
-
 import { FieldManager } from 'hydra-editor/field_manager'
-//import Handlebars from 'handlebars'
+import ControlledVocabulary from 'hyrax/editor/controlled_vocabulary'
+import Handlebars from 'handlebars'
 import Autocomplete from 'hyrax/autocomplete'
-import AuthoritySelect from 'hyrax/authority_select'
 
+// export default class MultiControlledVocabulary extends ControlledVocabulary {
 export default class MultiControlledVocabulary extends FieldManager {
 
   constructor(element, paramKey) {
@@ -23,24 +23,37 @@ export default class MultiControlledVocabulary extends FieldManager {
       addHtml:           '<button type=\"button\" class=\"btn btn-link add\"><span class=\"glyphicon glyphicon-plus\"></span><span class="controls-add-text"></span></button>',
       addText:           'Add another',
 
-      removeHtml:        '<button type=\"button\" class=\"btn btn-link remove\"><span class=\"glyphicon glyphicon-remove\"></span><span class="controls-remove-text"></span> <span class=\"sr-only\"> previous <span class="controls-field-name-text">field</span></span></button>',
+      removeHtml:        '<button type=\"button\" class=\"btn btn-link remove\"><span class=\"glyphicon glyphicon-remove\"></span><span class=\"controls-remove-text\"></span> <span class=\"sr-only\"> previous <span class=\"controls-field-name-text\">field</span></span></button>',
       removeText:         'Remove',
 
       labelControls:      true,
     }
-    console.log("options: "+options)
     super(element, options)
     this.paramKey = paramKey
-    this.fieldName = this.element.data('field-name')
+    this.fieldName = this.element.data('fieldName')
     this.searchUrl = this.element.data('autocompleteUrl')
-    this.authorities = this.element.data('authority-select')
+    this.authOptions = this.element.data('authorities')
   }
 
+  // Overrides FieldManager, because field manager uses the wrong selector
+  // addToList( event ) {
+  //         event.preventDefault();
+  //         let $listing = $(event.target).closest('.multi_value').find(this.listClass)
+  //         let $activeField = $listing.children('li').last()
+  //
+  //         if (this.inputIsEmpty($activeField)) {
+  //             this.displayEmptyWarning();
+  //         } else {
+  //             this.clearEmptyWarning();
+  //             $listing.append(this._newField($activeField));
+  //         }
+  //
+  //         this._manageFocus()
+  // }
 
   // Overrides FieldManager in order to avoid doing a clone of the existing field
   createNewField($activeField) {
     let $newField = this._newFieldTemplate()
-    console.log("new field: "+$newField.html())
     this._addBehaviorsToInput($newField)
     this.element.trigger("managed_field:add", $newField);
     return $newField
@@ -48,55 +61,49 @@ export default class MultiControlledVocabulary extends FieldManager {
 
   /* This gives the index for the editor */
   _maxIndex() {
-    return $(this.fieldWrapperClass, this.element).size()
+    return $(this.fieldWrapperClass, this.element).length
   }
 
   // Overridden because we always want to permit adding another row
   inputIsEmpty(activeField) {
-    return false
+    return false 
   }
 
   _newFieldTemplate() {
     let index = this._maxIndex()
-    let rowTemplate = this._template
-    let controls = this.controls.clone()//.append(this.remover)
-    console.log("paramkey: "+this.paramKey)
+    let rowTemplate = this._template()
+    let controls = this.controls.clone().append(this.remover)
     let row =  $(rowTemplate({ "paramKey": this.paramKey,
                                "name": this.fieldName,
                                "index": index,
-                               "class": "multi_controlled_vocabulary",
-                               "authorities": this.authorities}))
+                               "class": "multi_controlled_vocabulary" }))
         .append(controls)
     return row
   }
 
   get _source() {
-    
-//      return "<li class=\"field-wrapper input-group input-append\">" +
-//        "<input class=\"string {{class}} optional form-control {{paramKey}}_{{name}} form-control multi-text-field\" name=\"{{paramKey}}[{{name}}_attributes][{{index}}][hidden_label]\" value=\"\" id=\"{{paramKey}}_{{name}}_attributes_{{index}}_hidden_label\" data-attribute=\"{{name}}\" type=\"text\">" +
-//        "<input name=\"{{paramKey}}[{{name}}_attributes][{{index}}][id]\" value=\"\" id=\"{{paramKey}}_{{name}}_attributes_{{index}}_id\" type=\"hidden\" data-id=\"remote\">" +
-//        "<input name=\"{{paramKey}}[{{name}}_attributes][{{index}}][_destroy]\" id=\"{{paramKey}}_{{name}}_attributes_{{index}}__destroy\" value=\"\" data-destroy=\"true\" type=\"hidden\"></li>"
-    return "<p>test?</p>"
+
+    return "<li class=\"field-wrapper input-group input-append\">" +
+      "<div class=auth-select-div><label>Authority:</label><select class={{paramKey}}_{{name}}_auth_select\">" + this._authSelectOptions() + "</select></div>" + 
+      "<input class=\"string {{class}} optional form-control {{paramKey}}_{{name}} form-control multi-text-field\" name=\"{{paramKey}}[{{name}}_attributes][{{index}}][hidden_label]\" value=\"\" id=\"{{paramKey}}_{{name}}_attributes_{{index}}_hidden_label\" data-attribute=\"{{name}}\" type=\"text\">" +
+      "<input name=\"{{paramKey}}[{{name}}_attributes][{{index}}][id]\" value=\"\" id=\"{{paramKey}}_{{name}}_attributes_{{index}}_id\" type=\"hidden\" data-id=\"remote\">" +
+      "<input name=\"{{paramKey}}[{{name}}_attributes][{{index}}][_destroy]\" id=\"{{paramKey}}_{{name}}_attributes_{{index}}__destroy\" value=\"\" data-destroy=\"true\" type=\"hidden\"></li>"
   }
 
-  _template(args) {
-//    return Handlebars.compile(this._source)
-    var auths = args['authorities']
-    var template = '<li class="field-wrapper input-group input-append">'
-    
-    template += '<select name="'+args['name']+'_authority" id="'+args['name']+'_authority" class="form-control dummy_select optional authority">'
-    for (var i = 0; i< auths.length; i++) {
-      template += '<option value = "'+auths[i][1]+'">'+auths[i][0]+'</option>'
+  _authSelectOptions() {
+    let rv = "";
+    for (var option of this.authOptions){
+      rv = rv + this._authSelectOption(option[0],option[1])
     }
-    template += '<option value="http://loc/etc">loc</option>'
-    template += '</select>'
+    return rv
+  }
 
-    template += '<input class="string '+args['class']+' optional form-control '+args['paramKey']+'_'+args['name']+' form-control multi-text-field" name="'+args['paramKey']+'['+args['name']+'_attributes]['+args['index']+'][hidden_label]" value="" id="'+args['paramKey']+'_'+args['name']+'_attributes_'+args['index']+'_hidden_label" data-attribute="'+args['name']+'" type="text">'
-    template += '<input name="'+args['paramKey']+'['+args['name']+'_attributes]['+args['index']+'][id]" value="" id="'+args['paramKey']+'_'+args['name']+'_attributes_'+args['index']+'_id" type="hidden" data-id="remote">'
-    template += '<input name="'+args['paramKey']+'['+args['name']+'_attributes]['+args['index']+'][_destroy]" id="'+args['paramKey']+'_'+args['name']+'_attributes_'+args['index']+'__destroy" value="" data-destroy="true" type="hidden">'
-    template += '</li>'
+  _authSelectOption(name,value) {
+    return "<option value=\""+value+"\">"+name+"</option>"
+  }
 
-    return template
+  _template() {
+    return Handlebars.compile(this._source)
   }
 
   /**
