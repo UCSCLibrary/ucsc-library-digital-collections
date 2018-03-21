@@ -1,0 +1,12 @@
+development:
+  client_id:3062262425067b4469d7
+  client_secret:e0c953c0018ee5f04e5dc4ff3158301dd65fee1c
+test:
+  client_id:3062262425067b4469d7
+  client_secret:e0c953c0018ee5f04e5dc4ff3158301dd65fee1c
+staging:
+  client_id:0270b82e70b878f9aa82
+  client_secret:b39409cadb130e8e4e90fd6856e124f9be8c99c7
+production:
+  client_id:25953c08f609379d11c0
+  client_secret:b25140ac8c185593593f2afcd12329ff5b84da12
