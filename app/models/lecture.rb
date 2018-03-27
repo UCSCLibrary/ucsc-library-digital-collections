@@ -2,7 +2,7 @@
 #  `rails generate hyrax:work Lecture`
 class Lecture < ActiveFedora::Base
   include ::Hyrax::WorkBehavior
-
+  include ::ScoobySnacks::WorkModelBehavior
   
   self.human_readable_type = 'Lecture'
 
@@ -25,7 +25,6 @@ class Lecture < ActiveFedora::Base
   property :digital_publisher_homepage, predicate: ::RDF::Vocab::DC.publisher do |index|
     index.as :stored_searchable
   end
-
 
   include ::Hyrax::BasicMetadata
 

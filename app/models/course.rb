@@ -2,10 +2,11 @@
 #  `rails generate hyrax:work Course`
 class Course < ActiveFedora::Base
   include ::Hyrax::WorkBehavior
-  # Change this to restrict which works can be added as a child.
+  include ::ScoobySnacks::WorkModelBehavior
   
   self.human_readable_type = 'Course'
 
+  # Change this to restrict which works can be added as a child.
   self.valid_child_concerns = [Lecture,Work]
 
   validates :title, presence: { message: 'Each course must have a title.' }

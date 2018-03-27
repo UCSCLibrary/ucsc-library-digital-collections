@@ -514,14 +514,18 @@ work_types:
       collectionCallNumber:
       donorProvenance:
   lecture:
+    properties:
       title:
       description:
+        primary: true
       dateCreated:
   course:
+    properties:
       title:
       description:
       dateCreated:
   gdao_work:
+    properties:
       title:
       description:
       dateCreated:
