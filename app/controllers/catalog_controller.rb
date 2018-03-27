@@ -33,7 +33,10 @@ class CatalogController < ApplicationController
       },
       document: {
         limit: 25,            # number of records returned with each request, default: 15
-        set_fields: []        # ability to define ListSets, optional, default: nil
+        set_fields: [
+          {label: "Work Type", solr_field: "has_model_ssim"},
+#          {label: "Collection / Series", solr_field: "member_of_collections_ssim"}
+        ]        # ability to define ListSets, optional, default: nil
       }
     }
 
@@ -164,6 +167,8 @@ class CatalogController < ApplicationController
     false
   end
 
-
+  def oai_provider
+    @oai_provider ||= Ucsc::Oai::SolrDocumentProvider.new(self,oai_config)
+  end
 
 end
