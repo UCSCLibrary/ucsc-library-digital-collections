@@ -1,5 +1,6 @@
 class BulkMetadata::IngestsController < ApplicationController
 #  before_action :ensure_admin!
+  before_action :check_github_auth
   layout 'dashboard'
   load_and_authorize_resource
 
@@ -146,4 +147,25 @@ class BulkMetadata::IngestsController < ApplicationController
     def ingest_params
       params.require(:bulk_metadata_ingest).permit(:id,:user_id, :name, :file, :work_type, :identifier, :replace_files)
     end
+
+
+    def check_github_auth
+      if (@authenticated_in_github = authenticated_in_github?)
+        @github_username = github_username
+      end
+    end
+
+    def authenticated_in_github?
+      session["github_access_token"]
+    end
+
+    def github_username
+      return nil unless (access_token = authenticated_in_github?)
+      
+    end
+
+    def github
+      Github.new client_id: GITHUB_CLIENT_ID, client_secret: GITHUB_CLIENT_SECRET
+    end
+
 end
