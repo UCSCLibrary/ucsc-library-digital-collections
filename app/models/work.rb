@@ -29,7 +29,9 @@ class Work < ActiveFedora::Base
       end
       self.send(property.to_s+"_attributes=",attributes) unless attributes.empty?
     end
-    super
+    self.last_reconciled = DateTime.current
+    rv = super
+    return rv
   end
 
   def fix_loc_id loc_id

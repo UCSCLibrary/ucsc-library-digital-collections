@@ -13,16 +13,18 @@ module Ucsc
       object.controlled_properties.each do |property|
         solr_doc[label_field(property)] = []
         solr_doc[Solrizer.solr_name(property)] = []
-
-
         # resolve from QA endpoints!
 
         object[property] = Array(object[property]) if !object[property].kind_of?(Array)
         object[property].each do |val|
           case val
           when ActiveTriples::Resource
-            label = get_existing_index(object) unless needs_indexing?(object)
-            label = fetch_remote_label(val) if label.nil?
+            if needs_indexing?(object)
+              label = fetch_remote_label(val)
+            else
+              label = get_existing_index(object) unless needs_indexing?(object)
+            end
+
             solr_doc[label_field(property)] << label
             solr_doc[Solrizer.solr_name(property)] << val.id
           when String

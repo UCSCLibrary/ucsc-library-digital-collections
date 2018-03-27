@@ -1,4 +1,5 @@
 require 'scooby_snacks/blacklight_configuration'
+require 'ucsc/oai/solr_document_provider'
 class CatalogController < ApplicationController
   include Hydra::Catalog
   include Hydra::Controller::ControllerBehavior  

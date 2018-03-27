@@ -1,3 +1,4 @@
+require 'ucsc/oai/solr_document_wrapper'
 module Ucsc
   module Oai
     class SolrDocumentProvider < BlacklightOaiProvider::SolrDocumentProvider
