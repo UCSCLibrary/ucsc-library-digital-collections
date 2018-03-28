@@ -2,6 +2,9 @@ module Ucsc
   class WorkIndexer < Hyrax::WorkIndexer
     #    include Ucsc::IndexesLinkedMetadata
 
+    @@last_buffer_reset = DateTime.now
+    @@linked_data_buffer = {}
+
     def generate_solr_document
       super.tap do |solr_doc|
         solr_doc = index_controlled_fields(solr_doc)
@@ -10,59 +13,90 @@ module Ucsc
 
     def index_controlled_fields(solr_doc)
       return unless object.persisted?
+
       object.controlled_properties.each do |property|
+        # Move on if the property does not need to be reconciled (saves time)
+        next unless needs_reconciliation?(object,solr_doc, property)
+
+        # Clear old values from the solr document
         solr_doc[label_field(property)] = []
         solr_doc[Solrizer.solr_name(property)] = []
-        # resolve from QA endpoints!
 
+        # Wrap single objects in arrays if necessary (though it shouldn't be)
         object[property] = Array(object[property]) if !object[property].kind_of?(Array)
+
+        # Loop through the different values provided for this property
         object[property].each do |val|
           case val
           when ActiveTriples::Resource
-            if needs_indexing?(object)
-              label = fetch_remote_label(val)
-            else
-              label = get_existing_index(object) unless needs_indexing?(object)
-            end
-
-            solr_doc[label_field(property)] << label
+            # We need to fetch the string from an external vocabulary
+            solr_doc[label_field(property)] << fetch_remote_label(val)
             solr_doc[Solrizer.solr_name(property)] << val.id
           when String
-            solr_doc[label_field(property)] = val
+            # This is just a normal string (from a legacy model, etc)
+            # Set the label index to the string for now
+            # In the future, we will create a new entry in 
+            # the appropriate local vocab
+            solr_doc[label_field(property)] << val
+            solr_doc[Solrizer.solr_name(property)] << val
           else
             raise ArgumentError, "Can't handle #{val.class}"
           end
         end
-
       end
       solr_doc
     end
 
-    def needs_indexing?(obj)
-      return true if obj.last_reconciled.nil? or obj.date_modified.nil?
-      return true if obj.last_reconciled < 6.months.ago
-#      return true if obj.last_reconciled < 2.hours.ago
-      return true if obj.last_reconciled < obj.date_modified
-    end
+    def needs_reconciliation?(obj, solr_doc, property)
+      #first, reconcile if the object is brand new
+      return true if obj.date_modified.nil?
 
-    def get_existing_index(obj,property)
-      query = ActiveFedora::SolrQueryBuilder.construct_query_for_ids([obj.id])
-      solr_response = ActiveFedora::SolrService.get(query)
-      sd = SolrDocument.new(solr_response['response']['docs'].first, solr_response)
-      label = sd[label_field(property)]
-    end
+      old_solr_doc = SolrDocument.find(obj.id)
+      new_solr_doc = SolrDocument.new(solr_doc)
+      last_reconciled = old_solr_doc.last_reconciled
+      
+      # Index if it was never reconciled or is newly created
+      return true if last_reconciled.blank?
 
+      # Index if it was last reconciled more than 6 months ago
+      return true if last_reconciled < 6.months.ago
+
+      # Do not reconcile if the property is unchanged
+      return false if old_solr_doc.send(property).sort == new_solr_doc.send.property.sort
+
+      # Do not reconcile if the property is unchanged and a string
+      return false if old_solr_doc.send(property+"_label").sort == new_solr_doc.send(property).sort
+
+      # Otherwise, go ahead and index
+      return true
+    end
 
     def fetch_remote_label(resource)
+      # Reset buffer if it is old
+      @@linked_data_buffer = {} if DateTime.now - @@last_reset_buffer > 6.months
+
+      # Return key from buffer if it exists already
+      if @@linked_data_buffer.key?(resource.id)
+        return @@linked_data_buffer[resource.id]
+
       Rails.logger.info "Fetching #{resource.rdf_subject} from the authorative source. (this is slow)"
+      # Check if it's a local resource
       if resource.id.include? "ucsc.edu" 
+        # Swap in 'localhost' to reconcile from staging, dev, etc
         url = resource.id.gsub("digital-collections.library.ucsc.edu","localhost")
         Rails.logger.debug("Fetching label from QA url: #{url}")
         label = JSON.parse(Net::HTTP.get_response(URI.parse(url)).body)["term"]
       else
+        # Fetch the resource from its url
         resource.fetch(headers: { 'Accept'.freeze => default_accept_header })
-        return resource.rdf_label.first.to_s
+        label = resource.rdf_label.first.to_s
       end
+      
+      # Trim the first entry from the buffer if it is getting large
+      @@linked_data_buffer.except!(@@linked_data_buffer.keys.first) if @@linked_data_buffer.size > 2000
+      # Add this to the buffer 
+      @@linked_data_buffer[resource.id] = label
+      return label
     rescue Exception => e
       # IOError could result from a 500 error on the remote server
       # SocketError results if there is no server to connect to

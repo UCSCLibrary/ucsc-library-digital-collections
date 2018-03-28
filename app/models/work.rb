@@ -4,7 +4,7 @@ class Work < ActiveFedora::Base
   include ::Hyrax::WorkBehavior
 #  include ::Hyrax::BasicMetadata
 
-  # Special hidden property to store the last indexed date
+  # Special hidden properties to store the last indexed dates
   property :last_reconciled, predicate: ::RDF::Vocab::XHTML.index, multiple: false
 
   include ::ScoobySnacks::WorkModelBehavior
@@ -29,9 +29,7 @@ class Work < ActiveFedora::Base
       end
       self.send(property.to_s+"_attributes=",attributes) unless attributes.empty?
     end
-    self.last_reconciled = DateTime.current
-    rv = super
-    return rv
+    super
   end
 
   def fix_loc_id loc_id

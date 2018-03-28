@@ -516,13 +516,24 @@ work_types:
   lecture:
     properties:
       title:
+        inherit: prepend
       description:
         primary: true
+      creator:
+      license:
+        inherit: true
+      keyword:
+        inherit: true
       dateCreated:
   course:
     properties:
       title:
       description:
+        primary: true
+      creator:
+        primary: true
+      license:
+      keyword:
       dateCreated:
   gdao_work:
     properties:

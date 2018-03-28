@@ -3,6 +3,7 @@
 class Lecture < ActiveFedora::Base
   include ::Hyrax::WorkBehavior
   include ::ScoobySnacks::WorkModelBehavior
+  self.indexer = Ucsc::WorkIndexer
   
   self.human_readable_type = 'Lecture'
 
@@ -26,6 +27,6 @@ class Lecture < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  include ::Hyrax::BasicMetadata
+#  include ::Hyrax::BasicMetadata
 
 end
