@@ -76,9 +76,8 @@ module Ucsc
       @@linked_data_buffer = {} if DateTime.now - @@last_reset_buffer > 6.months
 
       # Return key from buffer if it exists already
-      if @@linked_data_buffer.key?(resource.id)
-        return @@linked_data_buffer[resource.id]
-
+      return @@linked_data_buffer[resource.id] if @@linked_data_buffer.key?(resource.id)
+        
       Rails.logger.info "Fetching #{resource.rdf_subject} from the authorative source. (this is slow)"
       # Check if it's a local resource
       if resource.id.include? "ucsc.edu" 
