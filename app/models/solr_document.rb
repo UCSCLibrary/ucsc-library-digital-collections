@@ -11,8 +11,8 @@ class SolrDocument
   # Adds ScoobySnacks metadata attribute definitions
   include ScoobySnacks::SolrBehavior
 
+  # add collection membership in OAI-PMH feed
   add_field_semantics('isPartOf','member_of_collections_ssim')
-#  add_field_semantics('subject', Solrizer.solr_name('subject'))
 
   # self.unique_key = 'id'
 
