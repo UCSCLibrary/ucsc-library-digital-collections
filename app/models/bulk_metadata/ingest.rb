@@ -9,9 +9,6 @@ class BulkMetadata::Ingest < ApplicationRecord
   require 'csv'   
 
   def self.create_new(params)
-
-#    raise NameError, "What the hell is a subject.lc?!?", caller
-
     instance = self.new(params.except(:file));
     instance.status = "unparsed"
     # default to a work type called "Work"
