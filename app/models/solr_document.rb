@@ -11,6 +11,9 @@ class SolrDocument
   # Adds ScoobySnacks metadata attribute definitions
   include ScoobySnacks::SolrBehavior
 
+  field_semantics.merge!('isPartOf' => 'member_of_collections_ssim')
+  field_semantics['subject'] = Solrizer.solr_name('subject')
+
   # self.unique_key = 'id'
 
   # Email uses the semantic field mappings below to generate the body of an email.
