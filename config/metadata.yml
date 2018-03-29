@@ -149,8 +149,10 @@ properties:
       subauthority: dcmi_types
     facet: true
     input: dropdown
+    OAI: DC:type
 #    multiple: false
 #    search_result_display: true
+   
   
   rightsStatement:
     definition: Information about rights held in and over the resource expressed in general terms (i.e. boilerplate statements).
@@ -218,6 +220,7 @@ properties:
     facet: true
     input: autosuggest
     core: true
+    OAI: DC:subject
 #    search_result_display: true
   
   subjectPlace:
@@ -408,6 +411,7 @@ properties:
     predicate: schema:identifier
     core: true
     display_area: brief
+    OAI: DC:identifier
 
   donorProvenance:
     definition: "A statement of any changes in ownership and custody of the resource since its creation that are significant for its authenticity, integrity, and interpretation."
