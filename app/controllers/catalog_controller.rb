@@ -35,8 +35,8 @@ class CatalogController < ApplicationController
       document: {
         limit: 25,            # number of records returned with each request, default: 15
         set_fields: [
-          {label: "Work Type", solr_field: "has_model_ssim"},
-#          {label: "Collection / Series", solr_field: "member_of_collections_ssim"}
+#          {label: "Work Type", solr_field: "has_model_ssim"},
+          {label: "Collection", solr_field: "member_of_collections_ssim"}
         ]        # ability to define ListSets, optional, default: nil
       }
     }
