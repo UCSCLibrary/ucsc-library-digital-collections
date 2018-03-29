@@ -11,8 +11,8 @@ class SolrDocument
   # Adds ScoobySnacks metadata attribute definitions
   include ScoobySnacks::SolrBehavior
 
-  field_semantics.merge!('isPartOf' => 'member_of_collections_ssim')
-  field_semantics['subject'] = Solrizer.solr_name('subject')
+  add_field_semantics('isPartOf','member_of_collections_ssim')
+#  add_field_semantics('subject', Solrizer.solr_name('subject'))
 
   # self.unique_key = 'id'
 
@@ -73,5 +73,7 @@ class SolrDocument
     return nil if response.nil?
     @parent_work_solr_document = SolrDocument.new(response)
   end
+
+
 
 end
