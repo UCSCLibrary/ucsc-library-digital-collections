@@ -43,7 +43,7 @@ module Ucsc
           )
         end
         query.append_filter_query(@set.from_spec(options[:set])) if options[:set].present?
-        query = query.merge(fq:"has_model_ssim:(Work OR Course)")
+        query = query.merge(fq:"has_model_ssim:Work")
         query
       end
 
