@@ -2,8 +2,18 @@ module Ucsc
   class WorkIndexer < Hyrax::WorkIndexer
     #    include Ucsc::IndexesLinkedMetadata
 
-    @@last_buffer_reset = DateTime.now
-    @@linked_data_buffer = {}
+    class << self
+      attr_accessor :last_buffer_reset
+      attr_accessor :ld_buffer
+    end
+    @last_buffer_reset = DateTime.now
+    @ld_buffer = {}
+
+    def initialize(args=nil)
+      self.class.last_buffer_reset = DateTime.now
+      self.class.ld_buffer = {}
+      super args
+    end
 
     def generate_solr_document
       super.tap do |solr_doc|
@@ -51,7 +61,12 @@ module Ucsc
       #first, reconcile if the object is brand new
       return true if obj.date_modified.nil?
 
-      old_solr_doc = SolrDocument.find(obj.id)
+      begin
+        old_solr_doc = SolrDocument.find(obj.id)
+      rescue Blacklight::Exceptions::RecordNotFound => e
+        return true
+      end
+
       new_solr_doc = SolrDocument.new(solr_doc)
       last_reconciled = old_solr_doc.last_reconciled
       
@@ -72,11 +87,12 @@ module Ucsc
     end
 
     def fetch_remote_label(resource)
+
       # Reset buffer if it is old
-      @@linked_data_buffer = {} if DateTime.now - @@last_reset_buffer > 6.months
+      self.class.ld_buffer = {} if DateTime.now - self.class.last_buffer_reset > 6.months
 
       # Return key from buffer if it exists already
-      return @@linked_data_buffer[resource.id] if @@linked_data_buffer.key?(resource.id)
+      return self.class.ld_buffer[resource.id] if self.class.ld_buffer.key?(resource.id)
         
       Rails.logger.info "Fetching #{resource.rdf_subject} from the authorative source. (this is slow)"
       # Check if it's a local resource
@@ -92,9 +108,9 @@ module Ucsc
       end
       
       # Trim the first entry from the buffer if it is getting large
-      @@linked_data_buffer.except!(@@linked_data_buffer.keys.first) if @@linked_data_buffer.size > 2000
+      self.class.ld_buffer.except!(self.class.ld_buffer.keys.first) if self.class.ld_buffer.size > 2000
       # Add this to the buffer 
-      @@linked_data_buffer[resource.id] = label
+      self.class.ld_buffer[resource.id] = label
       return label
     rescue Exception => e
       # IOError could result from a 500 error on the remote server

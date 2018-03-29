@@ -4,9 +4,6 @@ class Work < ActiveFedora::Base
   include ::Hyrax::WorkBehavior
 #  include ::Hyrax::BasicMetadata
 
-  # Special hidden properties to store the last indexed dates
-  property :last_reconciled, predicate: ::RDF::Vocab::XHTML.index, multiple: false
-
   include ::ScoobySnacks::WorkModelBehavior
   self.indexer = Ucsc::WorkIndexer
   # Change this to restrict which works can be added as a child.
