@@ -18,7 +18,16 @@ module Ucsc
     def generate_solr_document
       super.tap do |solr_doc|
         solr_doc = index_controlled_fields(solr_doc)
+        solr_doc = merge_subjects(solr_doc)
       end
+    end
+
+    def merge_subjects(solr_doc)
+      subject_fields = ["subjectTopic","subjectName","subjectTemporal","subjectPlace"]
+      subjects = []
+      subject_fields.each{ |subject_field| subjects.concat(solr_doc[Solrizer.solr_name(subject_field)]) }
+      solr_doc[Solrizer.solr_name('subject')] = subjects
+      solr_doc
     end
 
     def index_controlled_fields(solr_doc)
