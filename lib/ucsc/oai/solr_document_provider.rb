@@ -3,6 +3,8 @@ module Ucsc
   module Oai
     class SolrDocumentProvider < BlacklightOaiProvider::SolrDocumentProvider
 
+      SolrDocumentProvider.register_format(Ucsc::Oai::Metadata::Dpla.instance)
+
       def initialize(controller, options = {})
         super(controller, options)
         self.class.model = Ucsc::Oai::SolrDocumentWrapper.new(controller, options[:document])

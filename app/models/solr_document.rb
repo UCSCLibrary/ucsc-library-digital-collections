@@ -1,3 +1,4 @@
+require 'socket'
 # frozen_string_literal: true
 class SolrDocument
   include Blacklight::Solr::Document
@@ -28,10 +29,24 @@ class SolrDocument
   # and Blacklight::Document::SemanticFields#to_semantic_values
   # Recommendation: Use field names from Dublin Core
   use_extension(Blacklight::Document::DublinCore)
+  use_extension(Ucsc::Blacklight::Dpla)
 
   # Do content negotiation for AF models. 
 
   use_extension( Hydra::ContentNegotiation )
+
+
+  def permalink(record = self)
+    "#{root_url}/records/#{record.id}"
+  end
+
+  def display_image_url(record = self)
+    root_url + record.thumbnail_path.gsub("thumbnail","large")
+  end
+
+  def root_url
+    "https://"+Socket.gethostname
+  end
 
   def member_ids
     fetch('member_ids_ssim', [])

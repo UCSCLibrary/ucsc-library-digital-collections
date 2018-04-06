@@ -30,7 +30,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     The 'compession' part of 'identify'
     The optional attributes of 'resumptionToken'
     The optional 'setDescription' container of 'set'
-  All the links just link to oai_dc versions of records.
+  All the links just link to oai_dpla versions of records.
 -->
 <xsl:stylesheet
     version="1.0"
@@ -163,10 +163,10 @@ p.intro {
 <xsl:template name="quicklinks">
     <ul class="quicklinks">
       <li><a href="?verb=Identify">Identify</a> | </li>
-      <li><a href="?verb=ListRecords&amp;metadataPrefix=oai_dc">ListRecords</a> | </li>
+      <li><a href="?verb=ListRecords&amp;metadataPrefix=oai_dpla">ListRecords</a> | </li>
       <li><a href="?verb=ListSets">ListSets</a> | </li>
       <li><a href="?verb=ListMetadataFormats">ListMetadataFormats</a> | </li>
-      <li><a href="?verb=ListIdentifiers&amp;metadataPrefix=oai_dc">ListIdentifiers</a></li>
+      <li><a href="?verb=ListIdentifiers&amp;metadataPrefix=oai_dpla">ListIdentifiers</a></li>
     </ul>
 </xsl:template>
 
@@ -479,6 +479,7 @@ p.intro {
     <tr><td class="key">OAI Identifier</td>
     <td class="value">
       <xsl:value-of select="oai:identifier"/>
+      <xsl:text> </xsl:text><a class="link" href="?verb=GetRecord&amp;metadataPrefix=oai_dpla&amp;identifier={oai:identifier}">oai_dpla</a>
       <xsl:text> </xsl:text><a class="link" href="?verb=GetRecord&amp;metadataPrefix=oai_dc&amp;identifier={oai:identifier}">oai_dc</a>
       <xsl:text> </xsl:text><a class="link" href="?verb=ListMetadataFormats&amp;identifier={oai:identifier}">formats</a>
     </td></tr>
@@ -486,16 +487,6 @@ p.intro {
     <tr><td class="key">Object Type</td>
     <td class="value">
       <xsl:value-of select="oai:type"/>
-    </td></tr>
-
-    <tr><td class="key">Display URL</td>
-    <td class="value">
-      <xsl:value-of select="oai:isShownAt"/>
-    </td></tr>
-
-    <tr><td class="key">Representative File URL</td>
-    <td class="value">
-      <xsl:value-of select="oai:object"/>
     </td></tr>
 
     <tr><td class="key">Datestamp</td>
@@ -528,8 +519,8 @@ p.intro {
 <xsl:template match="oai:setSpec">
   <tr><td class="key">setSpec</td>
   <td class="value"><xsl:value-of select="."/>
-    <xsl:text> </xsl:text><a class="link" href="?verb=ListIdentifiers&amp;metadataPrefix=oai_dc&amp;set={.}">Identifiers</a>
-    <xsl:text> </xsl:text><a class="link" href="?verb=ListRecords&amp;metadataPrefix=oai_dc&amp;set={.}">Records</a>
+    <xsl:text> </xsl:text><a class="link" href="?verb=ListIdentifiers&amp;metadataPrefix=oai_dpla&amp;set={.}">Identifiers</a>
+    <xsl:text> </xsl:text><a class="link" href="?verb=ListRecords&amp;metadataPrefix=oai_dpla&amp;set={.}">Records</a>
   </td></tr>
 </xsl:template>
 
@@ -569,6 +560,17 @@ p.intro {
   <div class="dcdata">
     <h3>Dublin Core Metadata (oai_dc)</h3>
     <table class="dcdata">
+      <xsl:apply-templates select="*" />
+    </table>
+  </div>
+</xsl:template>
+
+<!-- oai_dpla record -->
+
+<xsl:template match="oai_dpla:dpla"  xmlns:oai_dpla="https://digitalcollections.library.ucsc.edu/oai_dpla/" >
+  <div class="dpladata">
+    <h3>DPLA Metadata (oai_dpla)</h3>
+    <table class="dpladata">
       <xsl:apply-templates select="*" />
     </table>
   </div>
@@ -635,6 +637,12 @@ p.intro {
 
 <xsl:template match="dc:rights" xmlns:dc="http://purl.org/dc/elements/1.1/">
 <tr><td class="key">Rights Management</td><td class="value"><xsl:value-of select="."/></td></tr></xsl:template>
+
+<xsl:template match="edm:object" xmlns:edm="http://www.europeana.eu/schemas/edm/">
+<tr><td class="key">Representative Image URL</td><td class="value"><xsl:value-of select="."/></td></tr></xsl:template>
+
+<xsl:template match="edm:isShownAt" xmlns:edm="http://www.europeana.eu/schemas/edm/">
+<tr><td class="key">Display URL</td><td class="value"><xsl:value-of select="."/></td></tr></xsl:template>
 
 <!-- XML Pretty Maker -->
 
