@@ -2,16 +2,7 @@ module Ucsc
   class WorkShowPresenter < Hyrax::WorkShowPresenter
     include ScoobySnacks::PresenterBehavior
 
-    #Todo: add code to optionally overwrite attributes 
-    # with parent work's info for some fields
-    # for example:
-    #   def creator
-    #    return solr_document.creator unless solr_document.creator.nil?
-    #    parent_work.creator unless parent_work.nil?
-    #  end
-
-
-    delegate :file_set_ids, :display_image_url, to: :solr_document
+    delegate :file_set_ids, :display_image_url,:display_image_path, to: :solr_document
 
     delegate :member_av_files, :ordered_work_ids, to: :member_presenter_factory
 
