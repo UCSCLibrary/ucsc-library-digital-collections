@@ -35,13 +35,20 @@ class SolrDocument
 
   use_extension( Hydra::ContentNegotiation )
 
+  def subject_label
+    subjectTopic_label.merge(subjectTemporal_label).merge(subjectPlace_label).merge(subjectName_label)
+  end
 
   def permalink(record = self)
     "#{root_url}/records/#{record.id}"
   end
 
+  def display_image_path(record = self)
+    record.thumbnail_path.gsub("thumbnail","large")
+  end
+
   def display_image_url(record = self)
-    root_url + record.thumbnail_path.gsub("thumbnail","large")
+    root_url + display_record_path(record)
   end
 
   def root_url
