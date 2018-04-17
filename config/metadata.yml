@@ -43,7 +43,7 @@ properties:
     search_field: false
     sort_field: false
     input_as: text
-    search_result_display: false
+    search_result_display: true
 #    class_name: Ucsc::ControlledResource
 
   title:
