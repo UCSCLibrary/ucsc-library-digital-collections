@@ -67,12 +67,17 @@ module Ucsc
     end
 
     def needs_reconciliation?(obj, solr_doc, property)
-      #first, reconcile if the object is brand new
-      return true if obj.date_modified.nil?
+      puts "-----------------------------"
+      puts "---OBJECT ID: #{obj.id} ---------------_!!!!!!!!!!!!!!!!!!!!!!!!!!"
+      puts "-----------------------------"
 
+      #first, definitely reconcile if the object is brand new
+      return true if obj.id.nil?
+
+      # Next, reconcile if we can't find the solr document for any reason
       begin
         old_solr_doc = SolrDocument.find(obj.id)
-      rescue Blacklight::Exceptions::RecordNotFound => e
+      rescue RuntimeError => e
         return true
       end
 
