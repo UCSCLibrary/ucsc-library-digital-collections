@@ -42,6 +42,7 @@ properties:
     index_as: stored_searchable
     search_field: false
     sort_field: false
+    index_field: false
     input_as: text
     search_result_display: true
 #    class_name: Ucsc::ControlledResource
@@ -59,6 +60,7 @@ properties:
     work_title: tre
     index_itemprop: name
     index_if: false
+    index_field: true
     search_field: true
     OAI: DC:title
 
@@ -316,6 +318,7 @@ properties:
     definition: An account of the resource.
     label: Description
     predicate: DC:description
+    index_field: true
     index_itemprop: "description"
     index_helper_method: "iconify_auto_link"
     search_field: true
