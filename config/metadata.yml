@@ -282,10 +282,8 @@ properties:
     encoding: W3CDTF
     label: 'Date Created'
     predicate: DC:date
-    index_type: date
     index_helper_method: human_readable_date
     index_itemprop: dateCreated
-    sort_field: true
     input: date
     core: true    
     OAI: DC:date
@@ -301,7 +299,6 @@ properties:
     encoding: W3CDTF
     label: Date Digitized
     predicate: DC:modified
-    index_type: date
     index_helper_method: human_readable_date
     index_itemprop: dateModified
     input: date
@@ -311,10 +308,8 @@ properties:
     encoding: W3CDTF
     label: 'Date Published'
     predicate: DC:issued
-    index_type: date
     index_helper_method: human_readable_date
     index_itemprop: datePublished
-    sort_field: true
     input: date
   
   description:
