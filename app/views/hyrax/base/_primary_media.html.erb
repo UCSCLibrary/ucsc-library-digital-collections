@@ -6,6 +6,6 @@
     <% end %>
     <%= javascript_include_tag "include_player" %>
     <%= stylesheet_link_tag "embed" %>
-<% elsif @presenter.representative_id %>
-    <%= image_tag @presenter.solr_document.display_image_url, class: "primary-media",role: "presentation"%>
+<% elsif @presenter.representative_id && @presenter.solr_document.image? %>
+    <%= image_tag @presenter.solr_document.display_image_path, class: "primary-media",role: "presentation"%>
 <% end %>
