@@ -284,7 +284,7 @@ properties:
     encoding: W3CDTF
     label: 'Date Created'
     predicate: DC:date
-    index_helper_method: human_readable_date
+#    index_helper_method: human_readable_date
     index_itemprop: dateCreated
     input: date
     core: true    
@@ -301,7 +301,7 @@ properties:
     encoding: W3CDTF
     label: Date Digitized
     predicate: DC:modified
-    index_helper_method: human_readable_date
+#    index_helper_method: human_readable_date
     index_itemprop: dateModified
     input: date
   
@@ -310,7 +310,7 @@ properties:
     encoding: W3CDTF
     label: 'Date Published'
     predicate: DC:issued
-    index_helper_method: human_readable_date
+#    index_helper_method: human_readable_date
     index_itemprop: datePublished
     input: date
   
