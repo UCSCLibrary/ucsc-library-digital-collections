@@ -48,7 +48,7 @@ class SolrDocument
   end
 
   def display_image_url(record = self)
-    root_url + display_record_path(record)
+    root_url + display_image_path(record)
   end
 
   def root_url
