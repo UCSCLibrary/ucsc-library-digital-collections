@@ -19,7 +19,7 @@ module Ucsc
       end
 
       unless (wrk = presenter.solr_document.parent_work).nil?
-        wrk_title = wrk.title.is_a? String ? wrk.title : wrk.title.first
+        wrk_title = wrk.title.is_a?(String) ? wrk.title : wrk.title.first
         add_breadcrumb wrk_title, "/records/#{wrk.id}"
         hide_breadcrumbs = false;
       end
