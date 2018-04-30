@@ -76,8 +76,15 @@ body {
         border: 1px solid #7A7A7A;
     }
 
-    
+    ol#featured_collections {
+        margin-left: 0px;
+        padding-left: 0px;
+        list-style: none;
+    }
 
+    .home-content ol .featured-item div.col-sm-3 a {
+        float: right;
+    }
 
     img.primary-media {
         max-width: 100%
