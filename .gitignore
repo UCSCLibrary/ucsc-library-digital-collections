@@ -26,6 +26,7 @@ pickle-email-*.html
 
 /public/uploads/batch_metadata_ingests/*
 /public/assets/*
+/public/stream
 
 # dotenv
 # TODO Comment out this rule if environment variables can be committed
