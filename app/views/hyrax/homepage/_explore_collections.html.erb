@@ -1,10 +1,10 @@
-<ol id="featured-collections">
+<ol id="featured_collections">
     <% collections.each do |collection| %>
 
         <%# REMOVE THE FOLLOWING LINE ONCE FEATURED COLLECTION THINGY WORKS%>
         <% next unless collection.id == 'rx913p88g' %>
 
-        <li class="featured-collection" data-id="<%= collection.id %>">
+        <li class="featured-item" data-id="<%= collection.id %>">
             <div class="main row">
                 <div class="col-sm-3">
                     <%= render_thumbnail_tag collection, { width: 90 } %>
