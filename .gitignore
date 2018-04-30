@@ -23,6 +23,7 @@ pickle-email-*.html
 
 /config/database.yml
 /config/secrets.yml
+/config/fedora.yml
 
 /public/uploads/batch_metadata_ingests/*
 /public/assets/*
