@@ -1,3 +1,5 @@
+require 'nokogiri'
+require 'open-uri'
 module Ucsc
   class WorkIndexer < Hyrax::WorkIndexer
     #    include Ucsc::IndexesLinkedMetadata
@@ -67,9 +69,6 @@ module Ucsc
     end
 
     def needs_reconciliation?(obj, solr_doc, property)
-      puts "-----------------------------"
-      puts "---OBJECT ID: #{obj.id} ---------------_!!!!!!!!!!!!!!!!!!!!!!!!!!"
-      puts "-----------------------------"
 
       #first, definitely reconcile if the object is brand new
       return true if obj.id.nil?
@@ -115,6 +114,14 @@ module Ucsc
         url = resource.id.gsub("digital-collections.library.ucsc.edu","localhost")
         Rails.logger.debug("Fetching label from QA url: #{url}")
         label = JSON.parse(Net::HTTP.get_response(URI.parse(url)).body)["term"]
+        
+      elsif resource.id.include? "geonames.org"
+        unless (res_url = resource.id).include? "/about.rdf"
+          res_url = File.join(resource.id,'about.rdf')
+        end
+        puts "resource id (url): #{res_url}"
+        doc = Nokogiri::XML(open(res_url))
+        label = doc.xpath('//gn:name').first.children.first.text
       else
         # Fetch the resource from its url
         resource.fetch(headers: { 'Accept'.freeze => default_accept_header })
