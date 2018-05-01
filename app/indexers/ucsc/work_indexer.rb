@@ -49,7 +49,7 @@ module Ucsc
         # Loop through the different values provided for this property
         object[property].each do |val|
           case val
-          when ActiveTriples::Resource
+         when ActiveTriples::Resource
             # We need to fetch the string from an external vocabulary
             solr_doc[label_field(property)] << fetch_remote_label(val)
             solr_doc[Solrizer.solr_name(property)] << val.id
@@ -102,7 +102,10 @@ module Ucsc
     def fetch_remote_label(resource)
 
       # Reset buffer if it is old
-      self.class.ld_buffer = {} if DateTime.now - self.class.last_buffer_reset > 6.months
+      if DateTime.now - self.class.last_buffer_reset > 6.months
+        self.class.ld_buffer = {} if DateTime.now - self.class.last_buffer_reset > 6.months
+        self.class.last_buffer_reset = DateTime.now
+      end
 
       # Return key from buffer if it exists already
       return self.class.ld_buffer[resource.id] if self.class.ld_buffer.key?(resource.id)
