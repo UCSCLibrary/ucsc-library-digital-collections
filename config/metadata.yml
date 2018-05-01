@@ -94,7 +94,7 @@ properties:
     definition: "A theme or something theme-like."
     usage_note: ""
     label: "Theme"
-    predicate: "http://opaquenamespace.org/ns/set"
+    predicate: "opaque:set"
     search_field: true
 
   creator:
