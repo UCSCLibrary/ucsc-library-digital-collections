@@ -10,7 +10,7 @@
   </div>
 
   <div class="col-sm-8">
-    <%= render 'work_description', presenter: @presenter %>
+    <%# = render 'work_description', presenter: @presenter %>
     <%= render 'primary_media', presenter: @presenter, av_files: (av_files = @presenter.all_av_files) %>
     <%= render 'metadata', presenter: @presenter %>
     <%= render 'relationships', presenter: @presenter %>
