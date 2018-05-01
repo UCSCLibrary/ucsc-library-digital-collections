@@ -82,6 +82,21 @@ properties:
     search_field: true
     OAI: DC:alternative
 
+  subSeries:
+    definition: "A subseries title for the resource."
+    usage_note: "This is a descriptive title not necessarily given by the creator"
+    label: "Sub-Series Title"
+    predicate: "DC:subseriesStatement"
+    search_field: true
+    OAI: DC:alternative
+
+  theme:
+    definition: "A theme or something theme-like."
+    usage_note: ""
+    label: "Theme"
+    predicate: "http://opaquenamespace.org/ns/set"
+    search_field: true
+
   creator:
     definition: "A person or organization responsible for creating the resource."
     predicate: "DC:creator"
@@ -450,6 +465,8 @@ work_types:
       title:
       titleAlternative:
         primary: true
+      subseries:
+        primary: true
       creator:
       contributor:
       publisher:
@@ -478,6 +495,7 @@ work_types:
       subjectPlace:
       subjectTemporal:
       genre:
+      physicalFormat:
       masterFilename:
       originalPublisher:
       physicalDescription:
@@ -486,6 +504,7 @@ work_types:
       collectionCallNumber:
       donorProvenance:
       boxFolder:
+      theme:
       itemCallNumber:
   collection:
     properties:
