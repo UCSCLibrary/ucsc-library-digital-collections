@@ -5,7 +5,7 @@ module Ucsc::Oai::Metadata
 
     def initialize
       @prefix = 'oai_dpla'
-      @schema =  "http://localhost:3000/oai_dpla/oai_dpla.xsd"
+      @schema =  "digitalcollections.library.ucsc.edu/oai_dpla/oai_dpla.xsd"
       @namespace = 'http://www.openarchives.org/OAI/2.0/'
       @element_namespace = 'dpla'
       @fields = [ :isShownAt, :object]
