@@ -82,11 +82,11 @@ properties:
     search_field: true
     OAI: DC:alternative
 
-  subSeries:
+  subseries:
     definition: "A subseries title for the resource."
     usage_note: "This is a descriptive title not necessarily given by the creator"
     label: "Sub-Series Title"
-    predicate: "DC:subseriesStatement"
+    predicate: "BF2:subseriesStatement"
     search_field: true
     OAI: DC:alternative
 
