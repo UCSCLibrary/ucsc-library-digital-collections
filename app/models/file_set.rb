@@ -57,7 +57,7 @@ class FileSet < ActiveFedora::Base
   end
 
     def cleanup_derivatives
-      derivative_path_factory.derivatives_for_reference(file_set).each do |path|
+      derivative_path_factory.derivatives_for_reference(self).each do |path|
         FileUtils.rm_f(path)
       end
     end
