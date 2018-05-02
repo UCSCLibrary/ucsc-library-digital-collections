@@ -18,15 +18,20 @@ module Ucsc::Blacklight::Dpla
     [:contributor, :coverage, :creator, :date, :description, :format, :identifier, :language, :publisher, :relation, :rights, :source, :subject, :title, :type]
   end
 
+  def dcterms_field_names
+    [:alternative]
+  end
+
   def edm_field_names
     [:object, :isShownAt]
   end
 
   def dpla_field_names
-    dc_field_names + edm_field_names
+    dc_field_names + dcterms_field_names + edm_field_names
   end
 
   def to_semantic_values
+#    super.merge({object: display_image_url, isShownAt: permalink, alternative: subseries})
     super.merge({object: display_image_url, isShownAt: permalink})
   end
 
@@ -36,6 +41,7 @@ module Ucsc::Blacklight::Dpla
     xml.tag!("oai_dpla:dpla",
              'xmlns:oai_dpla' => "https://digitalcollections.library.ucsc.edu/oai_dpla/",
              'xmlns:dc' => "http://purl.org/dc/elements/1.1/",
+             'xmlns:dcterms' => "http://purl.org/dc/terms/",
              'xmlns:edm' => "http://www.europeana.eu/schemas/edm/",
              'xmlns:xsi' => "http://www.w3.org/2001/XMLSchema-instance",
              'xsi:schemaLocation' => %(https://digitalcollections.library.ucsc.edu/oai_dpla/ https://digitalcollections.library.ucsc.edu/oai_dpla/oai_dpla.xsd)) do
@@ -57,11 +63,16 @@ module Ucsc::Blacklight::Dpla
   def field_prefix(field)
     return "dc" if dc_field_name? field
     return "edm" if edm_field_name? field
+    return "dcterms" if dcterms_field_name? field
     return ""
   end
 
   def dc_field_name? field
     dc_field_names.include? field.to_sym
+  end
+
+  def dcterms_field_name? field
+    dcterms_field_names.include? field.to_sym
   end
 
   def edm_field_name? field

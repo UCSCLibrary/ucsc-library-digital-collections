@@ -579,6 +579,9 @@ p.intro {
 <xsl:template match="dc:title" xmlns:dc="http://purl.org/dc/elements/1.1/">
 <tr><td class="key">Title</td><td class="value"><xsl:value-of select="."/></td></tr></xsl:template>
 
+<xsl:template match="dcterms:alternative" xmlns:dcterms="http://purl.org/dc/terms/">
+<tr><td class="key">Alternate Title or SubSeries Title</td><td class="value"><xsl:value-of select="."/></td></tr></xsl:template>
+
 <xsl:template match="dc:creator" xmlns:dc="http://purl.org/dc/elements/1.1/">
 <tr><td class="key">Author or Creator</td><td class="value"><xsl:value-of select="."/></td></tr></xsl:template>
 

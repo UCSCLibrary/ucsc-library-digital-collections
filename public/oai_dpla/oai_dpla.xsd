@@ -1,15 +1,19 @@
-<schema xmlns:oai_dpla="http://digitalcollections.library.ucsc.edu/oai_dpla/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://digitalcollections.library.ucsc.edu/oai_dpla/" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<schema xmlns:oai_dpla="http://digitalcollections.library.ucsc.edu/oai_dpla/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://digitalcollections.library.ucsc.edu/oai_dpla/" elementFormDefault="qualified" attributeFormDefault="unqualified">
 <annotation>
 <documentation>
 XML Schema 2018-04-05 by Ned Henry, adapted from Pete Johnston for use with DPLA schema (DC + a few EDM). 
 </documentation>
 </annotation>
 <import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="http://dublincore.org/schemas/xmls/simpledc20021212.xsd"/>
+<import namespace="http://purl.org/dc/terms/" schemaLocation="http://dublincore.org/schemas/xmls/qdc/2008/02/11/dcterms.xsd"/>
 <import namespace="http://www.europeana.eu/schemas/edm/" schemaLocation="http://www.europeana.eu/schemas/ese/ESE-V3.4.xsd"/>
 <element name="dc" type="oai_dc:oai_dcType"/>
 <complexType name="oai_dcType">
 <choice minOccurs="0" maxOccurs="unbounded">
+<element ref="edm:isShownAt"/>
+<element ref="edm:Object"/>
 <element ref="dc:title"/>
+<element ref="dcterms:alternative"/>
 <element ref="dc:creator"/>
 <element ref="dc:subject"/>
 <element ref="dc:description"/>
@@ -24,8 +28,6 @@ XML Schema 2018-04-05 by Ned Henry, adapted from Pete Johnston for use with DPLA
 <element ref="dc:relation"/>
 <element ref="dc:coverage"/>
 <element ref="dc:rights"/>
-<element ref="edm:isShownAt"/>
-<element ref="edm:Object"/>
 </choice>
 </complexType>
 </schema>

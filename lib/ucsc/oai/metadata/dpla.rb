@@ -5,7 +5,7 @@ module Ucsc::Oai::Metadata
 
     def initialize
       @prefix = 'oai_dpla'
-      @schema =  "https://digitalcollections.library.ucsc.edu/oai_dpla/oai_dpla.xsd"
+      @schema =  "http://localhost:3000/oai_dpla/oai_dpla.xsd"
       @namespace = 'http://www.openarchives.org/OAI/2.0/'
       @element_namespace = 'dpla'
       @fields = [ :isShownAt, :object]
@@ -15,6 +15,7 @@ module Ucsc::Oai::Metadata
       {
         'xmlns:oai_dpla' =>  "https://digitalcollections.library.ucsc.edu/oai_dpla/",
         'xmlns:dc' => "http://purl.org/dc/elements/1.1/",
+        'xmlns:dcterms' => "http://purl.org/dc/terms/",
         'xmlns:edm' => "http://www.europeana.eu/schemas/edm/",
         'xmlns:xsi' => "http://www.w3.org/2001/XMLSchema-instance",
         'xsi:schemaLocation' =>
