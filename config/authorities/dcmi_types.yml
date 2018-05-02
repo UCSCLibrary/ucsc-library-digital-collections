@@ -1,5 +1,25 @@
 terms:
-  - id: testtype1
-    term: "test type 1"
-  - id: testtype2
-    term: "test type 2"
+  - id: http://purl.org/dc/dcmitype/Collections
+    term: Collection
+  - id: http://purl.org/dc/dcmitype/Dataset
+    term: Dataset
+  - id: http://purl.org/dc/dcmitype/Event
+    term: Event
+  - id: http://purl.org/dc/dcmitype/Image
+    term: Image
+  - id: http://purl.org/dc/dcmitype/InteractiveResource
+    term: Interactive Resource
+  - id: http://purl.org/dc/dcmitype/MovingImage
+    term: Moving Image
+  - id: http://purl.org/dc/dcmitype/PhysicalObject
+    term: Physical Object
+  - id: http://purl.org/dc/dcmitype/Service
+    term: Service
+  - id: http://purl.org/dc/dcmitype/Software
+    term: Software
+  - id: http://purl.org/dc/dcmitype/Sound
+    term: Sound
+  - id: http://purl.org/dc/dcmitype/StillImage
+    term: Still Image
+  - id: http://purl.org/dc/dcmitype/Text
+    term: Text      
