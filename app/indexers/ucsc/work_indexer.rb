@@ -4,18 +4,6 @@ module Ucsc
   class WorkIndexer < Hyrax::WorkIndexer
     #    include Ucsc::IndexesLinkedMetadata
 
-    class << self
-      attr_accessor :last_buffer_reset
-    end
-    @last_buffer_reset = DateTime.now
-    @ld_buffer = {}
-
-    def initialize(args=nil)
-      self.class.last_buffer_reset = DateTime.now
-      self.class.ld_buffer = {}
-      super args
-    end
-
     def generate_solr_document
       super.tap do |solr_doc|
         solr_doc = index_controlled_fields(solr_doc)
@@ -100,15 +88,11 @@ module Ucsc
 
     def fetch_remote_label(resource)
 
-
-      # Return key from buffer if it exists already
-      return self.class.ld_buffer[resource.id] if self.class.ld_buffer.key?(resource.id)
-
-      buf = LdBuffer.where(url: resource.id).order(created_at: desc).first
+      buf = LdBuffer.where(url: resource.id).order(created_at: :desc).first
 
       # Return the buffered value if it's up to date
       # Destroy it if it's obsolete
-      if !buf.nil
+      if !buf.nil?
         if buf.created_at > DateTime.now - 6.months
           return buf.label
         else
