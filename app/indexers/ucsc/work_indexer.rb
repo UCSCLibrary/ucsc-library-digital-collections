@@ -6,7 +6,6 @@ module Ucsc
 
     class << self
       attr_accessor :last_buffer_reset
-      attr_accessor :ld_buffer
     end
     @last_buffer_reset = DateTime.now
     @ld_buffer = {}
@@ -101,14 +100,21 @@ module Ucsc
 
     def fetch_remote_label(resource)
 
-      # Reset buffer if it is old
-      if DateTime.now - self.class.last_buffer_reset > 6.months
-        self.class.ld_buffer = {} if DateTime.now - self.class.last_buffer_reset > 6.months
-        self.class.last_buffer_reset = DateTime.now
-      end
 
       # Return key from buffer if it exists already
       return self.class.ld_buffer[resource.id] if self.class.ld_buffer.key?(resource.id)
+
+      buf = LdBuffer.where(url: resource.id).order(created_at: desc).first
+
+      # Return the buffered value if it's up to date
+      # Destroy it if it's obsolete
+      if !buf.nil
+        if buf.created_at > DateTime.now - 6.months
+          return buf.label
+        else
+          buf.destroy!
+        end
+      end
         
       Rails.logger.info "Fetching #{resource.rdf_subject} from the authorative source. (this is slow)"
       # Check if it's a local resource
@@ -131,11 +137,16 @@ module Ucsc
         label = resource.rdf_label.first.to_s
       end
       
-      # Trim the first entry from the buffer if it is getting large
-      self.class.ld_buffer.except!(self.class.ld_buffer.keys.first) if self.class.ld_buffer.size > 2000
-      # Add this to the buffer 
-      self.class.ld_buffer[resource.id] = label
+      LdBuffer.create(url: resource.id, label: label)
+
+      # Delete oldest records if we have more than 5K in the buffer
+      if (cnt = LdBuffer.count - 5000) > 0
+        ids = LdBuffer.order('created_at DESC').limit(cnt).pluck(:id)
+        LdBuffer.where(id: ids).delete_all
+      end
+
       return label
+
     rescue Exception => e
       # IOError could result from a 500 error on the remote server
       # SocketError results if there is no server to connect to
