@@ -10,19 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180509032505) do
-
-  create_table "bmi_edits", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.text     "work_ids",           limit: 65535
-    t.string   "status"
-    t.string   "user"
-    t.date     "deadline"
-    t.text     "comment",            limit: 65535
-    t.integer  "workflow_id"
-    t.integer  "workflow_action_id"
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
-  end
+ActiveRecord::Schema.define(version: 20180509184807) do
 
   create_table "bookmarks", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id",                     null: false
@@ -37,14 +25,14 @@ ActiveRecord::Schema.define(version: 20180509032505) do
   end
 
   create_table "bulk_meta_cells", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer  "bmi_row_id"
+    t.integer  "row_id"
     t.string   "name"
     t.string   "value_url"
     t.integer  "status"
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
     t.text     "value",      limit: 65535
-    t.index ["bmi_row_id"], name: "index_bulk_meta_cells_on_bmi_row_id", using: :btree
+    t.index ["row_id"], name: "index_bulk_meta_cells_on_row_id", using: :btree
   end
 
   create_table "bulk_meta_ingests", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -65,17 +53,17 @@ ActiveRecord::Schema.define(version: 20180509032505) do
   end
 
   create_table "bulk_meta_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer  "bmi_ingest_id"
-    t.integer  "bmi_row_id"
-    t.integer  "bmi_cell_id"
+    t.integer  "ingest_id"
+    t.integer  "row_id"
+    t.integer  "cell_id"
     t.string   "type"
     t.string   "subtype"
     t.string   "message"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-    t.index ["bmi_cell_id"], name: "index_bulk_meta_logs_on_bmi_cell_id", using: :btree
-    t.index ["bmi_ingest_id"], name: "index_bulk_meta_logs_on_bmi_ingest_id", using: :btree
-    t.index ["bmi_row_id"], name: "index_bulk_meta_logs_on_bmi_row_id", using: :btree
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cell_id"], name: "index_bulk_meta_logs_on_cell_id", using: :btree
+    t.index ["ingest_id"], name: "index_bulk_meta_logs_on_ingest_id", using: :btree
+    t.index ["row_id"], name: "index_bulk_meta_logs_on_row_id", using: :btree
   end
 
   create_table "bulk_meta_relationships", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -84,19 +72,20 @@ ActiveRecord::Schema.define(version: 20180509032505) do
     t.string   "relationship_type"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
-    t.integer  "bmi_row_id"
+    t.integer  "row_id"
     t.string   "status"
+    t.index ["row_id"], name: "fk_rails_e0a67ffd2b", using: :btree
   end
 
   create_table "bulk_meta_rows", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer  "bmi_ingest_id"
+    t.integer  "ingest_id"
     t.string   "status"
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
-    t.text     "text",          limit: 65535
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.text     "text",        limit: 65535
     t.string   "ingested_id"
     t.integer  "line_number"
-    t.index ["bmi_ingest_id"], name: "index_bulk_meta_rows_on_bmi_ingest_id", using: :btree
+    t.index ["ingest_id"], name: "index_bulk_meta_rows_on_ingest_id", using: :btree
   end
 
   create_table "checksum_audit_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -638,10 +627,13 @@ ActiveRecord::Schema.define(version: 20180509032505) do
     t.index ["work_id"], name: "index_work_view_stats_on_work_id", using: :btree
   end
 
-  add_foreign_key "bulk_meta_cells", "bulk_meta_rows", column: "bmi_row_id"
+  add_foreign_key "bulk_meta_cells", "bulk_meta_rows", column: "row_id"
   add_foreign_key "bulk_meta_ingests", "users"
-  add_foreign_key "bulk_meta_logs", "bulk_meta_ingests", column: "bmi_ingest_id"
-  add_foreign_key "bulk_meta_rows", "bulk_meta_ingests", column: "bmi_ingest_id"
+  add_foreign_key "bulk_meta_logs", "bulk_meta_cells", column: "cell_id"
+  add_foreign_key "bulk_meta_logs", "bulk_meta_ingests", column: "ingest_id"
+  add_foreign_key "bulk_meta_logs", "bulk_meta_rows", column: "row_id"
+  add_foreign_key "bulk_meta_relationships", "bulk_meta_rows", column: "row_id"
+  add_foreign_key "bulk_meta_rows", "bulk_meta_ingests", column: "ingest_id"
   add_foreign_key "curation_concerns_operations", "users"
   add_foreign_key "mailboxer_conversation_opt_outs", "mailboxer_conversations", column: "conversation_id", name: "mb_opt_outs_on_conversations_id"
   add_foreign_key "mailboxer_notifications", "mailboxer_conversations", column: "conversation_id", name: "notifications_on_conversation_id"
