@@ -6,6 +6,6 @@
     <% end %>
     <%= javascript_include_tag "include_player" %>
     <%= stylesheet_link_tag "embed" %>
-<% elsif @presenter.representative_id && @presenter.solr_document.image? || @presenter.solr_document.resourceType.include?("http://purl.org/dc/dcmitype/StillImage")%>
+<% elsif @presenter.representative_id && @presenter.solr_document.image? || @presenter.solr_document.resourceType.include?("http://purl.org/dc/dcmitype/StillImage") || @presenter.solr_document.resourceType.include?("http://purl.org/dc/dcmitype/Image")%>
     <%= image_tag @presenter.solr_document.display_image_path, class: "primary-media",role: "presentation"%>
 <% end %>
