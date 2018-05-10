@@ -62,7 +62,7 @@ class BulkMetadata::Row < ApplicationRecord
     Qa::LocalAuthorityEntry.create(local_authority: auth,
                                    label: value,
                                    uri: id)
-    return localIdToUrl(id,auth)
+    return localIdToUrl(id,auth_name)
   end
 
   def findAuthUrl(auth, value)
@@ -80,8 +80,8 @@ class BulkMetadata::Row < ApplicationRecord
     return nil
   end
 
-  def localIdToUrl(id,auth) 
-    return "https://digitalcollections.library.ucsc.edu/authorities/show/local/#{auth}/#{id}"
+  def localIdToUrl(id,auth_name) 
+    return "https://digitalcollections.library.ucsc.edu/authorities/show/local/#{auth_name}/#{id}"
   end
 
   def getLocalAuth(property)
