@@ -105,7 +105,14 @@ module Ucsc
       # Check if it's a local resource
       if resource.rdf_subject.to_s.include?("ucsc.edu")
         Rails.logger.info "handling as ucsc resource"
-        label = JSON.parse(Net::HTTP.get_response(URI(resource.rdf_subject.to_s)).body)["label"]
+
+        # TODO replace hard-coded URLs
+        # Swap for hostname in staging
+        uri = URI(resource.id.gsub("digital-collections.library.ucsc.edu",Socket.gethostname())) if Socket.gethostname.include? "staging"
+        # Swap for localhost in development
+        (uri = URI(resource.id.gsub("digital-collections.library.ucsc.edu","localhost:3000"))).port=(3000) if ['RAILS_ENV'] == "development"
+        
+        label = JSON.parse(Net::HTTP.get_response(uri).body)["label"]
 
       # handle geonames specially
       elsif resource.id.include? "geonames.org"
@@ -119,7 +126,6 @@ module Ucsc
       else
         resource.fetch(headers: { 'Accept'.freeze => default_accept_header })
         label = resource.rdf_label.first.to_s
-
       end
       
       LdBuffer.create(url: resource.id, label: label)
