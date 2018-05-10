@@ -92,7 +92,7 @@ module Ucsc
 
       # Return the buffered value if it's up to date
       # Destroy it if it's obsolete
-      if !buf.nil?
+      unless buf.nil?
         if buf.created_at > DateTime.now - 6.months
           return buf.label
         else
@@ -101,24 +101,25 @@ module Ucsc
       end
         
       Rails.logger.info "Fetching #{resource.rdf_subject} from the authorative source. (this is slow)"
+
       # Check if it's a local resource
-      if resource.id.include? "ucsc.edu" 
-        # Swap in 'localhost' to reconcile from staging, dev, etc
-        url = resource.id.gsub("digital-collections.library.ucsc.edu","localhost")
-        Rails.logger.debug("Fetching label from QA url: #{url}")
-        label = JSON.parse(Net::HTTP.get_response(URI.parse(url)).body)["term"]
-        
+      if resource.rdf_subject.to_s.include?("ucsc.edu")
+        Rails.logger.info "handling as ucsc resource"
+        label = JSON.parse(Net::HTTP.get_response(URI(resource.rdf_subject.to_s)).body)["label"]
+
+      # handle geonames specially
       elsif resource.id.include? "geonames.org"
         unless (res_url = resource.id).include? "/about.rdf"
           res_url = File.join(resource.id,'about.rdf')
         end
-        puts "resource id (url): #{res_url}"
         doc = Nokogiri::XML(open(res_url))
         label = doc.xpath('//gn:name').first.children.first.text
+
+      # fetch from other normal authorities
       else
-        # Fetch the resource from its url
         resource.fetch(headers: { 'Accept'.freeze => default_accept_header })
         label = resource.rdf_label.first.to_s
+
       end
       
       LdBuffer.create(url: resource.id, label: label)
