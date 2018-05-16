@@ -108,10 +108,15 @@ module Ucsc
 
         # TODO replace hard-coded URLs
         # Swap for hostname in staging
-        uri = URI(resource.id.gsub("digital-collections.library.ucsc.edu",Socket.gethostname())) if Socket.gethostname.include? "staging"
-        # Swap for localhost in development
-        (uri = URI(resource.id.gsub("digital-collections.library.ucsc.edu","localhost:3000"))).port=(3000) if ['RAILS_ENV'] == "development"
-        
+        if Socket.gethostname.include? "staging"
+          uri = URI(resource.id.gsub("digitalcollections.library.ucsc.edu",Socket.gethostname()).gsub("https://","http://")) 
+        elsif ENV['RAILS_ENV'] == "development"
+          # Swap for localhost in development
+          (uri = URI(resource.id.gsub("digitalcollections.library.ucsc.edu","localhost:3000"))).port=(3000) 
+        else
+          uri = URI(resource.id)
+        end
+
         label = JSON.parse(Net::HTTP.get_response(uri).body)["label"]
 
       # handle geonames specially
