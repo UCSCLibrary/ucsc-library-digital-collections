@@ -6,4 +6,4 @@ namespace :hycruz  do
     end
   end
 end
-after "deploy:finished","hycruz
+after "deploy:finished","hycruz:link_stream"
