@@ -107,12 +107,12 @@ module Ucsc
         Rails.logger.info "handling as ucsc resource"
 
         # TODO replace hard-coded URLs
-        # Swap for hostname in staging
-        if Socket.gethostname.include? "staging"
-          uri = URI(resource.id.gsub("digitalcollections.library.ucsc.edu",Socket.gethostname()).gsub("https://","http://")) 
-        elsif ENV['RAILS_ENV'] == "development"
-          # Swap for localhost in development
-          (uri = URI(resource.id.gsub("digitalcollections.library.ucsc.edu","localhost:3000"))).port=(3000) 
+        # Swap for correct hostname in non-prod environments
+        case ENV['RAILS_ENV']
+        when 'staging'
+          (uri = URI(resource.id.gsub("digitalcollections.library","digitalcollections-staging.library").gsub("https://","http://")))
+        when 'development'
+          (uri = URI(resource.id.gsub("digitalcollections.library.ucsc.edu","localhost"))).port=(3000) 
         else
           uri = URI(resource.id)
         end
