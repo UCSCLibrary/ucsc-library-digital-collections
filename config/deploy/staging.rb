@@ -34,8 +34,8 @@ role :ingest, %w{hyrax@digitalcollections-ingests.library.ucsc.edu}
 # http://capistranorb.com/documentation/getting-started/configuration/
 # Feel free to add new variables to customise your setup.
 
-set :default_env, { RAILS_ENV: "production" }
-set :rails_env, "production"
+set :default_env, { RAILS_ENV: "staging" }
+set :rails_env, "staging"
 
 # Custom SSH Options
 # ==================
