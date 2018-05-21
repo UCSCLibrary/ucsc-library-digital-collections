@@ -6,7 +6,7 @@ test:
   port: <%= ENV.fetch('REDIS_PORT', 6379) %>
 staging:
   host: digitalcollections-ingests.library.ucsc.edu
-  port: 6379
+  port: 6380
 production:
   host: digitalcollections-ingests.library.ucsc.edu
   port: 6379
