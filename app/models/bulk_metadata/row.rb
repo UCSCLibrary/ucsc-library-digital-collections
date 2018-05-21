@@ -3,6 +3,8 @@ require 'socket'
 
 class BulkMetadata::Row < ApplicationRecord
 
+  attr_accessor :work_type
+
   self.table_name = "bulk_meta_rows"
 
   BASE_PATH = "/dams_ingest"
@@ -11,19 +13,17 @@ class BulkMetadata::Row < ApplicationRecord
   has_many :relationships
 
   def schema
-    ScoobySnacks::METADATA_SCHEMA["work_types"][ingest.work_type.downcase]
+    ScoobySnacks::METADATA_SCHEMA["work_types"][@work_type.downcase]
+  end
+
+  def work_type
+    @work_type ||= ingest.work_type
   end
 
   def reparse
     row_hash = CSV.parse(ingest.get_csv([id]),headers:true).first
     cells.each{ |cell| cell.destroy! }
     createNewCells!(row_hash)
-  end
-
-  def updateText(text)
-    #TODO check whether this is stupid (there is a convention for this)
-    #log event
-    #update text
   end
 
   def createNewCells!(row_hash)
@@ -44,12 +44,6 @@ class BulkMetadata::Row < ApplicationRecord
     end
   end
 
-  #special cell types:
-  #file
-  #relationship (parent, child)
-  #work type
-  #edit identifier
-  #ignore
 
   def localAuthUrl(property, value) 
     return value if (auth = getLocalAuth(property)).nil?
@@ -102,11 +96,11 @@ class BulkMetadata::Row < ApplicationRecord
 
     #presume a new work unless we hear otherwise
     edit_id = nil;
-    work_type = ingest.work_type
+    @work_type = ingest.work_type
     id_type = ingest.relationship_identifier
     visibility = ingest.visibility
 
-    wrk = work_type.camelize.constantize.new
+    wrk = @work_type.camelize.constantize.new
 
     cells.each do |cell|
       next if cell.value.blank?
@@ -165,7 +159,7 @@ class BulkMetadata::Row < ApplicationRecord
       when "work type"
         # set the work type for this item
         # overriding the default set for the whole ingest
-        work_type = cell.value
+        @work_type = cell.value
         
       when "visibility"
         # set the work type for this item
@@ -221,9 +215,9 @@ class BulkMetadata::Row < ApplicationRecord
     end
 
     if edit_id.nil?
-      UcscCreateWorkJob.perform_later(work_type,user_email,metadata,id,visibility)
+      UcscCreateWorkJob.perform_later(@work_type,user_email,metadata,id,visibility)
     else
-      UcscEditWorkJob.perform_later(edit_id,work_type,user,metadata,id,visibility)
+      UcscEditWorkJob.perform_later(edit_id,@work_type,user,metadata,id,visibility)
     end
   end
 
@@ -239,12 +233,8 @@ class BulkMetadata::Row < ApplicationRecord
   end
 
   def ingested_work
-    return false if !@work_id
-    work_type.camelize.constantize.find(@work_id)
-  end
-
-  def set_work_id(work_id)
-    @work_id = work_id
+    return nil if ingested_id.nil?
+    work_type.camelize.constantize.find(ingested_id)
   end
 
   def title
