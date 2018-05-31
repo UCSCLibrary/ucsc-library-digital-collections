@@ -17,6 +17,14 @@ module Ucsc
       @all_av_files ||= generate_all_av_file_list
     end
 
+
+    def image?
+      return true if solr_document.resourceType.include?("http://purl.org/dc/dcmitype/StillImage")
+      return true if solr_document.resourceType.include?("http://purl.org/dc/dcmitype/Image")
+      return false unless representative_id
+      return solr_document.image?
+    end
+
     private 
 
     def generate_all_av_file_list
