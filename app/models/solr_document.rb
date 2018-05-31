@@ -35,10 +35,6 @@ class SolrDocument
 
   use_extension( Hydra::ContentNegotiation )
 
-#  def subject_label
-#    subjectTopic_label + subjectTemporal_label + subjectPlace_label + subjectName_label
-#  end
-
   def permalink(record = self)
     "#{root_url}/records/#{record.id}"
   end
