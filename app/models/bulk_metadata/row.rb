@@ -13,7 +13,7 @@ class BulkMetadata::Row < ApplicationRecord
   has_many :relationships
 
   def schema
-    ScoobySnacks::METADATA_SCHEMA["work_types"][@work_type.downcase]
+    ScoobySnacks::METADATA_SCHEMA["work_types"][work_type.downcase]
   end
 
   def work_type
