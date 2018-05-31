@@ -14,8 +14,8 @@ module Ucsc
     def merge_subjects(solr_doc)
       subject_fields = ["subjectTopic","subjectName","subjectTemporal","subjectPlace"]
       subjects = []
-      subject_fields.each{ |subject_field| subjects.concat(solr_doc[Solrizer.solr_name(subject_field)]) }
-      solr_doc[Solrizer.solr_name('subject')] = subjects
+      subject_fields.each{ |subject_field| subjects.concat( solr_doc[label_field(subject_field)]) }
+      solr_doc[label_field("subject")] = subjects
       solr_doc
     end
 
@@ -39,14 +39,12 @@ module Ucsc
          when ActiveTriples::Resource
             # We need to fetch the string from an external vocabulary
             solr_doc[label_field(property)] << fetch_remote_label(val)
-            solr_doc[Solrizer.solr_name(property)] << val.id
           when String
             # This is just a normal string (from a legacy model, etc)
             # Set the label index to the string for now
             # In the future, we will create a new entry in 
             # the appropriate local vocab
             solr_doc[label_field(property)] << val
-            solr_doc[Solrizer.solr_name(property)] << val
           else
             raise ArgumentError, "Can't handle #{val.class}"
           end
