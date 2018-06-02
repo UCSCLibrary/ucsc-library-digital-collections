@@ -1,94 +1,109 @@
 <% provide :page_header do %>
-  <h1><span class="glyphicon glyphicon-ok-circle"></span> <%= t('.header') %></h1>
+    <h1><span class="glyphicon glyphicon-ok-circle"></span> <%= t('.header') %></h1>
 <% end %>
 
 <div class="row">
-  <div class="col-md-12">
-    <div class="panel panel-default tabs">
-      <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-          <a href="#under-review" role="tab" data-toggle="tab"><%= t('.tabs.under_review') %></a>
-        </li>
-        <li>
-          <a href="#published" role="tab" data-toggle="tab"><%= t('.tabs.published') %></a>
-        </li>
-      </ul>
-      <div class="tab-content">
-        <div id="under-review" class="tab-pane active">
-          <div class="panel panel-default labels">
-            <div class="panel-body">
-              <div class="table-responsive">
-                <table class="table table-condensed table-striped datatable">
-                  <thead>
-                    <tr>
-                      <th width="20%"></th>
-                      <th width="40%">Title / Subseries</th>
-                      <th width="20%">Submission Date</th>
-                      <th width="20%">Workflow Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <% @status_list.each do |document| %>
-                      <tr>
-                        <td>
-                            <%= image_tag document.display_image_path %>
-                            <!-- Image tag here -->
-                        </td>
-                        <td>
-                          <%= link_to document, [main_app, document] %>
-                            <%= ": #{document.subseries.first}" if document.subseries %>
-                        </td>
-                        <td>
-                          <%= document.date_modified %>
-                        </td>
-                        <td>
-                          <span class="state state-pending"><%= document.workflow_state %></span>
-                        </td>
-                      </tr>
-                    <% end %>
-                  </tbody>
-                </table>
-              </div>
+    <div class="col-md-12">
+
+        <div class="panel panel-default tabs">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="active">
+                    <a href="#under-review" role="tab" data-toggle="tab"><%= t('.tabs.under_review') %></a>
+                </li>
+                <li>
+                    <a href="#published" role="tab" data-toggle="tab"><%= t('.tabs.published') %></a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div id="under-review" class="tab-pane active">
+                    <div class="panel panel-default labels">
+                        <div class="panel-body">
+
+                            <div id="bulk-select-buttons"> 
+                                <button id="select-all">Select All</button>
+                                <button id="select-none">Select None</button>
+                            </div>
+
+                            <div id="bulk-review-actions"> 
+                                <button id="approve">Approve</button>
+                                <button id="select-none">Flag for edits</button>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-condensed table-striped datatable">
+                                    <thead>
+                                        <tr>
+                                            <th width="5%"</th>
+                                            <th width="20%"></th>
+                                            <th width="40%">Title / Subseries</th>
+                                            <th width="20%">Submission Date</th>
+                                            <th width="20%">Workflow Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% @status_list.each do |document| %>
+                                            <tr>
+                                                <td>
+                                                    <input type="checkbox" name="<%= document.id%>" class="review-select-checkbox"/>
+                                                </td>
+                                                <td>
+                                                    <%= image_tag document.thumbnail_path, class: "review-thumb"  %>
+                                                </td>
+                                                <td>
+                                                    <%= link_to document, [main_app, document] %>
+                                                    <%= ": #{document.subseries.first}" if document.subseries %>
+                                                </td>
+                                                <td>
+                                                    <%= document.date_modified %>
+                                                </td>
+                                                <td>
+                                                    <span class="state state-pending"><%= document.workflow_state %></span>
+                                                </td>
+                                            </tr>
+                                        <% end %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="published" class="tab-pane">
+                    <div class="panel panel-default labels">
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-condensed table-striped datatable">
+                                    <thead>
+                                        <tr>
+                                            <th width="20%"></th>
+                                            <th width="40%">Title / Subseries</th>
+                                            <th width="20%">Submission Date</th>
+                                            <th width="20%">Workflow Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% @published_list.each do |document| %>
+                                            <tr>
+                                                <td>
+                                                    <!-- Image tag here -->
+                                                </td>
+                                                <td>
+                                                    <%= link_to document, [main_app, document] %>
+                                                </td>
+                                                <td>
+                                                    <%= document.date_modified %>
+                                                </td>
+                                                <td>
+                                                    <span class="state state-pending"><%= document.workflow_state %></span>
+                                                </td>
+                                            </tr>
+                                        <% end %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-        <div id="published" class="tab-pane">
-          <div class="panel panel-default labels">
-            <div class="panel-body">
-              <div class="table-responsive">
-                <table class="table table-condensed table-striped datatable">
-                  <thead>
-                    <tr>
-                      <th width="20%"></th>
-                      <th width="40%">Title / Subseries</th>
-                      <th width="20%">Submission Date</th>
-                      <th width="20%">Workflow Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <% @published_list.each do |document| %>
-                      <tr>
-                        <td>
-                            <!-- Image tag here -->
-                        </td>
-                        <td>
-                          <%= link_to document, [main_app, document] %>
-                        </td>
-                        <td>
-                          <%= document.date_modified %>
-                        </td>
-                        <td>
-                          <span class="state state-pending"><%= document.workflow_state %></span>
-                        </td>
-                      </tr>
-                    <% end %>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
 </div>
