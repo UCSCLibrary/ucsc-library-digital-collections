@@ -7,9 +7,9 @@
 
 <% state = Hyrax::WorkflowPresenter.new(SolrDocument.new(Work.find(params['id']).to_solr), current_ability).state %>
 
-<% if state == "pending_offline_edits" %>
+<% if state == "changes_underway" %>
         <div class="alert alert-warning" role="alert">
-            This file is currently being edited offline. The metadata here will be overwritten using the batch upload tool. The form below for altering metadata is diabled, because any changes made now will be erased when the batch metadata is uploaded.
+            This file is currently being edited by another administrator. The form below for altering metadata is disabled until that person finishes their work.
         </div>
         <script>
          jQuery(document).ready(function(){
