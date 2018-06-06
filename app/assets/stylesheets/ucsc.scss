@@ -5,8 +5,17 @@ $ucsc-footer-back:#c1c1c1;
 $ucsc-footer-color:#6e6e6e;
 $header-height: 40px;
 
-body {
+body.dashboard div#bulk-review-buttons {
+    min-height: 50px;
+    div#selections {
+        float:left;
+    }
+    div#actions {
+        float:right;
+    }
+}
 
+body {
 
     div#documents.gallery {
         clear:left;
@@ -28,8 +37,9 @@ body {
                 }
             }
         }
-   }
+    }
 
+    
     p#splash-message {
         font-size: 1.2em;
         max-width: 600px;
@@ -55,9 +65,9 @@ body {
         div.select2-container.autosuggest{
             width:75%
         }
-//        input.string.controlled_vocabulary.form-control {
-//            
-//        }
+        //        input.string.controlled_vocabulary.form-control {
+        //            
+        //        }
         input.ui-autocomplete-input.form-control { 
             width: 100%;
         }
@@ -90,11 +100,11 @@ body {
         max-width: 100%
     }
 
-//    padding-top:0px !important;
+    //    padding-top:0px !important;
 
     nav#masthead {
-//        position:relative;
-//        display:block;
+        //        position:relative;
+        //        display:block;
     }
 
 
@@ -117,7 +127,7 @@ body {
             color:$ucsc-gold;
         }
     }
-  
+    
     div.form-group.multi_controlled_vocabulary {
         ul {
             padding-left: 5px;
@@ -138,7 +148,7 @@ body {
             }
         }
     }
-  
+    
     li.document {
         h2 {
             clear:left;
