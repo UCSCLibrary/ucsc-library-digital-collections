@@ -1,0 +1,76 @@
+<div id="<%= state[:name] %>" class="tab-pane">   
+    <div class="panel panel-default labels">
+        <div class="panel-body">
+            <form id="<%= state[:name] %>-actions" method="post" action="/dashboard/workflow_actions/update">
+                <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+                <input name="_method" value="put" type="hidden">
+
+                <input id="workflow-action-input" type="hidden" name="workflow_action" value="">
+                <input type="hidden" name="workflow_id" value="<%= @workflow_id %>" />
+
+                <div id="bulk-review-buttons">
+                    <div id="selections"> 
+                        <button type="button"  id="select-all" onclick="$('input.select-<%= state[:name] %>-checkbox').prop('checked',true)">
+                            Select All
+                        </button>
+                        <button  type="button" id="select-none" onclick="$('input.select-<%= state[:name] %>-checkbox').prop('checked',false)" >
+                            Select None
+                        </button>
+                    </div>
+
+
+                    <div id="actions"> 
+
+
+
+
+                        <% state[:actions].each do |action| %>
+                            <button type="button" class="review-action-button" onclick="performAction('<%= "#{action.name}', '#{state[:name]}" %>')"> 
+                                <%= action.name.titleize %>
+                            </button>
+                        <% end %>
+                    </div>
+
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-condensed table-striped datatable">
+                        <thead>
+                            <tr>
+                                <th width="5%"</th>
+                                <th width="20%"></th>
+                                <th width="35%">Title / Subseries</th>
+                                <th width="20%">Submission Date</th>
+                                <th width="20%">Workflow Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% state[:list].each do |document| %>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" name="ids[]" value="<%= document.id%>" class="#select-<%= state[:name] %>-checkbox"/>
+                                    </td>
+                                    <td>
+                                        <%= image_tag document.thumbnail_path, class: "review-thumb"  %>
+                                    </td>
+                                    <td>
+                                        <%= link_to document, [main_app, document] %>
+                                        <%= ": #{document.subseries.first}" if document.subseries %>
+                                    </td>
+                                    <td>
+                                        <%= document.date_modified %>
+                                    </td>
+                                    <td>
+                                        <span class="state"><%= document.workflow_state %></span>
+                                    </td>
+                                </tr>
+                            <% end %>
+                        </tbody>
+                    </table>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>

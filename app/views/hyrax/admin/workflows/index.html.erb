@@ -7,116 +7,28 @@
 
         <div class="panel panel-default tabs">
             <ul class="nav nav-tabs" role="tablist">
-                <li class="active">
-                    <a href="#under-review" role="tab" data-toggle="tab"><%= t('.tabs.under_review') %></a>
-                </li>
-                <li>
-                    <a href="#published" role="tab" data-toggle="tab"><%= t('.tabs.published') %></a>
-                </li>
+                <% @states.each do |state| %>
+                    <li>
+                        <a href="#<%= state[:name] %>" active ="<%= (@states.first[:id] == state[:id]).to_s %>" role="tab" data-toggle="tab"><%= state[:name].titleize %></a>
+                    </li>
+                <% end %>
             </ul>
+
+            <script>
+             function performAction(action_name, state_name) {
+                 $("#"+state_name+"-actions input#workflow-action-input").val(action_name);
+                 $("form#"+state_name+"-actions").submit();
+             }
+            </script>
+            
             <div class="tab-content">
-                <div id="under-review" class="tab-pane active">
-                    <div class="panel panel-default labels">
-                        <div class="panel-body">
 
-                            <form method="post" action="/dashboard/workflow_actions/update">
-                                <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
-                                <input name="_method" value="put" type="hidden">
+                <% @states.each do |state| %>
+                    <%= render 'review_tab', {state: state} %>
+                <% end %>
 
-                                <div id="bulk-review-buttons">
-                                    <div id="selections"> 
-                                        <button type="button"  id="select-all" onclick="$('input.review-select-checkbox').prop('checked',true)">
-                                            Select All
-                                        </button>
-                                        <button  type="button" id="select-none" onclick="$('input.review-select-checkbox').prop('checked',false)" >
-                                            Select None
-                                        </button>
-                                    </div>
-
-                                    <div id="actions"> 
-                                        <input type="submit" name="workflow_action" value="approve" class="review-action-button" />
-                                        <input type="submit" name="workflow_action" value="request_changes" class="review-action-button" />
-                                    </div>
-                                </div>
-
-                                <div class="table-responsive">
-                                    <table class="table table-condensed table-striped datatable">
-                                        <thead>
-                                            <tr>
-                                                <th width="5%"</th>
-                                                <th width="20%"></th>
-                                                <th width="35%">Title / Subseries</th>
-                                                <th width="20%">Submission Date</th>
-                                                <th width="20%">Workflow Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <% @status_list.each do |document| %>
-                                                <tr>
-                                                    <td>
-                                                        <input type="checkbox" name="ids[]" value="<%= document.id%>" class="review-select-checkbox"/>
-                                                    </td>
-                                                    <td>
-                                                        <%= image_tag document.thumbnail_path, class: "review-thumb"  %>
-                                                    </td>
-                                                    <td>
-                                                        <%= link_to document, [main_app, document] %>
-                                                        <%= ": #{document.subseries.first}" if document.subseries %>
-                                                    </td>
-                                                    <td>
-                                                        <%= document.date_modified %>
-                                                    </td>
-                                                    <td>
-                                                        <span class="state state-pending"><%= document.workflow_state %></span>
-                                                    </td>
-                                                </tr>
-                                            <% end %>
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                            </form>
-
-                        </div>
-                    </div>
-                </div>
-                <div id="published" class="tab-pane">
-                    <div class="panel panel-default labels">
-                        <div class="panel-body">
-                            <div class="table-responsive">
-                                <table class="table table-condensed table-striped datatable">
-                                    <thead>
-                                        <tr>
-                                            <th width="20%"></th>
-                                            <th width="40%">Title / Subseries</th>
-                                            <th width="20%">Submission Date</th>
-                                            <th width="20%">Workflow Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <% @published_list.each do |document| %>
-                                            <tr>
-                                                <td>
-                                                    <!-- Image tag here -->
-                                                </td>
-                                                <td>
-                                                    <%= link_to document, [main_app, document] %>
-                                                </td>
-                                                <td>
-                                                    <%= document.date_modified %>
-                                                </td>
-                                                <td>
-                                                    <span class="state state-pending"><%= document.workflow_state %></span>
-                                                </td>
-                                            </tr>
-                                        <% end %>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
+
         </div>
     </div>
 </div>
