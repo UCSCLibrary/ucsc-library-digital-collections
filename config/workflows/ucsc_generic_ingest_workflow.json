@@ -1,0 +1,57 @@
+{
+  "workflows": [
+    {
+      "name": "ucsc_generic_ingest",
+      "label": "UCSC Ingest & Review Workflow",
+      "description": "A workflow for depositing, reviewing, altering, approving, and publishing digital media, suitable for batches or individual ingests.",
+      "actions": [
+
+        {"name": "create",
+         "from_states": [],
+         "transition_to": "review_required",
+         "notifications": [{"notification_type": "email",
+                            "name": "Hyrax::Workflow::PendingReviewNotification",
+                            "to": ["reviewing"]}],
+         "methods": ["Hyrax::Workflow::DeactivateObject"]}, 
+
+        {"name": "request_changes",
+         "from_states": [{"names": ["complete", "review_required", "review_underway"], "roles": ["reviewing"]}],
+         "transition_to": "changes_required",
+         "notifications": [{"notification_type": "email",
+                            "name": "Hyrax::Workflow::ChangesRequiredNotification",
+                            "to": ["editing"]}],
+         "methods": ["Hyrax::Workflow::DeactivateObject",
+                     "Workflow::ResolveClaims"]}, 
+
+        {"name": "approve",
+         "from_states": [{"names": ["review_required", "review_underway"], "roles": ["reviewing"]}],
+         "transition_to": "complete",
+         "notifications": [],
+         "methods": ["Hyrax::Workflow::ActivateObject",
+                     "Workflow::ResolveClaims"]}, 
+
+        {"name": "request_review",
+         "from_states": [{"names": ["changes_underway","changes_required","review_underway"], "roles": ["editing", "reviewing"]}],
+         "transition_to": "review_required",
+         "notifications": [{"notification_type": "email",
+                            "name": "Workflow::NeedsReviewNotification",
+                            "to": ["reviewing"]}],
+         "methods": ["Hyrax::Workflow::DeactivateObject",
+                     "Workflow::ResolveClaims"]}, 
+
+        {"name": "claim_for_review",
+         "from_states": [{"names": ["review_required"], "roles": ["reviewing"]}],
+         "transition_to": "review_underway",
+         "notifications": [],
+         "methods": ["Workflow::ClaimObjectReview"]}, 
+
+        {"name": "claim_for_edits",
+         "from_states": [{"names": ["changes_required"], "roles": ["editing"]}],
+         "transition_to": "changes_underway",
+         "notifications": [],
+         "methods": ["Workflow::ClaimObjectEdit"]}
+
+      ]
+    }
+  ]
+}
