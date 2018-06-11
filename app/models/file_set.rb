@@ -4,7 +4,7 @@ class FileSet < ActiveFedora::Base
   include Hyrax::FileSetBehavior
   include SamveraHls::FileSetBehavior
 
-  Hydra::Derivatives.output_file_service = Ucsc::PersistDerivatives
+  Hydra::Derivatives.output_file_service = ::PersistDerivatives
 
   def create_derivatives(filename)
     # create hls derivatives instead of normal ones 
