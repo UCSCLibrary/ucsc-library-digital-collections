@@ -8,8 +8,8 @@
         <div class="panel panel-default tabs">
             <ul class="nav nav-tabs" role="tablist">
                 <% @states.each do |state| %>
-                    <li>
-                        <a href="#<%= state[:name] %>" active ="<%= (@states.first[:id] == state[:id]).to_s %>" role="tab" data-toggle="tab"><%= state[:name].titleize %></a>
+                    <li <%= (@states.first[:id] == state[:id]) ? 'class="active"' : "" %>>
+                        <a href="#<%= state[:name] %>" active ="<%= .to_s %>" role="tab" data-toggle="tab"><%= state[:name].titleize %></a>
                     </li>
                 <% end %>
             </ul>
@@ -20,7 +20,7 @@
                  $("form#"+state_name+"-actions").submit();
              }
             </script>
-            
+            wor
             <div class="tab-content">
 
                 <% @states.each do |state| %>
