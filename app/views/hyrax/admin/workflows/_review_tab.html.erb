@@ -1,4 +1,4 @@
-<div id="<%= state[:name] %>" class="tab-pane">   
+<div id="<%= state[:name] %>" class="tab-pane <%= active ? 'active' : '' %>">
     <div class="panel panel-default labels">
         <div class="panel-body">
             <form id="<%= state[:name] %>-actions" method="post" action="/dashboard/workflow_actions/update">

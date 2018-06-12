@@ -9,7 +9,7 @@
             <ul class="nav nav-tabs" role="tablist">
                 <% @states.each do |state| %>
                     <li <%= (@states.first[:id] == state[:id]) ? 'class="active"' : "" %>>
-                        <a href="#<%= state[:name] %>" active ="<%= .to_s %>" role="tab" data-toggle="tab"><%= state[:name].titleize %></a>
+                        <a href="#<%= state[:name] %>" role="tab" data-toggle="tab"><%= state[:name].titleize %></a>
                     </li>
                 <% end %>
             </ul>
@@ -24,7 +24,7 @@
             <div class="tab-content">
 
                 <% @states.each do |state| %>
-                    <%= render 'review_tab', {state: state} %>
+                    <%= render 'review_tab', {state: state, active: (@states.first[:id] == state[:id]) } %>
                 <% end %>
 
             </div>
