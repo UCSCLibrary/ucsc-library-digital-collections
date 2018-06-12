@@ -19,8 +19,8 @@ module Ucsc
 
 
     def image?
-      return true if solr_document.resourceType.include?("http://purl.org/dc/dcmitype/StillImage")
-      return true if solr_document.resourceType.include?("http://purl.org/dc/dcmitype/Image")
+      return true if solr_document.resourceType_label.include?("Still Image")
+      return true if solr_document.resourceType_label.include?("Image")
       return false unless representative_id
       return solr_document.image?
     end
