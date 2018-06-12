@@ -9,24 +9,45 @@ class Admin::WorkflowsController < Hyrax::Admin::WorkflowsController
 
   def index
 
-    @states = []
+    states = []
     @workflow_id = workflow.id
 
     workflow.workflow_states.each do |state|
       label = state.name.titleize
       if claimed_states.include? state.name
-        list = Workflow::Claim.where(user_id: current_user.id, sipity_workflow_states_id: state.id )
+        
+        list = Workflow::Claim.where(user_id: current_user.id, sipity_workflow_states_id: state.id ).map{|claim| SolrDocument.find(claim.work_id)}
       else
         list = Hyrax::Workflow::StatusListService.new(self, "workflow_state_name_ssim:#{state.name}")
       end
       
       actions = Sipity::WorkflowStateAction.where(originating_workflow_state_id: state.id).map{|sa| sa.workflow_action}
-      
-      @states << {label: label,
+
+      states << {label: label,
                   name: state.name,
                   id: state.id,
                   list: list,
-                  actions: actions}
+                  actions: actions,
+                  order: preferred_order(state.name)}
     end
+    @states = states.sort_by{|state| state[:order]}
   end
+
+
+  def preferred_order state_name
+    case state_name
+    when "review_required"
+      return 1
+    when "review_underway"
+      return 2
+    when "changes_required"
+      return 3
+    when "changes_underway"
+      return 4
+    when "complete"
+      return 5
+    else
+      return 10
+    end
+    
 end
