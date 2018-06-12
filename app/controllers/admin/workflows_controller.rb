@@ -5,7 +5,7 @@ class Admin::WorkflowsController < Hyrax::Admin::WorkflowsController
   class_attribute :claimed_states
 
   self.workflow = Sipity::Workflow.last
-  self.claimed_states = ["under_review","changes_underway"]
+  self.claimed_states = ["review_underway","changes_underway"]
 
   def index
 
@@ -27,7 +27,6 @@ class Admin::WorkflowsController < Hyrax::Admin::WorkflowsController
                   id: state.id,
                   list: list,
                   actions: actions}
-
     end
   end
 end
