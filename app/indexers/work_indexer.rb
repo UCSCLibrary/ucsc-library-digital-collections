@@ -20,9 +20,6 @@ class WorkIndexer < Hyrax::WorkIndexer
   def index_controlled_fields(solr_doc)
     return unless object.persisted?
 
-    # Move on if the property does not need to be reconciled (saves time)
-    next unless needs_reconciliation?(object,solr_doc, property)
-
     object.controlled_properties.each do |property|
 
       # Clear old values from the solr document
@@ -50,37 +47,6 @@ class WorkIndexer < Hyrax::WorkIndexer
       end
     end
     solr_doc
-  end
-
-  def needs_reconciliation?(obj, solr_doc, property)
-
-    #first, definitely reconcile if the object is brand new
-    return true if obj.id.nil?
-
-    # Next, reconcile if we can't find the solr document for any reason
-    begin
-      old_solr_doc = SolrDocument.find(obj.id)
-    rescue RuntimeError => e
-      return true
-    end
-
-    new_solr_doc = SolrDocument.new(solr_doc)
-    last_reconciled = old_solr_doc.last_reconciled
-    
-    # Index if it was never reconciled or is newly created
-    return true if last_reconciled.blank?
-
-    # Index if it was last reconciled more than 6 months ago
-    return true if last_reconciled < 6.months.ago
-
-    # Do not reconcile if the property is unchanged
-    return false if old_solr_doc.send(property).sort == new_solr_doc.send.property.sort
-
-    # Do not reconcile if the property is unchanged and a string
-    return false if old_solr_doc.send(property+"_label").sort == new_solr_doc.send(property).sort
-
-    # Otherwise, go ahead and index
-    return true
   end
 
   def fetch_remote_label(resource)
