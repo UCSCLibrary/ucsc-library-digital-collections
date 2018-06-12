@@ -22,7 +22,7 @@ class FileSet < ActiveFedora::Base
   end
   
   def derivative_path_factory
-    Ucsc::DerivativePath
+    ::DerivativePath
   end
 
   def image_outputs
@@ -63,7 +63,7 @@ class FileSet < ActiveFedora::Base
     end
 
     def derivative_path_factory
-      Ucsc::DerivativePath
+      ::DerivativePath
     end
 
   private

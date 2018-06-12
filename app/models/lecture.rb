@@ -3,7 +3,7 @@
 class Lecture < ActiveFedora::Base
   include ::Hyrax::WorkBehavior
   include ::ScoobySnacks::WorkModelBehavior
-  self.indexer = Ucsc::WorkIndexer
+  self.indexer = ::WorkIndexer
   
   self.human_readable_type = 'Lecture'
 

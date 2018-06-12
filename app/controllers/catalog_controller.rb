@@ -58,8 +58,7 @@ class CatalogController < ApplicationController
     config.advanced_search[:query_parser] ||= 'dismax'
     config.advanced_search[:form_solr_parameters] ||= {}
 
-    config.search_builder_class = Ucsc::CatalogSearchBuilder
-#    config.search_builder_class = Hyrax::CatalogSearchBuilder
+    config.search_builder_class = CatalogSearchBuilder
 
     ## Default parameters to send to solr for all search-like requests. See also SolrHelper#solr_search_params
     config.default_solr_params = {

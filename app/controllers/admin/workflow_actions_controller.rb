@@ -8,7 +8,7 @@ class Admin::WorkflowActionsController < Hyrax::WorkflowActionsController
       form = Hyrax::Forms::WorkflowActionForm.new(
         current_ability: current_ability,
         work: ActiveFedora::Base.find(id),
-        attributes: {name: params["workflow_action"})
+        attributes: {name: params["workflow_action"]})
       unless form.save
         errors << id
       end

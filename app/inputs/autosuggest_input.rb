@@ -44,7 +44,7 @@ class AutosuggestInput < MultiValueInput
   def retrieve_label(uri)
     Rails.logger.info "Fetching #{resource.rdf_subject} from the authorative source. (this is slow)"
     Active
-    Ucsc::ControlledVocabularies::Person.new(uri).fetch().rdf_label.first.to_s
+    ControlledVocabularies::Person.new(uri).fetch().rdf_label.first.to_s
   rescue IOError, SocketError => e
     # IOError could result from a 500 error on the remote server
     # SocketError results if there is no server to connect to
@@ -135,7 +135,6 @@ class AutosuggestInput < MultiValueInput
     @collection ||= begin
                       val = object[attribute_name]
                       col = val.respond_to?(:to_ary) ? val.to_ary : val
-#                      col = [Ucsc::ControlledResource.new()] if col.empty?
                       col.reject { |value| value.to_s.strip.blank? }
                     end
   end
