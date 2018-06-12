@@ -1,4 +1,4 @@
-require 'nokogiri'
+orequire 'nokogiri'
 require 'open-uri'
 class WorkIndexer < Hyrax::WorkIndexer
 
@@ -20,9 +20,10 @@ class WorkIndexer < Hyrax::WorkIndexer
   def index_controlled_fields(solr_doc)
     return unless object.persisted?
 
+    # Move on if the property does not need to be reconciled (saves time)
+    next unless needs_reconciliation?(object,solr_doc, property)
+
     object.controlled_properties.each do |property|
-      # Move on if the property does not need to be reconciled (saves time)
-      next unless needs_reconciliation?(object,solr_doc, property)
 
       # Clear old values from the solr document
       solr_doc[label_field(property)] = []
