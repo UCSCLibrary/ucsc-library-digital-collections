@@ -44,7 +44,7 @@
                             <% state[:list].each do |document| %>
                                 <tr>
                                     <td>
-                                        <input type="checkbox" name="ids[]" value="<%= document.id%>" class="#select-<%= state[:name] %>-checkbox"/>
+                                        <input type="checkbox" name="ids[]" value="<%= document.id%>" class="select-<%= state[:name] %>-checkbox"/>
                                     </td>
                                     <td>
                                         <%= image_tag document.thumbnail_path, class: "review-thumb"  %>
