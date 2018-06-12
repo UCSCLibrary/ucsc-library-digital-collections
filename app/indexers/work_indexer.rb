@@ -1,4 +1,4 @@
-orequire 'nokogiri'
+require 'nokogiri'
 require 'open-uri'
 class WorkIndexer < Hyrax::WorkIndexer
 
