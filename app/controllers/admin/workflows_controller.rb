@@ -49,5 +49,6 @@ class Admin::WorkflowsController < Hyrax::Admin::WorkflowsController
     else
       return 10
     end
+  end
     
 end
