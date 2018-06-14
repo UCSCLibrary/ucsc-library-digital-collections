@@ -51,7 +51,7 @@
                                     </td>
                                     <td>
                                         <%= link_to document, [main_app, document] %>
-                                        <%= ": #{document.subseries.first}" if document.subseries %>
+                                        <%= ": #{document.subseries.first}" if !document.subseries.blank? %>
                                     </td>
                                     <td>
                                         <%= document.date_modified %>
