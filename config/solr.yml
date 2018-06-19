@@ -6,4 +6,4 @@ test:
 staging:
   url: http://digitalcollections-index.library.ucsc.edu:8983/solr/hycruz-staging
 production:
-  url: http://digitalcollections.library.ucsc.edu:8983/solr/hycruz
+  url: http://digitalcollections.library.ucsc.edu:8983/solr/hydra
