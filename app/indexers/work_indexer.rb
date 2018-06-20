@@ -12,7 +12,7 @@ class WorkIndexer < Hyrax::WorkIndexer
   def merge_subjects(solr_doc)
     subject_fields = ["subjectTopic","subjectName","subjectTemporal","subjectPlace"]
     subjects = []
-    subject_fields.each{ |subject_field| subjects.concat( solr_doc[label_field(subject_field)]) }
+    subject_fields.each{ |subject_field| subjects.concat( solr_doc[label_field(subject_field)]) if solr_doc[label_field(subject_field)] }
     solr_doc[label_field("subject")] = subjects
     solr_doc
   end
