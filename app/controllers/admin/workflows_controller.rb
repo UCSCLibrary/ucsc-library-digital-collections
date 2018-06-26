@@ -27,6 +27,7 @@ class Admin::WorkflowsController < Hyrax::Admin::WorkflowsController
                   name: state.name,
                   id: state.id,
                   list: list,
+                  num: list.each.reduce(0){|i,wrk| i+1},
                   actions: actions,
                   order: preferred_order(state.name)}
     end
