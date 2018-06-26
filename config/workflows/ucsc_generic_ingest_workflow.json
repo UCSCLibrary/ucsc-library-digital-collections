@@ -41,13 +41,13 @@
          "from_states": [{"names": ["review_required"], "roles": ["approving"]}],
          "transition_to": "review_underway",
          "notifications": [],
-         "methods": ["Workflow::ClaimObjectReview"]}, 
+         "methods": ["Workflow::ClaimObject"]}, 
 
         {"name": "claim_for_edits",
          "from_states": [{"names": ["changes_required"], "roles": ["editing"]}],
          "transition_to": "changes_underway",
          "notifications": [],
-         "methods": ["Workflow::ClaimObjectEdit"]}
+         "methods": ["Workflow::ClaimObject"]}
 
       ]
     }
