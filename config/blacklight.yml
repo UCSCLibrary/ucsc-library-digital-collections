@@ -9,5 +9,6 @@ staging:
   url: http://digitalcollections-index.library.ucsc.edu:8983/solr/hycruz-staging
 production:
   adapter: solr
-  url: http://digitalcollections.library.ucsc.edu:8983/solr/hydra
+  url: http://digitalcollections-index.library.ucsc.edu:8983/solr/hycruz
+
 
