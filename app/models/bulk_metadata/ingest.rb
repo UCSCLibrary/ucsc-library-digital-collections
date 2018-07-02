@@ -121,6 +121,14 @@ module BulkMetadata
       self.filename = save_as
     end
 
+    def where_status(status)
+      if status == "error"
+        rows.where('status not like "parsed" and status not like "ingesting" and status not like "ingested" and status not like "unparsed"')
+      else
+        rows.where(status: status)
+      end
+    end
+
     def numUnparsed
       return rows.where(status:"unparsed").count unless rows.empty?
       return 0 if filename.blank? or !File.exists?(filename)
@@ -133,7 +141,7 @@ module BulkMetadata
     end
 
     def numErrors
-      rows.where(status:"error").count
+      rows.where('status not like "parsed" and status not like "ingesting" and status not like "ingested" and status not like "unparsed"').count
     end
 
     def numIngesting

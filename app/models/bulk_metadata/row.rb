@@ -13,7 +13,7 @@ class BulkMetadata::Row < ApplicationRecord
   has_many :relationships
 
   def schema
-    ScoobySnacks::METADATA_SCHEMA["work_types"][@work_type.downcase]
+    ScoobySnacks::METADATA_SCHEMA["work_types"][work_type.downcase]
   end
 
   def work_type
@@ -99,8 +99,6 @@ class BulkMetadata::Row < ApplicationRecord
     @work_type = ingest.work_type
     id_type = ingest.relationship_identifier
     visibility = ingest.visibility
-
-    wrk = @work_type.camelize.constantize.new
 
     cells.each do |cell|
       next if cell.value.blank?
@@ -188,7 +186,7 @@ class BulkMetadata::Row < ApplicationRecord
         # if the cell name is not a valid metadata element, 
         # check if it is the label of a valid element
         property_name = format_param_name(cell.name)
-        if schema["labels"][property_name] && !wrk.responds_to?(property_name)
+        if schema["labels"][property_name] && !@work_type.camelize.constantize.new.responds_to?(property_name)
           property_name = schema["labels"][property_name] 
         end
 

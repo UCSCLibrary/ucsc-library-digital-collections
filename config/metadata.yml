@@ -34,6 +34,7 @@ properties:
     multiple: true
     primary: false
     hidden: false
+    stored: true
     display_area: more
     core: false
     work_title: false
@@ -42,10 +43,8 @@ properties:
     index_as: stored_searchable
     search_field: false
     sort_field: false
-    index_field: false
     input_as: text
     search_result_display: true
-#    class_name: Ucsc::ControlledResource
 
   title:
     definition: "The title of the resource."
@@ -60,7 +59,6 @@ properties:
     work_title: tre
     index_itemprop: name
     index_if: false
-    index_field: true
     search_field: true
     OAI: DC:title
 
@@ -144,7 +142,7 @@ properties:
   
   publisher:
     predicate: "DC:publisher"
-    label: "Digital Publicher & Contact Info"
+    label: "Digital Publisher & Contact Info"
 #    multiple: false
     core: true
     OAI: DC:publisher

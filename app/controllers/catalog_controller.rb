@@ -58,8 +58,7 @@ class CatalogController < ApplicationController
     config.advanced_search[:query_parser] ||= 'dismax'
     config.advanced_search[:form_solr_parameters] ||= {}
 
-    config.search_builder_class = Ucsc::CatalogSearchBuilder
-#    config.search_builder_class = Hyrax::CatalogSearchBuilder
+    config.search_builder_class = CatalogSearchBuilder
 
     ## Default parameters to send to solr for all search-like requests. See also SolrHelper#solr_search_params
     config.default_solr_params = {
@@ -99,8 +98,8 @@ class CatalogController < ApplicationController
     # ------
 
     ScoobySnacks::BlacklightConfiguration.add_index_fields(config)
+    config.add_index_field solr_name("subject_label", :stored_searchable), label: "Subject"
 
-#    config.add_index_field solr_name("file_format", :stored_searchable), label: "File Format", link_to_search: solr_name("file_format", :facetable)
 #    config.add_index_field solr_name("identifier", :stored_searchable), label: "Identifier", helper_method: :index_field_link, field_name: 'identifier'
 #    config.add_index_field solr_name("embargo_release_date", :stored_sortable, type: :date), label: "Embargo release date", helper_method: :human_readable_date
 #    config.add_index_field solr_name("lease_expiration_date", :stored_sortable, type: :date), label: "Lease expiration date", helper_method: :human_readable_date
@@ -115,8 +114,7 @@ class CatalogController < ApplicationController
 
 
     ScoobySnacks::BlacklightConfiguration.add_show_fields(config)
-
-
+    config.add_show_field solr_name("subject_label", :stored_searchable), label: "Subject"
 
     # "fielded" search configuration. Used by pulldown among other places.
     # For supported keys in hash, see rdoc for Blacklight::SearchFields

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180509184807) do
+ActiveRecord::Schema.define(version: 20180613175214) do
 
   create_table "bookmarks", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id",                     null: false
@@ -375,6 +375,16 @@ ActiveRecord::Schema.define(version: 20180509184807) do
     t.index ["proxy_for_id", "proxy_for_type"], name: "sipity_agents_proxy_for", unique: true, using: :btree
   end
 
+  create_table "sipity_claims", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "user_id"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.integer  "sipity_workflow_states_id"
+    t.string   "work_id"
+    t.index ["sipity_workflow_states_id"], name: "index_sipity_claims_on_sipity_workflow_states_id", using: :btree
+    t.index ["user_id"], name: "index_sipity_claims_on_user_id", using: :btree
+  end
+
   create_table "sipity_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "entity_id",                null: false
     t.integer  "agent_id",                 null: false
@@ -640,5 +650,6 @@ ActiveRecord::Schema.define(version: 20180509184807) do
   add_foreign_key "mailboxer_receipts", "mailboxer_notifications", column: "notification_id", name: "receipts_on_notification_id"
   add_foreign_key "permission_template_accesses", "permission_templates"
   add_foreign_key "qa_local_authority_entries", "qa_local_authorities", column: "local_authority_id"
+  add_foreign_key "sipity_claims", "users"
   add_foreign_key "uploaded_files", "users"
 end

@@ -37,6 +37,8 @@ role :ingest, %w{hyrax@digitalcollections-ingests.library.ucsc.edu}
 set :default_env, { RAILS_ENV: "staging" }
 set :rails_env, "staging"
 
+set :branch, ENV['BRANCH'] || "staging"
+
 # Custom SSH Options
 # ==================
 # You may pass any option but keep in mind that net/ssh understands a

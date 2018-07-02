@@ -1,0 +1,40 @@
+<% if can? :review, :submissions %>
+    <li class="h5"><%= t('hyrax.admin.sidebar.tasks') %></li>
+    <%= menu.nav_link(hyrax.admin_workflows_path) do %>
+        <span class="fa fa-flag"></span> <span class="sidebar-action-text"><%= t('hyrax.admin.sidebar.workflow_review') %></span>
+    <% end %>
+<% end %>
+
+<% if can? :manage, User %>
+    <%= menu.nav_link(hyrax.admin_users_path) do %>
+        <span class="fa fa-user"></span> <span class="sidebar-action-text"><%= t('hyrax.admin.sidebar.users') %></span>
+    <% end %>
+<% end %>
+
+
+<% if can? :review, :submissions %>
+  <li>
+    <%= menu.collapsable_section 'Bulk Metadata',
+                                 icon_class: "fa fa-table",
+                                 id: 'collapseIngests',
+                                 open: false do %>
+      <%= menu.nav_link("/bulk_metadata/ingests/new") do %>
+        <span class="fa fa-file-o"></span> New Bulk Ingest/Edit
+      <% end %>
+      <%= menu.nav_link("/bulk_metadata/ingests") do %>
+        <span class="fa fa-copy"></span> Manage Bulk Ingests/Edits
+      <% end %>
+    <% end %>
+  </li>
+<% end %>
+
+<% if can? :read, :admin_dashboard %>
+    <%= menu.nav_link(hyrax.embargoes_path) do %>
+        <span class="fa fa-flag"></span> <span class="sidebar-action-text"><%= t('hyrax.embargoes.index.manage_embargoes') %></span>
+    <% end %>
+
+    <%= menu.nav_link(hyrax.leases_path) do %>
+        <span class="fa fa-flag"></span> <span class="sidebar-action-text"><%= t('hyrax.leases.index.manage_leases') %></span>
+    <% end %>
+<% end %>
+
