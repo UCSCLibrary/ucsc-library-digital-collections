@@ -107,7 +107,6 @@ properties:
       - authority: local
         subauthority: agents
     primary: true
-#    required: true
     facet: true
     index_itemprop: creator
     search_field: true
@@ -158,7 +157,6 @@ properties:
     label: Type
     search_field: true
     predicate: DC:type
-    required: true
     vocabulary: 
       authority: local
       subauthority: dcmi_types
@@ -174,7 +172,7 @@ properties:
     DC mapping: dc:rights
     label: Copyright Statement
     predicate: DC:rights
-    required: 'true'
+#    required: 'true'
     core: true
     OAI: DC:rights
   
