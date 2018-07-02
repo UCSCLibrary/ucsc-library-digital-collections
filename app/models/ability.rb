@@ -13,18 +13,14 @@ class Ability
       can :manage, BulkMetadata::Row
       can :manage, BulkMetadata::Ingest
       can :manage, BulkMetadata::Edit
-    else
-      cannot :manage, BulkMetadata::Row
-      cannot :manage, BulkMetadata::Ingest
-      cannot :manage, BulkMetadata::Edit
+      can :manage, User
     end
 
     if user_groups.include? "reviewer"
       can :read, ContentBlock
       can :read, :admin_dashboard
-
-      can :index, Hydra::AccessControls::Embargo
-      can :index, Hydra::AccessControls::Lease
+      
+      can :review, :submissions
 
       can :view_admin_show_any, AdminSet
       can :view_admin_show_any, Collection
