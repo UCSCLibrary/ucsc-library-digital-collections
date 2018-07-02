@@ -662,7 +662,7 @@ GEM
       rdf (~> 2.1)
     redic (1.5.0)
       hiredis
-    redis (4.0.1)
+    redis (3.3.5)
     redis-namespace (1.6.0)
       redis (>= 3.0.4)
     redlock (0.2.1)
@@ -856,6 +856,7 @@ DEPENDENCIES
   puma (~> 3.0)
   rails (~> 5.0.0, >= 5.0.0.1)
   rails-controller-testing
+  redis (~> 3.0)
   resque-pool
   riiif (~> 1.1)
   rsolr (~> 1.0)
@@ -874,4 +875,4 @@ DEPENDENCIES
   web-console
 
 BUNDLED WITH
-   1.15.4
+   1.16.1

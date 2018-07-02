@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180104161318) do
+ActiveRecord::Schema.define(version: 20180613175214) do
 
   create_table "bookmarks", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id",                     null: false
@@ -74,6 +74,7 @@ ActiveRecord::Schema.define(version: 20180104161318) do
     t.datetime "updated_at",        null: false
     t.integer  "row_id"
     t.string   "status"
+    t.index ["row_id"], name: "fk_rails_e0a67ffd2b", using: :btree
   end
 
   create_table "bulk_meta_rows", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -194,6 +195,25 @@ ActiveRecord::Schema.define(version: 20180104161318) do
     t.index ["user_id"], name: "index_job_io_wrappers_on_user_id", using: :btree
   end
 
+  create_table "ld_buffers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "url"
+    t.string   "label"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "local_authorities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "name"
+  end
+
+  create_table "local_authority_entries", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer "local_authority_id"
+    t.string  "label"
+    t.string  "uri"
+    t.index ["local_authority_id", "label"], name: "entries_by_term_and_label", using: :btree
+    t.index ["local_authority_id", "uri"], name: "entries_by_term_and_uri", using: :btree
+  end
+
   create_table "mailboxer_conversation_opt_outs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string  "unsubscriber_type"
     t.integer "unsubscriber_id"
@@ -312,11 +332,9 @@ ActiveRecord::Schema.define(version: 20180104161318) do
     t.integer  "local_authority_id"
     t.string   "label"
     t.string   "uri"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
-    t.string   "lower_label",        limit: 256
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
     t.index ["local_authority_id"], name: "index_qa_local_authority_entries_on_local_authority_id", using: :btree
-    t.index ["lower_label", "local_authority_id"], name: "index_qa_local_authority_entries_on_lower_label_and_authority", using: :btree
     t.index ["uri"], name: "index_qa_local_authority_entries_on_uri", unique: true, using: :btree
   end
 
@@ -355,6 +373,16 @@ ActiveRecord::Schema.define(version: 20180104161318) do
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
     t.index ["proxy_for_id", "proxy_for_type"], name: "sipity_agents_proxy_for", unique: true, using: :btree
+  end
+
+  create_table "sipity_claims", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "user_id"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.integer  "sipity_workflow_states_id"
+    t.string   "work_id"
+    t.index ["sipity_workflow_states_id"], name: "index_sipity_claims_on_sipity_workflow_states_id", using: :btree
+    t.index ["user_id"], name: "index_sipity_claims_on_user_id", using: :btree
   end
 
   create_table "sipity_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -611,7 +639,10 @@ ActiveRecord::Schema.define(version: 20180104161318) do
 
   add_foreign_key "bulk_meta_cells", "bulk_meta_rows", column: "row_id"
   add_foreign_key "bulk_meta_ingests", "users"
+  add_foreign_key "bulk_meta_logs", "bulk_meta_cells", column: "cell_id"
   add_foreign_key "bulk_meta_logs", "bulk_meta_ingests", column: "ingest_id"
+  add_foreign_key "bulk_meta_logs", "bulk_meta_rows", column: "row_id"
+  add_foreign_key "bulk_meta_relationships", "bulk_meta_rows", column: "row_id"
   add_foreign_key "bulk_meta_rows", "bulk_meta_ingests", column: "ingest_id"
   add_foreign_key "curation_concerns_operations", "users"
   add_foreign_key "mailboxer_conversation_opt_outs", "mailboxer_conversations", column: "conversation_id", name: "mb_opt_outs_on_conversations_id"
@@ -619,5 +650,6 @@ ActiveRecord::Schema.define(version: 20180104161318) do
   add_foreign_key "mailboxer_receipts", "mailboxer_notifications", column: "notification_id", name: "receipts_on_notification_id"
   add_foreign_key "permission_template_accesses", "permission_templates"
   add_foreign_key "qa_local_authority_entries", "qa_local_authorities", column: "local_authority_id"
+  add_foreign_key "sipity_claims", "users"
   add_foreign_key "uploaded_files", "users"
 end

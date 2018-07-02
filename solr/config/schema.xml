@@ -22,14 +22,7 @@
  (i.e. ./solr/conf/schema.xml by default)
  or located where the classloader for the Solr webapp can find it.
 
- This example schema is the recommended starting point for users.
- It should be kept correct and concise, usable out-of-the-box.
-
- For more information, on how to customize this file, please see
- http://wiki.apache.org/solr/SchemaXml
-
- PERFORMANCE NOTE: this schema includes many optional features and should not
- be used for benchmarking.  To improve performance one could
+  PERFORMANCE NOTE:  To improve performance one could
   - set stored="false" for all fields possible (esp large fields) when you
     only need to search on the field but don't need to return the original
     value.
@@ -350,10 +343,10 @@
     destination field is to use the dynamic field syntax.
     copyField also supports a maxChars to copy setting.  -->
 
-   <!-- <copyField source="*_tesim" dest="all_text_timv" maxChars="3000"/> -->
+   <copyField source="*_tesm" dest="all_text_timv" maxChars="3000"/>
    <!-- for suggestions -->
-   <copyField source="*_tesim" dest="suggest"/>
-   <copyField source="*_ssim" dest="suggest"/>
+   <!-- <copyField source="*_tesim" dest="suggest"/> -->
+   <!-- <copyField source="*_ssim" dest="suggest"/> -->
 
  <!-- Similarity is the scoring routine for each document vs. a query.
       A custom similarity may be specified here, but the default is fine

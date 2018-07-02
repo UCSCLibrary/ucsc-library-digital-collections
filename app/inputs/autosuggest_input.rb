@@ -1,6 +1,7 @@
 class AutosuggestInput < ControlledVocabularyInput
 #  private
   
+
 #  def build_field(value, index)
 #    options = input_html_options.dup
 #    authority_picker(options[:data]['authority-select']) + super
@@ -17,4 +18,6 @@ class AutosuggestInput < ControlledVocabularyInput
 #                   wrapper: false,
 #                   :input_html => { :class => 'authority' })
 #  end
+
+
 end

@@ -61,7 +61,7 @@ module Hyrax
         return default_file unless file_reference
 
 #        file_path = Hyrax::DerivativePath.derivative_path_for_reference(params[asset_param_key], file_reference)
-        file_path = Ucsc::DerivativePath.derivative_path_for_reference(params[asset_param_key], file_reference)
+        file_path = ::DerivativePath.derivative_path_for_reference(params[asset_param_key], file_reference)
         File.exist?(file_path) ? file_path : nil
       end
 

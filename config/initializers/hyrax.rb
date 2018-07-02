@@ -61,7 +61,7 @@ Hyrax.config do |config|
   # config.temp_file_base = '/home/developer1'
 
   # Hostpath to be used in Endnote exports
-  # config.persistent_hostpath = 'http://localhost/files/'
+  config.persistent_hostpath = 'http://localhost/records/'
 
   # If you have ffmpeg installed and want to transcode audio and video set to true
    config.enable_ffmpeg = true
@@ -251,9 +251,12 @@ end
 
 Date::DATE_FORMATS[:standard] = "%m/%d/%Y"
 
-Qa::Authorities::Local.register_subauthority('subjects', 'Qa::Authorities::Local::TableBasedAuthority')
-Qa::Authorities::Local.register_subauthority('languages', 'Qa::Authorities::Local::TableBasedAuthority')
-Qa::Authorities::Local.register_subauthority('genres', 'Qa::Authorities::Local::TableBasedAuthority')
+Qa::Authorities::Local.register_subauthority('dcmi_types', 'Qa::Authorities::Local::TableBasedAuthority')
+Qa::Authorities::Local.register_subauthority('agents', 'Qa::Authorities::Local::TableBasedAuthority')
+Qa::Authorities::Local.register_subauthority('places', 'Qa::Authorities::Local::TableBasedAuthority')
+Qa::Authorities::Local.register_subauthority('time_periods', 'Qa::Authorities::Local::TableBasedAuthority')
+Qa::Authorities::Local.register_subauthority('topics', 'Qa::Authorities::Local::TableBasedAuthority')
+Qa::Authorities::Local.register_subauthority('formats', 'Qa::Authorities::Local::TableBasedAuthority')
 
 Qa::Authorities::Geonames.username = 'UCSC_Library_DI'
 
@@ -276,17 +279,14 @@ Rails.application.config.to_prepare do
     end
   end
 
-  OAI::Provider::Response::RecordResponse.class_eval do
-    
+  OAI::Provider::Response::RecordResponse.class_eval do    
     def header_for(record)
       param = Hash.new
       param[:status] = 'deleted' if deleted?(record)
       @builder.header param do
-        @builder.identifier identifier_for(record)
+        @builder.identifier record.id
         @builder.type record.human_readable_type
         @builder.datestamp timestamp_for(record)
-        @builder.isShownAt persistent_url(record)
-        @builder.object object_for(record)
 
         record.collection_ids.each do |id|
           @builder.isPartOf id
@@ -294,28 +294,8 @@ Rails.application.config.to_prepare do
 
         sets_for(record).each do |set|
           @builder.setSpec set.spec
-        end
+         end
       end
-    end
-    
-    private
-    
-    def identifier_for(record)
-      record.id
-    end
-
-    def persistent_url(record)
-      "#{root_url}/records/#{record.id}"
-    end
-
-    def object_for(record)
-      root_url  + record.thumbnail_path.gsub("thumbnail","large")
-    end
-
-    def root_url
-      "https://"+Socket.gethostname
-    end
-
+    end      
   end
-#  OAI::Provider::Response::RecordResponse.include Ucsc::Oai::RecordHeaderExtensions
 end

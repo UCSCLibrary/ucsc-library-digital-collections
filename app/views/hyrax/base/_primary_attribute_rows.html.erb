@@ -1,8 +1,18 @@
-<%= presenter.attribute_to_html(:alternativeTitle, label: "Alternative Title:") %>
+
+<%= presenter.attribute_to_html(:titleAlternative, label: "Alternative Title:") %>
+<%= presenter.attribute_to_html(:subseries, label: "SubSeries Title:") %>
+<%= presenter.attribute_to_html(:description, label: "Description:") %>
 <%= presenter.attribute_to_html(:creator_label, render_as: :faceted, label: "Creator") %>
 <%= presenter.attribute_to_html(:subject_label, render_as: :faceted, label: "Subject") %>
+<%= presenter.attribute_to_html(:subjectTopic_label, render_as: :faceted, label: "Subject") %>
+<%= presenter.attribute_to_html(:subjectName_label, render_as: :faceted, label: "Subject (Person)") %>
+<%= presenter.attribute_to_html(:subjectPlace_label, render_as: :faceted, label: "Subject (Place)") %>
+<%= presenter.attribute_to_html(:theme, label: "Theme") %>
 <%= presenter.attribute_to_html(:publisher, render_as: :faceted, label: "Publisher") %>
-
 <%= presenter.attribute_to_html(:resourceType_label, render_as: :faceted, label: "Resource Type") %>
 <%= presenter.attribute_to_html(:keyword, render_as: :faceted) %>
 <%= presenter.attribute_to_html(:dateCreated, render_as: :linked, search_field: 'date_created_tesim', label: "Date Created") %>
+
+
+
+

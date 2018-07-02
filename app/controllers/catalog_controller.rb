@@ -1,4 +1,5 @@
 require 'scooby_snacks/blacklight_configuration'
+require 'ucsc/oai/solr_document_provider'
 class CatalogController < ApplicationController
   include Hydra::Catalog
   include Hydra::Controller::ControllerBehavior  
@@ -21,7 +22,6 @@ class CatalogController < ApplicationController
 
   configure_blacklight do |config|
 
-    include ScoobySnacks::CatalogControllerBehavior
 
     config.oai = {
       provider: {
@@ -33,7 +33,10 @@ class CatalogController < ApplicationController
       },
       document: {
         limit: 25,            # number of records returned with each request, default: 15
-        set_fields: []        # ability to define ListSets, optional, default: nil
+        set_fields: [
+#          {label: "Work Type", solr_field: "has_model_ssim"},
+          {label: "Collection", solr_field: "member_of_collections_ssim"}
+        ]        # ability to define ListSets, optional, default: nil
       }
     }
 
@@ -55,8 +58,7 @@ class CatalogController < ApplicationController
     config.advanced_search[:query_parser] ||= 'dismax'
     config.advanced_search[:form_solr_parameters] ||= {}
 
-    config.search_builder_class = Hyrax::CatalogSearchBuilder
-
+    config.search_builder_class = CatalogSearchBuilder
 
     ## Default parameters to send to solr for all search-like requests. See also SolrHelper#solr_search_params
     config.default_solr_params = {
@@ -80,7 +82,7 @@ class CatalogController < ApplicationController
     # replaced by scoobysnacks
     # ------
 
-
+    ScoobySnacks::BlacklightConfiguration.add_facet_fields(config)
 
     # Have BL send all facet field names to Solr, which has been the default
     # previously. Simply remove these lines if you'd rather use Solr request
@@ -96,8 +98,8 @@ class CatalogController < ApplicationController
     # ------
 
     ScoobySnacks::BlacklightConfiguration.add_index_fields(config)
+    config.add_index_field solr_name("subject_label", :stored_searchable), label: "Subject"
 
-#    config.add_index_field solr_name("file_format", :stored_searchable), label: "File Format", link_to_search: solr_name("file_format", :facetable)
 #    config.add_index_field solr_name("identifier", :stored_searchable), label: "Identifier", helper_method: :index_field_link, field_name: 'identifier'
 #    config.add_index_field solr_name("embargo_release_date", :stored_sortable, type: :date), label: "Embargo release date", helper_method: :human_readable_date
 #    config.add_index_field solr_name("lease_expiration_date", :stored_sortable, type: :date), label: "Lease expiration date", helper_method: :human_readable_date
@@ -109,6 +111,10 @@ class CatalogController < ApplicationController
     # ----
     # replaced by scoobysnacks
     # ------
+
+
+    ScoobySnacks::BlacklightConfiguration.add_show_fields(config)
+    config.add_show_field solr_name("subject_label", :stored_searchable), label: "Subject"
 
     # "fielded" search configuration. Used by pulldown among other places.
     # For supported keys in hash, see rdoc for Blacklight::SearchFields
@@ -127,6 +133,9 @@ class CatalogController < ApplicationController
     # This one uses all the defaults set by the solr request handler. Which
     # solr request handler? The one set in config[:default_solr_parameters][:qt],
     # since we aren't specifying it otherwise.
+
+    ScoobySnacks::BlacklightConfiguration.add_search_fields(config)
+
     config.add_search_field('all_fields', label: 'All Fields', include_in_advanced_search: false) do |field|
       all_names = config.show_fields.values.map(&:field).join(" ")
       title_name = solr_name("title", :stored_searchable)
@@ -146,6 +155,9 @@ class CatalogController < ApplicationController
     # whether the sort is ascending or descending (it must be asc or desc
     # except in the relevancy case).
     # label is key, solr field is value
+
+    ScoobySnacks::BlacklightConfiguration.add_sort_fields(config)
+
     config.add_sort_field "score desc, #{uploaded_field} desc", label: "relevance"
     config.add_sort_field "#{uploaded_field} desc", label: "date uploaded \u25BC"
     config.add_sort_field "#{uploaded_field} asc", label: "date uploaded \u25B2"
@@ -164,6 +176,8 @@ class CatalogController < ApplicationController
     false
   end
 
-
+  def oai_provider
+    @oai_provider ||= Ucsc::Oai::SolrDocumentProvider.new(self,oai_config)
+  end
 
 end

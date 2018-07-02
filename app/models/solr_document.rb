@@ -1,3 +1,4 @@
+require 'socket'
 # frozen_string_literal: true
 class SolrDocument
   include Blacklight::Solr::Document
@@ -10,6 +11,9 @@ class SolrDocument
 
   # Adds ScoobySnacks metadata attribute definitions
   include ScoobySnacks::SolrBehavior
+
+  # add collection membership in OAI-PMH feed
+  add_field_semantics('isPartOf','member_of_collections_ssim')
 
   # self.unique_key = 'id'
 
@@ -25,10 +29,27 @@ class SolrDocument
   # and Blacklight::Document::SemanticFields#to_semantic_values
   # Recommendation: Use field names from Dublin Core
   use_extension(Blacklight::Document::DublinCore)
+  use_extension(Ucsc::Blacklight::Dpla)
 
   # Do content negotiation for AF models. 
 
   use_extension( Hydra::ContentNegotiation )
+
+  def permalink(record = self)
+    "#{root_url}/records/#{record.id}"
+  end
+
+  def display_image_path(record = self)
+    record.thumbnail_path.gsub("thumbnail","large")
+  end
+
+  def display_image_url(record = self)
+    root_url + display_image_path(record)
+  end
+
+  def root_url
+    "https://"+Socket.gethostname
+  end
 
   def member_ids
     fetch('member_ids_ssim', [])
@@ -70,5 +91,7 @@ class SolrDocument
     return nil if response.nil?
     @parent_work_solr_document = SolrDocument.new(response)
   end
+
+
 
 end

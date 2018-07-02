@@ -1,44 +1,41 @@
+require 'uri'
+require 'socket'
+
 class BulkMetadata::Row < ApplicationRecord
+
+  attr_accessor :work_type
 
   self.table_name = "bulk_meta_rows"
 
-  BASE_PATH = "/avalon2sufia/inbox"
+  BASE_PATH = "/dams_ingest"
   belongs_to :ingest 
   has_many :cells
   has_many :relationships
 
   def schema
-    ScoobySnacks::METADATA_SCHEMA["work_types"][ingest.work_type.downcase]
+    ScoobySnacks::METADATA_SCHEMA["work_types"][work_type.downcase]
   end
 
-  def parse
-    #TODO
-    #this method only applies if the text of the row is edited after failure
-    #parse self.text
-    #make sure it matches up with headers array
-    #(get array headers from parent csv file if necessary)
-    #update status
-    #create log
-    #return parsed array
+  def work_type
+    @work_type ||= ingest.work_type
   end
 
-  def updateText(text)
-    #TODO check whether this is stupid (there is a convention for this)
-    #log event
-    #update text
+  def reparse
+    row_hash = CSV.parse(ingest.get_csv([id]),headers:true).first
+    cells.each{ |cell| cell.destroy! }
+    createNewCells!(row_hash)
   end
 
   def createNewCells!(row_hash)
-    puts "work_type: #{ingest.work_type}"
-    puts "schema: #{schema.to_s}"
     row_hash.each do |property,values|
       next if values.nil?
       row_errors = []
       values.split(';').each do |value|
 
         if schema["properties"][property] && schema["properties"][property]["controlled"]
-          cell = cells.find_by(name: property, value_url: value )
-          cell ||= self.cells.create(name: property, value_url: value, value: value, status: "pending")
+          url = (value =~ URI::regexp) ? value : localAuthUrl(property, value)
+          cell = cells.find_by(name: property, value_url: url )
+          cell ||= self.cells.create(name: property, value_url: url, value: value, status: "pending")
         else
           cell = cells.find_by(name: property, value: value )
           cell ||= self.cells.create(name: property, value: value, status: "pending") 
@@ -47,24 +44,61 @@ class BulkMetadata::Row < ApplicationRecord
     end
   end
 
-  #special cell types:
-  #file
-  #relationship (parent, child)
-  #work type
-  #edit identifier
-  #ignore
 
+  def localAuthUrl(property, value) 
+    return value if (auth = getLocalAuth(property)).nil?
+    return (url = findAuthUrl(auth, value)) ? url : mintLocalAuthUrl(auth,value)
+  end
+
+  def mintLocalAuthUrl(auth_name, value) 
+    id = value.parameterize
+    auth = Qa::LocalAuthority.find_or_create_by(name: auth_name)
+    Qa::LocalAuthorityEntry.create(local_authority: auth,
+                                   label: value,
+                                   uri: id)
+    return localIdToUrl(id,auth_name)
+  end
+
+  def findAuthUrl(auth, value)
+    return nil if auth.nil?
+    return nil unless (entries = Qa::Authorities::Local.subauthority_for(auth).search(value))
+    entries.each do |entry|
+      #require exact match
+      if entry["label"] == value
+        url = entry["url"]
+        url ||= entry["id"]
+        url = localIdToUrl(url,auth) unless url =~ URI::regexp
+        return url
+      end
+    end
+    return nil
+  end
+
+  def localIdToUrl(id,auth_name) 
+    return "https://digitalcollections.library.ucsc.edu/authorities/show/local/#{auth_name}/#{id}"
+  end
+
+  def getLocalAuth(property)
+     if vocs = schema["properties"][property]["vocabularies"]
+       vocs.each do |voc|
+         return voc["subauthority"] if voc["authority"].downcase == "local"
+       end
+     elsif voc = schema["properties"][property]["vocabulary"]
+       return voc["subauthority"] if voc["authority"].downcase == "local"
+     end
+     return nil
+  end
+
+    
   def ingest!(user_email)
     user = User.find_by_email(user_email)
     metadata = {}
 
     #presume a new work unless we hear otherwise
     edit_id = nil;
-    work_type = ingest.work_type
+    @work_type = ingest.work_type
     id_type = ingest.relationship_identifier
     visibility = ingest.visibility
-
-    wrk = work_type.camelize.constantize.new
 
     cells.each do |cell|
       next if cell.value.blank?
@@ -77,8 +111,8 @@ class BulkMetadata::Row < ApplicationRecord
           file = File.open(File.join(BASE_PATH,cell.value))
           uploaded_file = Hyrax::UploadedFile.create(file: file, user: user)
           (metadata[:uploaded_files] ||= []) << uploaded_file.id if !uploaded_file.id.nil?
-        rescue
-          self.status = "Error: Cannot open file"
+        rescue Exception => e  
+          self.status = "Error: Cannot open file: #{File.join(BASE_PATH,cell.value)}, #{e.message}"
           self.save
           return false
         end
@@ -123,7 +157,7 @@ class BulkMetadata::Row < ApplicationRecord
       when "work type"
         # set the work type for this item
         # overriding the default set for the whole ingest
-        work_type = cell.value
+        @work_type = cell.value
         
       when "visibility"
         # set the work type for this item
@@ -152,15 +186,15 @@ class BulkMetadata::Row < ApplicationRecord
         # if the cell name is not a valid metadata element, 
         # check if it is the label of a valid element
         property_name = format_param_name(cell.name)
-        if schema["labels"][property_name] && !wrk.responds_to?(property_name)
+        if schema["labels"][property_name] && !@work_type.camelize.constantize.new.responds_to?(property_name)
           property_name = schema["labels"][property_name] 
         end
 
         next unless schema["properties"][property_name]
 
-
         if schema["properties"][property_name]["controlled"]
           value = cell.value_url ? cell.value_url : cell.value
+          
           metadata["#{property_name}_attributes"] ||= []
           metadata["#{property_name}_attributes"] << {id: value.strip}
         else
@@ -179,9 +213,9 @@ class BulkMetadata::Row < ApplicationRecord
     end
 
     if edit_id.nil?
-      UcscCreateWorkJob.perform_later(work_type,user_email,metadata,id,visibility)
+      UcscCreateWorkJob.perform_later(@work_type,user_email,metadata,id,visibility)
     else
-      UcscEditWorkJob.perform_later(edit_id,work_type,user,metadata,id,visibility)
+      UcscEditWorkJob.perform_later(edit_id,@work_type,user,metadata,id,visibility)
     end
   end
 
@@ -197,12 +231,8 @@ class BulkMetadata::Row < ApplicationRecord
   end
 
   def ingested_work
-    return false if !@work_id
-    work_type.camelize.constantize.find(@work_id)
-  end
-
-  def set_work_id(work_id)
-    @work_id = work_id
+    return nil if ingested_id.nil?
+    work_type.camelize.constantize.find(ingested_id)
   end
 
   def title

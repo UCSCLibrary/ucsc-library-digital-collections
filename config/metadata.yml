@@ -34,6 +34,7 @@ properties:
     multiple: true
     primary: false
     hidden: false
+    stored: true
     display_area: more
     core: false
     work_title: false
@@ -43,8 +44,7 @@ properties:
     search_field: false
     sort_field: false
     input_as: text
-    search_result_display: false
-#    class_name: Ucsc::ControlledResource
+    search_result_display: true
 
   title:
     definition: "The title of the resource."
@@ -79,6 +79,21 @@ properties:
     predicate: "DC:alternative"
     search_field: true
     OAI: DC:alternative
+
+  subseries:
+    definition: "A subseries title for the resource."
+    usage_note: "This is a descriptive title not necessarily given by the creator"
+    label: "Sub-Series Title"
+    predicate: "BF2:subseriesStatement"
+    search_field: true
+    OAI: DC:alternative
+
+  theme:
+    definition: "A theme or something theme-like."
+    usage_note: ""
+    label: "Theme"
+    predicate: "opaque:set"
+    search_field: true
 
   creator:
     definition: "A person or organization responsible for creating the resource."
@@ -127,7 +142,7 @@ properties:
   
   publisher:
     predicate: "DC:publisher"
-    label: "Digital Publicher & Contact Info"
+    label: "Digital Publisher & Contact Info"
 #    multiple: false
     core: true
     OAI: DC:publisher
@@ -149,8 +164,10 @@ properties:
       subauthority: dcmi_types
     facet: true
     input: dropdown
+    OAI: DC:type
 #    multiple: false
 #    search_result_display: true
+   
   
   rightsStatement:
     definition: Information about rights held in and over the resource expressed in general terms (i.e. boilerplate statements).
@@ -218,6 +235,7 @@ properties:
     facet: true
     input: autosuggest
     core: true
+    OAI: DC:subject
 #    search_result_display: true
   
   subjectPlace:
@@ -279,10 +297,8 @@ properties:
     encoding: W3CDTF
     label: 'Date Created'
     predicate: DC:date
-    index_type: date
-    index_helper_method: human_readable_date
+#    index_helper_method: human_readable_date
     index_itemprop: dateCreated
-    sort_field: true
     input: date
     core: true    
     OAI: DC:date
@@ -298,8 +314,7 @@ properties:
     encoding: W3CDTF
     label: Date Digitized
     predicate: DC:modified
-    index_type: date
-    index_helper_method: human_readable_date
+#    index_helper_method: human_readable_date
     index_itemprop: dateModified
     input: date
   
@@ -308,16 +323,15 @@ properties:
     encoding: W3CDTF
     label: 'Date Published'
     predicate: DC:issued
-    index_type: date
-    index_helper_method: human_readable_date
+#    index_helper_method: human_readable_date
     index_itemprop: datePublished
-    sort_field: true
     input: date
   
   description:
     definition: An account of the resource.
     label: Description
     predicate: DC:description
+    index_field: true
     index_itemprop: "description"
     index_helper_method: "iconify_auto_link"
     search_field: true
@@ -408,6 +422,7 @@ properties:
     predicate: schema:identifier
     core: true
     display_area: brief
+    OAI: DC:identifier
 
   donorProvenance:
     definition: "A statement of any changes in ownership and custody of the resource since its creation that are significant for its authenticity, integrity, and interpretation."
@@ -448,6 +463,8 @@ work_types:
       title:
       titleAlternative:
         primary: true
+      subseries:
+        primary: true
       creator:
       contributor:
       publisher:
@@ -476,6 +493,7 @@ work_types:
       subjectPlace:
       subjectTemporal:
       genre:
+      physicalFormat:
       masterFilename:
       originalPublisher:
       physicalDescription:
@@ -484,6 +502,7 @@ work_types:
       collectionCallNumber:
       donorProvenance:
       boxFolder:
+      theme:
       itemCallNumber:
   collection:
     properties:
@@ -514,14 +533,29 @@ work_types:
       collectionCallNumber:
       donorProvenance:
   lecture:
+    properties:
       title:
+        inherit: prepend
       description:
+        primary: true
+      creator:
+      license:
+        inherit: true
+      keyword:
+        inherit: true
       dateCreated:
   course:
+    properties:
       title:
       description:
+        primary: true
+      creator:
+        primary: true
+      license:
+      keyword:
       dateCreated:
   gdao_work:
+    properties:
       title:
       description:
       dateCreated:

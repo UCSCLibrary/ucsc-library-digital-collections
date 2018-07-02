@@ -23,9 +23,11 @@ pickle-email-*.html
 
 /config/database.yml
 /config/secrets.yml
+/config/fedora.yml
 
 /public/uploads/batch_metadata_ingests/*
 /public/assets/*
+/public/stream
 
 # dotenv
 # TODO Comment out this rule if environment variables can be committed

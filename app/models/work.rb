@@ -4,11 +4,8 @@ class Work < ActiveFedora::Base
   include ::Hyrax::WorkBehavior
 #  include ::Hyrax::BasicMetadata
 
-  # Special hidden property to store the last indexed date
-  property :last_reconciled, predicate: ::RDF::Vocab::XHTML.index, multiple: false
-
   include ::ScoobySnacks::WorkModelBehavior
-  self.indexer = Ucsc::WorkIndexer
+  self.indexer = ::WorkIndexer
   # Change this to restrict which works can be added as a child.
   # self.valid_child_concerns = []
   validates :title, presence: { message: 'Your work must have a title.' }

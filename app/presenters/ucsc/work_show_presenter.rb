@@ -2,29 +2,27 @@ module Ucsc
   class WorkShowPresenter < Hyrax::WorkShowPresenter
     include ScoobySnacks::PresenterBehavior
 
-    #Todo: add code to optionally overwrite attributes 
-    # with parent work's info for some fields
-    # for example:
-    #   def creator
-    #    return solr_document.creator unless solr_document.creator.nil?
-    #    parent_work.creator unless parent_work.nil?
-    #  end
-
-
-    delegate :file_set_ids, to: :solr_document
+    delegate :file_set_ids, :display_image_url,:display_image_path, to: :solr_document
 
     delegate :member_av_files, :ordered_work_ids, to: :member_presenter_factory
 
     def representative_presenter
       return nil unless representative_id
-      file_set = FileSet.find(representative_id)
+      file_set = SolrDocument.find(representative_id)
       return nil unless file_set
-      solr_doc = SolrDocument.new(file_set.to_solr)
-      Hyrax::FileSetPresenter.new(solr_doc,current_ability)
+      Hyrax::FileSetPresenter.new(file_set,current_ability)
     end
 
     def all_av_files
       @all_av_files ||= generate_all_av_file_list
+    end
+
+
+    def image?
+      return true if solr_document.resourceType_label.include?("Still Image")
+      return true if solr_document.resourceType_label.include?("Image")
+      return false unless representative_id
+      return solr_document.image?
     end
 
     private 
@@ -32,7 +30,7 @@ module Ucsc
     def generate_all_av_file_list
       own_av_files = []
       file_set_ids.each do |id|
-        fs = FileSet.find(id)
+        fs = SolrDocument.find(id)
         next unless fs.audio? || fs.video?
         own_av_files << id
       end 

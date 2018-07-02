@@ -18,7 +18,10 @@ test:
   patron:
     - patron1@example.com
     - leland_himself@example.com
-
+staging:
+  archivist:
+    - archivist1@example.com
+    - ethenry@ucsc.edu
 production:
   archivist:
     - archivist1@example.com
