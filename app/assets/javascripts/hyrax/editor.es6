@@ -16,7 +16,6 @@ export default class {
     this.paramKey = element.data('paramKey') // The work type
     this.adminSetWidget = new AdminSetWidget(element.find('select[id$="_admin_set_id"]'))
     this.sharingTabElement = $('#tab-share')
-
     this.autocomplete()
     this.controlledVocabularies()
     this.sharingTab()
@@ -36,7 +35,7 @@ export default class {
       })
   }
 
-  // Autocomplete fields for the work edit form (based_near, subject, language, child works)
+  // Autocomplete fields for the work edit form 
   autocomplete() {
       var autocomplete = new Autocomplete()
 

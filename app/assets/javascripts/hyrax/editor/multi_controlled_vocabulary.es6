@@ -84,7 +84,7 @@ export default class MultiControlledVocabulary extends FieldManager {
   get _source() {
 
     return "<li class=\"field-wrapper input-group input-append\">" +
-      "<div class=auth-select-div><label>Authority:</label><select class={{paramKey}}_{{name}}_auth_select\">" + this._authSelectOptions() + "</select></div>" + 
+      "<div class=auth-select-div><label>Authority:</label><select class=\"{{paramKey}}_{{name}}_auth_select\">" + this._authSelectOptions() + "</select></div>" + 
       "<input class=\"string {{class}} optional form-control {{paramKey}}_{{name}} form-control multi-text-field\" name=\"{{paramKey}}[{{name}}_attributes][{{index}}][hidden_label]\" value=\"\" id=\"{{paramKey}}_{{name}}_attributes_{{index}}_hidden_label\" data-attribute=\"{{name}}\" type=\"text\">" +
       "<input name=\"{{paramKey}}[{{name}}_attributes][{{index}}][id]\" value=\"\" id=\"{{paramKey}}_{{name}}_attributes_{{index}}_id\" type=\"hidden\" data-id=\"remote\">" +
       "<input name=\"{{paramKey}}[{{name}}_attributes][{{index}}][_destroy]\" id=\"{{paramKey}}_{{name}}_attributes_{{index}}__destroy\" value=\"\" data-destroy=\"true\" type=\"hidden\"></li>"
