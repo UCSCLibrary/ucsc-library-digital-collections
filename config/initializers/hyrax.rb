@@ -166,12 +166,12 @@ Hyrax.config do |config|
 
   # Temporary paths to hold uploads before they are ingested into FCrepo
   # These must be lambdas that return a Pathname. Can be configured separately
-  config.upload_path = ->() { Pathname.new("/avalon2sufia/tmp") }
+  config.upload_path = ->() { Pathname.new("/dams_derivatives/tmp") }
   #  config.cache_path = ->() { Rails.root + 'tmp' + 'uploads' + 'cache' }
 
   # Location on local file system where derivatives will be stored
   # If you use a multi-server architecture, this MUST be a shared volume
-  config.derivatives_path = '/avalon2sufia/derivatives'
+  config.derivatives_path = '/dams_derivatives/staging'
 
   # Should schema.org microdata be displayed?
   # config.display_microdata = true
@@ -180,10 +180,6 @@ Hyrax.config do |config|
   # type can not be found in the locale file?
   # config.microdata_default_type = 'http://schema.org/CreativeWork'
 
-  # Location on local file system where uploaded files will be staged
-  # prior to being ingested into the repository or having derivatives generated.
-  # If you use a multi-server architecture, this MUST be a shared volume.
-  config.upload_path = ->() { Pathname.new("/avalon2sufia/tmp") }  
 
   # Should the media display partial render a download link?
  #  config.display_media_download_link = true
