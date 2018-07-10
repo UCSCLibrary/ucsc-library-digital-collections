@@ -64,7 +64,7 @@ Hyrax.config do |config|
   config.persistent_hostpath = 'http://localhost/records/'
 
   # If you have ffmpeg installed and want to transcode audio and video set to true
-   config.enable_ffmpeg = true
+  config.enable_ffmpeg = true
 
   # Hyrax uses NOIDs for files and collections instead of Fedora UUIDs
   # where NOID = 10-character string and UUID = 32-character string w/ hyphens
@@ -158,20 +158,17 @@ Hyrax.config do |config|
   # The banner image. Should be 5000px wide by 1000px tall
   # config.banner_image = 'https://cloud.githubusercontent.com/assets/92044/18370978/88ecac20-75f6-11e6-8399-6536640ef695.jpg'
   # config.banner_image = ''
-
-
   # image server
-
 
 
   # Temporary paths to hold uploads before they are ingested into FCrepo
   # These must be lambdas that return a Pathname. Can be configured separately
-  config.upload_path = ->() { Pathname.new("/dams_derivatives/tmp") }
-  #  config.cache_path = ->() { Rails.root + 'tmp' + 'uploads' + 'cache' }
+  config.upload_path = ->() { Pathname.new("/dams_derivatives/tmp/#{Rails.env}") }
+  config.cache_path  = ->() { Pathname.new("/dams_derivatives/tmp/#{Rails.env}/cache") }
 
   # Location on local file system where derivatives will be stored
   # If you use a multi-server architecture, this MUST be a shared volume
-  config.derivatives_path = '/dams_derivatives/staging'
+  config.derivatives_path = "/dams_derivatives/#{Rails.env}"
 
   # Should schema.org microdata be displayed?
   # config.display_microdata = true
@@ -179,7 +176,6 @@ Hyrax.config do |config|
   # What default microdata type should be used if a more appropriate
   # type can not be found in the locale file?
   # config.microdata_default_type = 'http://schema.org/CreativeWork'
-
 
   # Should the media display partial render a download link?
  #  config.display_media_download_link = true
