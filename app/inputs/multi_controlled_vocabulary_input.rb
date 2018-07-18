@@ -2,19 +2,14 @@ class MultiControlledVocabularyInput < ControlledVocabularyInput
 #  private
   
   def build_field(value, index)
-#    options = input_html_options.dup
-#    authority_picker(options[:data]['authority-select']) + super
-    super(value, index)
+    super(value, index) + raw("<span class=\"glyphicon glyphicon-floppy-disk\"></span>") + raw("<button type=\"button\" class=\"btn btn-link remove\"><span class=\"glyphicon glyphicon-remove\"></span></button>")  + raw("<button type=\"button\" style=\"display:none\" class=\"btn btn-link restore\"><span class=\"glyphicon glyphicon-share-alt\"></span></button>")
   end
- 
-#  def authority_picker(options)
-#    @builder.input(attribute_name.to_s + "_auth_select", 
-#                   as: :vocab_select, 
-#                   collection: options[:data]['authority-select'],
-#                   include_blank: false, 
-#                   label: false,
-#                   class: "authority",
-#                   wrapper: false,
-#                   :input_html => { :class => 'authority' })
-#  end
+
+ def build_options_for_existing_row(_attribute_name, _index, value, options)
+   value.fetch
+   options[:value] = value.rdf_label.first || "Unable to fetch label for #{value.rdf_subject}"
+   options[:readonly] = true
+   return options
+ end
+
 end
