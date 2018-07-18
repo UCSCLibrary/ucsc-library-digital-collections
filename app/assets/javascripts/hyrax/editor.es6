@@ -6,6 +6,7 @@ import MultiControlledVocabulary from 'hyrax/editor/multi_controlled_vocabulary'
 import Autocomplete from 'hyrax/autocomplete'
 import AuthoritySelect from 'hyrax/authority_select'
 
+
 export default class {
   /**
    * initialize the editor behaviors
@@ -22,17 +23,6 @@ export default class {
     this.relationshipsControl()
     this.saveWorkControl()
     this.saveWorkFixed()
-  }
-
-  // Used when you have a linked data field that can have terms from multiple
-  // authorities.
-  authoritySelect() {
-      $("[data-authority-select]").each(function() {
-          let authoritySelect = $(this).data().authoritySelect
-          let options =  {selectBox: 'select.' + authoritySelect,
-                          inputField: 'input.' + authoritySelect}
-          new AuthoritySelect(this, options);
-      })
   }
 
   // Autocomplete fields for the work edit form 
