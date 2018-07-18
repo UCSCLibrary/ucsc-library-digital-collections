@@ -3,6 +3,7 @@ import { FieldManager } from 'hydra-editor/field_manager'
 import ControlledVocabulary from 'hyrax/editor/controlled_vocabulary'
 import Handlebars from 'handlebars'
 import Autocomplete from 'hyrax/autocomplete'
+import MvcLine from "./mvc_line"
 
 // export default class MultiControlledVocabulary extends ControlledVocabulary {
 export default class MultiControlledVocabulary extends FieldManager {
@@ -23,40 +24,43 @@ export default class MultiControlledVocabulary extends FieldManager {
       addHtml:           '<button type=\"button\" class=\"btn btn-link add\"><span class=\"glyphicon glyphicon-plus\"></span><span class="controls-add-text"></span></button>',
       addText:           'Add another',
 
-      removeHtml:        '<button type=\"button\" class=\"btn btn-link remove\"><span class=\"glyphicon glyphicon-remove\"></span><span class=\"controls-remove-text\"></span> <span class=\"sr-only\"> previous <span class=\"controls-field-name-text\">field</span></span></button>',
-      removeText:         'Remove',
-
       labelControls:      true,
     }
     super(element, options)
     this.paramKey = paramKey
     this.fieldName = this.element.data('fieldName')
-    this.searchUrl = this.element.data('autocompleteUrl')
     this.authOptions = this.element.data('authorities')
+    
+    this.addRemoveBehavior(element)
+    
   }
 
-  // Overrides FieldManager, because field manager uses the wrong selector
-  // addToList( event ) {
-  //         event.preventDefault();
-  //         let $listing = $(event.target).closest('.multi_value').find(this.listClass)
-  //         let $activeField = $listing.children('li').last()
-  //
-  //         if (this.inputIsEmpty($activeField)) {
-  //             this.displayEmptyWarning();
-  //         } else {
-  //             this.clearEmptyWarning();
-  //             $listing.append(this._newField($activeField));
-  //         }
-  //
-  //         this._manageFocus()
-  // }
+  addRemoveBehavior(element) {
+    $('button.remove',element).click(function(){
+      let destructor = $(this).siblings('input[name*=destroy]')
+      destructor.val(true)
+      destructor.prop('disabled',false)
+      $(this).siblings('input.form-control').css('text-decoration','line-through')
+      $(this).siblings('button.restore').show()
+      $(this).hide()
+    })
+
+    $('button.restore',element).click(function(){
+      let destructor = $(this).siblings('input[name*=destroy]')
+      destructor.val("")
+      destructor.prop('disabled','disabled')
+      $(this).siblings('input.form-control').css('text-decoration','inherit')
+      $(this).siblings('button.remove').show()
+      $(this).hide()
+    })
+  }
+
+
+  
 
   // Overrides FieldManager in order to avoid doing a clone of the existing field
   createNewField($activeField) {
-    let $newField = this._newFieldTemplate()
-    this._addBehaviorsToInput($newField)
-    this.element.trigger("managed_field:add", $newField);
-    return $newField
+    return new MvcLine(this._maxIndex(),this.element, this.paramKey)
   }
 
   /* This gives the index for the editor */
@@ -69,70 +73,17 @@ export default class MultiControlledVocabulary extends FieldManager {
     return false 
   }
 
-  _newFieldTemplate() {
-    let index = this._maxIndex()
-    let rowTemplate = this._template()
-    let controls = this.controls.clone().append(this.remover)
-    let row =  $(rowTemplate({ "paramKey": this.paramKey,
-                               "name": this.fieldName,
-                               "index": index,
-                               "class": "multi_controlled_vocabulary" }))
-        .append(controls)
-    return row
-  }
+  // Override to NOT attached standard add and remove events
+ _attachEvents() {
+   this.element.on('click', this.addSelector, (e) => this.addToList(e))
+ }
 
-  get _source() {
-
-    return "<li class=\"field-wrapper input-group input-append\">" +
-      "<div class=auth-select-div><label>Authority:</label><select class=\"{{paramKey}}_{{name}}_auth_select\">" + this._authSelectOptions() + "</select></div>" + 
-      "<input class=\"string {{class}} optional form-control {{paramKey}}_{{name}} form-control multi-text-field\" name=\"{{paramKey}}[{{name}}_attributes][{{index}}][hidden_label]\" value=\"\" id=\"{{paramKey}}_{{name}}_attributes_{{index}}_hidden_label\" data-attribute=\"{{name}}\" type=\"text\">" +
-      "<input name=\"{{paramKey}}[{{name}}_attributes][{{index}}][id]\" value=\"\" id=\"{{paramKey}}_{{name}}_attributes_{{index}}_id\" type=\"hidden\" data-id=\"remote\">" +
-      "<input name=\"{{paramKey}}[{{name}}_attributes][{{index}}][_destroy]\" id=\"{{paramKey}}_{{name}}_attributes_{{index}}__destroy\" value=\"\" data-destroy=\"true\" type=\"hidden\"></li>"
-  }
-
-  _authSelectOptions() {
-    let rv = "";
-    for (var option of this.authOptions){
-      rv = rv + this._authSelectOption(option[0],option[1])
+   // override to NOT add a global remove control
+    _appendControls() {
+        // We want to make these DOM additions idempotently, so exit if it's
+        // already set up.
+        if (!this._hasAddControl()) {
+          this._createAddControl()
+        }
     }
-    return rv
-  }
-
-  _authSelectOption(name,value) {
-    return "<option value=\""+value+"\">"+name+"</option>"
-  }
-
-  _template() {
-    return Handlebars.compile(this._source)
-  }
-
-  /**
-   * @param {jQuery} $newField - The <li> tag
-   */
-  _addBehaviorsToInput($newField) {
-    let $newInput = $('input.multi-text-field', $newField)
-    $newInput.focus()
-    this.addAutocompleteToEditor($newInput)
-    this.element.trigger("managed_field:add", $newInput)
-  }
-
-  /**
-   * Make new element have autocomplete behavior
-   * @param {jQuery} input - The <input type="text"> tag
-   */
-  addAutocompleteToEditor(input) {
-    var autocomplete = new Autocomplete()
-    autocomplete.setup(input, this.fieldName, this.searchUrl)
-  }
-
-  // Overrides FieldManager
-  // Instead of removing the line, we override this method to add a
-  // '_destroy' hidden parameter
-  removeFromList( event ) {
-    event.preventDefault()
-    let field = $(event.target).parents(this.fieldWrapperClass)
-    field.find('[data-destroy]').val('true')
-    field.hide()
-    this.element.trigger("managed_field:remove", field)
-  }
 }
