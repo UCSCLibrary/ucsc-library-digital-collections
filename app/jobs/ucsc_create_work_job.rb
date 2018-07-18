@@ -8,6 +8,8 @@ class UcscCreateWorkJob < ActiveJob::Base
   queue_as :ingest
 
   after_perform do |job|
+    
+    # Adjust BulkMetadata Row status
     if @status.to_s.downcase.include? "error"
       @row.status = "ingest error"
     else
@@ -16,15 +18,21 @@ class UcscCreateWorkJob < ActiveJob::Base
     end
     @row.save    
 
-    # attempt to resolve all of the relationships defined in this row    
+    # Attempt to resolve all of the relationships defined in this row    
     @row.relationships.each do |relationship|
       relationship.resolve!
     end
-    # attempt to resolve each dangling (objectless) relationship using
-    
-    # this row as a potential object
+    # Attempt to resolve each dangling (objectless) relationships using   
+    # this row as an object
     BulkMetadata::Relationship.where(:status => "objectless").each do |relationship|
       relationship.resolve! @row.id
+    end
+
+    # Delete any UploadedFiles
+    @work.file_sets.each do |fileset|
+      if uf = Hyrax::UploadedFile.find_by(file: fileset.label)
+        uf.destroy!
+      end
     end
   end
 
