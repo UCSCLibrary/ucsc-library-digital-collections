@@ -4,7 +4,7 @@
 
 <% data = {'autocomplete-url' => authority_options.first.last,
            'autocomplete' => key,
-           'authority-select' => "#{key.to_s.underscore}_auth_select}",
+           'authority-select' => "#{key.to_s.underscore}_auth_select",
            'authorities' => authority_options } %>
 <%# options[:as] = property['input'].to_sym %>
 <% options[:as] = :multi_controlled_vocabulary %>
