@@ -6,8 +6,7 @@ class MultiControlledVocabularyInput < ControlledVocabularyInput
   end
 
  def build_options_for_existing_row(_attribute_name, _index, value, options)
-   value.fetch
-   options[:value] = value.rdf_label.first || "Unable to fetch label for #{value.rdf_subject}"
+   options[:value] = ::WorkIndexer.fetch_remote_label(value) || "Unable to fetch label for #{value.rdf_subject}"
    options[:readonly] = true
    return options
  end
