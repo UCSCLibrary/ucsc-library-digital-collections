@@ -34,7 +34,7 @@ class WorkIndexer < Hyrax::WorkIndexer
         case val
         when ActiveTriples::Resource
           # We need to fetch the string from an external vocabulary
-          solr_doc[label_field(property)] << fetch_remote_label(val)
+          solr_doc[label_field(property)] << self.class.fetch_remote_label(val)
         when String
           # This is just a normal string (from a legacy model, etc)
           # Set the label index to the string for now
@@ -49,7 +49,7 @@ class WorkIndexer < Hyrax::WorkIndexer
     solr_doc
   end
 
-  def fetch_remote_label(resource)
+  def self.fetch_remote_label(resource)
 
     buf = LdBuffer.where(url: resource.id).order(created_at: :desc).first
 

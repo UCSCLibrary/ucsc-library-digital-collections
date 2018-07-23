@@ -98,7 +98,6 @@ properties:
   creator:
     definition: "A person or organization responsible for creating the resource."
     predicate: "DC:creator"
-    range: "Agent"
     vocabularies: 
       - authority: loc
         subauthority: names
@@ -117,7 +116,6 @@ properties:
   contributor:
     definition: "A person or organization responsible for making contributions to the resource."
     predicate: "DC:contributor"
-    range: "Agent"
     vocabularies: 
       - authority: loc
         subauthority: names
@@ -130,7 +128,7 @@ properties:
     search_field: true
     core: true
     display_area: more
-    input: autosuggest
+    input: multi_controlled_vocabulary
     OAI: DC:contributor
 
   originalPublisher:
@@ -147,6 +145,7 @@ properties:
     OAI: DC:publisher
   
   publisherHomepage:
+    label: "Publisher Homepage"
     definition: "The URL of the publisher's homepage."
 #    multiple: false
     predicate: FOAF:homepage
@@ -186,7 +185,7 @@ properties:
         subauthority: names
       - authority: local
         subauthority: agents
-    input: autosuggest
+    input: multi_controlled_vocabulary
     core: true
     OAI: DC:rights
   
@@ -231,7 +230,7 @@ properties:
       - authority: local
         subauthority: agents        
     facet: true
-    input: autosuggest
+    input: multi_controlled_vocabulary
     core: true
     OAI: DC:subject
 #    search_result_display: true
@@ -250,7 +249,7 @@ properties:
         subauthority: places
     facet: true
     search_field: true
-    input: autosuggest
+    input: multi_controlled_vocabulary
     core: true
     OAI: DC:subject
 #    search_result_display: true
@@ -267,7 +266,7 @@ properties:
       - authority: local
         subauthority: time_periods
     facet: true
-    input: autosuggest
+    input: multi_controlled_vocabulary
     core: true
     OAI: DC:subject
 #    search_result_display: true
@@ -285,7 +284,7 @@ properties:
     index_itemprop: about
     facet: true
     search_field: true
-    input: autosuggest
+    input: multi_controlled_vocabulary
     core: true
     OAI: DC:subject
 #    search_result_display: true
@@ -347,7 +346,7 @@ properties:
       - authority: local
         subauthority: formats
     facet: true
-    input: autosuggest
+    input: multi_controlled_vocabulary
     core: true
     OAI: DC:format
   
