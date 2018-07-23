@@ -4,11 +4,9 @@
 
 <div class="col-xs-12 col-sm-12">
     <div id="explore_collections_container" >
-        <%= render 'explore_collections', collections: @presenter.collections %>
+        <%= render 'explore_collections', collections: Collection.all %>
     </div>
 </div>
-
-
 
 <div class="col-xs-12 col-sm-12">
     <div id="featured_container" >
