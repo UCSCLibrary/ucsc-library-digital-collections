@@ -1,5 +1,5 @@
-module Ucsc::Authorities
-  class Local::TableBasedAuthority << Qa::Authorities::Local::TableBasedAuthority
+module Ucsc::Authorities::Local
+  class TableBasedAuthority < Qa::Authorities::Local::TableBasedAuthority
 
     def find(uri)
       record = base_relation.find_by(uri: uri)
