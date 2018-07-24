@@ -243,12 +243,12 @@ end
 
 Date::DATE_FORMATS[:standard] = "%m/%d/%Y"
 
-Qa::Authorities::Local.register_subauthority('dcmi_types', 'Qa::Authorities::Local::TableBasedAuthority')
-Qa::Authorities::Local.register_subauthority('agents', 'Qa::Authorities::Local::TableBasedAuthority')
-Qa::Authorities::Local.register_subauthority('places', 'Qa::Authorities::Local::TableBasedAuthority')
-Qa::Authorities::Local.register_subauthority('time_periods', 'Qa::Authorities::Local::TableBasedAuthority')
-Qa::Authorities::Local.register_subauthority('topics', 'Qa::Authorities::Local::TableBasedAuthority')
-Qa::Authorities::Local.register_subauthority('formats', 'Qa::Authorities::Local::TableBasedAuthority')
+Qa::Authorities::Local.register_subauthority('dcmi_types', 'Ucsc::Authorities::Local::TableBasedAuthority')
+Qa::Authorities::Local.register_subauthority('agents', 'Ucsc::Authorities::Local::TableBasedAuthority')
+Qa::Authorities::Local.register_subauthority('places', 'Ucsc::Authorities::Local::TableBasedAuthority')
+Qa::Authorities::Local.register_subauthority('time_periods', 'Ucsc::Authorities::Local::TableBasedAuthority')
+Qa::Authorities::Local.register_subauthority('topics', 'Ucsc::Authorities::Local::TableBasedAuthority')
+Qa::Authorities::Local.register_subauthority('formats', 'Ucsc::Authorities::Local::TableBasedAuthority')
 
 Qa::Authorities::Geonames.username = 'UCSC_Library_DI'
 
