@@ -26,14 +26,22 @@ class Hyrax::HomepageController < ApplicationController
 
   private
 
-    # Return 5 collections
+    # Return collections
     def collections(rows: 15)
       builder = Hyrax::CollectionSearchBuilder.new(self)
                                               .rows(rows)
       response = repository.search(builder)
-      response.documents
+      collections = []
+      response.documents.each do |col| 
+        collections << col unless blacklisted_collections.include(col.id)
+      end
+
     rescue Blacklight::Exceptions::ECONNREFUSED, Blacklight::Exceptions::InvalidRequest
       []
+    end
+
+    def blacklisted_collections
+      ['cj82k733h', '8k71nh08w']
     end
 
     def recent
