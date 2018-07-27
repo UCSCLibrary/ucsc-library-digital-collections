@@ -31,11 +31,7 @@ class Hyrax::HomepageController < ApplicationController
       builder = Hyrax::CollectionSearchBuilder.new(self)
                                               .rows(rows)
       response = repository.search(builder)
-      collections = []
-      response.documents.each do |col| 
-        collections << col unless blacklisted_collections.include? col.id
-      end
-
+      docs = response.documents.select{|col| col.visibility == "open" && !blacklisted_collections.include?(col.id) }
     rescue Blacklight::Exceptions::ECONNREFUSED, Blacklight::Exceptions::InvalidRequest
       []
     end
