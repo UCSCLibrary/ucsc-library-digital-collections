@@ -33,7 +33,7 @@ class Hyrax::HomepageController < ApplicationController
       response = repository.search(builder)
       collections = []
       response.documents.each do |col| 
-        collections << col unless blacklisted_collections.include(col.id)
+        collections << col unless blacklisted_collections.include? col.id
       end
 
     rescue Blacklight::Exceptions::ECONNREFUSED, Blacklight::Exceptions::InvalidRequest
