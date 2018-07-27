@@ -52,6 +52,9 @@ en:
     institution:
       name: "UC Santa Cruz"
       homepage_url: "http://ucsc.edu"
+    homepage:
+      featured_works:
+        no_works: ""
     schema_org:
       resource_type:
         Article: "http://schema.org/Article"

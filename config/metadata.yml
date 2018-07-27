@@ -298,13 +298,14 @@ properties:
     index_itemprop: dateCreated
     input: date
     core: true    
-    OAI: DC:date
+#    OAI: DC:date
 #    search_result_display: true
 
   dateCreatedDisplay:
     definition: Textual representation of the creation date (temporary fix)
     label: 'Date Created'
     predicate: MODS:dateCreated
+    OAI: DC:date
 
   dateDigitized:
     definition: Date on which the resourc was changed, i.e., digitized.
