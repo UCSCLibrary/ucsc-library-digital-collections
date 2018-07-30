@@ -27,15 +27,12 @@ class Hyrax::HomepageController < ApplicationController
   private
 
     # Return collections
-    def collections(rows: 15)
+    def collections(rows: 55)
       builder = Hyrax::CollectionSearchBuilder.new(self)
                                               .rows(rows)
       response = repository.search(builder)
       collections = []
-      response.documents.each do |col| 
-        collections << col unless blacklisted_collections.include? col.id
-      end
-
+      response.documents.select { |col| !blacklisted_collections.include? col.id}
     rescue Blacklight::Exceptions::ECONNREFUSED, Blacklight::Exceptions::InvalidRequest
       []
     end
