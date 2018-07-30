@@ -483,7 +483,7 @@ work_types:
       series:
       coordinates:
       dateCreated:
-      dateCreatedFake:
+      dateCreatedDisplay:
       datePublished:
       dateDigitized:
       subjectTopic:
