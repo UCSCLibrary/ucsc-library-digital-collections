@@ -15,6 +15,8 @@ class SolrDocument
   # add collection membership in OAI-PMH feed
   add_field_semantics('isPartOf','member_of_collections_ssim')
 
+  add_field_semantics('identifier','thumbnail_path')
+
   # self.unique_key = 'id'
 
   # Email uses the semantic field mappings below to generate the body of an email.
@@ -39,8 +41,8 @@ class SolrDocument
     "#{root_url}/records/#{record.id}"
   end
 
-  def display_image_path(record = self)
-    record.thumbnail_path.gsub("thumbnail","large")
+  def display_image_path(record = self, size = "large")
+    record.thumbnail_path.gsub("thumbnail",size)
   end
 
   def display_image_url(record = self)
