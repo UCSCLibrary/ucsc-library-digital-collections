@@ -113,7 +113,7 @@ class WorkIndexer < Hyrax::WorkIndexer
     return "Cannot find term"
   end
 
-  def default_accept_header
+  def self.default_accept_header
     RDF::Util::File::HttpAdapter.default_accept_header.sub(/, \*\/\*;q=0\.1\Z/, '')
   end
 
