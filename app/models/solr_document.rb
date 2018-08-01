@@ -37,6 +37,28 @@ class SolrDocument
 
   use_extension( Hydra::ContentNegotiation )
 
+
+  def to_semantic_values
+    @semantic_value_hash ||= self.class.field_semantics.each_with_object(Hash.new([])) do |(key, field_names), hash|
+      
+      ##
+      # Handles single string field_name or an array of field_names
+      value = Array.wrap(field_names).map do |field_name| 
+        raw_value = self[field_name]
+        raw_value = self.send(field_name) if raw_value.blank? and self.respond_to? field_name.to_sym
+        raw_value
+      end
+               
+      value = value.flatten.compact
+
+      # Make single and multi-values all arrays, so clients
+      # don't have to know.
+      hash[key] = value unless value.empty?
+    end
+    
+    @semantic_value_hash ||= {}
+  end
+  
   def permalink(record = self)
     "#{root_url}/records/#{record.id}"
   end
