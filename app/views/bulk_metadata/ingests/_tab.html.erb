@@ -28,7 +28,7 @@
                 </ul>
 
                 <ul class="rows">
-                    <% @ingest.rows.where_status(type).each do |row| %>
+                    <% @ingest.rows.where(status: type).each do |row| %>
                         <% partial = (row.status == "unparsed" ? "unparsed_row" : "row") %>
                         <%= render partial: partial, locals: { 
                             id: row.id,
