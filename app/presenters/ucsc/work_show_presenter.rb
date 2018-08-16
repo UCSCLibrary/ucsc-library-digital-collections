@@ -19,11 +19,19 @@ module Ucsc
 
 
     def image?
-      return true if solr_document.resourceType_label.include?("Still Image")
-      return true if solr_document.resourceType_label.include?("Image")
-      return false unless representative_id
+       return false unless representative_id
       return solr_document.image?
     end
+
+    def page_title
+      return super unless super == "Untitled"
+      return titleAlternative.first unless titleAlternative.blank?
+      return subseries.first unless subseries.blank?
+      return series.first unless series.blank?
+      return I18n.t('hyrax.product_name')
+    end
+
+    delegate :titleAlternative, :subseries, :series, to: :solr_document
 
     private 
 
