@@ -23,14 +23,15 @@ class WorkIndexer < Hyrax::WorkIndexer
     object.controlled_properties.each do |property|
 
       # Clear old values from the solr document
-      solr_doc[label_field(property)] = []
-      solr_doc[Solrizer.solr_name(property)] = []
+      solr_doc.delete label_field(property)
+      solr_doc.delete Solrizer.solr_name(property)
 
       # Wrap single objects in arrays if necessary (though it shouldn't be)
       object[property] = Array(object[property]) if !object[property].kind_of?(Array)
 
       # Loop through the different values provided for this property
       object[property].each do |val|
+        solr_doc[label_field(property)] ||= []
         case val
         when ActiveTriples::Resource
           # We need to fetch the string from an external vocabulary
