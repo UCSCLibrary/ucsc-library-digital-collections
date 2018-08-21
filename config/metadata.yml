@@ -39,7 +39,8 @@ properties:
     core: false
     work_title: false
     input: scalar
-    facet_limit: 5
+    facet_limit: 20
+    facet: false
     index_as: stored_searchable
     search_field: false
     sort_field: false
@@ -86,12 +87,14 @@ properties:
     label: "Sub-Series Title"
     predicate: "BF2:subseriesStatement"
     search_field: true
+    facet: true
     OAI: DC:alternative
 
   theme:
     definition: "A theme or something theme-like."
     usage_note: ""
     label: "Theme"
+    facet: true
     predicate: "opaque:set"
     search_field: true
 
@@ -483,7 +486,7 @@ work_types:
       series:
       coordinates:
       dateCreated:
-      dateCreatedFake:
+      dateCreatedDisplay:
       datePublished:
       dateDigitized:
       subjectTopic:

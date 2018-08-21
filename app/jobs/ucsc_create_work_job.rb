@@ -12,6 +12,8 @@ class UcscCreateWorkJob < ActiveJob::Base
     # Adjust BulkMetadata Row status
     if @status.to_s.downcase.include? "error"
       @row.status = "ingest error"
+    elsif @work.id.nil?
+      @row.status = "error"
     else
       @row.ingested_id = @work.id
       @row.status = "ingested"

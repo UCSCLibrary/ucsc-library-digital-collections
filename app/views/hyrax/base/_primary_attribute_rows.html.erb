@@ -11,8 +11,10 @@
 <%= presenter.attribute_to_html(:publisher, render_as: :faceted, label: "Publisher") %>
 <%= presenter.attribute_to_html(:resourceType_label, render_as: :faceted, label: "Resource Type") %>
 <%= presenter.attribute_to_html(:keyword, render_as: :faceted) %>
-<%= presenter.attribute_to_html(:dateCreated, render_as: :linked, search_field: 'date_created_tesim', label: "Date Created") %>
-
-
+<% unless (display_date = presenter.attribute_to_html(:dateCreatedDisplay, label: "Date Created")).blank? %>
+    <%= display_date %>
+<% else %>
+    <%= presenter.attribute_to_html(:dateCreated, label: "Date Created")  %>
+<% end %>
 
 
