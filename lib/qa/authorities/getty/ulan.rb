@@ -33,8 +33,6 @@ module Qa::Authorities
                  skos:altLabel ?alt .
               FILTER #{ex} .
             } ORDER BY ?name"
-      Rails.logger.error("COMMENCE SPARQL!!!!!")
-      Rails.logger.error(sparql)
       sparql
     end
 
