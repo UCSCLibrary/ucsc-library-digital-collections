@@ -48,5 +48,12 @@ module Ucsc
     def member_presenter_factory
       WorkMemberPresenterFactory.new(solr_document, current_ability, request)
     end
+
+
+    def find_renderer_class(name)
+      return ::Renderers::FacetedAttributeRenderer if name == :faceted
+      super
+    end
+
   end
 end
