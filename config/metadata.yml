@@ -87,14 +87,12 @@ properties:
     label: "Sub-Series Title"
     predicate: "BF2:subseriesStatement"
     search_field: true
-    facet: true
     OAI: DC:alternative
 
   theme:
     definition: "A theme or something theme-like."
     usage_note: ""
     label: "Theme"
-    facet: true
     predicate: "opaque:set"
     search_field: true
 
@@ -110,7 +108,6 @@ properties:
       - authority: local
         subauthority: agents
     primary: true
-    facet: true
     index_itemprop: creator
     search_field: true
     input: multi_controlled_vocabulary
@@ -128,7 +125,6 @@ properties:
         subauthority: ulan
       - authority: local
         subauthority: agents
-    facet: true
     index_itemprop: contributor
     search_field: true
     core: true
@@ -146,6 +142,7 @@ properties:
     predicate: "DC:publisher"
     label: "Digital Publisher & Contact Info"
 #    multiple: false
+    search_field: true
     core: true
     OAI: DC:publisher
   
@@ -202,7 +199,6 @@ properties:
   series:
     definition: A related resource in which the described resource is physically or logically included.
     label: Series Title
-    facet: true
     predicate: opaque:seriesName
     search_field: true
   
@@ -236,8 +232,9 @@ properties:
       - authority: getty
         subauthority: ulan 
       - authority: local
-        subauthority: agents        
-    facet: true
+        subauthority: agents
+    facet: true        
+    search_field: true
     input: multi_controlled_vocabulary
     core: true
     OAI: DC:subject
@@ -274,6 +271,7 @@ properties:
       - authority: local
         subauthority: time_periods
     facet: true
+    search_field: true
     input: multi_controlled_vocabulary
     core: true
     OAI: DC:subject
@@ -354,7 +352,7 @@ properties:
         subauthority: aat
       - authority: local
         subauthority: formats
-    facet: true
+    search_field: true
     input: multi_controlled_vocabulary
     core: true
     OAI: DC:format
@@ -376,7 +374,6 @@ properties:
     vocabularies:
       - authority: loc
       - subauthority: languages
-    facet: true
     itemprop: inLanguage
     input: dropdown
     core: true
