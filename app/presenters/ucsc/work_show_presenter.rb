@@ -19,7 +19,10 @@ module Ucsc
 
 
     def image?
-       return false unless representative_id
+      return false unless representative_id
+      solr_document.resourceType_label.each do |type|
+        return true if type.to_s.downcase.include? "image"
+      end
       return solr_document.image?
     end
 
