@@ -54,7 +54,7 @@ module Ucsc
 
 
     def find_renderer_class(name)
-      return ::Renderers::FacetedAttributeRenderer if name == :faceted
+      return ::FacetedAttributeRenderer if name == :faceted
       super
     end
 
