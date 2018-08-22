@@ -39,7 +39,7 @@ properties:
     core: false
     work_title: false
     input: scalar
-    facet_limit: 20
+    facet_limit: 5
     facet: false
     index_as: stored_searchable
     search_field: false
@@ -100,6 +100,7 @@ properties:
 
   creator:
     definition: "A person or organization responsible for creating the resource."
+    label: Creator
     predicate: "DC:creator"
     vocabularies: 
       - authority: loc
@@ -119,6 +120,7 @@ properties:
   contributor:
     definition: "A person or organization responsible for making contributions to the resource."
     predicate: "DC:contributor"
+    label: Contributor
     vocabularies: 
       - authority: loc
         subauthority: names
@@ -195,16 +197,19 @@ properties:
   scale:
     definition: Ratio of the dimensions of a form contained or embodied in a resource to the dimensions of the entity it represents, e.g., for images or cartographic resources.
     predicate: BF2:scale
+    label: Scale
 
   series:
     definition: A related resource in which the described resource is physically or logically included.
     label: Series Title
+    facet: true
     predicate: opaque:seriesName
     search_field: true
   
   source:
     definition: A related resource from which the described resource is derived. (Use to record previous publication information, i.e. the place of publication and publisher name for physical resources).
     display_area: staff
+    label: Source
     predicate: DC:source
     search_field: true
   
@@ -433,6 +438,7 @@ properties:
 
   genre:
     definition: "A genre term designates the style or technique of the intellectual content of textual materials or, for graphic materials, aspects such as vantage point, intended purpose, characteristics of the creator, publication status, or method  of representation. Does not capture aboutness. Ex. lectures; underground dance music."
+    label: Genre
     vocabulary:
       - authority: loc
       - subauthority: languages
