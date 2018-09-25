@@ -24,7 +24,8 @@
 
     <% i = 1 %>
     <% file_set_ids.each do |file_set_id| %>
-        <source src="<%= File.join(request.base_url,"file_set",file_set_id,"hls.m3u8") %>" title="<%= "Track #{i}" %>" type="application/x-mpegurl"/>
+        <!-- <source src="<%= File.join(request.base_url,"file_set",file_set_id,"hls.m3u8") %>" title="<%= "Track #{i}" %>" type="application/x-mpegurl"/>  -->        
+        <source src="<%= hyrax.download_path(file_set, file: 'mp3') %>" title="<%= "Track #{i}" %>" type="audio/mpeg"/>
         <% i += 1 %>
     <%end %>
         Your browser does not support the audio tag.
