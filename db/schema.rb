@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180613175214) do
+ActiveRecord::Schema.define(version: 20181004155522) do
 
   create_table "bookmarks", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id",                     null: false
@@ -88,6 +88,22 @@ ActiveRecord::Schema.define(version: 20180613175214) do
     t.index ["ingest_id"], name: "index_bulk_meta_rows_on_ingest_id", using: :btree
   end
 
+  create_table "bulk_update_drafts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "name"
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_bulk_update_drafts_on_user_id", using: :btree
+  end
+
+  create_table "bulk_update_inclusions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "work_id"
+    t.integer  "bulk_update_draft_id"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.index ["bulk_update_draft_id"], name: "index_bulk_update_inclusions_on_bulk_update_draft_id", using: :btree
+  end
+
   create_table "checksum_audit_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "file_set_id"
     t.string   "file_id"
@@ -99,6 +115,28 @@ ActiveRecord::Schema.define(version: 20180613175214) do
     t.boolean  "passed"
     t.index ["checked_uri"], name: "index_checksum_audit_logs_on_checked_uri", using: :btree
     t.index ["file_set_id", "file_id"], name: "by_file_set_id_and_file_id", using: :btree
+  end
+
+  create_table "collection_branding_infos", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "collection_id"
+    t.string   "role"
+    t.string   "local_path"
+    t.string   "alt_text"
+    t.string   "target_url"
+    t.integer  "height"
+    t.integer  "width"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  create_table "collection_type_participants", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "hyrax_collection_type_id"
+    t.string   "agent_type"
+    t.string   "agent_id"
+    t.string   "access"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.index ["hyrax_collection_type_id"], name: "hyrax_collection_type_id", using: :btree
   end
 
   create_table "content_blocks", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -172,6 +210,30 @@ ActiveRecord::Schema.define(version: 20180613175214) do
     t.integer  "user_id"
     t.index ["file_id"], name: "index_file_view_stats_on_file_id", using: :btree
     t.index ["user_id"], name: "index_file_view_stats_on_user_id", using: :btree
+  end
+
+  create_table "github_credentials", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "user_id"
+    t.string   "username"
+    t.string   "oauth_code"
+    t.string   "state"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_github_credentials_on_user_id", using: :btree
+  end
+
+  create_table "hyrax_collection_types", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string  "title"
+    t.text    "description",               limit: 65535
+    t.string  "machine_id"
+    t.boolean "nestable",                                default: true,  null: false
+    t.boolean "discoverable",                            default: true,  null: false
+    t.boolean "sharable",                                default: true,  null: false
+    t.boolean "allow_multiple_membership",               default: true,  null: false
+    t.boolean "require_membership",                      default: false, null: false
+    t.boolean "assigns_workflow",                        default: false, null: false
+    t.boolean "assigns_visibility",                      default: false, null: false
+    t.index ["machine_id"], name: "index_hyrax_collection_types_on_machine_id", unique: true, using: :btree
   end
 
   create_table "hyrax_features", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -285,7 +347,7 @@ ActiveRecord::Schema.define(version: 20180613175214) do
     t.string   "access"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.index ["permission_template_id"], name: "fk_rails_9c1ccdc6d5", using: :btree
+    t.index ["permission_template_id", "agent_id", "agent_type", "access"], name: "uk_permission_template_accesses", unique: true, using: :btree
   end
 
   create_table "permission_templates", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -644,6 +706,9 @@ ActiveRecord::Schema.define(version: 20180613175214) do
   add_foreign_key "bulk_meta_logs", "bulk_meta_rows", column: "row_id"
   add_foreign_key "bulk_meta_relationships", "bulk_meta_rows", column: "row_id"
   add_foreign_key "bulk_meta_rows", "bulk_meta_ingests", column: "ingest_id"
+  add_foreign_key "bulk_update_drafts", "users"
+  add_foreign_key "bulk_update_inclusions", "bulk_update_drafts"
+  add_foreign_key "collection_type_participants", "hyrax_collection_types"
   add_foreign_key "curation_concerns_operations", "users"
   add_foreign_key "mailboxer_conversation_opt_outs", "mailboxer_conversations", column: "conversation_id", name: "mb_opt_outs_on_conversations_id"
   add_foreign_key "mailboxer_notifications", "mailboxer_conversations", column: "conversation_id", name: "notifications_on_conversation_id"
