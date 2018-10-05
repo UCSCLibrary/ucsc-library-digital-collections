@@ -1,0 +1,2 @@
+class GithubCredential < ApplicationRecord
+end
