@@ -29,6 +29,7 @@ module BulkMetadata
 
     def get_csv(row_ids = "all")
       if row_ids == "all" || row_ids.nil? || row_ids.empty?
+        csv_rows = rows
       else
         csv_rows = row_ids.map {|id| Row.find(id) }
       end
@@ -68,7 +69,7 @@ module BulkMetadata
         row_index_offset += 1
       end
 
-      csv = CSV.parse(csv_text, :headers => true)
+      csv = CSV.parse(csv_text, headers: true)
       #TODO validate csv.headers 
       # abort if this returns false
       # (currently does nothing)
