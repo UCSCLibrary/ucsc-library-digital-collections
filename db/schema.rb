@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181004155522) do
+ActiveRecord::Schema.define(version: 20181026232205) do
 
   create_table "bookmarks", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id",                     null: false
@@ -88,20 +88,50 @@ ActiveRecord::Schema.define(version: 20181004155522) do
     t.index ["ingest_id"], name: "index_bulk_meta_rows_on_ingest_id", using: :btree
   end
 
-  create_table "bulk_update_drafts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string   "name"
+  create_table "bulk_ops_github_credentails", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
+    t.string   "username"
+    t.string   "oauth_code"
+    t.string   "state"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_bulk_update_drafts_on_user_id", using: :btree
+    t.index ["user_id"], name: "index_bulk_ops_github_credentails_on_user_id", using: :btree
   end
 
-  create_table "bulk_update_inclusions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "bulk_ops_operations", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "user_id"
+    t.string   "name",                         null: false
+    t.string   "stage",                        null: false
+    t.string   "operation_type"
+    t.string   "commit_sha"
+    t.string   "status"
+    t.text     "message",        limit: 65535
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.index ["user_id"], name: "index_bulk_ops_operations_on_user_id", using: :btree
+  end
+
+  create_table "bulk_ops_relationships", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "work_proxy_id"
+    t.string   "object_identifier"
+    t.string   "identifier_type"
+    t.string   "relationship_type"
+    t.string   "status"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.index ["work_proxy_id"], name: "index_bulk_ops_relationships_on_bulk_ops_work_proxys_id", using: :btree
+  end
+
+  create_table "bulk_ops_work_proxys", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "operation_id"
     t.string   "work_id"
-    t.integer  "bulk_update_draft_id"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
-    t.index ["bulk_update_draft_id"], name: "index_bulk_update_inclusions_on_bulk_update_draft_id", using: :btree
+    t.integer  "line_number"
+    t.datetime "last_event"
+    t.string   "status"
+    t.text     "message",      limit: 65535
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.index ["operation_id"], name: "index_bulk_ops_work_proxys_on_bulk_ops_operation_id", using: :btree
   end
 
   create_table "checksum_audit_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -210,16 +240,6 @@ ActiveRecord::Schema.define(version: 20181004155522) do
     t.integer  "user_id"
     t.index ["file_id"], name: "index_file_view_stats_on_file_id", using: :btree
     t.index ["user_id"], name: "index_file_view_stats_on_user_id", using: :btree
-  end
-
-  create_table "github_credentials", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer  "user_id"
-    t.string   "username"
-    t.string   "oauth_code"
-    t.string   "state"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_github_credentials_on_user_id", using: :btree
   end
 
   create_table "hyrax_collection_types", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -706,8 +726,9 @@ ActiveRecord::Schema.define(version: 20181004155522) do
   add_foreign_key "bulk_meta_logs", "bulk_meta_rows", column: "row_id"
   add_foreign_key "bulk_meta_relationships", "bulk_meta_rows", column: "row_id"
   add_foreign_key "bulk_meta_rows", "bulk_meta_ingests", column: "ingest_id"
-  add_foreign_key "bulk_update_drafts", "users"
-  add_foreign_key "bulk_update_inclusions", "bulk_update_drafts"
+  add_foreign_key "bulk_ops_operations", "users"
+  add_foreign_key "bulk_ops_relationships", "bulk_ops_work_proxys", column: "work_proxy_id"
+  add_foreign_key "bulk_ops_work_proxys", "bulk_ops_operations", column: "operation_id"
   add_foreign_key "collection_type_participants", "hyrax_collection_types"
   add_foreign_key "curation_concerns_operations", "users"
   add_foreign_key "mailboxer_conversation_opt_outs", "mailboxer_conversations", column: "conversation_id", name: "mb_opt_outs_on_conversations_id"

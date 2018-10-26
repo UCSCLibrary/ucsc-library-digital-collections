@@ -1,0 +1,23 @@
+<form id="new-bulk-operation" name="new_bulk_operation">
+
+    <h1>Set up a New Bulk Ingest or Update</h1>
+
+    <label>Ingest or Update?</label>
+    <p> Would you like to set up a bulk ingest of new works, or a bulk update of existing works?</p>
+    <select name="type">
+        <option value="ingest">Ingest </option>
+        <option value="update">Update </option>
+    </select>
+
+    <div id="operation-name">
+        <label>Name:</label>
+        <p>Choose a short descriptive name for this bulk operation</p>
+        <input type="text" name="name" />
+    </div>
+
+    <%= render "ingest_options" %>
+    <%= render "update_options" %>
+    
+    <input type="submit" name="create_operation" id="create-operation">Create Bulk Operation</button>
+
+</form>

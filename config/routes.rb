@@ -90,25 +90,21 @@ Rails.application.routes.draw do
   patch '/dashboard/workflow_actions/update(.:format)', to: 'admin/workflow_actions#update'
 
   get '/github_auth/:user_id', to: "github_credentials#authenticate"
-#  get '/works/:export_csv', to: "works#export_csv"
 
-  get '/bulk_updates', to: "bulk_updates#index"
-  get '/bulk_updates/new', to: "bulk_updates#new"
-  post '/bulk_updates/new', to: "bulk_updates#new"
-  get '/bulk_updates/show/:update_name', to: "bulk_updates#show"
-  get '/bulk_updates/edit/:update_name', to: "bulk_updates#edit"
-  post '/bulk_updates/edit/:update_name', to: "bulk_updates#edit"
-  post '/bulk_updates/delete/:update_name', to: "bulk_updates#delete"
-  post '/bulk_updates/apply/:update_name', to: "bulk_updates#apply"
-  get '/bulk_updates/csv/:update_name', to: "bulk_updates#csv"
-  get '/bulk_updates/preview/:update_name', to: "bulk_updates#preview"
-  get '/bulk_updates/existing', to: "bulk_updates#export_csv"
-  get '/bulk_updates/in_progress', to: "bulk_updates#running"
-  get '/bulk_updates/errors', to: "bulk_updates#errors"
-  get '/bulk_updates/log', to: "bulk_updates#log"
-  get '/bulk_updates/status', to: "bulk_updates#status"
-  get '/bulk_updates/completed', to: "bulk_updates#completed"
-  
-  
+  namespace :bulk_ops do
+
+    resources :operations do
+      post :search
+      member do
+        post :request_application
+        post :apply
+        get :csv
+        get :info
+        get :errors
+        get :log
+      end
+    end
+    
+  end
   
 end

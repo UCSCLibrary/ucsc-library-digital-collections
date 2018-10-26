@@ -12,37 +12,6 @@ class Work < ActiveFedora::Base
   
   self.human_readable_type = 'Work'
 
-  def to_csv_line fields
-    line = ''
-    fields.map do |field_name| 
-      label = false
-      if field_name.downcase.include? "label"
-        label = true
-        field_name = field_name[0..-7]
-      end
-      values = self.call(field_name)
-      values.map do |value|
-        value =  label ? WorkIndexer.fetch_remote_label(value.id) : value.id unless value.is_a? String
-        '"#{value.gsub("\"","\"\"")}"'
-      end.join(',')
-    end
-    #TODO escape semicolons, quotation marks, commas in field texts
-  end
-
-  def self.to_csv work_ids, labels=false
-    header = self.csv_header labels
-    csv_text = work_ids.reduce(header){|csv, nextwork_id| csv + Work.find(id).to_csv_line(field_names)}
-  end
-
-  def self.csv_fields labels=false
-    fields = []
-    ScoobySnacks::METADATA_SCHEMA.fields.each do |field_name,field|
-      fields << field_name
-      fields << "#{field_name} Label" if labels && field.controlled?
-    end
-    return fields
-  end
-
   def save
     controlled_properties.each do |property|
       attributes = []
