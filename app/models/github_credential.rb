@@ -1,2 +1,0 @@
-class GithubCredential < ApplicationRecord
-end
