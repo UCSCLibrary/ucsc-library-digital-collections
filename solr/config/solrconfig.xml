@@ -16,10 +16,7 @@
  limitations under the License.
 -->
 
-<!--
- This is a stripped down config file used for a simple example...  
- It is *not* a good example to work from. 
--->
+
 <config>
   
   <!-- Controls what version of Lucene various components of Solr
@@ -63,7 +60,7 @@
     </updateLog>
 
     <autoCommit>
-      <maxTime>${solr.autoCommit.maxTime:15000}</maxTime>
+      <maxTime>${solr.autoCommit.maxTime:25000}</maxTime>
       <openSearcher>false</openSearcher>
     </autoCommit>
 
@@ -102,16 +99,21 @@
        -->
         <str name="qf">
           id
-          title_tesim
-          author_tesim
-          subject_tesim
+          title_tesim^10
+          subseries_tesim^5
+          creator_label_tesim^8
+          subject_name_label_tesim^3
+          subject_place_label_tesim^2
+          subject_topic_label_tesim^3
+          subject_temporal_label_tesim^2
+          all_text_timv
         </str>
         <str name="pf">
-          all_text_timv^10
+          all_text_timv
         </str>
 
        <str name="author_qf">
-          author_tesim
+          creator_label_tesim
        </str>
        <str name="author_pf">
        </str>
@@ -121,7 +123,10 @@
        <str name="title_pf">
        </str>
        <str name="subject_qf">
-          subject_tesim
+          subject_name_label_tesim
+          subject_place_label_tesim
+          subject_topic_label_tesim
+          subject_temporal_label_tesim
        </str>
        <str name="subject_pf">
        </str>
@@ -284,6 +289,7 @@
       -->
   </searchComponent>
 
+<!--
   <searchComponent name="suggest" class="solr.SuggestComponent">
     <lst name="suggester">
       <str name="name">mySuggester</str>
@@ -304,7 +310,7 @@
       <str>suggest</str>
     </arr>
   </requestHandler>
-
+-->
   <requestHandler name="/update/extract" class="org.apache.solr.handler.extraction.ExtractingRequestHandler">
     <lst name="defaults">
       <str name="fmap.Last-Modified">last_modified</str>

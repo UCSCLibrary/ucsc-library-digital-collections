@@ -1,4 +1,4 @@
-namespace :ucsc_sufia_based_dams  do 
+namespace :hycruz  do 
   task :link_stream do
     on roles(:app), in: :sequence, wait: 5 do
       print "Linking stream folder..."
@@ -6,4 +6,4 @@ namespace :ucsc_sufia_based_dams  do
     end
   end
 end
-after "deploy:finished","ucsc_sufia_based_dams:link_stream"
+after "deploy:finished","hycruz:link_stream"

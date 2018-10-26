@@ -1,3 +1,4 @@
+require 'socket'
 # frozen_string_literal: true
 class SolrDocument
   include Blacklight::Solr::Document
@@ -10,6 +11,11 @@ class SolrDocument
 
   # Adds ScoobySnacks metadata attribute definitions
   include ScoobySnacks::SolrBehavior
+
+  # add collection membership in OAI-PMH feed
+  add_field_semantics('isPartOf','member_of_collections_ssim')
+
+  add_field_semantics('identifier','thumbnail_path')
 
   # self.unique_key = 'id'
 
@@ -25,10 +31,50 @@ class SolrDocument
   # and Blacklight::Document::SemanticFields#to_semantic_values
   # Recommendation: Use field names from Dublin Core
   use_extension(Blacklight::Document::DublinCore)
+  use_extension(Ucsc::Blacklight::Dpla)
 
   # Do content negotiation for AF models. 
 
   use_extension( Hydra::ContentNegotiation )
+
+
+  def to_semantic_values
+    @semantic_value_hash ||= self.class.field_semantics.each_with_object(Hash.new([])) do |(key, field_names), hash|
+      
+      ##
+      # Handles single string field_name or an array of field_names
+      value = Array.wrap(field_names).map do |field_name| 
+        raw_value = self[field_name]
+        raw_value = self.send(field_name) if raw_value.blank? and self.respond_to? field_name.to_sym
+        raw_value = display_image_url if field_name == "thumbnail_path"
+        raw_value
+      end
+               
+      value = value.flatten.compact
+
+      # Make single and multi-values all arrays, so clients
+      # don't have to know.
+      hash[key] = value unless value.empty?
+    end
+    
+    @semantic_value_hash ||= {}
+  end
+  
+  def permalink(record = self)
+    "#{root_url}/records/#{record.id}"
+  end
+
+  def display_image_path(record = self, size = "large")
+    record.thumbnail_path.gsub("thumbnail",size)
+  end
+
+  def display_image_url(record = self)
+    root_url + display_image_path(record)
+  end
+
+  def root_url
+    "https://"+Socket.gethostname
+  end
 
   def member_ids
     fetch('member_ids_ssim', [])
@@ -70,5 +116,7 @@ class SolrDocument
     return nil if response.nil?
     @parent_work_solr_document = SolrDocument.new(response)
   end
+
+
 
 end

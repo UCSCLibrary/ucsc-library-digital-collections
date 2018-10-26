@@ -4,6 +4,7 @@
 # You can define all roles on a single server, or split them:
 
 server 'digitalcollections-staging.library.ucsc.edu', user: 'sufia', roles: %w{app db web}
+server 'digitalcollections-ingests.library.ucsc.edu', user: 'hyrax', roles: %w{ingest}
 
 # server 'example.com', user: 'deploy', roles: %w{app db web}, my_property: :my_value
 # server 'example.com', user: 'deploy', roles: %w{app web}, other_property: :other_value
@@ -22,7 +23,7 @@ server 'digitalcollections-staging.library.ucsc.edu', user: 'sufia', roles: %w{a
 # role :app, %w{deploy@example.com}, my_property: :my_value
 # role :web, %w{user1@primary.com user2@additional.com}, other_property: :other_value
 # role :db,  %w{deploy@example.com}
-
+role :ingest, %w{hyrax@digitalcollections-ingests.library.ucsc.edu}
 
 
 # Configuration
@@ -33,8 +34,10 @@ server 'digitalcollections-staging.library.ucsc.edu', user: 'sufia', roles: %w{a
 # http://capistranorb.com/documentation/getting-started/configuration/
 # Feel free to add new variables to customise your setup.
 
-set :default_env, { RAILS_ENV: "production" }
-set :rails_env, "production"
+set :default_env, { RAILS_ENV: "staging" }
+set :rails_env, "staging"
+
+set :branch, ENV['BRANCH'] || "staging"
 
 # Custom SSH Options
 # ==================

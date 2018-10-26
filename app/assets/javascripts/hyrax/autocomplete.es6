@@ -1,7 +1,6 @@
 import Default from './autocomplete/default'
 import Work from './autocomplete/work'
 import LinkedData from './autocomplete/linked_data'
-import MultiLinkedData from './autocomplete/multi_linked_data'
 
 export default class Autocomplete {
   /**
@@ -21,8 +20,6 @@ export default class Autocomplete {
         break
       case 'based_near':
         new LinkedData(element, url)
-      case 'creator':
-        new MultiLinkedData(element)
       default:
         new Default(element, url)
         break

@@ -99,7 +99,7 @@ class BulkMetadata::IngestsController < ApplicationController
         format.html { redirect_to @ingest, notice: 'Batch metadata ingest was successfully created.' }
         format.json { render :show, status: :created, location: @ingest }
       else
-      format.html { redirect_to edit_ingest_path(@ingest), notice: 'Batch metadata ingest was successfully created.' }
+      format.html { redirect_to @ingest, notice: 'Batch metadata ingest was successfully created.' }
       format.json { render :edit, status: :created, location: @ingest }       
       end
     end

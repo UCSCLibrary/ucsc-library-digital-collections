@@ -61,10 +61,10 @@ Hyrax.config do |config|
   # config.temp_file_base = '/home/developer1'
 
   # Hostpath to be used in Endnote exports
-  # config.persistent_hostpath = 'http://localhost/files/'
+  config.persistent_hostpath = 'http://localhost/records/'
 
   # If you have ffmpeg installed and want to transcode audio and video set to true
-   config.enable_ffmpeg = true
+  config.enable_ffmpeg = true
 
   # Hyrax uses NOIDs for files and collections instead of Fedora UUIDs
   # where NOID = 10-character string and UUID = 32-character string w/ hyphens
@@ -158,20 +158,17 @@ Hyrax.config do |config|
   # The banner image. Should be 5000px wide by 1000px tall
   # config.banner_image = 'https://cloud.githubusercontent.com/assets/92044/18370978/88ecac20-75f6-11e6-8399-6536640ef695.jpg'
   # config.banner_image = ''
-
-
   # image server
-
 
 
   # Temporary paths to hold uploads before they are ingested into FCrepo
   # These must be lambdas that return a Pathname. Can be configured separately
-  config.upload_path = ->() { Pathname.new("/avalon2sufia/tmp") }
-  #  config.cache_path = ->() { Rails.root + 'tmp' + 'uploads' + 'cache' }
+  config.upload_path = ->() { Pathname.new("/dams_derivatives/tmp/#{Rails.env}") }
+  config.cache_path  = ->() { Pathname.new("/dams_derivatives/tmp/#{Rails.env}/cache") }
 
   # Location on local file system where derivatives will be stored
   # If you use a multi-server architecture, this MUST be a shared volume
-  config.derivatives_path = '/avalon2sufia/derivatives'
+  config.derivatives_path = "/dams_derivatives/#{Rails.env}"
 
   # Should schema.org microdata be displayed?
   # config.display_microdata = true
@@ -179,11 +176,6 @@ Hyrax.config do |config|
   # What default microdata type should be used if a more appropriate
   # type can not be found in the locale file?
   # config.microdata_default_type = 'http://schema.org/CreativeWork'
-
-  # Location on local file system where uploaded files will be staged
-  # prior to being ingested into the repository or having derivatives generated.
-  # If you use a multi-server architecture, this MUST be a shared volume.
-  config.upload_path = ->() { Pathname.new("/avalon2sufia/tmp") }  
 
   # Should the media display partial render a download link?
  #  config.display_media_download_link = true
@@ -251,9 +243,12 @@ end
 
 Date::DATE_FORMATS[:standard] = "%m/%d/%Y"
 
-Qa::Authorities::Local.register_subauthority('subjects', 'Qa::Authorities::Local::TableBasedAuthority')
-Qa::Authorities::Local.register_subauthority('languages', 'Qa::Authorities::Local::TableBasedAuthority')
-Qa::Authorities::Local.register_subauthority('genres', 'Qa::Authorities::Local::TableBasedAuthority')
+Qa::Authorities::Local.register_subauthority('dcmi_types', 'Ucsc::Authorities::Local::TableBasedAuthority')
+Qa::Authorities::Local.register_subauthority('agents', 'Ucsc::Authorities::Local::TableBasedAuthority')
+Qa::Authorities::Local.register_subauthority('places', 'Ucsc::Authorities::Local::TableBasedAuthority')
+Qa::Authorities::Local.register_subauthority('time_periods', 'Ucsc::Authorities::Local::TableBasedAuthority')
+Qa::Authorities::Local.register_subauthority('topics', 'Ucsc::Authorities::Local::TableBasedAuthority')
+Qa::Authorities::Local.register_subauthority('formats', 'Ucsc::Authorities::Local::TableBasedAuthority')
 
 Qa::Authorities::Geonames.username = 'UCSC_Library_DI'
 
@@ -276,17 +271,14 @@ Rails.application.config.to_prepare do
     end
   end
 
-  OAI::Provider::Response::RecordResponse.class_eval do
-    
+  OAI::Provider::Response::RecordResponse.class_eval do    
     def header_for(record)
       param = Hash.new
       param[:status] = 'deleted' if deleted?(record)
       @builder.header param do
-        @builder.identifier identifier_for(record)
+        @builder.identifier record.id
         @builder.type record.human_readable_type
         @builder.datestamp timestamp_for(record)
-        @builder.isShownAt persistent_url(record)
-        @builder.object object_for(record)
 
         record.collection_ids.each do |id|
           @builder.isPartOf id
@@ -294,28 +286,8 @@ Rails.application.config.to_prepare do
 
         sets_for(record).each do |set|
           @builder.setSpec set.spec
-        end
+         end
       end
-    end
-    
-    private
-    
-    def identifier_for(record)
-      record.id
-    end
-
-    def persistent_url(record)
-      "#{root_url}/records/#{record.id}"
-    end
-
-    def object_for(record)
-      root_url  + record.thumbnail_path.gsub("thumbnail","large")
-    end
-
-    def root_url
-      "https://"+Socket.gethostname
-    end
-
+    end      
   end
-#  OAI::Provider::Response::RecordResponse.include Ucsc::Oai::RecordHeaderExtensions
 end

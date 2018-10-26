@@ -1,0 +1,20 @@
+<div id="work-list" style="border:1px solid black; margin:15px; padding: 10px">
+    <h4>List of works included in the new bulk update </h3>
+    <ul>
+        <% (works = @operation.work_proxys).each do |work| %>
+            <li>
+                <input type="checkbox" name="selected_work_ids[]" value="<%= work.id %>" />
+                <%= image_tag(work.thumbnail_path, height: '200', class: 'work-thumb') %>
+                <div class="work-title"><%=work.title%></div>
+                <div class="work-desription"><%=work.description%></div>
+            </li>
+        <% end %>
+    </ul>
+    <button id="remove-works" <%= 'class=hidden' if works.blank? %> >Remove Checked Works From List</button>
+    <button id="create-update" <%= 'class=hidden' if works.blank? %> >Create New Update Now From the List Above</button>
+    <p id="draft-empty-message"  <%= 'class=hidden' unless works.blank? %> >
+        There are no works selected. When you select works to update, they will appear here. Then when all the right works are selected, you can create a new bulk update.
+    </p>
+</div>    
+
+

@@ -9,7 +9,7 @@
 <% vocab = {"authority" => "local", "subauthority" => vocab} if vocab.is_a? String %>
 <% options[:collection] =  Hyrax::QaSelectService.new(vocab["subauthority"]).select_all_options%>
 
-<% Raise StandardError unless vocab['authority'].downcase == "local" or vocab["authority"].downcase == "ucsc" %>
+<%# Raise StandardError unless vocab['authority'].downcase == "local" or vocab["authority"].downcase == "ucsc" %>
 
 <%= f.input key, options %>
 

@@ -1,0 +1,34 @@
+
+
+<div id="add-works">
+    <h3>Add Works to Update List</h3>
+
+    <div>    
+        <label> Collection </label>
+        <select><%= options_for_select @collections %> </select>
+    </div>
+    <div>    
+        <label> Administrative Set </label>
+        <select> <%= options_for_select @admin_sets %> </select>
+    </div>
+    <div>    
+        <label> Workflow Step </label>
+        <select> <%= options_for_select @workflow_states %></select>
+    </div>
+    
+    <div>
+        <label> keyword search </label>
+        <input type="text" disabled="true" />
+    </div>
+
+    <button id="add-works-search"> Search </button>
+
+    <div id="search-summary">
+        <p id="count"></p>
+        <ul id="search-sample">
+        </ul>
+    </div>
+
+
+</div>
+

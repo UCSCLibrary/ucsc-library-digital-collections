@@ -1,4 +1,4 @@
-namespace :ucsc_sufia_based_dams  do 
+namespace :hycruz  do 
   task :restart_apache do
     on roles(:app), in: :sequence, wait: 5 do
       print "Restarting webserver..."
@@ -6,4 +6,4 @@ namespace :ucsc_sufia_based_dams  do
     end
   end
 end
-after "deploy","ucsc_sufia_based_dams:restart_apache"
+after "deploy","hycruz:restart_apache"

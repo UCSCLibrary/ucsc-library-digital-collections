@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>User:</strong>
+  <%= @github_credential.user_id %>
+</p>
+
+<p>
+  <strong>Username:</strong>
+  <%= @github_credential.username %>
+</p>
+
+<p>
+  <strong>Oauth code:</strong>
+  <%= @github_credential.oauth_code %>
+</p>
+
+<%= link_to 'Edit', edit_github_credential_path(@github_credential) %> |
+<%= link_to 'Back', github_credentials_path %>

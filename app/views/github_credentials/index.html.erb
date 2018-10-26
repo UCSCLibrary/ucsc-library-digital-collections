@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Github Credentials</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Username</th>
+      <th>Oauth code</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @github_credentials.each do |github_credential| %>
+      <tr>
+        <td><%= github_credential.user_id %></td>
+        <td><%= github_credential.username %></td>
+        <td><%= github_credential.oauth_code %></td>
+        <td><%= link_to 'Show', github_credential %></td>
+        <td><%= link_to 'Edit', edit_github_credential_path(github_credential) %></td>
+        <td><%= link_to 'Destroy', github_credential, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Github Credential', new_github_credential_path %>

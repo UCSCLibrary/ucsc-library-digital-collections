@@ -17,8 +17,16 @@ class BulkMetadata::Relationship < ApplicationRecord
         when "title"
 #          TODO replace this with solr query for speed
           objects = work_type.camelize.constantize.where(title: object_identifier)
-          fail! if objects.empty?
-          create_relationship!(relationship_type,subject,objects.first)
+          
+          if objects.empty?
+            if work_type == "Collection"
+              objects = [Collection.create(title: [object_identifier])]
+            else 
+              fail!
+            end
+          end
+
+          implement_relationship!(relationship_type,subject,objects.first)
 
         when "id"
           #TODO This will fail for relationships between
@@ -26,7 +34,7 @@ class BulkMetadata::Relationship < ApplicationRecord
           # Fix it by Solr to find
           # work by ID and then figure out work type (I think this is possible).
           if object = work_type.camelize.constantize.find(object_identifier)
-            create_relationship!(relationship_type,subject,object)
+            implement_relationship!(relationship_type,subject,object)
           else
             wait!
           end
@@ -39,7 +47,7 @@ class BulkMetadata::Relationship < ApplicationRecord
           else
             objects.each do |solr_object|
               object = solr_object["has_model_ssim"].first.constantize.find(solr_object["id"])
-              create_relationship!(relationship_type,subject,object)
+              implement_relationship!(relationship_type,subject,object)
             end
           end
 
@@ -48,7 +56,7 @@ class BulkMetadata::Relationship < ApplicationRecord
           case objrow.status
           when "ingested"
                 if object = objrow.ingested_work
-                  create_relationship!(relationship_type,subject,object)
+                  implement_relationship!(relationship_type,subject,object)
                 else
                   wait!
                 end
@@ -63,7 +71,9 @@ class BulkMetadata::Relationship < ApplicationRecord
     end
   end
   
-  def create_relationship!(type,subject,object)
+  private 
+  
+  def implement_relationship!(type,subject,object)
     case type
         when "parent"
           subject.ordered_members << object
@@ -72,7 +82,7 @@ class BulkMetadata::Relationship < ApplicationRecord
           object.ordered_members << subject
           object.save
         when "collection"
-          object.add_member(subject.id)
+          object.add_members([subject.id])
           object.save
           
     end

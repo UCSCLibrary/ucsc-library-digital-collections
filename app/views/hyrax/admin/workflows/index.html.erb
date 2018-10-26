@@ -1,0 +1,34 @@
+<% provide :page_header do %>
+    <h1><span class="glyphicon glyphicon-ok-circle"></span> <%= t('.header') %></h1>
+<% end %>
+
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="panel panel-default tabs">
+            <ul class="nav nav-tabs" role="tablist">
+                <% @states.each do |state| %>
+                    <li <%= (@states.first[:id] == state[:id]) ? 'class=active' : "" %>>
+                        <a href="#<%= state[:name] %>" role="tab" data-toggle="tab"><%= state[:name].titleize %> (<%= state[:num] %>)</a>
+                    </li>
+                <% end %>
+            </ul>
+
+            <script>
+             function performAction(action_name, state_name) {
+                 $("#"+state_name+"-actions input#workflow-action-input").val(action_name);
+                 $("form#"+state_name+"-actions").submit();
+             }
+            </script>
+
+            <div class="tab-content">
+
+                <% @states.each do |state| %>
+                    <%= render 'review_tab', {state: state, active: (@states.first[:id] == state[:id]) } %>
+                <% end %>
+
+            </div>
+
+        </div>
+    </div>
+</div>

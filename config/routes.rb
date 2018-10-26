@@ -1,11 +1,14 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+
   concern :oai_provider, BlacklightOaiProvider::Routes.new
 
   mount BrowseEverything::Engine => '/browse'
 
   devise_for :users
+
+  get '/admin/workflows(.:format)', to: 'admin/workflows#index'
 
   mount Hyrax::Engine => '/'
 
@@ -67,6 +70,8 @@ Rails.application.routes.draw do
 
   get '/records/:id' => 'records#show'
 
+  
+
   resources :solr_documents, only: [:show], path: '/catalog', controller: 'catalog' do
     concerns :exportable
   end
@@ -81,5 +86,25 @@ Rails.application.routes.draw do
 
     # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
+  put '/dashboard/workflow_actions/update(.:format)', to: 'admin/workflow_actions#update'
+  patch '/dashboard/workflow_actions/update(.:format)', to: 'admin/workflow_actions#update'
 
+  get '/github_auth/:user_id', to: "github_credentials#authenticate"
+
+  namespace :bulk_ops do
+
+    resources :operations do
+      post :search
+      member do
+        post :request_application
+        post :apply
+        get :csv
+        get :info
+        get :errors
+        get :log
+      end
+    end
+    
+  end
+  
 end

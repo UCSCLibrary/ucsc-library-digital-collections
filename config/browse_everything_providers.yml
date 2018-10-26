@@ -4,7 +4,7 @@
 #
 ---
 file_system:
-  :home: "/avalon2sufia/uploads"
+  :home: "/dams_ingest"
 # dropbox:
 #   :app_key: YOUR_DROPBOX_APP_KEY
 #   :app_secret: YOUR_DROPBOX_APP_SECRET

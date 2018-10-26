@@ -34,17 +34,18 @@ properties:
     multiple: true
     primary: false
     hidden: false
+    stored: true
     display_area: more
     core: false
     work_title: false
     input: scalar
     facet_limit: 5
+    facet: false
     index_as: stored_searchable
     search_field: false
     sort_field: false
     input_as: text
-    search_result_display: false
-#    class_name: Ucsc::ControlledResource
+    search_result_display: true
 
   title:
     definition: "The title of the resource."
@@ -80,10 +81,25 @@ properties:
     search_field: true
     OAI: DC:alternative
 
+  subseries:
+    definition: "A subseries title for the resource."
+    usage_note: "This is a descriptive title not necessarily given by the creator"
+    label: "Sub-Series Title"
+    predicate: "BF2:subseriesStatement"
+    search_field: true
+    OAI: DC:alternative
+
+  theme:
+    definition: "A theme or something theme-like."
+    usage_note: ""
+    label: "Theme"
+    predicate: "opaque:set"
+    search_field: true
+
   creator:
     definition: "A person or organization responsible for creating the resource."
+    label: Creator
     predicate: "DC:creator"
-    range: "Agent"
     vocabularies: 
       - authority: loc
         subauthority: names
@@ -92,8 +108,6 @@ properties:
       - authority: local
         subauthority: agents
     primary: true
-#    required: true
-    facet: true
     index_itemprop: creator
     search_field: true
     input: multi_controlled_vocabulary
@@ -103,7 +117,7 @@ properties:
   contributor:
     definition: "A person or organization responsible for making contributions to the resource."
     predicate: "DC:contributor"
-    range: "Agent"
+    label: Contributor
     vocabularies: 
       - authority: loc
         subauthority: names
@@ -111,12 +125,11 @@ properties:
         subauthority: ulan
       - authority: local
         subauthority: agents
-    facet: true
     index_itemprop: contributor
     search_field: true
     core: true
     display_area: more
-    input: autosuggest
+    input: multi_controlled_vocabulary
     OAI: DC:contributor
 
   originalPublisher:
@@ -127,12 +140,14 @@ properties:
   
   publisher:
     predicate: "DC:publisher"
-    label: "Digital Publicher & Contact Info"
+    label: "Digital Publisher & Contact Info"
 #    multiple: false
+    search_field: true
     core: true
     OAI: DC:publisher
   
   publisherHomepage:
+    label: "Publisher Homepage"
     definition: "The URL of the publisher's homepage."
 #    multiple: false
     predicate: FOAF:homepage
@@ -143,21 +158,22 @@ properties:
     label: Type
     search_field: true
     predicate: DC:type
-    required: true
     vocabulary: 
       authority: local
       subauthority: dcmi_types
     facet: true
     input: dropdown
+    OAI: DC:type
 #    multiple: false
 #    search_result_display: true
+   
   
   rightsStatement:
     definition: Information about rights held in and over the resource expressed in general terms (i.e. boilerplate statements).
     DC mapping: dc:rights
     label: Copyright Statement
     predicate: DC:rights
-    required: 'true'
+#    required: 'true'
     core: true
     OAI: DC:rights
   
@@ -171,13 +187,14 @@ properties:
         subauthority: names
       - authority: local
         subauthority: agents
-    input: autosuggest
+    input: multi_controlled_vocabulary
     core: true
     OAI: DC:rights
   
   scale:
     definition: Ratio of the dimensions of a form contained or embodied in a resource to the dimensions of the entity it represents, e.g., for images or cartographic resources.
     predicate: BF2:scale
+    label: Scale
 
   series:
     definition: A related resource in which the described resource is physically or logically included.
@@ -188,6 +205,7 @@ properties:
   source:
     definition: A related resource from which the described resource is derived. (Use to record previous publication information, i.e. the place of publication and publisher name for physical resources).
     display_area: staff
+    label: Source
     predicate: DC:source
     search_field: true
   
@@ -214,10 +232,12 @@ properties:
       - authority: getty
         subauthority: ulan 
       - authority: local
-        subauthority: agents        
-    facet: true
-    input: autosuggest
+        subauthority: agents
+    facet: true        
+    search_field: true
+    input: multi_controlled_vocabulary
     core: true
+    OAI: DC:subject
 #    search_result_display: true
   
   subjectPlace:
@@ -234,7 +254,7 @@ properties:
         subauthority: places
     facet: true
     search_field: true
-    input: autosuggest
+    input: multi_controlled_vocabulary
     core: true
     OAI: DC:subject
 #    search_result_display: true
@@ -251,7 +271,8 @@ properties:
       - authority: local
         subauthority: time_periods
     facet: true
-    input: autosuggest
+    search_field: true
+    input: multi_controlled_vocabulary
     core: true
     OAI: DC:subject
 #    search_result_display: true
@@ -269,7 +290,7 @@ properties:
     index_itemprop: about
     facet: true
     search_field: true
-    input: autosuggest
+    input: multi_controlled_vocabulary
     core: true
     OAI: DC:subject
 #    search_result_display: true
@@ -279,27 +300,25 @@ properties:
     encoding: W3CDTF
     label: 'Date Created'
     predicate: DC:date
-    index_type: date
-    index_helper_method: human_readable_date
+#    index_helper_method: human_readable_date
     index_itemprop: dateCreated
-    sort_field: true
     input: date
     core: true    
-    OAI: DC:date
+#    OAI: DC:date
 #    search_result_display: true
 
   dateCreatedDisplay:
     definition: Textual representation of the creation date (temporary fix)
     label: 'Date Created'
     predicate: MODS:dateCreated
+    OAI: DC:date
 
   dateDigitized:
     definition: Date on which the resourc was changed, i.e., digitized.
     encoding: W3CDTF
     label: Date Digitized
     predicate: DC:modified
-    index_type: date
-    index_helper_method: human_readable_date
+#    index_helper_method: human_readable_date
     index_itemprop: dateModified
     input: date
   
@@ -308,16 +327,15 @@ properties:
     encoding: W3CDTF
     label: 'Date Published'
     predicate: DC:issued
-    index_type: date
-    index_helper_method: human_readable_date
+#    index_helper_method: human_readable_date
     index_itemprop: datePublished
-    sort_field: true
     input: date
   
   description:
     definition: An account of the resource.
     label: Description
     predicate: DC:description
+    index_field: true
     index_itemprop: "description"
     index_helper_method: "iconify_auto_link"
     search_field: true
@@ -334,8 +352,8 @@ properties:
         subauthority: aat
       - authority: local
         subauthority: formats
-    facet: true
-    input: autosuggest
+    search_field: true
+    input: multi_controlled_vocabulary
     core: true
     OAI: DC:format
   
@@ -356,7 +374,6 @@ properties:
     vocabularies:
       - authority: loc
       - subauthority: languages
-    facet: true
     itemprop: inLanguage
     input: dropdown
     core: true
@@ -408,6 +425,7 @@ properties:
     predicate: schema:identifier
     core: true
     display_area: brief
+    OAI: DC:identifier
 
   donorProvenance:
     definition: "A statement of any changes in ownership and custody of the resource since its creation that are significant for its authenticity, integrity, and interpretation."
@@ -417,6 +435,7 @@ properties:
 
   genre:
     definition: "A genre term designates the style or technique of the intellectual content of textual materials or, for graphic materials, aspects such as vantage point, intended purpose, characteristics of the creator, publication status, or method  of representation. Does not capture aboutness. Ex. lectures; underground dance music."
+    label: Genre
     vocabulary:
       - authority: loc
       - subauthority: languages
@@ -448,6 +467,8 @@ work_types:
       title:
       titleAlternative:
         primary: true
+      subseries:
+        primary: true
       creator:
       contributor:
       publisher:
@@ -468,7 +489,7 @@ work_types:
       series:
       coordinates:
       dateCreated:
-      dateCreatedFake:
+      dateCreatedDisplay:
       datePublished:
       dateDigitized:
       subjectTopic:
@@ -476,6 +497,7 @@ work_types:
       subjectPlace:
       subjectTemporal:
       genre:
+      physicalFormat:
       masterFilename:
       originalPublisher:
       physicalDescription:
@@ -484,6 +506,7 @@ work_types:
       collectionCallNumber:
       donorProvenance:
       boxFolder:
+      theme:
       itemCallNumber:
   collection:
     properties:
@@ -514,14 +537,29 @@ work_types:
       collectionCallNumber:
       donorProvenance:
   lecture:
+    properties:
       title:
+        inherit: prepend
       description:
+        primary: true
+      creator:
+      license:
+        inherit: true
+      keyword:
+        inherit: true
       dateCreated:
   course:
+    properties:
       title:
       description:
+        primary: true
+      creator:
+        primary: true
+      license:
+      keyword:
       dateCreated:
   gdao_work:
+    properties:
       title:
       description:
       dateCreated:
