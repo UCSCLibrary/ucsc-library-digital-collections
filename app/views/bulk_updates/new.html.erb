@@ -1,15 +1,27 @@
-<h1>New Bulk Updates</h1>
-<p>On this page, you can define groups of works that you want to update in bulk.</p>
-<p>Once you click "create update", you will not be able to easily add or remove works from this group. Take your time to make sure you are collecting the right group of works to update. The system will save your group of works here, even if you log out or use a different computer.</p>
-<p>You can even name and save multiple groups of works, if you are preparing several different updates. Until you click "create update", no action is taken and these groups are only temporary lists of items.</p>
+<h1>Create a Bulk Update</h1>
 
-<div id="group-name">
-    <label>Group name:</label>
-    <select name="group_name">
-        <%= options_for_select @group_name_options, @group_id %>
+<p>The first step to creating a bulk update is to group together all the works you want to update into a "Bulk Update Draft". </p>
+
+<a href="bulk_update_drafts/new">
+    <button> Create Bulk Update Draft</button>
+</a>
+
+<p>If you already have a Bulk Update Draft that you're happy with, select it below to generate a metadata spreadsheet for editing. Make sure you are happy with your draft before you proceed.</p>
+
+<div id="draft-name">
+    <label>Draft name:</label>
+    <select name="draft_id">
+        <%= options_for_select @draft_name_options, @draft_id %>
     </select>
+
 </div>
     
-<hr>
+<%= render "update_options"  %>
 
-<div id="group-list"    
+
+<button id="create-update">Create Update Now</button>
+
+
+
+
+
