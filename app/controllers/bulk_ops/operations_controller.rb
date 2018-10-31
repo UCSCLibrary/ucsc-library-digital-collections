@@ -191,8 +191,8 @@ class BulkOps::OperationsController < ApplicationController
       @operation = BulkOps::Operation.find_by(name: params["operation_name"])
     end
     if @operation.nil?
-      @branches = BulkOps::GithubAccess.list_branches
-      @branch_options = @branches.map{|branch| [branch[:name],branch[:name]]} - [['master','master']]
+      @branch_names = BulkOps::GithubAccess.list_branch_names
+      @branch_options = @branch_names.map{|branch| [branch,branch]}
       @branch_options = [["No Bulk Updates Defined",0]] if @branch_options.blank?
     elsif @operation.stage == "draft" 
       @works = @operation.work_proxys.map{|work_proxy| SolrDocument.find(work_proxy.work_id)}

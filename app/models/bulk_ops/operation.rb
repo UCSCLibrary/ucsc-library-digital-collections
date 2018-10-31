@@ -9,25 +9,14 @@ class BulkOps::Operation < ApplicationRecord
     message = "#{type.titleize} initiated by #{current_user.name || current_user.email}"
     save
     
-    get_spreadsheet
+    get_final_spreadsheet
     
     apply_ingest! if ingest?
     apply_update! if update?
-
-
-    #loop through work proxies
-    work_proxies.each |proxy| do
-      
-      
-
-    end
-
-    #  create background jobs for each
-    #  
   end
 
   def apply_ingest! spreadsheet
-    #destroy existing work proxies for an ingest. Create from current spreadsheet only.
+    #destroy any existing work proxies, which should not exist for an ingest. Create from current spreadsheet only.
     work_proxys.each{|proxy| proxy.destroy!}
 
     #create a work proxy for each row in the spreadsheet
@@ -67,29 +56,25 @@ class BulkOps::Operation < ApplicationRecord
     end
   end
 
-  def create_branch(fields: fields, work_ids: work_ids, options: options)
-    work_ids ||= []
+  def create_branch(fields: nil, work_ids: nil, options: nil)
+    work_ids ||= work_proxys.map{|proxy| proxy.work_id}
     fields ||= default_metadata_fields
 
-    begin
-      git.create_branch!
+    git.create_branch!
 
-      #copy template files
-      Dir["#{Rails.root}/lib/bulk_operations/templates/*"].each do |template_file_path| 
-        git.add_file "#{name}/#{template_file_path}" 
-      end
+    #copy template files
+    Dir["#{Rails.root}/lib/bulk_ops/templates/*"].each{|file| git.add_file file}
 
-      #update configuration options      
+    #update configuration options 
+    unless options.nil?
       new_options = YAML.load_file("lib/bulk_operations/templates/configuration.yml")
-      options.each { |option, value| new_options[option] = value } unless options.nil?
+      options.each { |option, value| new_options[option] = value }
       git.update_options new_options
-
-      #add metadata spreadsheet
-      @metadata = self.works_to_csv(work_ids, fields)
-      git.add_contents "#{name}/metadata.csv", metadata, branch: name
-    rescue
-      false
     end
+    
+    #add metadata spreadsheet
+    @metadata = self.class.works_to_csv(work_ids, fields)
+    git.add_new_spreadsheet @metadata
 
   end
 
@@ -101,8 +86,16 @@ class BulkOps::Operation < ApplicationRecord
     @metadata ||= git.load_metadata
   end
 
+  def get_final_spreadsheet
+    @metadata ||= git.load_metadata "master"
+  end
+
   def update_spreadsheet filename, message=false
     git.update_spreadsheet(filename, message)
+  end
+
+  def update_options filename, message=false
+    git.update_options(filename, message)
   end
 
   def options
@@ -131,13 +124,28 @@ class BulkOps::Operation < ApplicationRecord
   end
 
   def destroy!
-    git.delete_branch(name)
+    git.delete_branch!
     super
   end
 
+  def delete_branch
+    git.delete_branch!
+  end
+
   def destroy
-    git.delete_branch(name)
+    git.delete_branch!
     super
+  end
+
+  def default_metadata_fields labels = true
+    #returns full set of metadata parameters from ScoobySnacks to include in ingest template spreadsheet    
+    fields = []
+    #    ScoobySnacks::METADATA_SCHEMA.fields.each do |field_name,field|
+    ScoobySnacks::METADATA_SCHEMA['work_types']['work']['properties'].each do |field_name,field|
+      fields << field_name
+      fields << "#{field_name} Label" if labels && field["controlled"]
+    end
+    return fields
   end
 
   private
@@ -155,12 +163,12 @@ class BulkOps::Operation < ApplicationRecord
         label = true
         field_name = field_name[0..-7]
       end
-      values = self.call(field_name)
+      values = work.send(field_name)
       values.map do |value|
         value = (label ? WorkIndexer.fetch_remote_label(value.id) : value.id) unless value.is_a? String
-        '"#{value.gsub("\"","\"\"")}"'
-      end.join(',')
-    end
+        value.gsub("\"","\"\"")
+      end.join(';')
+    end.join(',')
   end
 
   def self.filter_fields fields, label = true
@@ -168,17 +176,6 @@ class BulkOps::Operation < ApplicationRecord
       # reject if not in scoobysnacks
       # add label if needed
     end
-  end
-
-  def default_metadata_fields labels = true
-    #returns full set of metadata parameters from ScoobySnacks to include in ingest template spreadsheet    
-    fields = []
-#    ScoobySnacks::METADATA_SCHEMA.fields.each do |field_name,field|
-    ScoobySnacks::METADATA_SCHEMA['work_types']['work']['properties'].each do |field_name,field|
-      fields << field_name
-      fields << "#{field_name} Label" if labels && field["controlled"]
-    end
-    return fields
   end
 
   def ignored_fields

@@ -6,6 +6,8 @@ require 'base64'
 class BulkOps::GithubAccess
 
   ROW_OFFSET = 2
+  SPREADSHEET_FILENAME = 'metadata.csv'
+  OPTIONS_FILENAME = 'configuration.yml'
 
   #
   #
@@ -81,6 +83,14 @@ class BulkOps::GithubAccess
     self.new(name).add_contents file_name, contents, message=false
   end
 
+  def self.load_options name
+    self.new(name).load_options
+  end
+
+  def self.load_metadata name
+    self.new(name).load_metadata
+  end
+  
   def self.update_options name, options, message=false
     self.new(name).update_options options, message=false
   end
@@ -89,49 +99,70 @@ class BulkOps::GithubAccess
     self.new("dummy").list_branches
   end
 
+  def self.list_branch_names
+    self.new("dummy").list_branch_names
+  end
+
   def initialize(name)
-    @name = name
+    @name = name.parameterize
   end
 
   def create_branch!
     client.create_ref repo, "heads/#{name}", current_master_commit_sha
   end
 
+  def delete_branch!
+    return false unless list_branch_names.include? name
+    client.delete_branch repo, name
+  end
+
   def add_file file_path, file_name = nil, message=false
-    file_name ||= File.basename file_path
+    file_name ||= File.basename(file_path)
+    unless file_name.downcase == "readme.md" || file_name.downcase.include? "#{name}/" 
+      file_name = File.join name, file_name
+    end 
     message ||= "adding file #{file_name} to github branch #{name}"
-    client.create_contents(repo, file_name, message, file: path, branch: name)
+    client.create_contents(repo, file_name, message, file: file_path, branch: name)
   end
 
 
   def add_contents file_name, contents, message=false
     message ||= "adding file #{file_name} to github branch #{name}"
-    client.create_contents(repo, template_file_name, message, Base64.encode64(contents), branch: name)
+    client.create_contents(repo, file_name, message, contents, branch: name)
+  end
+
+  def add_new_spreadsheet file_contents, message=false
+    add_contents(spreadsheet_path, file_contents, message)
   end
 
   def list_branches
-    client.branches(repo)
+    client.branches(repo).select{|branch| branch[:name] != "master"}
+  end
+
+  def list_branch_names
+    list_branches.map{|branch| branch[:name]}
   end
 
   def update_spreadsheet filename, message=false
-    message ||= "updating metadata spreadsheet through hyrax browser interface. User: #{current_user.email}"
-    sha = Digest::SHA1.hexdigest(client.contents(repo,spreadsheet_filename))
-    client.update_contents(repo, spreadsheet_filename, message, sha, file: filename)
+    message ||= "updating metadata spreadsheet through hyrax browser interface."
+    
+    sha = get_file_sha(spreadsheet_path)
+    client.update_contents(repo, spreadsheet_path, message, sha, File.read(filename), branch: name)
   end
 
   def update_options options, message=false
-    message ||= "updating metadata spreadsheet through hyrax browser interface. User: #{current_user.email}"
-    sha = Digest::SHA1.hexdigest(client.contents(repo,options_filename))
-    client.update_contents(repo, options_filename, message, sha, YAML.dump(options))
+    message ||= "updating metadata spreadsheet through hyrax browser interface."
+    sha = get_file_sha(options_path)
+    client.update_contents(repo, options_path, message, sha, YAML.dump(options), branch: name)
   end
-
 
   def load_options 
-    YAML.load(get_file_contents(options_filename))
+    YAML.load(Base64.decode64(get_file_contents(options_path)))
   end
 
-  def load_metadata
-    CSV.parse(get_file_contents(spreadsheet_filename), headers: true)
+  def load_metadata branch=nil
+    branch ||= name
+    CSV.parse(Base64.decode64(get_file_contents(spreadsheet_path), branch), headers: true)
   end
 
   def log_ingest_event log_level, row_number, event_type, message, commit_sha = nil
@@ -149,11 +180,28 @@ class BulkOps::GithubAccess
     past_metadata[row_number - ROW_OFFSET]
   end
 
-  def self.get_file_contents name, filename
-    Base64.decode64( client.contents(repo, path: filename, ref: name) )
+  def get_file filename
+    client.contents(repo, path: filename, ref: name)
+  end
+
+  def get_file_contents filename, ref=nil
+    ref ||= name
+    client.contents(repo, path: filename, ref: ref)[:content]
+  end
+
+  def get_file_sha filename
+    client.contents(repo, path: filename, ref: name)[:sha]
   end
 
   private
+
+  def spreadsheet_path
+    "#{name}/#{SPREADSHEET_FILENAME}"
+  end
+
+  def options_path
+    "#{name}/#{OPTIONS_FILENAME}"
+  end
 
   def repo
     github_config["repo"]
@@ -175,11 +223,5 @@ class BulkOps::GithubAccess
     @github_config ||=  YAML.load_file("#{Rails.root.to_s}/config/github.yml")[Rails.env]
   end
 
-  def spreadsheet_filename
-    "#{name}/metadata.csv"
-  end
-  def options_filename
-    "#{name}/configuration.yml"
-  end
 
 end
