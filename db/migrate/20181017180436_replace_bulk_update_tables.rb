@@ -27,7 +27,7 @@ class ReplaceBulkUpdateTables < ActiveRecord::Migration[5.0]
     add_foreign_key :bulk_ops_work_proxys, :bulk_ops_operations, column: :operation_id
 
     create_table :bulk_ops_relationships do |t|
-      t.references :work_proxy_id
+      t.references :work_proxy
       t.string   :object_identifier
       t.string   :identifier_type
       t.string   :relationship_type
