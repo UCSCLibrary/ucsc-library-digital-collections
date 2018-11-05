@@ -3,20 +3,233 @@ class BulkOps::Operation < ApplicationRecord
   has_many :work_proxys
   self.table_name = "bulk_ops_operations"
 
+  BASE_PATH = "/dams_ingest"
+  RELATIONSHIP_COLUMNS = ["parent","child","next"]
+  SPECIAL_COLUMNS = ["parent",
+                     "child",
+                     "order",
+                     "next",
+                     "work_type",
+                     "collection", 
+                     "collection_title",
+                     "collection_id",
+                     "visibility",
+                     "relationship_identifier_type",
+                     "id"]
+  IGNORED_COLUMNS = ["ignore","offline_notes"]
+  OPTION_REQUIREMENTS = {type: {required: true, 
+                                values:[:ingest,:update]},
+                         file_handling: {required: :update,
+                                         values: []},
+                         notifications: {required: true}}
+
+
+
+  def error_message type, args, file=nil
+    case type
+    when :missing_required_option 
+      error = "Error in your configuration file. Missing required option(s):"
+      error += args.map{|arg| arg[:name]}.join(", ") + "\n"
+    when :invalid_config_value 
+      error = "Error(s) in your configuration file.\n" 
+      args.each do |arg|
+        error += "Unacceptable value for #{args[:name}. Acceptable values include: #{args[:values]}\n"
+      end
+    when :cannot_get_headers 
+      error = "Error verifying column headers: cannot retrieve headers from metadata spreadsheet on github. Either the connection to github or the metadata spreadsheet on this branch is problematic.\n"
+    when :bad_header 
+      error =  "Error - could not interpret column header(s): "
+      error += args.map{|arg| arg[:name]}.join(", ")
+    when :cannot_retrieve_label 
+      error = ""
+      args.each do |arg|
+        error +=  "Error retrieving label for remote url #{arg.first[:url]}. This url appears in #{arg.count} instances in the spreadsheet, including the #{arg.first.column_name} column on row number #{arg.first.row} for example.\n"
+      end
+    when :bad_row_reference 
+      error = "Error - bad object reference in row #{args.first[:row]}. Invalid row number reference: #{args.first[:id]}\n"
+      if args.count > 1
+        error += "#{args.count} other rows also had invalid row number references. We will not list them all here.\n"
+      end
+    when :cannot_find_file
+      error = "Cannot find file #{args.first[:file]}."
+      error += "The same problem occurred on #{args.count - 1} other rows. We won't list them all here." if args.count > 1
+      
+    when :bad_id_reference 
+      error = "Error - bad object reference in row #{args.first[:row]}. Invalid Hydra ID reference: #{args.first[:id]}\n"
+      error += "#{args.count - 1 } other rows also referred to nonexistent objects in the DAMS. We will not list them all here\n" if args.count > 1
+    end
+    file.write error if file && error
+    return error
+  end
+
+  def schema
+    ScoobySnacks::METADATA_SCHEMA["work_types"][work_type.downcase]
+  end
+
+  def work_type
+    options["work type"] || "work"
+  end
+
+  def verify
+    error_file_name = "error_log_#{DateTime.now.strftime("%F-%H%M%p")}"
+    errors = verify_configuration + verify_column_headers + verify_remote_urls + verify_internal_references + verify_files
+    unless errors.blank?
+      Tempfile.open(error_file_name) do |error_file|
+        #write errors to error file
+        errors.each { |type, typed_errors| error_file.write( error_message(type, typed_errors) ) } 
+
+        #Add error file to github
+        git.add_file error_file
+
+        #notify everybody
+        notify! "Errors verify spreadsheet for bulk #{operation_type}: #{name}", "Hyrax ran a verification step to make sure that the spreadsheet for this bulk #{operation_type} is formatted correctly and won't create any errors. We found some problems. You can see a summary of the issues at this url: https://github.org/UcscLibrary/#{git.repo}/#{git.name}/#{error_file_name}?branch=#{git.name}. Please fix these problems and run this verification again. The bulk #{operation_type} will not be allowed to move forward until all verification issues are resolved, to protect the integrity of the data in the system."
+      end
+      return false
+    end
+    return true
+  end
+
+  def notify! subject:, message:
+    options["notifications"].each do |email|
+      mail(from: "admin@digitalcollections.library.ucsc.edu",
+           to: email,
+           subject: subject,
+           body: message)
+    end
+  end
+
+  def verify_files 
+    errors = {"cannot_find_file":[]}
+    metadata.each do |row, row_num|
+      next unless (file_string = row["file"]) || (file_string = row["filename"])
+      filenames = file_string.split(';')
+      filenames.each do |filename|
+        errors << {file: filename} unless File.file? File.join(BASE_PATH,filename)
+      end
+    end
+    return errors
+  end
+
+  def verify_configuration
+    errors = {"missing_required_option":[],
+             "invalid_config_value":[],
+             }
+    OPTION_REQUIREMENTS.each do |option_name, option_info|
+
+      # Make sure it's present if required
+      if (option_info["required"].to_s == "true") || (option_info["required"].to_s == type)
+
+        if options[option_name].blank?
+          errors["missing_required_option"] << {name: option_name}
+        end
+      end
+
+      # Make sure the values are acceptable if present
+      unless (values = option_info.values).blank? || option[option_name].blank?
+        unless values.include? option[option_name]
+          values_string = values.reduce{|a,b| "#{a}, #{b}"}
+          errors["invalid_config_value"] << {name: option_name, values: values_string}
+        end        
+      end
+    end    
+    return errors
+  end
+
+  # Make sure the headers in the spreadsheet are matching to properties
+  def verify_column_headers
+    error = {"cannot_get_headers":[],
+            "bad_header":[]}
+    unless (headers = metadata.get_headers)
+      # log an error if we can't get the metadata headers
+      errors["cannot_get_headers"] << true
+    end
+
+    headers.each do |column_name|
+      column_name = column_name.parameterize.underscore
+
+      # Ignore everything marked as a label
+      next if column_name.ends_with "_label"
+      
+      # Ignore any column names with special meaning in hyrax
+      next if SPECIAL_COLUMNS.include? column_name
+
+      # Ignore any columns speficied to be ignored in the configuration
+      next if options["ignored headers"] && options["ignored headers"].include? column_name
+      
+      # Column names corresponding to work attributes are legit
+      next if Work.attribute_names.include? column_name
+      errors["bad_header"] << {name: column_name}
+    end
+    return errors
+  end
+
+  def verify_remote_urls
+    errors = {"cannot_retrieve_label":[]}
+    metadata.each do |row, row_num|
+      schema["controlled"].each do |controlled_field|
+        next unless (url = row[controlled_field])
+        label = ::WorkIndexer.fetch_remote_label(url)        
+        if !label || label.blank?
+          errors["cannot_retrieve_label"] << {row: row_num + ROW_OFFSET, 
+                                              field: controlled_field,
+                                              url: url}
+        end
+      end
+    end
+    return errors
+  end
+
+  def verify_internal_references
+    errors = {"bad_object_reference":[]}
+    metadata.each do |row,row_num|
+      ref_id = row['reference_identifier'] || reference_identifier
+      RELATIONSHIP_COLUMNS.each do |relationship|
+        next unless (obj_id = row[relationship])
+        if (split = obj_id.split(':')).count == 2
+          ref_id = split[0].downcase
+          obj_id = split[1]
+        end
+        
+        if ref_id == "row" || (ref_id == "id/row" && obj_id.is_a?(Integer))
+          # This is a row number reference. It should be an integer in the range of possible row numbers.
+          unless obj_id.is_a? Integer && obj_id > 0 && obj_id <= metadata.count
+            errors[:bad_row_reference] << {id: obj_id, row: row_num + ROW_OFFSET}
+          end  
+        elsif ref_id == "id" || ref_id == "hyrax id" || (ref_id == "id/row" && (obj_id.is_a? Integer))
+          # This is a hydra id reference. It should correspond to an object already in the repo
+          unless SolrDocument.find(obj_id) || ActiveFedora::Base.find(obj_id)
+            errors[:bad_id_reference] << {id: obj_id, row: row_num+ROW_OFFSET)
+          end
+        else
+          # This must be based on some other presumably unique field in hyrax. We haven't added this functionality yet. Ignore for now.
+        end
+      end      
+    end
+    return errors
+  end
+
+
+  def reference_identifier
+    options["reference_identifier"] || "id/row"
+  end
+
+
   def apply!
     status = "#{type}ing"
     stage = "running"
-    message = "#{type.titleize} initiated by #{current_user.name || current_user.email}"
+    message = "#{type.titleize} initiated by #{user.name || user.email}"
     save
     
     get_final_spreadsheet
     
+    return unless verify
+
     apply_ingest! if ingest?
     apply_update! if update?
   end
 
   def apply_ingest! spreadsheet
-    #destroy any existing work proxies, which should not exist for an ingest. Create from current spreadsheet only.
+    #destroy any existing work proxies, which should not exist for an ingest. Create new proxies from finalized spreadsheet only.
     work_proxys.each{|proxy| proxy.destroy!}
 
     #create a work proxy for each row in the spreadsheet
@@ -24,17 +237,16 @@ class BulkOps::Operation < ApplicationRecord
       proxy = work_proxies.create(status: "queued",
                                   last_event: DateTime.now,
                                   row_number: row_number,
-                                  message: "Placeholder during ingest initiated by #{current_user.name || current_user.email}")
+                                  message: "Placeholder during ingest initiated by #{user.name || user.email}")
     end
 
     #loop through the work proxies to create a job for each work
     work_proxies.each do |proxy|
-      data = interpret_data(spreadsheet[proxy.row_number])
-      work_type = data['work_type'] || @work_type
-      work_type ||= 'Work'
-      visibility = data['visibility'] || @visibility
-      visibility ||= 'restricted'
-      BulkOps.IngestJob.perform_later(work_type,current_user.email,data,proxy.id,visibility)
+      data = proxy.interpret_data spreadsheet[proxy.row_number]
+      unless proxy.errors.blank?
+        
+      end
+      BulkOps.IngestJob.perform_later(proxy.work_type || "Work",user.email,data,proxy.id,proxy.visibility || "open")
     end
   end
 
@@ -44,15 +256,14 @@ class BulkOps::Operation < ApplicationRecord
       #todo throw & log appropriate exeption if work_id column not found or work referred to not found
       
       proxy.status = "updating"
-      proxy.message = "update initiated by #{current_user.name || current_user.email}"
+      proxy.message = "update initiated by #{user.name || user.email}"
       proxy.save
     end
 
     #loop through the work proxies to create a job for each work
     work_proxies.each do |proxy|
-      data = interpret_data(spreadsheet[proxy.row_number])
-      visibility = data['visibility'] || @visibility
-      BulkOps.UpdateJob.perform_later(proxy.id,data,current_user.email,visibility)      
+      data = proxy.interpret_data spreadsheet[proxy.row_number]
+      BulkOps.UpdateJob.perform_later(proxy.id,data,user.email,proxy.visibility || "open")
     end
   end
 
@@ -148,6 +359,12 @@ class BulkOps::Operation < ApplicationRecord
     return fields
   end
 
+
+  def ignored_fields
+    options['ignored headers'] + IGNORED_COLUMNS
+  end
+
+
   private
 
   def git
@@ -177,118 +394,7 @@ class BulkOps::Operation < ApplicationRecord
       # add label if needed
     end
   end
-
-  def ignored_fields
-    options['ignored_fields']
-  end
   
-  def interpret_data raw_data
-    metadata = []
-    raw_data.each do |field,value|
-      case field.downcase
-
-      when "file", "filename"
-        begin
-          file = File.open(File.join(BASE_PATH,value))
-          uploaded_file = Hyrax::UploadedFile.create(file: file, user: user)
-          (metadata[:uploaded_files] ||= []) << uploaded_file.id if !uploaded_file.id.nil?
-        rescue Exception => e  
-          self.status = "Error: Cannot open file: #{File.join(BASE_PATH,value)}, #{e.message}"
-          self.save
-          return false
-        end
-
-      when "collection title","collection"
-        if (col = find_collection(value))
-          (metadata[:member_of_collection_ids] ||= []) << col.id
-        else
-          relationships.build({ :relationship_type => 'collection',
-                                :identifier_type => 'title',
-                                :object_identifier => value,
-                                :status => "incomplete"})
-        end
-
-      when "collection id"
-        if (col = find_collection(value))
-          (metadata[:member_of_collection_ids] ||= []) << col.id
-        else
-          relationships.build({ :relationship_type => 'collection_id',
-                                :identifier_type => 'id',
-                                :object_identifier => value,
-                                :status => "incomplete"})
-        end
-
-      when "parent", "child"
-        # This field specifies a relationship. 
-        # Log this relationship in the database for future processing
-        # allow for customized identifier types
-        # using the notation "id:a78C2d81"
-        id_type = "work_id"
-        if(value.include?(":"))
-          split = value.split(":")
-          id_type = split[0]
-          object_id = split[1]
-        else
-          object_id = value              
-        end
-
-        relationships.build({ :relationship_type => field.downcase,
-                              :identifier_type => id_type,
-                              :object_identifier => object_id,
-                              :status => "incomplete"})
-      when "work type"
-        # set the work type for this item
-        # overriding the default set for the whole operation
-        @work_type = value
-        
-      when "visibility"
-        # set the work type for this item
-        # overriding the default set for the whole ingest
-        @visibility = value
-
-      when "relationship identifier type"
-        # set the work type for this item
-        # overriding the default set for the whole ingest
-        @id_type = value
-        
-      when "id"
-        # I want to only use id to pick out works to edit
-        # so edit_identifier can become a boolean flag
-        if ingest.edit_identifier == "id"
-          # we are editing an existing work
-          edit_id = value
-        else
-          
-        end
-      when *(ignored_fields.split(/[,;:]/))
-      # Ignore this i.e. do nothing
-      else
-        # this is presumably a normal metadata field
-
-        # if the field name is not a valid metadata element, 
-        # check if it is the label of a valid element
-        property_name = format_param_name(field)
-        if schema["labels"][property_name] && !@work_type.camelize.constantize.new.responds_to?(property_name)
-          property_name = schema["labels"][property_name] 
-        end
-
-        next unless schema["properties"][property_name]
-
-        if schema["properties"][property_name]["controlled"]
-          metadata["#{property_name}_attributes"] ||= []
-          metadata["#{property_name}_attributes"] << {id: value.strip}
-        else
-          (metadata[property_name] ||= []) << value.strip if !value.blank?
-        end
-      end
-    end
-    
-    asets = AdminSet.where({title: "Bulk Ingest Set"})
-    unless metadata[:admin_set_id] or asets.empty?
-      metadata[:admin_set_id] = asets.first.id
-    end
-    metadata
-  end
 end
 
 
