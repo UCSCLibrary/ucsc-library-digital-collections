@@ -125,7 +125,6 @@ class BulkOps::GithubAccess
     client.create_contents(repo, file_name, message, file: file_path, branch: name)
   end
 
-
   def add_contents file_name, contents, message=false
     message ||= "adding file #{file_name} to github branch #{name}"
     client.create_contents(repo, file_name, message, contents, branch: name)
@@ -170,6 +169,18 @@ class BulkOps::GithubAccess
     #TODO WRITE THIS CODE
   end
 
+  def create_pull_request
+    client.create_pull_request(repo, "master", name, "Apply update #{name} through Hyrax browser interface", "In Hyrax, an administrator has requested to apply a bulk update represented by this Git branch.")
+  end
+
+  def can_merge?
+    
+  end
+
+  def merge_pull_request pull_id
+    client.merge_pull_request(repo, pull_id)
+  end
+
   def get_metadata_row row_number
     @current_metadata ||= load_metadata
     @current_metadata[row_number - ROW_OFFSET]
@@ -193,6 +204,10 @@ class BulkOps::GithubAccess
     client.contents(repo, path: filename, ref: name)[:sha]
   end
 
+  def repo
+    github_config["repo"]
+  end
+
   private
 
   def spreadsheet_path
@@ -201,10 +216,6 @@ class BulkOps::GithubAccess
 
   def options_path
     "#{name}/#{OPTIONS_FILENAME}"
-  end
-
-  def repo
-    github_config["repo"]
   end
 
   def current_master_commit_sha
