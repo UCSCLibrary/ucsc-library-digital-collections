@@ -118,7 +118,7 @@ class BulkOps::GithubAccess
 
   def add_file file_path, file_name = nil, message=false
     file_name ||= File.basename(file_path)
-    unless file_name.downcase == "readme.md" || file_name.downcase.include? "#{name}/" 
+    unless (file_name.downcase == "readme.md") || (file_name.downcase.include? "#{name}/")
       file_name = File.join name, file_name
     end 
     message ||= "adding file #{file_name} to github branch #{name}"
@@ -161,7 +161,7 @@ class BulkOps::GithubAccess
 
   def load_metadata branch=nil
     branch ||= name
-    CSV.parse(Base64.decode64(get_file_contents(spreadsheet_path), branch), headers: true)
+    CSV.parse(Base64.decode64(get_file_contents(spreadsheet_path, branch)), headers: true)
   end
 
   def log_ingest_event log_level, row_number, event_type, message, commit_sha = nil
