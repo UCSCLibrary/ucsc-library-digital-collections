@@ -1,0 +1,7 @@
+<ul id="oeprations-index">
+    <% @active_operations.each do |operation| %>
+        <li>
+            <%= link_to(operation.name,"operations/#{operation.id}")%>
+        </li>
+    <% end %>
+</ul>

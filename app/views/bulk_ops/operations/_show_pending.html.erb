@@ -1,8 +1,8 @@
-<form id="export-operation" action="bulk_operations/csv/<%=@operation.id%>">
+<form id="export-operation" action="<%=@operation.id%>/csv">
     <input type="submit" value="Download spreadsheet file to edit" />
 </form>
 
-<form id="edit-operation" action="bulk_operations/edit/#{operation.id}">
+<form id="edit-operation" action="<%=operation.id%>/edit">
     
     <div id="spreadsheet-input">
         <label>Upload New Spreadsheet Version</label>
@@ -14,7 +14,7 @@
     <input type="submit" value="Save Changes" />
 </form>
 
-<form id="delete-operation" action="bulk_operations/delete/#{operation.id}">
+<form id="delete-operation" action="<%=operation.id%>/delete">
     <input type="submit" value="Cancel and delete this entire bulk <%= @operation.operation_type %>" />
 </form>
 
