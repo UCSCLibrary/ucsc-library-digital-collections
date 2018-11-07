@@ -4,6 +4,7 @@ class BulkOps::Operation < ApplicationRecord
   self.table_name = "bulk_ops_operations"
 
   BASE_PATH = "/dams_ingest"
+  TEMPLATE_DIR = "lib/bulk_ops/templates"
   RELATIONSHIP_COLUMNS = ["parent","child","next"]
   SPECIAL_COLUMNS = ["parent",
                      "child",
@@ -33,7 +34,7 @@ class BulkOps::Operation < ApplicationRecord
     when :invalid_config_value 
       error = "Error(s) in your configuration file.\n" 
       args.each do |arg|
-        error += "Unacceptable value for #{args[:name}. Acceptable values include: #{args[:values]}\n"
+        error += "Unacceptable value for #{args[:name]}. Acceptable values include: #{args[:values]}\n"
       end
     when :cannot_get_headers 
       error = "Error verifying column headers: cannot retrieve headers from metadata spreadsheet on github. Either the connection to github or the metadata spreadsheet on this branch is problematic.\n"
@@ -154,7 +155,7 @@ class BulkOps::Operation < ApplicationRecord
       next if SPECIAL_COLUMNS.include? column_name
 
       # Ignore any columns speficied to be ignored in the configuration
-      next if options["ignored headers"] && options["ignored headers"].include? column_name
+      next if options["ignored headers"] && options["ignored headers"].include?(column_name)
       
       # Column names corresponding to work attributes are legit
       next if Work.attribute_names.include? column_name
@@ -198,7 +199,7 @@ class BulkOps::Operation < ApplicationRecord
         elsif ref_id == "id" || ref_id == "hyrax id" || (ref_id == "id/row" && (obj_id.is_a? Integer))
           # This is a hydra id reference. It should correspond to an object already in the repo
           unless SolrDocument.find(obj_id) || ActiveFedora::Base.find(obj_id)
-            errors[:bad_id_reference] << {id: obj_id, row: row_num+ROW_OFFSET)
+            errors[:bad_id_reference] << {id: obj_id, row: row_num+ROW_OFFSET}
           end
         else
           # This must be based on some other presumably unique field in hyrax. We haven't added this functionality yet. Ignore for now.
@@ -274,11 +275,11 @@ class BulkOps::Operation < ApplicationRecord
     git.create_branch!
 
     #copy template files
-    Dir["#{Rails.root}/lib/bulk_ops/templates/*"].each{|file| git.add_file file}
+    Dir["#{Rails.root}/#{TEMPLATE_DIR}/*"].each{|file| git.add_file file}
 
     #update configuration options 
-    unless options.nil?
-      new_options = YAML.load_file("lib/bulk_operations/templates/configuration.yml")
+    unless options.blank?
+      new_options = YAML.load_file(File.join(Rails.root,TEMPLATE_DIR, BulkOps::GithubAccess::OPTIONS_FILENAME))
       options.each { |option, value| new_options[option] = value }
       git.update_options new_options
     end
@@ -290,8 +291,7 @@ class BulkOps::Operation < ApplicationRecord
   end
 
   def self.works_to_csv work_ids, fields
-    work_ids.reduce(fields.join(',')){|csv, work_id| csv + "\r\n" + self.work_to_csv(work_id,fields)}
-  end
+    work_ids.reduce(fields.join(',')){|csv, work_id| csv + "\r\n" + self.work_to_csv(work_id,fields)}  end
 
   def get_spreadsheet
     @metadata ||= git.load_metadata
