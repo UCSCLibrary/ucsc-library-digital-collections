@@ -2,7 +2,7 @@ class BulkOps::WorkProxy < ApplicationRecord
   self.table_name = "bulk_ops_work_proxys"
   belongs_to :operation, class_name: "BulkOps::Operation"
 
-  attr_accessor: :work_type, :visibility, :reference_identifier, :order, :errors
+  attr_accessor :work_type, :visibility, :reference_identifier, :order, :errors
 
   def interpret_data raw_data, error_file
     metadata = []
@@ -30,7 +30,7 @@ class BulkOps::WorkProxy < ApplicationRecord
         else
           BulkOps::Relationship.create({ work_proxy_id: proxy.id,
                                          identifier_type: 'title',
-                                         relationship_type: "collection_title"
+                                         relationship_type: "collection_title",
                                          object_identifier: value,
                                          status: "incomplete"})
         end
@@ -41,7 +41,7 @@ class BulkOps::WorkProxy < ApplicationRecord
         else
           BulkOps::Relationship.create({ work_proxy_id: proxy.id,
                                          identifier_type: 'id',
-                                         relationship_type: "collection_id"
+                                         relationship_type: "collection_id",
                                          object_identifier: value,
                                          status: "incomplete"})
         end
