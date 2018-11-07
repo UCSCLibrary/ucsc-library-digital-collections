@@ -92,6 +92,7 @@ class WorkIndexer < Hyrax::WorkIndexer
         ids = LdBuffer.order('created_at DESC').limit(cnt).pluck(:id)
         LdBuffer.where(id: ids).delete_all
       end
+      
       return label
 
     rescue Exception => e
@@ -100,13 +101,14 @@ class WorkIndexer < Hyrax::WorkIndexer
       Rails.logger.error "Unable to fetch #{url} from the authorative source.\n#{e.message}"
       return "Cannot find term"
     end
-    
-    def self.default_accept_header
-      RDF::Util::File::HttpAdapter.default_accept_header.sub(/, \*\/\*;q=0\.1\Z/, '')
-    end
-
-    def label_field(property)
-      Solrizer.solr_name("#{property}_label")
-    end
-
   end
+    
+  def self.default_accept_header
+    RDF::Util::File::HttpAdapter.default_accept_header.sub(/, \*\/\*;q=0\.1\Z/, '')
+  end
+  
+  def label_field(property)
+    Solrizer.solr_name("#{property}_label")
+  end
+  
+end
