@@ -42,7 +42,7 @@ Rails.application.routes.draw do
         get :info
         get :ingest_all
         post :process_row
-        get :export_csv
+        get :csv
         #      get :pending
         #      get :ingesting
         #      get :completed
