@@ -7,24 +7,25 @@ class BulkOps::OperationsController < ApplicationController
   attr_accessor :git
 
   def index
-    @active_operations = BulkOps.Operation.where.not(stage: ['completed','discarded'])
-    @old_operations = BulkOps.Operation.where(stage: ['completed','discarded']) if params["show_old_ops"]
+    @active_operations = BulkOps::Operation.where.not(stage: ['completed','discarded'])
+    @old_operations = BulkOps::Operation.where(stage: ['completed','discarded']) if params["show_old_ops"]
   end
 
   def new
     if params["create_operation"]
 
       # Create a unique operation name if the chosen name is taken
-      op_name = params['name']  
-      while  BulkOps::Operation.find_by(name: op_name) do
+      op_name = params['name'].parameterize 
+      while  BulkOps::Operation.find_by(name: op_name) || BulkOps::GithubAccess.list_branch_names.include?(op_name) do
         if ['-','_'].include?(op_name[-2]) && op_name[-1].to_i > 0
           op_name = op_name[0..-2]+(op_name[-1].to_i + 1).to_s
         else
           op_name = op_name + "_1"
         end
       end
+      
 
-      operation = BulkOps::Operation.create(name: params['name'], status: "new", stage: "new", operation_type: params['type'], message: "This #{params['type']} is brand new, just created", user: current_user)
+      operation = BulkOps::Operation.create(name: op_name, status: "new", stage: "new", operation_type: params['type'], message: "This #{params['type']} is brand new, just created", user: current_user)
 
       operation.create_branch fields: params['fields'],  options: updated_options
 
@@ -67,7 +68,7 @@ class BulkOps::OperationsController < ApplicationController
           BulkOps::WorkProxy.create(operation_id: @operation.id, 
                                     work_id: work_id,
                                     status: "new",
-                                    last_event: DateTime.now
+                                    last_event: DateTime.now,
                                     message: "Works added to future update by #{current_user.name || current_user.email}")
           added = true
         end
