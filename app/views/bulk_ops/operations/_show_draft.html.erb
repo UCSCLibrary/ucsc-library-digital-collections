@@ -6,7 +6,7 @@
     <input type="hidden" name="operation_id" value="<%=@operation.id%>"
     <input type="submit" value="Create Bulk Update from This Group" />
 </form>
-<form action="delete">
+<form action="<%= @operation.id %>/destroy">
     <input type="submit" value="Delete Bulk Update Grouping" />
 </form>
 up
