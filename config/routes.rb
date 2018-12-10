@@ -91,20 +91,23 @@ Rails.application.routes.draw do
 
   get '/github_auth/:user_id', to: "github_credentials#authenticate"
 
-  namespace :bulk_ops do
-
-    resources :operations do
-      post :search
-      member do
-        post :request_application
+  scope as: :bulk_ops, module: :bulk_ops do
+    resources :operations, path: :bulk_ops do
+      collection do
         post :apply
+        get :apply
+        post :search
+      end
+      member do
+        post :request_apply
+        post :approve
+        post :edit
         get :csv
         get :info
         get :errors
         get :log
       end
     end
-    
   end
-  
+    
 end
