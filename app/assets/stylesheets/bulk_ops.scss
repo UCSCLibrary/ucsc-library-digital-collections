@@ -1,0 +1,33 @@
+form#new-bulk-operation {
+    margin-top: 20px;
+    background-color: white;
+    padding: 10px;
+    border-radius: 3px;                         
+    div {
+        margin-bottom: 25px;
+        p { opacity: 0.8;
+            margin: 0}
+        input {margin-top: 5px}
+
+    }
+
+}
+
+div#bulk-operation-actions {
+    background-color: white;
+    border-radius: 5px;
+    padding: 15px;
+    form, div.op-action { margin-bottom: 35px;
+                          margin-top: 10px;
+                          
+                          input {margin-top:5px;
+                                 display:block;}
+                          #upload-spreadsheet {clear:left}
+                          label {float:left;
+                                 margin-right: 7px;}
+                          
+                          p {margin-bottom: 5px;}
+                          p.big {font-size: 1.2em}
+                        }
+    
+}
