@@ -26,6 +26,22 @@
       <% end %>
     <% end %>
   </li>
+
+  <li>
+    <%= menu.collapsable_section 'Bulk Operations',
+                                 icon_class: "fa fa-table",
+                                 id: 'collapseBulkOps',
+                                 open: false do %>
+      <%= menu.nav_link("/bulk_ops/new") do %>
+        <span class="fa fa-file-o"></span> New Bulk Operation
+      <% end %>
+      <%= menu.nav_link("/bulk_ops/") do %>
+        <span class="fa fa-copy"></span> Manage Bulk Operations
+      <% end %>
+    <% end %>
+  </li>
+
+
 <% end %>
 
 <% if can? :index,  Hydra::AccessControls::Embargo %>

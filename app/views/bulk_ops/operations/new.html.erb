@@ -1,13 +1,7 @@
+    <h1><span class="fa fa-edit" aria-hidden="true"></span>Create a New Bulk Ingest or Update</h1>
+
+
 <form id="new-bulk-operation" name="new_bulk_operation">
-
-    <h1>Set up a New Bulk Ingest or Update</h1>
-
-    <label>Ingest or Update?</label>
-    <p> Would you like to set up a bulk ingest of new works, or a bulk update of existing works?</p>
-    <select name="type">
-        <option value="ingest">Ingest </option>
-        <option value="update">Update </option>
-    </select>
 
     <div id="operation-name">
         <label>Name:</label>
@@ -15,9 +9,27 @@
         <input type="text" name="name" />
     </div>
 
+    <%= render "choose_notifications" %>
+
+
+    <div>
+        <label>Ingest or Update?</label>
+        <p> Would you like to set up a bulk ingest of new works, or a bulk update of existing works?</p>
+        <select name="type"  onchange="$('.options-panel').hide(); $('#'+this.value+'-options').show()" >
+            <option disabled selected value> -- Choose Operation Type -- </option>
+            <option value="ingest">Ingest </option>
+            <option value="update">Update </option>
+        </select>
+    </div>
+
+
     <%= render "ingest_options" %>
     <%= render "update_options" %>
+
+
+    <%= render "choose_fields" %>
+
     
-    <input type="submit" name="create_operation" id="create-operation">Create Bulk Operation</button>
+    <input type="submit" name="create_operation" id="create-operation" value="Create Bulk Operation" />
 
 </form>

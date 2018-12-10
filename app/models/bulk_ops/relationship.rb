@@ -1,16 +1,15 @@
 class BulkOps::Relationship < ApplicationRecord
   self.table_name = "bulk_ops_relationships"
-
-  belongs_to :work_proxy, class_name: "BulkOps::WorkProxy"
+  belongs_to :work_proxy, class_name: "BulkOps::WorkProxy", foreign_key: "work_proxy_id"
 
   def resolve! ()
 
-    unless subject = row.ingested_work
+    unless subject = work_proxy.work
       wait!
       return
     end
 
-    work_type = (relationship_type.downcase == "collection") ? "Collection" : row.work_type
+    work_type = (relationship_type.downcase == "collection") ? "Collection" : work_proxy.work_type
 
     case identifier_type
 
@@ -51,23 +50,23 @@ class BulkOps::Relationship < ApplicationRecord
             end
           end
 
-        when "row"
-          fail! unless objrow = Row.find_by(ingest_id: row.ingest_id, line_number: object_identifier)
-          case objrow.status
-          when "ingested"
-                if object = objrow.ingested_work
-                  implement_relationship!(relationship_type,subject,object)
-                else
-                  wait!
-                end
-          when "error"
-            fail!
-          when "failed"
-            fail!
-          else
-            wait!
-          end
-          
+#        when "row"
+#          fail! unless objrow = Row.find_by(ingest_id: row.ingest_id, line_number: object_identifier)
+#          case objrow.status
+#          when "ingested"
+#                if object = objrow.ingested_work
+#                  implement_relationship!(relationship_type,subject,object)
+#                else
+#                  wait!
+#                end
+#          when "error"
+#            fail!
+#          when "failed"
+#            fail!
+#          else
+#            wait!
+#          end
+#          
     end
   end
   

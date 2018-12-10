@@ -1,30 +1,9 @@
-
-<div id="update-options" class="hidden">
-    <h3>Options for Update</h3>
-
+<div id="update-options" class="options-panel collapse">
     <div>
         <label>How do you want to update files?</label>
-        <select name="file__method">
+        <select name="file_method">
             <%= options_for_select @file_update_options, "remove-and-add" %> 
         </select>
-    </div>
-
-    <div>
-        <label>Whom would you like to notify when this update moves forward?</label>
-        <ul> 
-            <% @notified_users.each do |user| %>
-                <li>
-                    <button class="remove_user_notification">Remove</button onclick="$(this).parent().remove()">
-                    <%= user.email %>
-                    <input type="hidden" name="notifications[]" value="user.email"/>
-                </li>
-            <% end %>
-        </ul>
-        <div>
-            <label> Enter email of other user to notify: </label>
-            <input type="text" name="add-user_notification" id="add-user-notification"/> 
-            <button id="add-user-notification">Add</button>
-        </div>
     </div>
 
 </div>

@@ -1,36 +1,7 @@
 
-<div id="ingest-options" class="hidden">
-    <h3>Options for Ingest</h3>
+<div id="ingest-options" class="collapse options-panel">
+<!--    <h3>Options for Ingest</h3> -->
 
-<!-- 
-    <div>
-        <label>How do you want to upload files?</label>
-        <select name="file-update-method">
-            <%= options_for_select @file_update_options, "remove-and-add" %> 
-        </select>
-    </div>
- -->
-    <div>
-        <label>Whom would you like to notify when this ingest moves forward?</label>
-        <ul> 
-            <% @notified_users.each do |user| %>
-                <li>
-                    <button class="remove_user_notification">Remove</button>
-                    <%= user.email %>
-                </li>
-            <% end %>
-        </ul>
-        <div>
-            <label> Enter email of other user to notify: </label>
-            <input type="text" name="add-user_notification" id="add-user-notification"/> 
-            <button id="add-user-notification">Add</button>
-        </div>
-    </div>
 
-<!-- 
-
-Select metadata fields to include in template spreadsheet
-
- -->
 
 </div>

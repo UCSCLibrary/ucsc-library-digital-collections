@@ -1,19 +1,26 @@
 class BulkOps::OperationsController < ApplicationController
 
   before_action :ensure_admin!
-  before_action :initialize_options, only: [:new,:show,:edit]
-  before_action :initialize_operation, only: [:edit, :delete, :show, :apply, :request_application, :csv, :errors, :log]
+  before_action :initialize_options, only: [:new,:show,:edit, :update]
+  before_action :initialize_operation, only: [:edit, :destroy, :show, :request_apply, :approve, :csv, :errors, :log, :update, :request]
   layout 'dashboard'
   attr_accessor :git
 
   def index
+    branches = BulkOps::GithubAccess.list_branch_names
+    BulkOps::Operation.all.each{|op| op.destroy! unless branches.include?(op.name) }
     @active_operations = BulkOps::Operation.where.not(stage: ['completed','discarded'])
+    @active_operations.each {|op| op.destroy! unless branches.include?(op.name) }
     @old_operations = BulkOps::Operation.where(stage: ['completed','discarded']) if params["show_old_ops"]
   end
 
   def new
-    if params["create_operation"]
+    @default_fields = BulkOps::Operation.default_metadata_fields + ['id','collection','filename']
+    @all_fields = (BulkOps::Operation.default_metadata_fields + BulkOps::Operation::SPECIAL_COLUMNS)
 
+    if params["create_operation"]
+      params.require([:name,:type,:notified_users])
+      params.permit([:fields,:file_method])
       # Create a unique operation name if the chosen name is taken
       op_name = params['name'].parameterize 
       while  BulkOps::Operation.find_by(name: op_name) || BulkOps::GithubAccess.list_branch_names.include?(op_name) do
@@ -50,17 +57,37 @@ class BulkOps::OperationsController < ApplicationController
   end
 
   def show
-    if @operation.running?
-      @num_works = @operation.work_proxys.count
-      @num_queued = @operation.work_proxys.where(status: 'queued').count
-      @num_running = @operation.work_proxys.where(status: 'running').count
-      @num_failed = @operation.work_proxys.where(status: 'failed').count
-      @num_complete = @operation.work_proxys.where(status: 'complete').count
-      @num_other = @operation.work_proxys.where.not(status: ['queued','running','failed','complete']).count
+    if @operation.running? || @operation.complete?
+      @num_works = (cnt = @operation.work_proxies.count) > 0 ? cnt : 1
+      @num_queued = @operation.work_proxies.where(status: 'queued').count
+      @num_running = @operation.work_proxies.where(status: 'running').count
+      @num_failed = @operation.work_proxies.where(status: 'failed').count
+      @num_complete = @operation.work_proxies.where(status: 'complete').count
+      @num_other = @operation.work_proxies.where.not(status: ['queued','running','failed','complete']).count
     end
   end
 
+  def update
+    #if a new spreadsheet is uploaded, put it in github
+    if params['spreadsheet'] && @operation.name
+      @operation.update_spreadsheet params['spreadsheet']
+      flash[:notice] = "Spreadsheet updated successfully"
+      redirect_to action: "show", id: @operation.id
+    end
+
+    #If new options have been defined, update them in github
+    if params["options"] && @operation.name
+      options = @operation.options
+      params["options"].each do |option_name, option_value|
+        options[options_name] = option_value
+      end
+      BulkOps::GithubAccess.update_options(@operation.name, options)
+    end  
+
+  end
+  
   def edit
+
     if params['add-work-id'] && @operation.draft?
       added = false
       params['add-work-id'].each do |work_id|
@@ -87,20 +114,6 @@ class BulkOps::OperationsController < ApplicationController
       flash[:notice] = "Works removed successfully from update" if destroyed
     end
 
-    #if a new spreadsheet is uploaded, update them in github
-    if params['spreadsheet'] && @operation.name
-      @operation.update_spreadsheet params['spreadsheet']
-    end
-
-    #If new options have been defined, update them in github
-    if params["options"] && @operation.name
-      options = @operation.options
-      params["options"].each do |option_name, option_value|
-        options[options_name] = option_value
-      end
-      BulkOps::GithubAccess.update_options(@operation.name, options)
-    end  
-
     redirect_to action: "show", id: @operation.id
   end
 
@@ -124,35 +137,60 @@ class BulkOps::OperationsController < ApplicationController
   end
 
 
-  def delete
+  def destroy
     @operation.destroy!
     flash[:notice] = "Bulk #{@operation.type} deleted successfully"
     redirect_to action: "index"
   end
 
-  def request_application
-    #create pull request for operation branch
-    #do verification steps on options and spreadsheet formatting
-    #
-    #once authorization is working, this should check if the logged in user can auto-authorize
+  def request_apply
+    if @operation.verify!
+      @operation.set_stage "authorize"
+      if @operation.create_pull_request
+        flash[:notice] = "Your bulk #{@operation.type} has passed verification, and is waiting for authorization before being applied."
+        redirect_to action: "show"
+      else
+        flash[:error] = "This bulk #{@operation.type} is already pending approval"
+        redirect_to action: "show"
+      end
+    else
+      flash[:error] = "Your bulk #{@operation.type} has failed verification. Errors have been emailed to notified parties. You can view the errors at this url: <a href=\"#{@operation.error_url}\">#{@operation.error_url}</a>"
+      redirect_to action: "show"
+    end
+  end
+ 
+  def approve
+    begin
+      @operation.stage="running"
+      @operation.save
+      @operation.merge_pull_request @operation.pull_id
+    rescue Octokit::MethodNotAllowed 
+      flash[:error] = "For some reason, github says that it won't let us merge our change into the master branch. This is strange, since it passed our internal verification. Log in to github and check out the branch manually to see if there are any strange files or unexplained commits.}"
+      rescue 
+        flash[:error] = "There was a confusing error while merging our github branch into the master branch. Please log in to Github and check whether the pull request was approved."
+    end
+    redirect_to action: "show"
   end
   
   def apply
-    #verify that branch is merged (which ought to trigger this action)
-
-    #do actual operations
-    @operation.apply
+    # TODO check that branch is merged (which ought to trigger this action)
+    op = BulkOps::Operation.find(params['op_id'])
+    unless ["running","complete"].include? op.stage
+      op.apply!
+      flash[:notice] = "Applying bulk #{op.operation_type}. Stay tuned to see how it goes!"
+    end
+    redirect_to action: "show", id: op.id
   end
 
-#  def preview
-    #implement this someday
-#  end
+  #  def preview
+  #implement this someday
+  #  end
 
 
   def csv
     response.headers['Content-Type'] = 'text/csv'
-    response.headers['Content-Disposition'] = 'attachment; filename=test.csv'    
-    render :text => @operation.get_spreadsheet
+    response.headers['Content-Disposition'] = "attachment; filename=#{@operation.name}.csv"    
+    render :text => @operation.get_spreadsheet(return_headers: true)
   end
 
   def info
@@ -167,7 +205,6 @@ class BulkOps::OperationsController < ApplicationController
     #render json with recent log messages
   end
 
-
   private
 
   def updated_options
@@ -180,7 +217,8 @@ class BulkOps::OperationsController < ApplicationController
                             ["Remove all files attached to these works and ingest a new set of files",'replace-all'],
                             ["Re-ingest some files with replacements of the same filename. Leave other files alone.","reingest-some"],
                             ["Remove one list of files and ingest another list of files. Leave other files alone.","remove-and-add"]]
-    default_notifications = [current_user,User.first]
+    default_notifications = [current_user,User.first].uniq
+    
     @notified_users = params['notified_user'].blank? ? default_notifications : params['notified_user'].map{ |user_id| User.find(user_id.to_i)}
   end
 
@@ -196,7 +234,7 @@ class BulkOps::OperationsController < ApplicationController
       @branch_options = @branch_names.map{|branch| [branch,branch]}
       @branch_options = [["No Bulk Updates Defined",0]] if @branch_options.blank?
     elsif @operation.stage == "draft" 
-      @works = @operation.work_proxys.map{|work_proxy| SolrDocument.find(work_proxy.work_id)}
+      @works = @operation.work_proxies.map{|work_proxy| SolrDocument.find(work_proxy.work_id)}
       @collections = Collection.all.map{|col| [col.title.first,col.id]}
       @admin_sets = AdminSet.all.map{|aset| [aset.title.first, aset.id]}
       workflow = Sipity::Workflow.where(name:"ucsc_generic_ingest").last

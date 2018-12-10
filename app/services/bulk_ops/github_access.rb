@@ -87,8 +87,8 @@ class BulkOps::GithubAccess
     self.new(name).load_options
   end
 
-  def self.load_metadata name
-    self.new(name).load_metadata
+  def self.load_metadata branch: name, return_headers: false
+    self.new(name).load_metadata return_headers: return_headers
   end
   
   def self.update_options name, options, message=false
@@ -116,11 +116,10 @@ class BulkOps::GithubAccess
     client.delete_branch repo, name
   end
 
-  def add_file file_path, file_name = nil, message=false
+  def add_file file_path, file_name = nil, message=nil
     file_name ||= File.basename(file_path)
-    unless (file_name.downcase == "readme.md") || (file_name.downcase.include? "#{name}/")
-      file_name = File.join name, file_name
-    end 
+#    unless (file_name.downcase == "readme.md") || (file_name.downcase.include? "#{name}/")
+    file_name = File.join name, file_name unless file_name.downcase.include? "#{name}/"
     message ||= "adding file #{file_name} to github branch #{name}"
     client.create_contents(repo, file_name, message, file: file_path, branch: name)
   end
@@ -142,11 +141,11 @@ class BulkOps::GithubAccess
     list_branches.map{|branch| branch[:name]}
   end
 
-  def update_spreadsheet filename, message=false
+  def update_spreadsheet file, message=false
     message ||= "updating metadata spreadsheet through hyrax browser interface."
     
     sha = get_file_sha(spreadsheet_path)
-    client.update_contents(repo, spreadsheet_path, message, sha, File.read(filename), branch: name)
+    client.update_contents(repo, spreadsheet_path, message, sha, file.read, branch: name)
   end
 
   def update_options options, message=false
@@ -159,9 +158,9 @@ class BulkOps::GithubAccess
     YAML.load(Base64.decode64(get_file_contents(options_path)))
   end
 
-  def load_metadata branch=nil
+  def load_metadata branch: nil, return_headers: false
     branch ||= name
-    CSV.parse(Base64.decode64(get_file_contents(spreadsheet_path, branch)), headers: true)
+    CSV.parse(Base64.decode64(get_file_contents(spreadsheet_path, branch)), {headers: true, return_headers: return_headers})
   end
 
   def log_ingest_event log_level, row_number, event_type, message, commit_sha = nil
@@ -170,11 +169,16 @@ class BulkOps::GithubAccess
   end
 
   def create_pull_request
-    client.create_pull_request(repo, "master", name, "Apply update #{name} through Hyrax browser interface", "In Hyrax, an administrator has requested to apply a bulk update represented by this Git branch.")
+    begin
+      pull = client.create_pull_request(repo, "master", name, "Apply update #{name} through Hyrax browser interface", "In Hyrax, an administrator has requested to apply a bulk update represented by this Git branch.")
+      pull["number"]
+    rescue Octokit::UnprocessableEntity
+      return false
+    end
   end
 
   def can_merge?
-    
+    return true
   end
 
   def merge_pull_request pull_id
@@ -208,11 +212,11 @@ class BulkOps::GithubAccess
     github_config["repo"]
   end
 
-  private
-
   def spreadsheet_path
     "#{name}/#{SPREADSHEET_FILENAME}"
   end
+
+  private
 
   def options_path
     "#{name}/#{OPTIONS_FILENAME}"
