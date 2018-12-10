@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181026232205) do
+ActiveRecord::Schema.define(version: 20181121194303) do
 
   create_table "bookmarks", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id",                     null: false
@@ -108,6 +108,7 @@ ActiveRecord::Schema.define(version: 20181026232205) do
     t.text     "message",        limit: 65535
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
+    t.integer  "pull_id"
     t.index ["user_id"], name: "index_bulk_ops_operations_on_user_id", using: :btree
   end
 
@@ -119,19 +120,18 @@ ActiveRecord::Schema.define(version: 20181026232205) do
     t.string   "status"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
-    t.index ["work_proxy_id"], name: "index_bulk_ops_relationships_on_bulk_ops_work_proxys_id", using: :btree
+    t.index ["work_proxy_id"], name: "index_bulk_ops_relationships_on_work_proxy_id", using: :btree
   end
 
-  create_table "bulk_ops_work_proxys", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "bulk_ops_work_proxies", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "operation_id"
     t.string   "work_id"
-    t.integer  "line_number"
+    t.integer  "row_number"
     t.datetime "last_event"
     t.string   "status"
     t.text     "message",      limit: 65535
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
-    t.index ["operation_id"], name: "index_bulk_ops_work_proxys_on_bulk_ops_operation_id", using: :btree
   end
 
   create_table "checksum_audit_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -145,28 +145,6 @@ ActiveRecord::Schema.define(version: 20181026232205) do
     t.boolean  "passed"
     t.index ["checked_uri"], name: "index_checksum_audit_logs_on_checked_uri", using: :btree
     t.index ["file_set_id", "file_id"], name: "by_file_set_id_and_file_id", using: :btree
-  end
-
-  create_table "collection_branding_infos", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string   "collection_id"
-    t.string   "role"
-    t.string   "local_path"
-    t.string   "alt_text"
-    t.string   "target_url"
-    t.integer  "height"
-    t.integer  "width"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-  end
-
-  create_table "collection_type_participants", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer  "hyrax_collection_type_id"
-    t.string   "agent_type"
-    t.string   "agent_id"
-    t.string   "access"
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
-    t.index ["hyrax_collection_type_id"], name: "hyrax_collection_type_id", using: :btree
   end
 
   create_table "content_blocks", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -242,20 +220,6 @@ ActiveRecord::Schema.define(version: 20181026232205) do
     t.index ["user_id"], name: "index_file_view_stats_on_user_id", using: :btree
   end
 
-  create_table "hyrax_collection_types", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string  "title"
-    t.text    "description",               limit: 65535
-    t.string  "machine_id"
-    t.boolean "nestable",                                default: true,  null: false
-    t.boolean "discoverable",                            default: true,  null: false
-    t.boolean "sharable",                                default: true,  null: false
-    t.boolean "allow_multiple_membership",               default: true,  null: false
-    t.boolean "require_membership",                      default: false, null: false
-    t.boolean "assigns_workflow",                        default: false, null: false
-    t.boolean "assigns_visibility",                      default: false, null: false
-    t.index ["machine_id"], name: "index_hyrax_collection_types_on_machine_id", unique: true, using: :btree
-  end
-
   create_table "hyrax_features", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "key",                        null: false
     t.boolean  "enabled",    default: false, null: false
@@ -282,18 +246,6 @@ ActiveRecord::Schema.define(version: 20181026232205) do
     t.string   "label"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "local_authorities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string "name"
-  end
-
-  create_table "local_authority_entries", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "local_authority_id"
-    t.string  "label"
-    t.string  "uri"
-    t.index ["local_authority_id", "label"], name: "entries_by_term_and_label", using: :btree
-    t.index ["local_authority_id", "uri"], name: "entries_by_term_and_uri", using: :btree
   end
 
   create_table "mailboxer_conversation_opt_outs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -367,7 +319,7 @@ ActiveRecord::Schema.define(version: 20181026232205) do
     t.string   "access"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.index ["permission_template_id", "agent_id", "agent_type", "access"], name: "uk_permission_template_accesses", unique: true, using: :btree
+    t.index ["permission_template_id"], name: "fk_rails_9c1ccdc6d5", using: :btree
   end
 
   create_table "permission_templates", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -414,9 +366,11 @@ ActiveRecord::Schema.define(version: 20181026232205) do
     t.integer  "local_authority_id"
     t.string   "label"
     t.string   "uri"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.string   "lower_label",        limit: 256
     t.index ["local_authority_id"], name: "index_qa_local_authority_entries_on_local_authority_id", using: :btree
+    t.index ["lower_label", "local_authority_id"], name: "index_qa_local_authority_entries_on_lower_label_and_authority", using: :btree
     t.index ["uri"], name: "index_qa_local_authority_entries_on_uri", unique: true, using: :btree
   end
 
@@ -720,16 +674,16 @@ ActiveRecord::Schema.define(version: 20181026232205) do
   end
 
   add_foreign_key "bulk_meta_cells", "bulk_meta_rows", column: "row_id"
+  add_foreign_key "bulk_meta_cells", "bulk_meta_rows", column: "row_id"
   add_foreign_key "bulk_meta_ingests", "users"
   add_foreign_key "bulk_meta_logs", "bulk_meta_cells", column: "cell_id"
+  add_foreign_key "bulk_meta_logs", "bulk_meta_ingests", column: "ingest_id"
   add_foreign_key "bulk_meta_logs", "bulk_meta_ingests", column: "ingest_id"
   add_foreign_key "bulk_meta_logs", "bulk_meta_rows", column: "row_id"
   add_foreign_key "bulk_meta_relationships", "bulk_meta_rows", column: "row_id"
   add_foreign_key "bulk_meta_rows", "bulk_meta_ingests", column: "ingest_id"
+  add_foreign_key "bulk_meta_rows", "bulk_meta_ingests", column: "ingest_id"
   add_foreign_key "bulk_ops_operations", "users"
-  add_foreign_key "bulk_ops_relationships", "bulk_ops_work_proxys", column: "work_proxy_id"
-  add_foreign_key "bulk_ops_work_proxys", "bulk_ops_operations", column: "operation_id"
-  add_foreign_key "collection_type_participants", "hyrax_collection_types"
   add_foreign_key "curation_concerns_operations", "users"
   add_foreign_key "mailboxer_conversation_opt_outs", "mailboxer_conversations", column: "conversation_id", name: "mb_opt_outs_on_conversations_id"
   add_foreign_key "mailboxer_notifications", "mailboxer_conversations", column: "conversation_id", name: "notifications_on_conversation_id"
