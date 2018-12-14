@@ -1,4 +1,4 @@
-class ReplaceBulkUpdateTables < ActiveRecord::Migration[5.0]
+class CreateBulkOpsTables < ActiveRecord::Migration[5.0]
   def change
 
     create_table :bulk_ops_operations do |t|
@@ -7,6 +7,7 @@ class ReplaceBulkUpdateTables < ActiveRecord::Migration[5.0]
       t.string :stage, null: false
       t.string :operation_type
       t.string :commit_sha
+      t.integer :pull_id
       t.string :status
       t.text :message
       t.timestamps
@@ -15,7 +16,7 @@ class ReplaceBulkUpdateTables < ActiveRecord::Migration[5.0]
     create_table :bulk_ops_work_proxies do |t|
       t.integer :operation_id
       t.string :work_id
-      t.integer :line_number
+      t.integer :row_number
       t.datetime :last_event
       t.string :status
       t.text :message
