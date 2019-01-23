@@ -23,6 +23,7 @@ Rails.application.routes.draw do
   mount Qa::Engine => '/authorities'
 
   mount SamveraHls::Engine => '/'
+  mount BulkOps::Engine => '/'
 
   # Administrative URLs
   namespace :bulk_metadata do
@@ -70,8 +71,6 @@ Rails.application.routes.draw do
 
   get '/records/:id' => 'records#show'
 
-  
-
   resources :solr_documents, only: [:show], path: '/catalog', controller: 'catalog' do
     concerns :exportable
   end
@@ -84,30 +83,7 @@ Rails.application.routes.draw do
     end
   end
 
-    # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-
   put '/dashboard/workflow_actions/update(.:format)', to: 'admin/workflow_actions#update'
   patch '/dashboard/workflow_actions/update(.:format)', to: 'admin/workflow_actions#update'
-
-  get '/github_auth/:user_id', to: "github_credentials#authenticate"
-
-  scope as: :bulk_ops, module: :bulk_ops do
-    resources :operations, path: :bulk_ops do
-      collection do
-        post :apply
-        get :apply
-        post :search
-      end
-      member do
-        post :request_apply
-        post :approve
-        post :edit
-        get :csv
-        get :info
-        get :errors
-        get :log
-      end
-    end
-  end
     
 end
