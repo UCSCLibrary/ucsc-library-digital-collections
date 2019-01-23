@@ -19,6 +19,12 @@ GIT
       tilt (~> 2.0)
 
 PATH
+  remote: /srv/bulk_ops
+  specs:
+    bulk_ops (0.0.2)
+      rails (~> 5)
+
+PATH
   remote: /srv/samvera_hls
   specs:
     samvera_hls (0.2.0)
@@ -829,6 +835,7 @@ DEPENDENCIES
   blacklight_advanced_search (~> 6.0)
   blacklight_oai_provider (>= 6.0.0)
   browse-everything
+  bulk_ops!
   byebug
   capistrano
   capistrano-bundler
