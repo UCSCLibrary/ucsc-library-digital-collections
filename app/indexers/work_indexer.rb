@@ -58,14 +58,14 @@ class WorkIndexer < Hyrax::WorkIndexer
     begin
       if url.to_s.include?("ucsc.edu")
         Rails.logger.info "handling as ucsc resource"
-
         # TODO replace hard-coded URLs
         # Swap for correct hostname in non-prod environments
         case ENV['RAILS_ENV']
         when 'staging'
           (uri = URI(url.gsub("digitalcollections.library","digitalcollections-staging.library").gsub("https://","http://")))
-        when 'development'
-          (uri = URI(url.gsub("digitalcollections.library.ucsc.edu","localhost"))).port=(3000) 
+        when 'development', 'test'
+#          (uri = URI(url.gsub("digitalcollections.library.ucsc.edu","localhost"))).port=(3000) 
+          uri = URI(url.gsub("https://digitalcollections.library.ucsc.edu","http://localhost"))
         else
           uri = URI(url)
         end
