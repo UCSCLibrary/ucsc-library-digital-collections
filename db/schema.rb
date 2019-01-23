@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181017180436) do
+ActiveRecord::Schema.define(version: 20190115191832) do
 
   create_table "bookmarks", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.integer  "user_id",                     null: false
@@ -91,10 +91,10 @@ ActiveRecord::Schema.define(version: 20181017180436) do
   create_table "bulk_ops_github_credentials", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.integer  "user_id"
     t.string   "username"
-    t.string   "oauth_code"
+    t.string   "oauth_token"
     t.string   "state"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
     t.index ["user_id"], name: "index_bulk_ops_github_credentials_on_user_id", using: :btree
   end
 
@@ -128,9 +128,13 @@ ActiveRecord::Schema.define(version: 20181017180436) do
     t.integer  "row_number"
     t.datetime "last_event"
     t.string   "status"
-    t.text     "message",      limit: 65535
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.text     "message",              limit: 65535
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+    t.string   "visibility"
+    t.string   "work_type"
+    t.string   "reference_identifier"
+    t.string   "order"
   end
 
   create_table "checksum_audit_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
