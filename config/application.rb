@@ -8,9 +8,6 @@ Bundler.require(*Rails.groups)
 
 module UcscHyrax
   class Application < Rails::Application
-
-    config.web_console.whitelisted_ips = ['127.0.0.1']
-    config.web_console.whitelisted_ips << '172.18.0.0/16' if Rails.env.development? or Rails.env.test?
     
     config.generators do |g|
       g.test_framework :rspec, :spec => true
