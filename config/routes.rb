@@ -25,32 +25,6 @@ Rails.application.routes.draw do
   mount SamveraHls::Engine => '/'
   mount BulkOps::Engine => '/'
 
-  # Administrative URLs
-  namespace :bulk_metadata do
-    resources :edits do
-      member do
-        get :export
-      end
-    end
-    resources :rows do
-      member do
-        get :row_info
-      end
-    end
-    get "row_info/:row_id", to: "ingests#row_info", as: 'row_info'
-    resources :ingests do
-      member do
-        get :info
-        get :ingest_all
-        post :process_row
-        get :csv
-        #      get :pending
-        #      get :ingesting
-        #      get :completed
-      end
-    end
-  end
-
 #  mount Sidekiq::Web => '/sidekiq' unless Rails.env.production?
   mount Sidekiq::Web => '/sidekiq' 
 
