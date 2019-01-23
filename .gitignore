@@ -4,6 +4,7 @@
 # or operating system, you probably want to add a global ignore instead:
 #   git config --global core.excludesfile '~/.gitignore_global'
 
+.DS_Store
 *.rbc
 capybara-*.html
 .rspec
@@ -24,6 +25,7 @@ pickle-email-*.html
 /config/database.yml
 /config/secrets.yml
 /config/fedora.yml
+/config/github.yml
 
 /public/uploads/batch_metadata_ingests/*
 /public/assets/*

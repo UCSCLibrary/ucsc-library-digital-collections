@@ -18,7 +18,7 @@ class Admin::WorkflowsController < Hyrax::Admin::WorkflowsController
         
         list = Workflow::Claim.where(user_id: current_user.id, sipity_workflow_states_id: state.id ).map{|claim| SolrDocument.find(claim.work_id)}
       else
-        list = Hyrax::Workflow::StatusListService.new(self, "workflow_state_name_ssim:#{state.name}", 9999)
+        list = ::Workflow::StatusListService.new(self, "workflow_state_name_ssim:#{state.name}", 9999)
       end
       
       actions = Sipity::WorkflowStateAction.where(originating_workflow_state_id: state.id).map{|sa| sa.workflow_action}

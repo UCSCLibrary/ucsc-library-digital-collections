@@ -1,6 +1,8 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
+  config.web_console.whitelisted_ips += ['127.0.0.1','172.0.0.0/8','192.168.0.0/16']
+
   # In the development environment your application's code is reloaded on
   # every request. This slows down response time but is perfect for development
   # since you don't have to restart the web server when you make code changes.
@@ -26,8 +28,8 @@ Rails.application.configure do
     config.cache_store = :null_store
   end
 
-#  config.active_job.queue_adapter     = :sidekiq
-  config.active_job.queue_adapter     = :inline
+  config.active_job.queue_adapter     = :sidekiq
+#  config.active_job.queue_adapter     = :inline
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false

@@ -165,7 +165,7 @@ class BulkMetadata::Row < ApplicationRecord
         visibility = cell.value
 
       when "relationship identifier type"
-        # set the work type for this item
+        # set the relationship identifier type for this item
         # overriding the default set for the whole ingest
         id_type = cell.value
         

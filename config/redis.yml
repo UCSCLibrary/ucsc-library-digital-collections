@@ -1,12 +1,12 @@
+default:
 development:
-  host: <%= ENV.fetch('REDIS_HOST', 'localhost') %>
-  port: <%= ENV.fetch('REDIS_PORT', 6379) %>
-test:
-  host: <%= ENV.fetch('REDIS_HOST', 'localhost') %>
-  port: <%= ENV.fetch('REDIS_PORT', 6379) %>
+  host: redis
+  port: 6379
+test:  
+  host: redis
+  port: 6379
+production:
+  host: digitalcollections-ingests.library.ucsc.edu
 staging:
   host: digitalcollections-ingests.library.ucsc.edu
   port: 6380
-production:
-  host: digitalcollections-ingests.library.ucsc.edu
-  port: 6379

@@ -2,7 +2,11 @@
 
 <h1>Batch Metadata Ingests</h1>
 
+
+
 <%= link_to 'New Batch metadata ingest', new_bulk_metadata_ingest_path %>
+
+<%= render "bulk_metadata/github_widget" %>
 
 <ul id="ingest-list">
 <% @ingests.each do |ingest| %>
