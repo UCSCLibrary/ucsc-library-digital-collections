@@ -84,7 +84,7 @@ Hyrax.config do |config|
 
   # Path to the file characterization tool
   if Rails.env.development?
-    config.fits_path = "/usr/local/share/fits/fits.sh"
+    config.fits_path = "/srv/fits/fits.sh"
   else
     config.fits_path = "/usr/share/fits/fits.sh"
   end
