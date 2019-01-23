@@ -8,7 +8,8 @@ RSpec.describe BulkOps::SearchBuilder do
                          current_user: me) }
   let(:solr_params) { { fq: [] } }
   let(:work) {Work.create(title:["test work"], depositor: me.email)}
-  let(:collection) { Collection.create!(title:["test_collection"], depositor: me.email)}
+#  let(:collection) { Collection.create!(title:["test_collection"], depositor: me.email)}
+  let(:collection) { build(:collection, id: '12345', title:["test_collection"]) }
   let(:builder) { described_class.new(scope: context, collection: collection) }
   let(:repository) {CatalogController.new.repository}
 
@@ -22,10 +23,9 @@ RSpec.describe BulkOps::SearchBuilder do
 
   describe '#member_of_collection' do
     let(:subject) { builder.member_of_collection(solr_params) }
-
     it 'updates solr_parameters[:fq]' do
       subject
-      expect(solr_params[:fq]).to include("#{builder.collection_membership_field}:#{collection.id}")
+      expect(solr_params[:fq]).to include("#{builder.collection_field}:#{collection.title.first}")
     end
   end
 
@@ -49,11 +49,10 @@ RSpec.describe BulkOps::SearchBuilder do
       end
     end
     context 'a work is part of the collection' do
-      let (:full_collection) {collection.members << work;collection}
+      let (:full_collection) {collection.members << work;collection.save;collection}
       let (:full_collection_builder) {described_class.new(scope: context, collection: collection) }
       let(:response_documents) {repository.search(full_collection_builder).documents}
       it 'returns one result' do
-        full_collection.save
         work.save
         expect(response_documents.count).to eq(1)
       end

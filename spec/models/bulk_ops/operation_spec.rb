@@ -4,19 +4,20 @@ RSpec.describe BulkOps::Operation do
   
   describe "A bulk update" do
     let(:usr) {User.create(email:"test user email")}
-    let!(:draft) {described_class.create(name: "rspec test branch", user_id: usr.id, stage: "draft", operation_type: "update", status: "new")}
+    let!(:op_name) {BulkOps::Operation.unique_name("rspec test branch", usr)}
+    let!(:draft) {described_class.create(name: op_name, user_id: usr.id, stage: "draft", operation_type: "update", status: "new")}
     let!(:wrk1) {Work.create(depositor: usr.email, title:["test title"])}
     let!(:wrk2) {Work.create(depositor: usr.email, title:["test title"])}
-    let!(:proxy1) {draft.work_proxys.create(work_id: wrk1.id,status:"new")}
-    let!(:proxy2) {draft.work_proxys.create(work_id: wrk2.id,status:"new")}
+    let!(:proxy1) {draft.work_proxies.create(work_id: wrk1.id,status:"new")}
+    let!(:proxy2) {draft.work_proxies.create(work_id: wrk2.id,status:"new")}
 
     before(:each)  do 
 #      @usr = User.create(email:"test user email")
 #      @draft = described_class.create(name: "rspec test branch", user_id: @usr.id, stage: "draft", operation_type: "update", status: "new")
 #      wrk1 = Work.create(depositor: @usr.email, title:["test title"])
 #      wrk2 = Work.create(depositor: @usr.email, title:["test title"])
-#      @draft.work_proxys.create(work_id: wrk1.id,status:"new")
-#      @draft.work_proxys.create(work_id: wrk2.id,status:"new")    
+#      @draft.work_proxies.create(work_id: wrk1.id,status:"new")
+#      @draft.work_proxies.create(work_id: wrk2.id,status:"new")    
       draft.create_branch
     end
     after(:each) {draft.delete_branch}
@@ -26,7 +27,7 @@ RSpec.describe BulkOps::Operation do
     end
     
     it "can recognize its contained works" do
-      expect(draft.work_proxys.count).to eq(2)
+      expect(draft.work_proxies.count).to eq(2)
     end
 
     it "puts a template options file in its new github branch" do
@@ -34,9 +35,9 @@ RSpec.describe BulkOps::Operation do
     end
     
     it "puts a spreadsheet of existing data in its new github branch" do
-      sheet = BulkOps::GithubAccess.load_metadata(draft.name)
+      sheet = BulkOps::GithubAccess.load_metadata(branch: draft.name)
       expect(sheet).to be_instance_of(CSV::Table)
-      expect(sheet.count).to eq(draft.work_proxys.count)
+      expect(sheet.count).to eq(draft.work_proxies.count)
     end
 
     it "can update the operation status appropriately" do
@@ -52,7 +53,7 @@ RSpec.describe BulkOps::Operation do
       let(:altered_title){"new altered test title"}
 
       before(:each) do
-        sheet = BulkOps::GithubAccess.load_metadata(draft.name)
+        sheet = BulkOps::GithubAccess.load_metadata(branch: draft.name)
         sheet.first["title"] = altered_title
         CSV.open(tmp_file, "wb") do |csv|
           csv << sheet.headers
@@ -64,7 +65,7 @@ RSpec.describe BulkOps::Operation do
       after(:each){tmp_file.unlink}
 
       it "succesfully updates the spreadsheet in Github" do
-        updated_sheet = BulkOps::GithubAccess.load_metadata(draft.name)
+        updated_sheet = BulkOps::GithubAccess.load_metadata(branch: draft.name)
         expect(updated_sheet.first["title"]).to eq(altered_title)
       end
     end
