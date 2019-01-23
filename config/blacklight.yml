@@ -1,8 +1,8 @@
-default: &default
-  adapter: solr
 development:
+  adapter: solr
   url: http://index:8983/solr/hycruz
 test: &test
+  adapter: solr
   url: http://index:8983/solr/hycruz-test
 staging:
   adapter: solr
