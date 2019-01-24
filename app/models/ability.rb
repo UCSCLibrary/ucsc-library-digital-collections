@@ -10,9 +10,7 @@ class Ability
 
     if current_user.admin?
       can [:create, :show, :add_user, :remove_user, :index, :edit, :update, :destroy], Role
-      can :manage, BulkMetadata::Row
-      can :manage, BulkMetadata::Ingest
-      can :manage, BulkMetadata::Edit
+      can :manage, BulkOps::Operation
       can :manage, User
     end
 
@@ -26,9 +24,7 @@ class Ability
       can :view_admin_show_any, Collection
       can :view_admin_show_any, ::SolrDocument
 
-      can [:show, :index], BulkMetadata::Row
-      can [:show, :index], BulkMetadata::Ingest
-      can [:show, :index], BulkMetadata::Edit      
+      can [:show, :index, :edit, :update, :delete], BulkOps::Operation
     end
 
     # Limits deleting objects to a the admin user
