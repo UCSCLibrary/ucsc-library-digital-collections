@@ -342,6 +342,11 @@ properties:
     OAI: dc:description
 #    search_result_display: true
   
+  relatedResource:
+    definition: A link to a relatd resource.
+    label: Related Resource
+    predicate: DC:relation
+  
   physicalFormat:
     definition: The form, and/or physical characteristics of the resource being described. The material or physical carrier of the resource. Does not capture aboutness.
     DC mapping: dc:medium
@@ -505,6 +510,7 @@ work_types:
       accessionNumber:
       collectionCallNumber:
       donorProvenance:
+      relatedResource:
       boxFolder:
       theme:
       itemCallNumber:
