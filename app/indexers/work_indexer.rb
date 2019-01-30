@@ -83,7 +83,7 @@ class WorkIndexer < Hyrax::WorkIndexer
       # fetch from other normal authorities
       else
         resource ||= ActiveTriples::Resource.new(url)
-        label = resource.fetch(headers: { 'Accept'.freeze => default_accept_header }).first.to_s
+        label = resource.fetch(headers: { 'Accept'.freeze => default_accept_header }).rdf_label.first.to_s
       end
       
       LdBuffer.create(url: url, label: label)
@@ -93,6 +93,18 @@ class WorkIndexer < Hyrax::WorkIndexer
         LdBuffer.where(id: ids).delete_all
       end
       
+      if label == url && url.include?("id.loc.gov")
+        #handle weird alternative syntax
+        response = JSON.parse(Net::HTTP.get_response(uri).body)
+        response.each do |index, node|
+          if node["@id"] == url
+            label = node["http://www.loc.gov/mads/rdf/v1#authoritativeLabel"].first["@value"]
+          end
+        end
+      end
+
+      raise Exception if label == url
+
       return label
 
     rescue Exception => e
