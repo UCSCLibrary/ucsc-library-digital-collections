@@ -30,10 +30,6 @@ RSpec.describe BulkOps::GithubAccess do
       expect(branch_names).to include(git.name)
     end
 
-    it "finds some options for our new branch" do
-      git.load_options.to be_instance_of(Hash)
-    end
-
     it "can delete this new branch" do
       git.delete_branch!
       sleep(0.5)

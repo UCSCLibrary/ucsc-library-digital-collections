@@ -20,10 +20,6 @@ RSpec.describe BulkOps::OperationsController, type: :controller do
     context 'User requests the index of bulk operations' do
       it 'displays a list of operations' do
         get :index
-        puts response.status_message
-        puts response.message
-        puts response.body
-        puts response.to_a.inspect
         expect(response).to be_success
         expect(response).to render_template("bulk_ops/operations/index")
       end
