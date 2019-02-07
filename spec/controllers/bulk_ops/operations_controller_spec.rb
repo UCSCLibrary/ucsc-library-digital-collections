@@ -1,15 +1,18 @@
 require 'rails_helper'
 
-RSpec.describe BulkOps::OperationsController do
+RSpec.describe BulkOps::OperationsController, type: :controller do
   include Devise::Test::ControllerHelpers
 
   routes {  BulkOps::Engine.routes }
   let(:main_app) { Rails.application.routes.url_helpers }
-  let(:user) { create(:user) }
+  let(:user) { create(:admin) }
   let(:work) { create(:work, title: ['Titacular'], with_admin_set: true) }
   let(:solr_work) { SolrDocument.find(work.id) }
 
-  before do 
+  before do  
+    admin = Role.find_by(name: "admin") || Role.create(name: "admin")
+    admin.users << user
+    admin.save
     sign_in user 
   end
 
@@ -17,6 +20,10 @@ RSpec.describe BulkOps::OperationsController do
     context 'User requests the index of bulk operations' do
       it 'displays a list of operations' do
         get :index
+        puts response.status_message
+        puts response.message
+        puts response.body
+        puts response.to_a.inspect
         expect(response).to be_success
         expect(response).to render_template("bulk_ops/operations/index")
       end
