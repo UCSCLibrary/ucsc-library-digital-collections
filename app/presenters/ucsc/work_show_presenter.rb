@@ -19,11 +19,22 @@ module Ucsc
 
 
     def image?
-      return true if solr_document.resourceType_label.include?("Still Image")
-      return true if solr_document.resourceType_label.include?("Image")
       return false unless representative_id
+      solr_document.resourceType_label.each do |type|
+        return true if type.to_s.downcase.include? "image"
+      end
       return solr_document.image?
     end
+
+    def page_title
+      return super unless super == "Untitled"
+      return titleAlternative.first unless titleAlternative.blank?
+      return subseries.first unless subseries.blank?
+      return series.first unless series.blank?
+      return I18n.t('hyrax.product_name')
+    end
+
+    delegate :titleAlternative, :subseries, :series, to: :solr_document
 
     private 
 
@@ -40,5 +51,12 @@ module Ucsc
     def member_presenter_factory
       WorkMemberPresenterFactory.new(solr_document, current_ability, request)
     end
+
+
+    def find_renderer_class(name)
+      return ::FacetedAttributeRenderer if name == :faceted
+      super
+    end
+
   end
 end

@@ -1,0 +1,32 @@
+<%= form_for(github_credential) do |f| %>
+  <% if github_credential.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(github_credential.errors.count, "error") %> prohibited this github_credential from being saved:</h2>
+
+      <ul>
+      <% github_credential.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :user_id %>
+    <%= f.number_field :user_id %>
+  </div>
+
+  <div class="field">
+    <%= f.label :username %>
+    <%= f.text_field :username %>
+  </div>
+
+  <div class="field">
+    <%= f.label :oauth_code %>
+    <%= f.text_field :oauth_code %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

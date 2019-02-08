@@ -24,7 +24,7 @@ module Ucsc
         next if work.nil?
         i=1 #index for works with multiple audio files
         work.file_set_ids.each do |file_set_id|
-          fs = FileSet.find(file_set_id)
+          fs = SolrDocument.find(file_set_id)
           next unless fs.audio? || fs.video?
           track_title = work.title.first
           track_title += " #{i}" if work.file_set_ids.count > 1

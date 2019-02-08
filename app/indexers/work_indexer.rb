@@ -23,14 +23,15 @@ class WorkIndexer < Hyrax::WorkIndexer
     object.controlled_properties.each do |property|
 
       # Clear old values from the solr document
-      solr_doc[label_field(property)] = []
-      solr_doc[Solrizer.solr_name(property)] = []
+      solr_doc.delete label_field(property)
+      solr_doc.delete Solrizer.solr_name(property)
 
       # Wrap single objects in arrays if necessary (though it shouldn't be)
       object[property] = Array(object[property]) if !object[property].kind_of?(Array)
 
       # Loop through the different values provided for this property
       object[property].each do |val|
+        solr_doc[label_field(property)] ||= []
         case val
         when ActiveTriples::Resource
           # We need to fetch the string from an external vocabulary
@@ -49,76 +50,77 @@ class WorkIndexer < Hyrax::WorkIndexer
     solr_doc
   end
 
-  def self.fetch_remote_label(resource)
+  def self.fetch_remote_label(url)
+    if url.is_a? ActiveTriples::Resource
+      resource = url
+      url = resource.id 
+    end
+    begin
+      if url.to_s.include?("ucsc.edu")
+        Rails.logger.info "handling as ucsc resource"
+        # TODO replace hard-coded URLs
+        # Swap for correct hostname in non-prod environments
+        case ENV['RAILS_ENV']
+        when 'staging'
+          (uri = URI(url.gsub("digitalcollections.library","digitalcollections-staging.library").gsub("https://","http://")))
+        when 'development', 'test'
+#          (uri = URI(url.gsub("digitalcollections.library.ucsc.edu","localhost"))).port=(3000) 
+          uri = URI(url.gsub("https://digitalcollections.library.ucsc.edu","http://localhost"))
+        else
+          uri = URI(url)
+        end
 
-    buf = LdBuffer.where(url: resource.id).order(created_at: :desc).first
+        label = JSON.parse(Net::HTTP.get_response(uri).body)["label"]
 
-    # Return the buffered value if it's up to date
-    # Destroy it if it's obsolete
-    unless buf.nil?
-      if buf.created_at > DateTime.now - 6.months
-        return buf.label
+      # handle geonames specially
+      elsif url.include? "geonames.org"
+        unless (res_url = url).include? "/about.rdf"
+          res_url = File.join(url,'about.rdf')
+        end
+        doc = Nokogiri::XML(open(res_url))
+        label = doc.xpath('//gn:name').first.children.first.text
+
+      # fetch from other normal authorities
       else
-        buf.destroy!
+        resource ||= ActiveTriples::Resource.new(url)
+        label = resource.fetch(headers: { 'Accept'.freeze => default_accept_header }).rdf_label.first.to_s
       end
-    end
-    
-    Rails.logger.info "Fetching #{resource.rdf_subject} from the authorative source. (this is slow)"
-
-    # Check if it's a local resource
-    if resource.rdf_subject.to_s.include?("ucsc.edu")
-      Rails.logger.info "handling as ucsc resource"
-
-      # TODO replace hard-coded URLs
-      # Swap for correct hostname in non-prod environments
-      case ENV['RAILS_ENV']
-      when 'staging'
-        (uri = URI(resource.id.gsub("digitalcollections.library","digitalcollections-staging.library").gsub("https://","http://")))
-      when 'development'
-        (uri = URI(resource.id.gsub("digitalcollections.library.ucsc.edu","localhost"))).port=(3000) 
-      else
-        uri = URI(resource.id)
+      
+      LdBuffer.create(url: url, label: label)
+      # Delete oldest records if we have more than 5K in the buffer
+      if (cnt = LdBuffer.count - 5000) > 0
+        ids = LdBuffer.order('created_at DESC').limit(cnt).pluck(:id)
+        LdBuffer.where(id: ids).delete_all
+      end
+      
+      if label == url && url.include?("id.loc.gov")
+        #handle weird alternative syntax
+        response = JSON.parse(Net::HTTP.get_response(uri).body)
+        response.each do |index, node|
+          if node["@id"] == url
+            label = node["http://www.loc.gov/mads/rdf/v1#authoritativeLabel"].first["@value"]
+          end
+        end
       end
 
-      label = JSON.parse(Net::HTTP.get_response(uri).body)["label"]
+      raise Exception if label == url
 
-    # handle geonames specially
-    elsif resource.id.include? "geonames.org"
-      unless (res_url = resource.id).include? "/about.rdf"
-        res_url = File.join(resource.id,'about.rdf')
-      end
-      doc = Nokogiri::XML(open(res_url))
-      label = doc.xpath('//gn:name').first.children.first.text
+      return label
 
-    # fetch from other normal authorities
-    else
-      resource.fetch(headers: { 'Accept'.freeze => default_accept_header })
-      label = resource.rdf_label.first.to_s
+    rescue Exception => e
+      # IOError could result from a 500 error on the remote server
+      # SocketError results if there is no server to connect to
+      Rails.logger.error "Unable to fetch #{url} from the authorative source.\n#{e.message}"
+      return "Cannot find term"
     end
-    
-    LdBuffer.create(url: resource.id, label: label)
-
-    # Delete oldest records if we have more than 5K in the buffer
-    if (cnt = LdBuffer.count - 5000) > 0
-      ids = LdBuffer.order('created_at DESC').limit(cnt).pluck(:id)
-      LdBuffer.where(id: ids).delete_all
-    end
-
-    return label
-
-  rescue Exception => e
-    # IOError could result from a 500 error on the remote server
-    # SocketError results if there is no server to connect to
-    Rails.logger.error "Unable to fetch #{resource.rdf_subject} from the authorative source.\n#{e.message}"
-    return "Cannot find term"
   end
-
+    
   def self.default_accept_header
     RDF::Util::File::HttpAdapter.default_accept_header.sub(/, \*\/\*;q=0\.1\Z/, '')
   end
-
+  
   def label_field(property)
     Solrizer.solr_name("#{property}_label")
   end
-
+  
 end

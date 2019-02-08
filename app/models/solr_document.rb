@@ -46,6 +46,7 @@ class SolrDocument
       value = Array.wrap(field_names).map do |field_name| 
         raw_value = self[field_name]
         raw_value = self.send(field_name) if raw_value.blank? and self.respond_to? field_name.to_sym
+        raw_value = display_image_url if field_name == "thumbnail_path"
         raw_value
       end
                

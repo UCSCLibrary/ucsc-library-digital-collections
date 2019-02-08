@@ -82,6 +82,7 @@ gem 'browse-everything'
 
 gem 'samvera_hls', path: "/srv/samvera_hls/"
 gem 'scooby_snacks', path: "/srv/scooby_snacks/"
+gem 'bulk_ops', path: "/srv/bulk_ops/"
 
 #gem 'ldfwrapper', github: 'boston-library/ldf-wrapper', branch: "master"
 
@@ -99,4 +100,4 @@ gem 'blacklight_advanced_search', '~> 6.0'
 gem 'blacklight_oai_provider', '>= 6.0.0'
 gem 'riiif', '~> 1.1'
 
-gem "github_api"
+gem "octokit", "~> 4.0"

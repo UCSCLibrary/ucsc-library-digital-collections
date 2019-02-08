@@ -12,7 +12,6 @@ class Work < ActiveFedora::Base
   
   self.human_readable_type = 'Work'
 
-
   def save
     controlled_properties.each do |property|
       attributes = []

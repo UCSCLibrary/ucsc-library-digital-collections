@@ -41,7 +41,8 @@ properties:
     input: scalar
     facet_limit: 5
     facet: false
-    index_field: true
+    index_as: stored_searchable
+    search_field: false
     sort_field: false
     date: false
     search_result_display: true
@@ -94,6 +95,7 @@ properties:
 
   creator:
     definition: "A person or organization responsible for creating the resource."
+    label: Creator
     predicate: "DC:creator"
     vocabularies: 
       - authority: loc
@@ -103,7 +105,6 @@ properties:
       - authority: local
         subauthority: agents
     primary: true
-    facet: true
     index_itemprop: creator
     input: multi_controlled_vocabulary
     core: true
@@ -112,6 +113,7 @@ properties:
   contributor:
     definition: "A person or organization responsible for making contributions to the resource."
     predicate: "DC:contributor"
+    label: Contributor
     vocabularies: 
       - authority: loc
         subauthority: names
@@ -119,7 +121,6 @@ properties:
         subauthority: ulan
       - authority: local
         subauthority: agents
-    facet: true
     index_itemprop: contributor
     core: true
     display_area: more
@@ -136,6 +137,7 @@ properties:
     predicate: "DC:publisher"
     label: "Digital Publisher & Contact Info"
 #    multiple: false
+    search_field: true
     core: true
     OAI: DC:publisher
   
@@ -186,6 +188,7 @@ properties:
   scale:
     definition: Ratio of the dimensions of a form contained or embodied in a resource to the dimensions of the entity it represents, e.g., for images or cartographic resources.
     predicate: BF2:scale
+    label: Scale
 
   series:
     definition: A related resource in which the described resource is physically or logically included.
@@ -196,6 +199,7 @@ properties:
   source:
     definition: A related resource from which the described resource is derived. (Use to record previous publication information, i.e. the place of publication and publisher name for physical resources).
     display_area: staff
+    label: Source
     predicate: DC:source
     facet: true
   
@@ -222,8 +226,9 @@ properties:
       - authority: getty
         subauthority: ulan 
       - authority: local
-        subauthority: agents        
-    facet: true
+        subauthority: agents
+    facet: true        
+    search_field: true
     input: multi_controlled_vocabulary
     core: true
     OAI: DC:subject
@@ -258,6 +263,7 @@ properties:
       - authority: local
         subauthority: time_periods
     facet: true
+    search_field: true
     input: multi_controlled_vocabulary
     core: true
     OAI: DC:subject
@@ -326,6 +332,11 @@ properties:
     OAI: dc:description
 #    search_result_display: true
   
+  relatedResource:
+    definition: A link to a relatd resource.
+    label: Related Resource
+    predicate: DC:relation
+  
   physicalFormat:
     definition: The form, and/or physical characteristics of the resource being described. The material or physical carrier of the resource. Does not capture aboutness.
     DC mapping: dc:medium
@@ -336,7 +347,7 @@ properties:
         subauthority: aat
       - authority: local
         subauthority: formats
-    facet: true
+    search_field: true
     input: multi_controlled_vocabulary
     core: true
     OAI: DC:format
@@ -418,6 +429,7 @@ properties:
 
   genre:
     definition: "A genre term designates the style or technique of the intellectual content of textual materials or, for graphic materials, aspects such as vantage point, intended purpose, characteristics of the creator, publication status, or method  of representation. Does not capture aboutness. Ex. lectures; underground dance music."
+    label: Genre
     vocabulary:
       - authority: loc
       - subauthority: languages
@@ -487,6 +499,7 @@ work_types:
       accessionNumber:
       collectionCallNumber:
       donorProvenance:
+      relatedResource:
       boxFolder:
       theme:
       itemCallNumber:
