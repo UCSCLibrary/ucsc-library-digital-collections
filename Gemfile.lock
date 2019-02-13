@@ -27,7 +27,7 @@ PATH
 PATH
   remote: /srv/scooby_snacks
   specs:
-    scooby_snacks (0.1.2)
+    scooby_snacks (0.1.1)
 
 GEM
   remote: https://rubygems.org/
