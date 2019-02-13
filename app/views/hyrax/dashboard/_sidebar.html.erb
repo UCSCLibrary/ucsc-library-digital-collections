@@ -4,7 +4,7 @@
   <li>
     <div class="profile">
       <div class="profile-image">
-        <%= image_tag current_user.avatar.url(:thumb), width: 100 if current_user.avatar.present? %>
+        <%= image_tag current_user.avatar.url(:thumb), width: 100 if current_user && current_user.avatar.present? %>
       </div>
       <div class="profile-data">
         <div class="profile-data-name"><%= current_user.name %></div>

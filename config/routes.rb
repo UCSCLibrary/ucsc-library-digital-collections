@@ -1,6 +1,7 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+
   concern :oai_provider, BlacklightOaiProvider::Routes.new
 
   mount BrowseEverything::Engine => '/browse'
@@ -22,32 +23,7 @@ Rails.application.routes.draw do
   mount Qa::Engine => '/authorities'
 
   mount SamveraHls::Engine => '/'
-
-  # Administrative URLs
-  namespace :bulk_metadata do
-    resources :edits do
-      member do
-        get :export
-      end
-    end
-    resources :rows do
-      member do
-        get :row_info
-      end
-    end
-    get "row_info/:row_id", to: "ingests#row_info", as: 'row_info'
-    resources :ingests do
-      member do
-        get :info
-        get :ingest_all
-        post :process_row
-        get :export_csv
-        #      get :pending
-        #      get :ingesting
-        #      get :completed
-      end
-    end
-  end
+  mount BulkOps::Engine => '/'
 
 #  mount Sidekiq::Web => '/sidekiq' unless Rails.env.production?
   mount Sidekiq::Web => '/sidekiq' 
@@ -81,11 +57,7 @@ Rails.application.routes.draw do
     end
   end
 
-    # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-
   put '/dashboard/workflow_actions/update(.:format)', to: 'admin/workflow_actions#update'
   patch '/dashboard/workflow_actions/update(.:format)', to: 'admin/workflow_actions#update'
-
-
-  
+    
 end

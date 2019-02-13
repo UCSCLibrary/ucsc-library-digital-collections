@@ -14,4 +14,8 @@ Rails.application.config.assets.precompile += %w( include_player.js )
 Rails.application.config.assets.precompile += %w( embed.js )
 Rails.application.config.assets.precompile += %w( embed.css )
 
+Rails.application.config.assets.precompile += %w( bulk_ops.js )
+Rails.application.config.assets.precompile += %w( bulk_ops.css )
+
+
 
