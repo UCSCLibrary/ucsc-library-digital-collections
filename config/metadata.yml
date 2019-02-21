@@ -430,7 +430,7 @@ properties:
     predicate: schema:identifier
     core: true
     display_area: brief
-    OAI: DC:identifier
+    OAI: DC:source
 
   donorProvenance:
     definition: "A statement of any changes in ownership and custody of the resource since its creation that are significant for its authenticity, integrity, and interpretation."
