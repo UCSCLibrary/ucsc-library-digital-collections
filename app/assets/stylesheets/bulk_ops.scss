@@ -151,38 +151,6 @@ ul#operations-index {
 div.bulk-ops-options  {
     margin-top:30px;
     margin-bottom:30px;
-//    div.tooltip {
-////        position: relative;
-////        display: inline-block;
-////        border-bottom: 1px dotted black;
-//        p.tooltip-text {
-//            visibility: hidden;
-//            width: 120px;
-//            background-color: black;
-//            color: #fff;
-//            text-align: center;
-//            padding: 5px 0;
-//            border-radius: 6px;
-//            
-//            /* Position the tooltip text*/
-//            position: absolute;
-//            z-index: 1;
-//            bottom: 125%;      
-//            left: 50%;         
-//            margin-left: -60px;   
-//
-//
-//            /* Fade in tooltip */
-//            opacity: 0;
-//            transition: opacity 0.3s;
-//        }
-//    }
-//
-//    div.tooltip:hover .tooltiptext {
-//        visibility: visible;
-//        opacity: 1;
-//    }
-//
     div#choose-fields{
         display:none;
         ul#bulk-ops-field-options {
@@ -258,6 +226,16 @@ a.bulk-ops-collapse-link {
 div#edit-options > div > div {
     margin-top: 20px;
     margin-bottom: 20px;
+}
+
+div.checkbox-container {
+    clear:left;
+    input {
+        display: inline !important;
+    }
+    label {
+        float: none !important;
+    }
 }
 
 div#search-summary {
