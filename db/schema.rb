@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190115191832) do
+ActiveRecord::Schema.define(version: 20181017180436) do
 
   create_table "bookmarks", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.integer  "user_id",                     null: false
@@ -129,12 +129,12 @@ ActiveRecord::Schema.define(version: 20190115191832) do
     t.datetime "last_event"
     t.string   "status"
     t.text     "message",              limit: 65535
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
     t.string   "visibility"
     t.string   "work_type"
     t.string   "reference_identifier"
     t.string   "order"
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
   end
 
   create_table "checksum_audit_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
