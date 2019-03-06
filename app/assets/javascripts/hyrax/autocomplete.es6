@@ -1,6 +1,6 @@
-import Default from './autocomplete/default'
-import Work from './autocomplete/work'
-import LinkedData from './autocomplete/linked_data'
+import Default from 'hyrax/autocomplete/default'
+import Resource from 'hyrax/autocomplete/resource'
+import LinkedData from 'hyrax/autocomplete/linked_data'
 
 export default class Autocomplete {
   /**
@@ -12,12 +12,17 @@ export default class Autocomplete {
   setup (element, fieldName, url) {
     switch (fieldName) {
       case 'work':
-        new Work(
+        new Resource(
           element,
           url,
           element.data('exclude-work')
         )
         break
+      case 'collection':
+        new Resource(
+          element,
+          url)
+        break     
       case 'based_near':
         new LinkedData(element, url)
       default:
