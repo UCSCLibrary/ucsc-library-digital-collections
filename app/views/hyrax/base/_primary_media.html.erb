@@ -7,5 +7,14 @@
     <%= javascript_include_tag "include_player" %>
     <%= stylesheet_link_tag "embed" %>
 <% elsif @presenter.image?%>
-    <%= image_tag @presenter.solr_document.display_image_path, class: "primary-media",role: "presentation"%>
+    <% if presenter.representative_id.present? && presenter.representative_presenter.present? %>
+        <% if defined?(viewer) && viewer %>
+            <%= PulUvRails::UniversalViewer.script_tag %>
+            <div class="viewer-wrapper">
+                <div class="uv viewer" data-uri="<%= main_app.polymorphic_path [main_app, :manifest, presenter] %>"></div>
+            </div>
+        <% else %>
+            <%= image_tag @presenter.solr_document.display_image_path, class: "primary-media",role: "presentation"%>
+        <% end %>
+    <% end %>
 <% end %>

@@ -11,7 +11,11 @@
 
   <div class="col-sm-8">
     <%# = render 'work_description', presenter: @presenter %>
-    <%= render 'primary_media', presenter: @presenter, av_files: (av_files = @presenter.all_av_files) %>
+     <% if @presenter.universal_viewer? %>
+         <%= render 'primary_media', presenter: @presenter, viewer: true, av_files: (av_files = @presenter.all_av_files) %>
+     <% else %>
+         <%= render 'primary_media', presenter: @presenter, viewer: false, av_files: (av_files = @presenter.all_av_files) %>
+     <% end %>
     <%= render 'metadata', presenter: @presenter %>
     <%= render 'relationships', presenter: @presenter %>
   </div>
