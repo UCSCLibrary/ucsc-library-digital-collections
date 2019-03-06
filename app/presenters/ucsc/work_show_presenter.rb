@@ -13,10 +13,14 @@ module Ucsc
       Hyrax::FileSetPresenter.new(file_set,current_ability)
     end
 
+    def universal_viewer?
+      # disable universal viewer for now
+      false
+    end
+
     def all_av_files
       @all_av_files ||= generate_all_av_file_list
     end
-
 
     def image?
       return false unless representative_id
