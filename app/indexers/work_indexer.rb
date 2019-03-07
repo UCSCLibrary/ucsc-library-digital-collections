@@ -55,6 +55,16 @@ class WorkIndexer < Hyrax::WorkIndexer
       resource = url
       url = resource.id 
     end
+    
+    # if it's buffered, return the buffer
+    if (buffer = LdBuffer.find_by(url: url))
+      if (Time.now - buffer.updated_at).seconds > 1.year
+        buffer.destroy
+      else
+        return buffer.label
+      end
+    end
+
     begin
       if url.to_s.include?("ucsc.edu")
         Rails.logger.info "handling as ucsc resource"
@@ -87,6 +97,7 @@ class WorkIndexer < Hyrax::WorkIndexer
       end
       
       LdBuffer.create(url: url, label: label)
+
       # Delete oldest records if we have more than 5K in the buffer
       if (cnt = LdBuffer.count - 5000) > 0
         ids = LdBuffer.order('created_at DESC').limit(cnt).pluck(:id)
