@@ -5,7 +5,7 @@ class Lecture < ActiveFedora::Base
   include ::ScoobySnacks::WorkModelBehavior
   self.indexer = ::WorkIndexer
   
-  self.human_readable_type = 'Lecture'
+#  self.human_readable_type = 'Lecture'
 
   self.valid_child_concerns = [Work]
 

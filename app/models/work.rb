@@ -10,7 +10,7 @@ class Work < ActiveFedora::Base
   # self.valid_child_concerns = []
   validates :title, presence: { message: 'Your work must have a title.' }
   
-  self.human_readable_type = 'Work'
+#  self.human_readable_type = 'Work'
 
   def save
     controlled_properties.each do |property|

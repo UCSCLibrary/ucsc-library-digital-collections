@@ -4,7 +4,7 @@ class Course < ActiveFedora::Base
   include ::Hyrax::WorkBehavior
   include ::ScoobySnacks::WorkModelBehavior
   
-  self.human_readable_type = 'Course'
+#  self.human_readable_type = 'Course'
 
   # Change this to restrict which works can be added as a child.
   self.valid_child_concerns = [Lecture,Work]
