@@ -12,7 +12,7 @@ class Work < ActiveFedora::Base
   
 #  self.human_readable_type = 'Work'
 
-  def save
+  def save *args
     controlled_properties.each do |property|
       attributes = []
       props =  self.send(property)
@@ -25,7 +25,7 @@ class Work < ActiveFedora::Base
       end
       self.send(property.to_s+"_attributes=",attributes) unless attributes.empty?
     end
-    super
+    super *args
   end
 
   def fix_loc_id loc_id
