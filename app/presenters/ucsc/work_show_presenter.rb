@@ -15,7 +15,8 @@ module Ucsc
 
     def universal_viewer?
       # disable universal viewer for now
-      false
+#      false
+      true
     end
 
     def all_av_files
