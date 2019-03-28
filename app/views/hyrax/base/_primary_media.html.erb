@@ -14,7 +14,7 @@
                 <div class="uv viewer" data-uri="<%= main_app.polymorphic_path [main_app, :manifest, presenter] %>"></div>
             </div>
         <% else %>
-            <%= image_tag @presenter.solr_document.display_image_path, class: "primary-media",role: "presentation"%>
+            <%= image_tag @presenter.display_image_url, class: "primary-media",role: "presentation"%>
         <% end %>
     <% end %>
 <% end %>
