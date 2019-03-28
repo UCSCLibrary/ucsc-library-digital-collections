@@ -14,9 +14,7 @@ module Ucsc
     end
 
     def universal_viewer?
-      # disable universal viewer for now
-#      false
-      true
+      false
     end
 
     def display_image_url
