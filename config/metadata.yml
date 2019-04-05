@@ -57,9 +57,8 @@ properties:
     primary: true
     core: true
     display_area: work_title
-    work_title: tre
+    work_title: true
     index_itemprop: name
-    index_if: false
     search_field: true
     OAI: DC:title
 
@@ -110,7 +109,7 @@ properties:
     primary: true
     index_itemprop: creator
     search_field: true
-    input: multi_controlled_vocabulary
+    input: textbox_autosuggest
     core: true
     OAI: DC:creator
 
@@ -129,7 +128,7 @@ properties:
     search_field: true
     core: true
     display_area: more
-    input: multi_controlled_vocabulary
+    input: textbox_autosuggest
     OAI: DC:contributor
 
   originalPublisher:
@@ -153,7 +152,7 @@ properties:
     predicate: FOAF:homepage
     core: true
   
-  resourceType:
+  resourceType  :
     definition: 'General nature or type of the resource (e.g., image, text, etc.). Does not capture aboutness. '
     label: Type
     search_field: true
@@ -187,7 +186,7 @@ properties:
         subauthority: names
       - authority: local
         subauthority: agents
-    input: multi_controlled_vocabulary
+    input: textbox_autosuggest
     core: true
     OAI: DC:rights
   
@@ -235,7 +234,7 @@ properties:
         subauthority: agents
     facet: true        
     search_field: true
-    input: multi_controlled_vocabulary
+    input: textbox_autosuggest
     core: true
     OAI: DC:subject
 #    search_result_display: true
@@ -254,7 +253,7 @@ properties:
         subauthority: places
     facet: true
     search_field: true
-    input: multi_controlled_vocabulary
+    input: textbox_autosuggest
     core: true
     OAI: DC:subject
 #    search_result_display: true
@@ -272,7 +271,7 @@ properties:
         subauthority: time_periods
     facet: true
     search_field: true
-    input: multi_controlled_vocabulary
+    input: textbox_autosuggest
     core: true
     OAI: DC:subject
 #    search_result_display: true
@@ -290,7 +289,7 @@ properties:
     index_itemprop: about
     facet: true
     search_field: true
-    input: multi_controlled_vocabulary
+    input: textbox_autosuggest
     core: true
     OAI: DC:subject
 #    search_result_display: true
@@ -358,7 +357,7 @@ properties:
       - authority: local
         subauthority: formats
     search_field: true
-    input: multi_controlled_vocabulary
+    input: textbox_autosuggest
     core: true
     OAI: DC:format
   
@@ -380,7 +379,7 @@ properties:
       - authority: loc
       - subauthority: languages
     itemprop: inLanguage
-    input: dropdown
+    input: textbox_autosuggest
     core: true
     OAI: DC:language
   
@@ -442,9 +441,10 @@ properties:
     definition: "A genre term designates the style or technique of the intellectual content of textual materials or, for graphic materials, aspects such as vantage point, intended purpose, characteristics of the creator, publication status, or method  of representation. Does not capture aboutness. Ex. lectures; underground dance music."
     label: Genre
     vocabulary:
-      - authority: loc
-      - subauthority: languages
+      authority: local
+      subauthority: dcmi_types
     predicate:  MODS:subjectGenre
+    input: dropdown
 
   boxFolder:
     definition: "A call number, shelf mark or similar label of an item. Format \"Box X, Folder Y\"."
