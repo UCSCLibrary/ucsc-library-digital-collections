@@ -9,42 +9,64 @@ class WorkIndexer < Hyrax::WorkIndexer
     end
   end
 
+  def schema
+    ScoobySnacks::METADATA_SCHEMA
+  end
+
   def merge_subjects(solr_doc)
-    subject_fields = ["subjectTopic","subjectName","subjectTemporal","subjectPlace"]
+    subject_field_names = ["subjectTopic","subjectName","subjectTemporal","subjectPlace"]
     subjects = []
-    subject_fields.each{ |subject_field| subjects.concat( solr_doc[label_field(subject_field)]) if solr_doc[label_field(subject_field)] }
-    solr_doc[label_field("subject")] = subjects
+    subject_field_names.each do |subject_field_name| 
+      field = schema.get_field(subject_field_name)
+      if (indexed_field_contents = solr_doc[field.solr_search_name])
+        subjects.concat(indexed_field_contents)
+      end
+    end
+    solr_doc[Solrizer.solr_name('subject')] = subjects
     solr_doc
   end
 
   def index_controlled_fields(solr_doc)
     return unless object.persisted?
 
-    object.controlled_properties.each do |property|
+    schema.controlled_field_names.each do |field_name|
+      Rails.logger.info "indexing controlled field: #{field_name}"
+      field = schema.get_field(field_name)
 
       # Clear old values from the solr document
-      solr_doc.delete label_field(property)
-      solr_doc.delete Solrizer.solr_name(property)
+      solr_doc.delete field.solr_search_name
+      solr_doc[field.solr_facet_name] ||= [] if field.facet?
+      solr_doc[field.solr_sort_name] ||= [] if field.sort?
+      label = ""
 
       # Wrap single objects in arrays if necessary (though it shouldn't be)
-      object[property] = Array(object[property]) if !object[property].kind_of?(Array)
+      object[field_name] = Array(object[field_name]) if !object[field_name].kind_of?(Array)
 
       # Loop through the different values provided for this property
-      object[property].each do |val|
-        solr_doc[label_field(property)] ||= []
+      object[field_name].each do |val|
+        solr_doc[field.solr_search_name] ||= []
+        solr_doc[field.solr_facet_name] ||= [] if field.facet?
+        solr_doc[field.solr_sort_name] ||= [] if field.sort?
+        label = ""
         case val
         when ActiveTriples::Resource
           # We need to fetch the string from an external vocabulary
-          solr_doc[label_field(property)] << self.class.fetch_remote_label(val)
+          label = self.class.fetch_remote_label(val)
+          Rails.logger.info "fetched label #{label} from url #{val.id}"
+          # skip indexing this one if we can't retrieve the label
+          next unless label
         when String
           # This is just a normal string (from a legacy model, etc)
           # Set the label index to the string for now
           # In the future, we will create a new entry in 
           # the appropriate local vocab
-          solr_doc[label_field(property)] << val
+          label = val
         else
           raise ArgumentError, "Can't handle #{val.class}"
         end
+        solr_doc[field.solr_search_name] << label
+        solr_doc[field.solr_facet_name] << label if field.facet?
+        solr_doc[field.solr_sort_name] << label if field.sort?
       end
     end
     solr_doc
@@ -79,6 +101,8 @@ class WorkIndexer < Hyrax::WorkIndexer
         else
           uri = URI(url)
         end
+
+        Rails.logger.info "Requesting uri: #{uri.to_s}"
 
         label = JSON.parse(Net::HTTP.get_response(uri).body)["label"]
 
@@ -122,16 +146,12 @@ class WorkIndexer < Hyrax::WorkIndexer
       # IOError could result from a 500 error on the remote server
       # SocketError results if there is no server to connect to
       Rails.logger.error "Unable to fetch #{url} from the authorative source.\n#{e.message}"
-      return "Cannot find term"
+      return false
     end
   end
     
   def self.default_accept_header
     RDF::Util::File::HttpAdapter.default_accept_header.sub(/, \*\/\*;q=0\.1\Z/, '')
   end
-  
-  def label_field(property)
-    Solrizer.solr_name("#{property}_label")
-  end
-  
+    
 end
