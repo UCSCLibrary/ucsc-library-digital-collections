@@ -64,7 +64,7 @@ class CatalogController < ApplicationController
     config.default_solr_params = {
       qt: "search",
       rows: 10,
-      qf: "title_tesim name_tesim"
+      qf: "title_tesim name_tesim subseries_tesim series_tesim creator_tesim"
     }
 
     # solr field configuration for document/show views
@@ -78,9 +78,6 @@ class CatalogController < ApplicationController
 #    config.add_facet_field solr_name("human_readable_type", :facetable), label: "Type", limit: 5
 #    config.add_facet_field solr_name("resource_type", :facetable), label: "Resource Type", limit: 5
 
-    # ----
-    # replaced by scoobysnacks
-    # ------
 
     ScoobySnacks::BlacklightConfiguration.add_facet_fields(config)
 
@@ -92,13 +89,8 @@ class CatalogController < ApplicationController
     # solr fields to be displayed in the index (search results) view
     #   The ordering of the field names is the order of the display
 
-    # ----
-    # replaced by scoobysnacks
-    # Wait, this isn't working?
-    # ------
-
     ScoobySnacks::BlacklightConfiguration.add_index_fields(config)
-    config.add_index_field solr_name("subject_label", :stored_searchable), label: "Subject"
+    config.add_index_field solr_name("subject"), label: "Subject"
 
 #    config.add_index_field solr_name("identifier", :stored_searchable), label: "Identifier", helper_method: :index_field_link, field_name: 'identifier'
 #    config.add_index_field solr_name("embargo_release_date", :stored_sortable, type: :date), label: "Embargo release date", helper_method: :human_readable_date
@@ -108,13 +100,8 @@ class CatalogController < ApplicationController
     # solr fields to be displayed in the show (single result) view
     #   The ordering of the field names is the order of the display
 
-    # ----
-    # replaced by scoobysnacks
-    # ------
-
-
     ScoobySnacks::BlacklightConfiguration.add_show_fields(config)
-    config.add_show_field solr_name("subject_label", :stored_searchable), label: "Subject"
+    config.add_show_field solr_name("subject"), label: "Subject"
 
     # "fielded" search configuration. Used by pulldown among other places.
     # For supported keys in hash, see rdoc for Blacklight::SearchFields
@@ -144,11 +131,6 @@ class CatalogController < ApplicationController
         pf: title_name.to_s
       }
     end
-
-    # ----
-    # replaced by scoobysnacks
-    # ------
-
 
     # "sort results by" select (pulldown)
     # label in pulldown is followed by the name of the SOLR field to sort by and
