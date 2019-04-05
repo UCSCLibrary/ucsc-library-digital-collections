@@ -11,7 +11,7 @@ export default class ControlledVocabInput {
     this.id = this.fieldName + '-' + index
     this.searchUrl = this.parentElement.data('autocompleteUrl')
     this.authOptions = this.parentElement.data('authorities')
-    this.multiple_vocabularies = (authOptions.length > 1) 
+    this.multiple_vocabularies = (this.authOptions.length > 1) 
     let rowTemplate = Handlebars.compile(this._source)
     let newElement =  $(rowTemplate({ "paramKey": paramKey,
                                "name": this.fieldName,
