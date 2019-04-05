@@ -4,8 +4,7 @@
 <%# multiple = options.delete[:multiple] %>
 <%# options[:item_helper] = method(:include_current_value) %>
 
-<% vocab = property['vocabulary'] %>
-<% vocab ||= property['vocabularies'].first unless property['vocabularies'].nil? %>
+<% vocab = property.vocabularies.first %>
 <% vocab = {"authority" => "local", "subauthority" => vocab} if vocab.is_a? String %>
 <% options[:collection] =  Hyrax::QaSelectService.new(vocab["subauthority"]).select_all_options%>
 
