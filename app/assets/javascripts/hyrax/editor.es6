@@ -2,11 +2,6 @@ import RelationshipsControl from 'hyrax/relationships/control'
 import SaveWorkControl from 'hyrax/save_work/save_work_control'
 import AdminSetWidget from 'hyrax/editor/admin_set_widget'
 import ControlledVocab from 'hyrax/editor/controlled_vocab'
-import Autocomplete from 'hyrax/autocomplete'
-
-//potentially superfluous now, since we use our own:
-import AuthoritySelect from 'hyrax/authority_select'
-import ControlledVocabulary from 'hyrax/editor/controlled_vocabulary'
 
 export default class {
   /**

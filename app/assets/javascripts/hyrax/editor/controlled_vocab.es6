@@ -54,11 +54,17 @@ export default class ControlledVocab extends FieldManager {
 
   // Overrides FieldManager in order to avoid doing a clone of the existing field
   createNewField($activeField) {
-    switch (this.inputStyle) {
+    console.log("switching on: "+this.inputStyle.underscore)
+    switch (this.inputStyle.underscore) {
     case "dropdown":
       return new Dropdown(this._maxIndex(),this.element, this.paramKey);
       break;
-    case "textbox-autosuggest":
+    case "textbox_autosuggest":
+      console.log("creating new textbox autosuggest")
+      return new TextboxAutosuggest(this._maxIndex(),this.element, this.paramKey);
+      break;
+    default: 
+      console.log("creating new textbox autosuggest from default case")
       return new TextboxAutosuggest(this._maxIndex(),this.element, this.paramKey);
       break;
     }
