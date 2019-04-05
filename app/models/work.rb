@@ -13,9 +13,9 @@ class Work < ActiveFedora::Base
 #  self.human_readable_type = 'Work'
 
   def save *args
-    controlled_properties.each do |property|
+    ::ScoobySnacks::METADATA_SCHEMA.controlled_field_names.each do |field_name|
       attributes = []
-      props =  self.send(property)
+      props =  self.send(field_name)
       props = Array(props) if !props.kind_of?(Array)
       props.each do |node|
         next unless node.respond_to?('id')
@@ -23,7 +23,7 @@ class Work < ActiveFedora::Base
         attributes << {id: fix_loc_id(node.id) }
         attributes << {id: node.id, _destroy: true}
       end
-      self.send(property.to_s+"_attributes=",attributes) unless attributes.empty?
+      self.send(field_name.to_s+"_attributes=",attributes) unless attributes.empty?
     end
     super *args
   end
