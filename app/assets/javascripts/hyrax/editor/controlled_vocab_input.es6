@@ -11,7 +11,7 @@ export default class ControlledVocabInput {
     this.id = this.fieldName + '-' + index
     this.searchUrl = this.parentElement.data('autocompleteUrl')
     this.authOptions = this.parentElement.data('authorities')
-    this.multiple_vocabularies = (authOptions.length > 1) 
+    this.multiple_vocabularies = (this.authOptions.length > 1) 
     let rowTemplate = Handlebars.compile(this._source)
     let newElement =  $(rowTemplate({ "paramKey": paramKey,
                                "name": this.fieldName,
@@ -48,13 +48,14 @@ export default class ControlledVocabInput {
   }
 
   get _source() {
+    var source;
     source = "<li id=\""+ this.id +"\" class=\"metadata-entry input-group input-append\" data-persisted=false>"
     if (this.multiple_vocabularies)
-      source += get_auth_select_source()
-    source += get_text_box_source()
-    source += get_hidden_id_source()
-    source += get_hidden_destructor_source()
-    source += get_remove_button_source()
+      source += this.get_auth_select_source()
+    source += this.get_input_source()
+    source += this.get_hidden_id_source()
+    source += this.get_hidden_destructor_source()
+    source += this.get_remove_button_source()
     source += "</li>"
     source += "<span class=\"input-group-btn field-controls\">"
     return source
