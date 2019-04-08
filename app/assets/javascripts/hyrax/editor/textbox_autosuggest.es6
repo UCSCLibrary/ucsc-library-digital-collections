@@ -1,4 +1,5 @@
 import ControlledVocabInput from 'hyrax/editor/controlled_vocab_input'
+import LinkedData from 'hyrax/autocomplete/linked_data'
 
 export default class TextboxAutosuggest extends ControlledVocabInput {
 

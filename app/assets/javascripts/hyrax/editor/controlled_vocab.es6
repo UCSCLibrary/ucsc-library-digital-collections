@@ -16,11 +16,11 @@ export default class ControlledVocab extends FieldManager {
       controlsHtml:      '<span class=\"input-group-btn field-controls\">',
       fieldWrapperClass: '.field-wrapper',
       warningClass:      '.has-warning',
-      listClass:         '.metadata-field-entries',
+      listClass:         '.listing',
       inputTypeClass:    '.'+$(element).data('inputStyle'),
 
       addHtml:           '<button type=\"button\" class=\"btn btn-link add\"><span class=\"glyphicon glyphicon-plus\"></span><span class="controls-add-text"></span></button>',
-      addText:           'Add another '+ $(element).data('fieldName'),
+      addText:           'Add another ',
 
       labelControls:      true,
     }

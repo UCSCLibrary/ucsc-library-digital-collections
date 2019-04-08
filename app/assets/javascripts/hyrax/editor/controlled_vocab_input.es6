@@ -1,6 +1,5 @@
 import ControlledVocabulary from 'hyrax/editor/controlled_vocabulary'
 import Handlebars from 'handlebars'
-import LinkedData from 'hyrax/autocomplete/linked_data'
 
 export default class ControlledVocabInput {
 
@@ -14,10 +13,10 @@ export default class ControlledVocabInput {
     this.multiple_vocabularies = (this.authOptions.length > 1) 
     let rowTemplate = Handlebars.compile(this._source)
     let newElement =  $(rowTemplate({ "paramKey": paramKey,
-                               "name": this.fieldName,
-                               "index": index,
-                               "class": "controlled_vocabulary" }))
-    this.parentElement.append(newElement)
+                                      "name": this.fieldName,
+                                      "index": index,
+                                      "class": "controlled_vocabulary" }))
+    this.parentElement.children('ul').append(newElement)
     this._addBehaviorsToInput(newElement)
 
     this.parentElement.trigger("managed_field:add", newElement);
@@ -44,12 +43,12 @@ export default class ControlledVocabInput {
   }
 
   get_remove_button_source() {
-      "<button type=\"button\" class=\"btn btn-link remove\"><span class=\"glyphicon glyphicon-remove\"></span><span class=\"controls-remove-text\"></span> <span class=\"sr-only\"> previous <span class=\"controls-field-name-text\">field</span></span></button>"
+     return "<button type=\"button\" class=\"btn btn-link remove\"><span class=\"glyphicon glyphicon-remove\"></span><span class=\"controls-remove-text\"></span> <span class=\"sr-only\"> previous <span class=\"controls-field-name-text\">field</span></span></button>"
   }
 
   get _source() {
     var source;
-    source = "<li id=\""+ this.id +"\" class=\"metadata-entry input-group input-append\" data-persisted=false>"
+    source = "<li id=\""+ this.id +"\" class=\"metadata-entry field-wrapper input-group input-append\" data-persisted=false>"
     if (this.multiple_vocabularies)
       source += this.get_auth_select_source()
     source += this.get_input_source()
