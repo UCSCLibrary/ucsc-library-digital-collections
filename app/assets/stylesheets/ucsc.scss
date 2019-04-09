@@ -127,9 +127,9 @@ body {
         }
     }
     
-    div.form-group.controlled_vocab {
+    div.form-group.textbox_autosuggest {
 
-        ul {
+        ul.listing {
             padding-left: 5px;
             list-style: none;
 
@@ -154,11 +154,11 @@ body {
                     line-height: 0;
                     float: left;
                 }
-                input.controlled_vocab[data-persisted=false] {
+                input.textbox_autosuggest[data-persisted=false] {
                     width: 60%;
                 }
 
-                input.controlled_vocab[data-persisted=true] {
+                input.textbox_autosuggest[data-persisted=true] {
                     width: 85%;
                     display: inline;
                 }
@@ -171,6 +171,25 @@ body {
                 .glyphicon {
                     top: 0.5em;
                     left: 7px;
+                }
+            }
+        }
+    }  
+    div.form-group.controlled_dropdown {
+
+        ul.listing {
+            padding-left: 5px;
+            list-style: none;
+
+            li.field-wrapper {
+                position:relative;
+                margin-top:20px;
+
+                label {
+                    font-weight: 400;
+                }
+                select {
+                    width: auto;
                 }
             }
         }
@@ -188,6 +207,10 @@ body {
             overflow-y: auto;
             overflow-x: hidden;
         }
+    }
+    
+    div#extended-terms {
+        margin-top: 30px;
     }
 
     footer {
