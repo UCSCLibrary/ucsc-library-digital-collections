@@ -156,8 +156,13 @@ body {
                 }
                 input.textbox_autosuggest[data-persisted=false] {
                     width: 60%;
+                    
                 }
 
+                input.textbox_autosuggest.selected {
+                    width: 85%;
+                    
+                }
                 input.textbox_autosuggest[data-persisted=true] {
                     width: 85%;
                     display: inline;
