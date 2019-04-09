@@ -152,7 +152,7 @@ properties:
     predicate: FOAF:homepage
     core: true
   
-  resourceType  :
+  resourceType:
     definition: 'General nature or type of the resource (e.g., image, text, etc.). Does not capture aboutness. '
     label: Type
     search_field: true
@@ -377,7 +377,7 @@ properties:
     predicate: DC:language
     vocabularies:
       - authority: loc
-      - subauthority: languages
+        subauthority: languages
     itemprop: inLanguage
     input: textbox_autosuggest
     core: true
