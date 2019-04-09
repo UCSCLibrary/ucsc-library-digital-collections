@@ -3,7 +3,7 @@ import { FieldManager } from 'hydra-editor/field_manager'
 import TextboxAutosuggest from "./textbox_autosuggest"
 import Dropdown from "./dropdown"
 
-export default class ControlledVocab extends FieldManager {
+export default class MultiControlledVocab extends FieldManager {
 
   constructor(element, paramKey) {
 

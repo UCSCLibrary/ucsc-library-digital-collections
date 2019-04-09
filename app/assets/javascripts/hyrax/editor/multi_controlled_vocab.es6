@@ -1,14 +1,11 @@
-
 import { FieldManager } from 'hydra-editor/field_manager'
-import ControlledVocabulary from 'hyrax/editor/controlled_vocabulary'
-import Handlebars from 'handlebars'
-import Autocomplete from 'hyrax/autocomplete'
-import MvcLine from "./mvc_line"
+import TextboxAutosuggest from "./textbox_autosuggest"
+import Dropdown from "./dropdown"
 
-// export default class MultiControlledVocabulary extends ControlledVocabulary {
-export default class MultiControlledVocabulary extends FieldManager {
+export default class MultiControlledVocab extends FieldManager {
 
   constructor(element, paramKey) {
+
     let options = {
       /* callback to run after add is called */
       add:    null,
@@ -19,20 +16,19 @@ export default class MultiControlledVocabulary extends FieldManager {
       fieldWrapperClass: '.field-wrapper',
       warningClass:      '.has-warning',
       listClass:         '.listing',
-      inputTypeClass:    '.multi_controlled_vocabulary',
+      inputTypeClass:    '.'+$(element).data('inputStyle'),
 
       addHtml:           '<button type=\"button\" class=\"btn btn-link add\"><span class=\"glyphicon glyphicon-plus\"></span><span class="controls-add-text"></span></button>',
-      addText:           'Add another',
+      addText:           'Add another ',
 
       labelControls:      true,
     }
     super(element, options)
+    this.inputStyle = this.element.data('inputStyle')
     this.paramKey = paramKey
     this.fieldName = this.element.data('fieldName')
     this.authOptions = this.element.data('authorities')
-    
     this.addRemoveBehavior(element)
-    
   }
 
   addRemoveBehavior(element) {
@@ -55,12 +51,23 @@ export default class MultiControlledVocabulary extends FieldManager {
     })
   }
 
-
-  
-
   // Overrides FieldManager in order to avoid doing a clone of the existing field
   createNewField($activeField) {
-    return new MvcLine(this._maxIndex(),this.element, this.paramKey)
+    console.log("switching on: "+this.inputStyle.underscore)
+    switch (this.inputStyle.underscore) {
+    case "dropdown":
+      return new Dropdown(this._maxIndex(),this.element, this.paramKey);
+      break;
+    case "textbox_autosuggest":
+      console.log("creating new textbox autosuggest")
+      return new TextboxAutosuggest(this._maxIndex(),this.element, this.paramKey);
+      break;
+    default: 
+      console.log("creating new textbox autosuggest from default case")
+      return new TextboxAutosuggest(this._maxIndex(),this.element, this.paramKey);
+      break;
+    }
+
   }
 
   /* This gives the index for the editor */

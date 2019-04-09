@@ -1,7 +1,8 @@
 import RelationshipsControl from 'hyrax/relationships/control'
 import SaveWorkControl from 'hyrax/save_work/save_work_control'
 import AdminSetWidget from 'hyrax/editor/admin_set_widget'
-import ControlledVocab from 'hyrax/editor/controlled_vocab'
+import MultiControlledVocab from 'hyrax/editor/controlled_vocab'
+import Dropdown from 'hyrax/editor/dropdown'
 
 export default class {
   /**
@@ -36,9 +37,28 @@ export default class {
 
   // initialize any controlled vocabulary widgets
   controlledVocabularies() {
-    this.element.find('.controlled_vocab.form-group').each((_idx, controlled_field) =>
-      new ControlledVocab(controlled_field, this.paramKey)
+    this.element.find('.textbox_autosuggest.form-group').each((_idx, controlled_field) =>
+      new MultiControlledVocab(controlled_field, this.paramKey)
     )
+    this.element.find('.controlled_dropdown.form-group select').each((_idx, controlled_dropdown) =>
+      $(controlled_dropdown).change(function(){
+        console.log("thing changed")
+        var destructor = $(this).siblings("input")
+        // If the new value is the same as the one stored in the DB
+        if(this.value == $(this).data("stored")) {
+          // disable the destructor and remove the element name so it won't submit
+          destructor.val("");
+          $(this).attr("name","")
+        } else {
+          // If we've picked something new, enable the desctructor and name the element
+          destructor.val("true")
+          if (this.value == "")
+            $(this).attr("name","")
+          else
+            $(this).attr("name", $(this).data("name"))
+
+        }
+      }))
   }
 
   // Display the sharing tab if they select an admin set that permits sharing
