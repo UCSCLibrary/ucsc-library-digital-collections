@@ -12,7 +12,7 @@
         <tbody>
             <%= render 'secondary_attribute_rows', presenter: presenter %>
 
-            <%= render 'tertiary_attribute_rows', presenter: presenter if can? :edit, Work %>
+            <%= render 'admin_only_attribute_rows', presenter: presenter if can? :edit, Work %>
 
             <%= presenter.attribute_to_html(:embargo_release_date, render_as: :date) %>
             <%= presenter.attribute_to_html(:lease_expiration_date, render_as: :date) %>
