@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.0.0', '>= 5.0.0.1'
+gem 'rails', '~> 5.0.0', '>= 5.0.7.2'
 # Use sqlite3 as the database for Active Record
 #gem 'sqlite3'
 gem 'mysql2'
@@ -102,3 +102,5 @@ gem 'blacklight_oai_provider', '>= 6.0.0'
 gem 'riiif', '~> 1.1'
 
 gem "octokit", "~> 4.0"
+
+gem 'actionview', '>= 5.0.7.2'
