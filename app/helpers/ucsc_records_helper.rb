@@ -1,6 +1,6 @@
 module UcscRecordsHelper
 
-    def render_edit_field_partial_ucsc(field_name, locals)
+  def render_edit_field_partial_ucsc(field_name, locals)
 
     schema = ScoobySnacks::METADATA_SCHEMA
     field = schema.get_field(field_name.to_s)
@@ -29,7 +29,7 @@ module UcscRecordsHelper
       Rails.logger.debug vocabularies.inspect
       
       authority_options = vocabularies.reject{|voc| voc['authority'].nil? || voc['subauthority'].nil?}.map{|voc| [voc['authority'].titleize+" "+voc['subauthority'].titleize, 
-                                                  "/authorities/search/#{voc['authority']}/#{voc['subauthority']}"]} 
+                                                                                                                  "/authorities/search/#{voc['authority']}/#{voc['subauthority']}"]} 
 
       data = {'autocomplete-url' => authority_options.first.last,
               'autocomplete' => field_name,
@@ -43,7 +43,7 @@ module UcscRecordsHelper
       options[:wrapper_html] = {data: data.merge!({'field-name' => field_name})}
     else
       # render as a string scalar
-      options[:as] = f.object.multiple?(field_name) ? :multi_value : :string 
+      options[:as] = field.multiple? ? :multi_value : :string 
     end
 
     render_edit_field_partial(field_name,locals.merge({input_options: options}))
