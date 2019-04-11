@@ -22,6 +22,7 @@ class CatalogController < ApplicationController
 
   configure_blacklight do |config|
 
+    schema = ScoobySnacks::METADATA_SCHEMA
 
     config.oai = {
       provider: {
@@ -51,12 +52,7 @@ class CatalogController < ApplicationController
 
     config.show.tile_source_field = :content_metadata_image_iiif_info_ssm
     config.show.partials.insert(1, :openseadragon)
-    # default advanced config values
-    config.advanced_search ||= Blacklight::OpenStructWithHashAccess.new
-    # config.advanced_search[:qt] ||= 'advanced'
-    config.advanced_search[:url_key] ||= 'advanced'
-    config.advanced_search[:query_parser] ||= 'dismax'
-    config.advanced_search[:form_solr_parameters] ||= {}
+
 
     config.search_builder_class = CatalogSearchBuilder
 
@@ -64,7 +60,7 @@ class CatalogController < ApplicationController
     config.default_solr_params = {
       qt: "search",
       rows: 10,
-      qf: "title_tesim name_tesim subseries_tesim series_tesim creator_tesim"
+      qf: schema.default_text_search_solrized_field_names
     }
 
     # solr field configuration for document/show views
