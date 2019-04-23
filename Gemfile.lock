@@ -30,11 +30,6 @@ PATH
     samvera_hls (0.2.0)
       rails (>= 4.2.6)
 
-PATH
-  remote: /srv/scooby_snacks
-  specs:
-    scooby_snacks (0.1.1)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -752,6 +747,7 @@ GEM
     sawyer (0.8.1)
       addressable (>= 2.3.5, < 2.6)
       faraday (~> 0.8, < 1.0)
+    scooby_snacks (0.3.1)
     select2-rails (3.5.10)
       thor (~> 0.14)
     shex (0.5.2)
@@ -891,7 +887,7 @@ DEPENDENCIES
   rspec-rails
   samvera_hls!
   sass-rails (~> 5.0)
-  scooby_snacks!
+  scooby_snacks (= 0.3.1)
   sidekiq
   sinatra!
   solr_wrapper (>= 0.3)

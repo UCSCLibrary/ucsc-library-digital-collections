@@ -82,7 +82,7 @@ gem 'browse-everything'
 #gem 'hydra-remote_identifier'
 
 gem 'samvera_hls', path: "/srv/samvera_hls/"
-gem 'scooby_snacks', path: "/srv/scooby_snacks/"
+gem 'scooby_snacks', '0.3.1'
 gem 'bulk_ops', path: "/srv/bulk_ops/"
 
 #gem 'ldfwrapper', github: 'boston-library/ldf-wrapper', branch: "master"
