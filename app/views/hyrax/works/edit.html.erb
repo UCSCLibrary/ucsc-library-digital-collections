@@ -2,11 +2,8 @@
 <% provide :page_header do %>
   <h1><%= t("hyrax.works.update.header") %></h1>
 <% end %>
-
 <% workflow = Hyrax::WorkflowPresenter.new(SolrDocument.new(Work.find(params['id']).to_solr), current_ability) %>
-
 <% state = Hyrax::WorkflowPresenter.new(SolrDocument.new(Work.find(params['id']).to_solr), current_ability).state %>
-
 <% if state == "changes_underway" %>
         <div class="alert alert-warning" role="alert">
             This file is currently being edited by another administrator. The form below for altering metadata is disabled until that person finishes their work.

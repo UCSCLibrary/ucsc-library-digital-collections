@@ -41,7 +41,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <% state[:list].each do |document| %>
+                            <% state[:list].first(150) do |document| %>
                                 <tr>
                                     <td>
                                         <input type="checkbox" name="ids[]" value="<%= document.id%>" class="select-<%= state[:name] %>-checkbox"/>

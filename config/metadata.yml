@@ -26,26 +26,24 @@
 # defined here. Predicates for each property should be defined
 # here, and cannot be overridden once defined.
 
-properties:
+fields:
 
   default:
     definition: "This property has not yet been documented."
     required: false
     multiple: true
-    primary: false
+    display_group: secondary
     hidden: false
-    stored: true
-    display_area: more
     core: false
     work_title: false
-    input: scalar
+    input: textbox
+    data_type: text
     facet_limit: 5
     facet: false
-    index_as: stored_searchable
-    search_field: false
-    sort_field: false
-    date: false
-    search_result_display: true
+    searchable: false
+    stored_in_solr: true
+    full_text_searchable: false
+    sortable: false
 
   title:
     definition: "The title of the resource."
@@ -55,21 +53,23 @@ properties:
     required: true
 #    multiple: false
     primary: true
-    core: true
-    display_area: work_title
-    work_title: true
+    display_groups: 
+      - primary
+      - search_result
     index_itemprop: name
-    type: string
+    work_title: true
+    searchable: true
+    full_text_searchable: true
     OAI: DC:title
 
   accessionNumber:
     definition: "An archival accession number for the resource."
-    DC mapping: "DC:identifier"
     label: "Accession Number"
-    display_area: staff
-    core: true
+    display_groups: 
+      - admin_only
+      - editor_primary
     predicate: "DC:identifier"
-    primary: true
+    data_type: string
 #    multiple: false
 
   titleAlternative:
@@ -77,14 +77,23 @@ properties:
     usage_note: "All titles for this work other than the primary title should be listed here"
     label: "Variant Title"
     predicate: "DC:alternative"
+    display_groups: 
+      - primary
+      - search_result
+    searchable: true
+    full_text_searchable: true
     OAI: DC:alternative
 
   subseries:
     definition: "A subseries title for the resource."
-    usage_note: "This is a descriptive title not necessarily given by the creator"
+    usage_note: "This is a descriptive title not necessarily given by the creator that describes one or more related works"
     label: "Sub-Series Title"
     predicate: "BF2:subseriesStatement"
-    facet: true
+    display_groups: 
+      - primary
+      - search_result
+    searchable: true
+    full_text_searchable: true    
     OAI: DC:alternative
 
   theme:
@@ -92,6 +101,8 @@ properties:
     usage_note: ""
     label: "Theme"
     predicate: "opaque:set"
+    searchable: true
+    full_text_searchable: true
 
   creator:
     definition: "A person or organization responsible for creating the resource."
@@ -104,10 +115,14 @@ properties:
         subauthority: ulan
       - authority: local
         subauthority: agents
-    primary: true
+    searchable: true
+    full_text_searchable: true
     index_itemprop: creator
-    input: multi_controlled_vocabulary
-    core: true
+    display_groups:
+      - primary
+      - search_result
+    facet: true
+    input: textbox_autosuggest
     OAI: DC:creator
 
   contributor:
@@ -121,10 +136,9 @@ properties:
         subauthority: ulan
       - authority: local
         subauthority: agents
+    searchable: true
     index_itemprop: contributor
-    core: true
-    display_area: more
-    input: multi_controlled_vocabulary
+    input: textbox_autosuggest
     OAI: DC:contributor
 
   originalPublisher:
@@ -135,23 +149,28 @@ properties:
   
   publisher:
     predicate: "DC:publisher"
+    definition: "The organization responsible for publishing the work digitally"
     label: "Digital Publisher & Contact Info"
 #    multiple: false
-    search_field: true
-    core: true
     OAI: DC:publisher
   
   publisherHomepage:
     label: "Publisher Homepage"
     definition: "The URL of the publisher's homepage."
+    display_groups: 
+      - secondary
+      - editor_primary
 #    multiple: false
     predicate: FOAF:homepage
-    core: true
   
   resourceType:
     definition: 'General nature or type of the resource (e.g., image, text, etc.). Does not capture aboutness. '
     label: Type
+    searchable: true
     predicate: DC:type
+    display_groups: 
+      - secondary
+      - search_result
     vocabulary: 
       authority: local
       subauthority: dcmi_types
@@ -159,30 +178,27 @@ properties:
     input: dropdown
     OAI: DC:type
 #    multiple: false
-#    search_result_display: true
-   
-  
+
   rightsStatement:
     definition: Information about rights held in and over the resource expressed in general terms (i.e. boilerplate statements).
-    DC mapping: dc:rights
     label: Copyright Statement
     predicate: DC:rights
 #    required: 'true'
-    core: true
     OAI: DC:rights
   
   rightsHolder:
     definition: A person or organization owning or managing rights over the resource.
-    DC mapping: dc:rightsHolder
     label: Copyright Holder
     predicate: DC:rightsHolder
+    display_groups:
+      - secondary
+      - editor_primary
     vocabularies: 
       - authority: loc
         subauthority: names
       - authority: local
         subauthority: agents
-    input: multi_controlled_vocabulary
-    core: true
+    input: textbox_autosuggest
     OAI: DC:rights
   
   scale:
@@ -194,30 +210,33 @@ properties:
     definition: A related resource in which the described resource is physically or logically included.
     label: Series Title
     predicate: opaque:seriesName
+    display_groups: 
+      - primary
+      - search_result
     facet: true
+    searchable: true
+    full_text_searchable: true
   
   source:
     definition: A related resource from which the described resource is derived. (Use to record previous publication information, i.e. the place of publication and publisher name for physical resources).
-    display_area: staff
+    display_group: admin_only
     label: Source
     predicate: DC:source
-    facet: true
   
   staffNote:
     definition: Textual information about the resource. This property is used when no type is specified. 
     label: Staff Note
-    display_area: staff
+    display_group: admin_only
     predicate: MODS:note
+    stored_in_solr: false
   
   coordinates:
     definition: Cartographic data that identifies characteristics of the resource, such as coordinates, projection, etc.
-    DC mapping: dc:relation
     label: Coordinates
     predicate: BF2:cartographicAttributes
   
   subjectName:
     definition: A name of the person that the resource is about.
-    DC mapping: dc:subject
     label: Subject (People)
     predicate: FOAF:name
     vocabularies:
@@ -228,15 +247,17 @@ properties:
       - authority: local
         subauthority: agents
     facet: true        
-    search_field: true
-    input: multi_controlled_vocabulary
-    core: true
+    searchable: true
+    full_text_searchable: true
+    input: textbox_autosuggest
+    display_groups:
+      - secondary
+      - editor_primary
+      - search_result
     OAI: DC:subject
-#    search_result_display: true
   
   subjectPlace:
     definition: Spatial characteristics of the resource.
-    DC mapping: dc:subject
     label: Subject (Place)
     predicate: DC:spatial
     vocabularies: 
@@ -247,14 +268,18 @@ properties:
       - authority: local
         subauthority: places
     facet: true
-    input: multi_controlled_vocabulary
-    core: true
+    searchable: true
+    input: textbox_autosuggest
+    display_groups:
+      - secondary
+      - editor_primary
+      - search_result
     OAI: DC:subject
-#    search_result_display: true
+
   
   subjectTemporal:
     definition: Temporal characteristics of the resource.
-    DC mapping: dc:subject
+    searchable: true
     label: Subject (Time)
     predicate: DC:temporal
     vocabularies: 
@@ -263,15 +288,18 @@ properties:
       - authority: local
         subauthority: time_periods
     facet: true
-    search_field: true
-    input: multi_controlled_vocabulary
-    core: true
+    searchable: true
+    full_text_searchable: true
+    input: textbox_autosuggest
+    display_groups:
+      - secondary
+      - editor_primary
+      - search_result
     OAI: DC:subject
-#    search_result_display: true
+
   
   subjectTopic:
     definition: The topic of the resource.
-    DC mapping: dc:subject
     label: Subject (Topic)
     predicate: DC:subject
     vocabularies: 
@@ -279,58 +307,75 @@ properties:
         subauthority: subjects
       - authority: local
         subauthority: topics
-    index_itemprop: about
     facet: true
-    input: multi_controlled_vocabulary
-    core: true
+    searchable: true
+    full_text_searchable: true
+    index_itemprop: about
+    input: textbox_autosuggest
+    display_groups:
+      - secondary
+      - editor_primary
+      - search_result
     OAI: DC:subject
-#    search_result_display: true
+
   
   dateCreated:
     definition: Date of creation of the original resource.
     encoding: W3CDTF
     label: 'Date Created'
     predicate: DC:date
-#    index_helper_method: human_readable_date
+    data_type: date
     index_itemprop: dateCreated
     input: date
-    core: true    
+    display_groups:
+      - secondary
+      - editor_primary
+#      - search_result   
 #    OAI: DC:date
-#    search_result_display: true
 
   dateCreatedDisplay:
     definition: Textual representation of the creation date (temporary fix)
     label: 'Date Created'
+    display_groups:
+      - secondary
+      - editor_primary 
+      - search_result
     predicate: MODS:dateCreated
     OAI: DC:date
 
   dateDigitized:
-    definition: Date on which the resourc was changed, i.e., digitized.
+    definition: Date on which the resource was changed, i.e., digitized.
     encoding: W3CDTF
     label: Date Digitized
+    index_itemprop: dateModified
     predicate: DC:modified
 #    index_helper_method: human_readable_date
-    index_itemprop: dateModified
     input: date
+    data_type: date
   
   datePublished:
     definition: Date of formal issuance (e.g., publication) of the resource.
     encoding: W3CDTF
     label: 'Date Published'
+    index_itemprop: datePublished
     predicate: DC:issued
 #    index_helper_method: human_readable_date
-    index_itemprop: datePublished
     input: date
+    data_type: date
   
   description:
     definition: An account of the resource.
     label: Description
     predicate: DC:description
-    index_field: true
-    index_itemprop: "description"
-    index_helper_method: "iconify_auto_link"
+    display_groups: 
+      - primary
+      - search_result
+    index_itemprop: description
+#    index_helper_method: "iconify_auto_link"
+    searchable: true
+    full_text_serachable: true
     OAI: dc:description
-#    search_result_display: true
+
   
   relatedResource:
     definition: A link to a relatd resource.
@@ -339,7 +384,6 @@ properties:
   
   physicalFormat:
     definition: The form, and/or physical characteristics of the resource being described. The material or physical carrier of the resource. Does not capture aboutness.
-    DC mapping: dc:medium
     label: Format
     predicate: DC:medium
     vocabularies: 
@@ -347,30 +391,38 @@ properties:
         subauthority: aat
       - authority: local
         subauthority: formats
-    search_field: true
-    input: multi_controlled_vocabulary
-    core: true
+    searchable: true
+    full_text_searchable: true
+    input: textbox_autosuggest
+    display_groups:
+      - secondary
+      - editor_primary
     OAI: DC:format
   
   keyword:
     definition: Keywords (i.e. non-standard terms) assigned to the resource.
     label: Keyword
     predicate: schema:keywords
+    index_itemprop: keyword
+    display_groups:
+      - secondary
+      - search_result
     facet: true
-    index_itemprop: keywords
-#    search_result_display: true
+    searchable: true
+    full_text_searchable: true
   
   language:
     definition: A language of the resource.
-    DC mapping: dc:language
     label: Language
     predicate: DC:language
     vocabularies:
       - authority: loc
-      - subauthority: languages
-    itemprop: inLanguage
-    input: dropdown
-    core: true
+        subauthority: languages
+    index_itemprop: inLanguage
+    input: textbox_autosuggest
+    display_groups:
+      - secondary
+      - editor_primary
     OAI: DC:language
   
   license:
@@ -381,9 +433,10 @@ properties:
   masterFilename:
     definition: "The name of the file (usually attached to this work) that is considered the master digital file to represent the work."
     predicate: EBUCore:filename
-    core: true
     label: Master File Name
-    display_area: staff
+    display_groups: 
+      - admin_only
+      - editor_primary
   
   physicalDescription:
     definition: Description or statement indicating the extent, size, or duration of the original, physical resource for digitized content.
@@ -392,38 +445,38 @@ properties:
   
   accessRights:
     definition: Information about who can access the resource or an indication of its security status.
-    core: true
+    display_groups:
+      - secondary
+      - editor_primary
     label: Access Rights
     predicate: DC:accessRights
     OAI: dc:rights
     
 #  collection:
 #    definition: A related resource in which the described resource is physi#cally or logically included.
-#    DC mapping: dc:relation
 #    label: Collection Title
 #    predicate: DC:isPartOf
 #    facet: true
   
   itemCallNumber:
     definition: Classification number in any scheme.
-    DC mapping: dc:source
-    label: Call Number
+    label: Item Call Number
     predicate: BF2:classification
-    core: true
-    display_area: brief
+    display_groups:
+      - secondary
+      - editor_primary
 
   collectionCallNumber:
     definition: The identifier for the collection to which the resource belongs.
-    DC mapping: dc:source
-    label: Call Number
+    label: Collection Call Number
     predicate: schema:identifier
-    core: true
-    display_area: brief
-    OAI: DC:identifier
+    display_groups:
+      - secondary
+      - editor_primary
+    OAI: DC:source
 
   donorProvenance:
     definition: "A statement of any changes in ownership and custody of the resource since its creation that are significant for its authenticity, integrity, and interpretation."
-    DC mapping: DC:provenance
     label: Donor/Provenance
     predicate: DC:provenance
 
@@ -431,134 +484,16 @@ properties:
     definition: "A genre term designates the style or technique of the intellectual content of textual materials or, for graphic materials, aspects such as vantage point, intended purpose, characteristics of the creator, publication status, or method  of representation. Does not capture aboutness. Ex. lectures; underground dance music."
     label: Genre
     vocabulary:
-      - authority: loc
-      - subauthority: languages
+      authority: local
+      subauthority: genres
     predicate:  MODS:subjectGenre
+    input: dropdown
 
   boxFolder:
     definition: "A call number, shelf mark or similar label of an item. Format \"Box X, Folder Y\"."
-    label: "Call Number"
+    label: "Call Number (Box/Folder)"
     usage note: "Format: \"Box X, Folder Y\"."
-    DC mapping: DC:identifier
     predicate:  purlOnt:holding#label
-
-#
-#-------------------
-# Work Type Settings
-#-------------------
-# Here we define metadata settings based on work type.
-# This section specifies which properties (defined above)
-# may be applied to each work type, and may specify display
-# settings such as "required" or "hidden".
-# 
-# In the future, this may be extended to actually define 
-# the work types for the application here.
-
-
-work_types:
-  work:
-    properties:
-      title:
-      titleAlternative:
-        primary: true
-      subseries:
-        primary: true
-      creator:
-      contributor:
-      publisher:
-      publisherHomepage:
-        primary: true
-      description:
-        primary: true
-      language:
-      resourceType:
-      rightsHolder:
-      rightsStatement:
-      scale:
-      source:
-      staffNote:
-      accessRights:
-      license:
-      collection:
-      series:
-      coordinates:
-      dateCreated:
-      dateCreatedDisplay:
-      datePublished:
-      dateDigitized:
-      subjectTopic:
-      subjectName:
-      subjectPlace:
-      subjectTemporal:
-      genre:
-      physicalFormat:
-      masterFilename:
-      originalPublisher:
-      physicalDescription:
-      keyword:
-      accessionNumber:
-      collectionCallNumber:
-      donorProvenance:
-      relatedResource:
-      boxFolder:
-      theme:
-      itemCallNumber:
-  collection:
-    properties:
-      title:
-      titleAlternative:
-        primary: true
-      creator:
-      contributor:
-      publisher:
-      publisherHomepage:
-        primary: true
-      description:
-        primary: true
-      language:
-      resourceType:
-      rightsHolder:
-      rightsStatement:
-      accessRights:
-      license:
-      dateCreated:
-      datePublished:
-      dateModified:
-      subjectTopic:
-      subjectName:
-      subjectPlace:
-      subjectTemporal:
-      keyword:
-      collectionCallNumber:
-      donorProvenance:
-  lecture:
-    properties:
-      title:
-        inherit: prepend
-      description:
-        primary: true
-      creator:
-      license:
-        inherit: true
-      keyword:
-        inherit: true
-      dateCreated:
-  course:
-    properties:
-      title:
-      description:
-        primary: true
-      creator:
-        primary: true
-      license:
-      keyword:
-      dateCreated:
-  gdao_work:
-    properties:
-      title:
-      description:
-      dateCreated:
-
 
 #-------------------
 # RDF Namespaces

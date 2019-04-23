@@ -38,11 +38,6 @@ body {
             }
         }
     }
-
-    div.select2-container.multi_controlled_vocabulary {
-        max-width: 70%
-    }
-
     
     p#splash-message {
         font-size: 1.2em;
@@ -132,22 +127,74 @@ body {
         }
     }
     
-    div.form-group.multi_controlled_vocabulary {
-        ul {
+    div.form-group.textbox_autosuggest {
+
+        ul.listing {
             padding-left: 5px;
-            li {
+            list-style: none;
+
+            li.field-wrapper {
+                position:relative;
+                margin-top:20px;
                 width: 100%;
+
                 label {
                     font-weight: 400;
                 }
+
+                div.select2-container.controlled_vocabulary {
+                    max-width: 65%
+                }
+
                 div.auth-select-div {
+                    max-width:25%;
+                    text-align:center;
+                    padding-top:5px;
                     padding-right: 10px;
-                    max-width: 40%;
                     line-height: 0;
                     float: left;
                 }
-                input.multi_controlled_vocabulary {
+                input.textbox_autosuggest[data-persisted=false] {
                     width: 60%;
+                    
+                }
+
+                input.textbox_autosuggest.selected {
+                    width: 85%;
+                    
+                }
+                input.textbox_autosuggest[data-persisted=true] {
+                    width: 85%;
+                    display: inline;
+                }
+
+                button.remove {
+//                    position: absolute;
+//                   right: 0;
+//                   top: 0.2em;
+                }
+                .glyphicon {
+                    top: 0.5em;
+                    left: 7px;
+                }
+            }
+        }
+    }  
+    div.form-group.controlled_dropdown {
+
+        ul.listing {
+            padding-left: 5px;
+            list-style: none;
+
+            li.field-wrapper {
+                position:relative;
+                margin-top:20px;
+
+                label {
+                    font-weight: 400;
+                }
+                select {
+                    width: auto;
                 }
             }
         }
@@ -165,6 +212,10 @@ body {
             overflow-y: auto;
             overflow-x: hidden;
         }
+    }
+    
+    div#extended-terms {
+        margin-top: 30px;
     }
 
     footer {

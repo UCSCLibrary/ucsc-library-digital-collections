@@ -56,7 +56,16 @@ div#update-draft-works {
     
 }
 
-form#finalize-draft {clear: left;}
+form#finalize-draft {
+    clear: left;
+    input[type=submit] {
+        margin: 10px;
+        padding: 5px;
+        font-size: 1.2em;
+        font-weight: 1.1em;
+        display: block;
+    } 
+}
 
 
 div#github-auth {
@@ -142,38 +151,6 @@ ul#operations-index {
 div.bulk-ops-options  {
     margin-top:30px;
     margin-bottom:30px;
-    div.tooltip {
-//        position: relative;
-//        display: inline-block;
-//        border-bottom: 1px dotted black;
-        p.tooltip-text {
-            visibility: hidden;
-            width: 120px;
-            background-color: black;
-            color: #fff;
-            text-align: center;
-            padding: 5px 0;
-            border-radius: 6px;
-            
-            /* Position the tooltip text*/
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;      
-            left: 50%;         
-            margin-left: -60px;   
-
-
-            /* Fade in tooltip */
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-    }
-
-    div.tooltip:hover .tooltiptext {
-        visibility: visible;
-        opacity: 1;
-    }
-
     div#choose-fields{
         display:none;
         ul#bulk-ops-field-options {
@@ -194,5 +171,85 @@ input#create-operation[type="submit"] {
 }
 
 div.github-message {
+    margin-top:15px;
+    div#show-git-message {
+        color: blue;
+        text-decoration: underline;
+        cursor: pointer;
+        margin-bottom: 10px;
+    }
+    #git-message-div {
+        margin-bottom: 10px;
+    }
+}
+
+.show-with-results{ display:none;}
+
+ul#search-sample, ul#proxy-list{
+    list-style:none;
+    li {
+        margin: 10px;
+        max-height: 150px;
+        img{ 
+            height: 100%;
+            max-height: 150px;
+        }
+        div.work-meta{
+            display:inline-block;
+        }
+    }
+}
+
+ul#ignored-columns {
     clear:left;
+    list-style:none;
+    input {
+        display: inline !important;
+    }
+    button {
+        vertical-align: middle;
+    }
+}
+
+form#new-bulk-op {
+    div.bulk-ops-options.options-panel {
+        display:none;
+    }
+}
+
+a.bulk-ops-collapse-link {
+    font-size:1.2em;
+    margin-top:15px;
+    margin-bottom: 15px;
+}
+
+div#edit-options > div > div {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+div.checkbox-container {
+    clear:left;
+    input {
+        display: inline !important;
+    }
+    label {
+        float: none !important;
+    }
+}
+
+div#search-summary {
+    border: 1px dotted gray;
+    border-radius: 10px;
+    padding: 10px;
+    display:none;
+}
+
+p#count {
+    margin: 20px;
+    font-size: 1.2em;
+}
+
+hr.bulk-ops {
+    border-top: 1px dotted gray;
 }

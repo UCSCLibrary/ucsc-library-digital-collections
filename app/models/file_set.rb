@@ -29,16 +29,7 @@ class FileSet < ActiveFedora::Base
     [{ label: :thumbnail, 
        format: 'jpg', 
        size: '200x150>', 
-       url: derivative_url('thumbnail') },
-     { label: :medium, 
-       format: 'jpg', 
-       size: '500x500>', 
-       url: derivative_url('medium') },
-     { label: :large, 
-       format: 'jpg', 
-       size: '1000x1000>', 
-       url: derivative_url('large') }
-    ]
+       url: derivative_url('thumbnail') }]
   end
   
 #  delegate :derivative_url, to: :file_set_derivatives_service

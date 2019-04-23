@@ -22,6 +22,7 @@ class CatalogController < ApplicationController
 
   configure_blacklight do |config|
 
+    schema = ScoobySnacks::METADATA_SCHEMA
 
     config.oai = {
       provider: {
@@ -51,12 +52,7 @@ class CatalogController < ApplicationController
 
     config.show.tile_source_field = :content_metadata_image_iiif_info_ssm
     config.show.partials.insert(1, :openseadragon)
-    # default advanced config values
-    config.advanced_search ||= Blacklight::OpenStructWithHashAccess.new
-    # config.advanced_search[:qt] ||= 'advanced'
-    config.advanced_search[:url_key] ||= 'advanced'
-    config.advanced_search[:query_parser] ||= 'dismax'
-    config.advanced_search[:form_solr_parameters] ||= {}
+
 
     config.search_builder_class = CatalogSearchBuilder
 
@@ -64,7 +60,7 @@ class CatalogController < ApplicationController
     config.default_solr_params = {
       qt: "search",
       rows: 10,
-      qf: "title_tesim name_tesim"
+      qf: schema.default_text_search_solrized_field_names
     }
 
     # solr field configuration for document/show views
@@ -75,13 +71,6 @@ class CatalogController < ApplicationController
 
     # solr fields that will be treated as facets by the blacklight application
     #   The ordering of the field names is the order of the display
-#    config.add_facet_field solr_name("human_readable_type", :facetable), label: "Type", limit: 5
-#    config.add_facet_field solr_name("resource_type", :facetable), label: "Resource Type", limit: 5
-
-    # ----
-    # replaced by scoobysnacks
-    # ------
-
     ScoobySnacks::BlacklightConfiguration.add_facet_fields(config)
 
     # Have BL send all facet field names to Solr, which has been the default
@@ -92,29 +81,18 @@ class CatalogController < ApplicationController
     # solr fields to be displayed in the index (search results) view
     #   The ordering of the field names is the order of the display
 
-    # ----
-    # replaced by scoobysnacks
-    # Wait, this isn't working?
-    # ------
-
-    ScoobySnacks::BlacklightConfiguration.add_index_fields(config)
-    config.add_index_field solr_name("subject_label", :stored_searchable), label: "Subject"
-
-#    config.add_index_field solr_name("identifier", :stored_searchable), label: "Identifier", helper_method: :index_field_link, field_name: 'identifier'
-#    config.add_index_field solr_name("embargo_release_date", :stored_sortable, type: :date), label: "Embargo release date", helper_method: :human_readable_date
-#    config.add_index_field solr_name("lease_expiration_date", :stored_sortable, type: :date), label: "Lease expiration date", helper_method: :human_readable_date
-
+    ScoobySnacks::BlacklightConfiguration.add_search_result_display_fields(config)
+    config.add_index_field solr_name("subject"), label: "Subject"
+    config.add_index_field solr_name("titleDisplay"), label: "Title"
+    config.add_index_field solr_name("callNumber"), label: "Call Number"
 
     # solr fields to be displayed in the show (single result) view
     #   The ordering of the field names is the order of the display
 
-    # ----
-    # replaced by scoobysnacks
-    # ------
-
-
     ScoobySnacks::BlacklightConfiguration.add_show_fields(config)
-    config.add_show_field solr_name("subject_label", :stored_searchable), label: "Subject"
+    config.add_show_field solr_name("subject"), label: "Subject"
+    config.add_show_field solr_name("titleDisplay"), label: "Title"
+    config.add_show_field solr_name("callNumber"), label: "Call Number"
 
     # "fielded" search configuration. Used by pulldown among other places.
     # For supported keys in hash, see rdoc for Blacklight::SearchFields
@@ -144,11 +122,6 @@ class CatalogController < ApplicationController
         pf: title_name.to_s
       }
     end
-
-    # ----
-    # replaced by scoobysnacks
-    # ------
-
 
     # "sort results by" select (pulldown)
     # label in pulldown is followed by the name of the SOLR field to sort by and

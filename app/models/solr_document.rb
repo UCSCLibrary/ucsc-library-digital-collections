@@ -64,12 +64,11 @@ class SolrDocument
     "#{root_url}/records/#{record.id}"
   end
 
-  def display_image_path(record = self, size = "large")
-    record.thumbnail_path.gsub("thumbnail",size)
-  end
-
-  def display_image_url(record = self)
-    root_url + display_image_path(record)
+  def display_image_url(size: "800,")
+    return nil unless FileSet.exists?(id)
+    return nil unless image?
+    @original_file_id ||= FileSet.find(id).original_file.id
+    Hyrax.config.iiif_image_url_builder.call(@original_file_id,"nil",size)
   end
 
   def root_url

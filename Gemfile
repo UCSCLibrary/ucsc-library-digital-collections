@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.0.0', '>= 5.0.0.1'
+gem 'rails', '~> 5.0.0', '>= 5.0.7.2'
 # Use sqlite3 as the database for Active Record
 #gem 'sqlite3'
 gem 'mysql2'
@@ -29,6 +29,8 @@ gem 'redis', '~> 3.0'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
+gem 'active-fedora', '11.5.2'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
@@ -49,8 +51,7 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-#gem 'sufia', '7.3.0'
-gem 'hyrax', '2'
+gem 'hyrax', '2.4'
 
 group :development, :test do
   gem 'solr_wrapper', '>= 0.3'
@@ -81,7 +82,7 @@ gem 'browse-everything'
 #gem 'hydra-remote_identifier'
 
 gem 'samvera_hls', path: "/srv/samvera_hls/"
-gem 'scooby_snacks', path: "/srv/scooby_snacks/"
+gem 'scooby_snacks', '0.3.1'
 gem 'bulk_ops', path: "/srv/bulk_ops/"
 
 #gem 'ldfwrapper', github: 'boston-library/ldf-wrapper', branch: "master"
@@ -101,3 +102,5 @@ gem 'blacklight_oai_provider', '>= 6.0.0'
 gem 'riiif', '~> 1.1'
 
 gem "octokit", "~> 4.0"
+
+gem 'actionview', '>= 5.0.7.2'
