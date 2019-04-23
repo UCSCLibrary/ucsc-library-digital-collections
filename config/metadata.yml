@@ -41,9 +41,9 @@ fields:
     facet_limit: 5
     facet: false
     searchable: false
+    stored_in_solr: true
     full_text_searchable: false
     sortable: false
-    search_result_display: true
 
   title:
     definition: "The title of the resource."
@@ -53,7 +53,9 @@ fields:
     required: true
 #    multiple: false
     primary: true
-    display_group: primary
+    display_groups: 
+      - primary
+      - search_result
     index_itemprop: name
     work_title: true
     searchable: true
@@ -75,9 +77,10 @@ fields:
     usage_note: "All titles for this work other than the primary title should be listed here"
     label: "Variant Title"
     predicate: "DC:alternative"
-    display_group: primary
+    display_groups: 
+      - primary
+      - search_result
     searchable: true
-    search_result_display: true
     full_text_searchable: true
     OAI: DC:alternative
 
@@ -86,9 +89,10 @@ fields:
     usage_note: "This is a descriptive title not necessarily given by the creator that describes one or more related works"
     label: "Sub-Series Title"
     predicate: "BF2:subseriesStatement"
-    display_group: primary
+    display_groups: 
+      - primary
+      - search_result
     searchable: true
-    search_result_display: true
     full_text_searchable: true    
     OAI: DC:alternative
 
@@ -111,11 +115,12 @@ fields:
         subauthority: ulan
       - authority: local
         subauthority: agents
-    primary: true
     searchable: true
     full_text_searchable: true
     index_itemprop: creator
-    search_result_display: true
+    display_groups:
+      - primary
+      - search_result
     facet: true
     input: textbox_autosuggest
     OAI: DC:creator
@@ -133,7 +138,6 @@ fields:
         subauthority: agents
     searchable: true
     index_itemprop: contributor
-    display_group: secondary
     input: textbox_autosuggest
     OAI: DC:contributor
 
@@ -164,6 +168,9 @@ fields:
     label: Type
     searchable: true
     predicate: DC:type
+    display_groups: 
+      - secondary
+      - search_result
     vocabulary: 
       authority: local
       subauthority: dcmi_types
@@ -171,7 +178,7 @@ fields:
     input: dropdown
     OAI: DC:type
 #    multiple: false
-    search_result_display: true
+
    
   
   rightsStatement:
@@ -205,11 +212,12 @@ fields:
     definition: A related resource in which the described resource is physically or logically included.
     label: Series Title
     predicate: opaque:seriesName
-    display_group: primary
+    display_groups: 
+      - primary
+      - search_result
     facet: true
     searchable: true
     full_text_searchable: true
-    search_result_display: true
   
   source:
     definition: A related resource from which the described resource is derived. (Use to record previous publication information, i.e. the place of publication and publisher name for physical resources).
@@ -220,8 +228,9 @@ fields:
   staffNote:
     definition: Textual information about the resource. This property is used when no type is specified. 
     label: Staff Note
-    display_group: staff
+    display_group: admin_only
     predicate: MODS:note
+    stored_in_solr: false
   
   coordinates:
     definition: Cartographic data that identifies characteristics of the resource, such as coordinates, projection, etc.
@@ -242,11 +251,11 @@ fields:
     facet: true        
     searchable: true
     full_text_searchable: true
-    search_result_display: true
     input: textbox_autosuggest
     display_groups:
       - secondary
       - editor_primary
+      - search_result
     OAI: DC:subject
   
   subjectPlace:
@@ -263,10 +272,10 @@ fields:
     facet: true
     searchable: true
     input: textbox_autosuggest
-    search_result_display: true
     display_groups:
       - secondary
       - editor_primary
+      - search_result
     OAI: DC:subject
 
   
@@ -283,11 +292,11 @@ fields:
     facet: true
     searchable: true
     full_text_searchable: true
-    search_result_display: true
     input: textbox_autosuggest
     display_groups:
       - secondary
       - editor_primary
+      - search_result
     OAI: DC:subject
 
   
@@ -303,12 +312,12 @@ fields:
     facet: true
     searchable: true
     full_text_searchable: true
-    search_result_display: true
     index_itemprop: about
     input: textbox_autosuggest
     display_groups:
       - secondary
       - editor_primary
+      - search_result
     OAI: DC:subject
 
   
@@ -322,9 +331,9 @@ fields:
     input: date
     display_groups:
       - secondary
-      - editor_primary    
+      - editor_primary
+#      - search_result   
 #    OAI: DC:date
-#    search_result_display: true
 
   dateCreatedDisplay:
     definition: Textual representation of the creation date (temporary fix)
@@ -332,7 +341,7 @@ fields:
     display_groups:
       - secondary
       - editor_primary 
-    search_result_display: true
+      - search_result
     predicate: MODS:dateCreated
     OAI: DC:date
 
@@ -360,12 +369,13 @@ fields:
     definition: An account of the resource.
     label: Description
     predicate: DC:description
+    display_groups: 
+      - primary
+      - search_result
     index_itemprop: description
-    index_field: true
 #    index_helper_method: "iconify_auto_link"
     searchable: true
     full_text_serachable: true
-    search_result_display: true
     OAI: dc:description
 
   
@@ -396,10 +406,12 @@ fields:
     label: Keyword
     predicate: schema:keywords
     index_itemprop: keyword
+    display_groups:
+      - secondary
+      - search_result
     facet: true
     searchable: true
     full_text_searchable: true
-    search_result_display: true
   
   language:
     definition: A language of the resource.
@@ -450,7 +462,7 @@ fields:
   
   itemCallNumber:
     definition: Classification number in any scheme.
-    label: Call Number
+    label: Item Call Number
     predicate: BF2:classification
     display_groups:
       - secondary
@@ -458,7 +470,7 @@ fields:
 
   collectionCallNumber:
     definition: The identifier for the collection to which the resource belongs.
-    label: Call Number
+    label: Collection Call Number
     predicate: schema:identifier
     display_groups:
       - secondary
@@ -481,10 +493,9 @@ fields:
 
   boxFolder:
     definition: "A call number, shelf mark or similar label of an item. Format \"Box X, Folder Y\"."
-    label: "Call Number"
+    label: "Call Number (Box/Folder)"
     usage note: "Format: \"Box X, Folder Y\"."
     predicate:  purlOnt:holding#label
-
 
 #-------------------
 # RDF Namespaces
