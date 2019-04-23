@@ -85,8 +85,10 @@ class CatalogController < ApplicationController
     # solr fields to be displayed in the index (search results) view
     #   The ordering of the field names is the order of the display
 
-    ScoobySnacks::BlacklightConfiguration.add_index_fields(config)
+    ScoobySnacks::BlacklightConfiguration.add_search_result_display_fields(config)
     config.add_index_field solr_name("subject"), label: "Subject"
+    config.add_index_field solr_name("titleDisplay"), label: "Title"
+    config.add_index_field solr_name("callNumber"), label: "Call Number"
 
 #    config.add_index_field solr_name("identifier", :stored_searchable), label: "Identifier", helper_method: :index_field_link, field_name: 'identifier'
 #    config.add_index_field solr_name("embargo_release_date", :stored_sortable, type: :date), label: "Embargo release date", helper_method: :human_readable_date
@@ -98,6 +100,8 @@ class CatalogController < ApplicationController
 
     ScoobySnacks::BlacklightConfiguration.add_show_fields(config)
     config.add_show_field solr_name("subject"), label: "Subject"
+    config.add_show_field solr_name("titleDisplay"), label: "Title"
+    config.add_show_field solr_name("callNumber"), label: "Call Number"
 
     # "fielded" search configuration. Used by pulldown among other places.
     # For supported keys in hash, see rdoc for Blacklight::SearchFields
