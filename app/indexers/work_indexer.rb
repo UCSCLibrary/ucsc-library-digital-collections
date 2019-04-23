@@ -5,7 +5,9 @@ class WorkIndexer < Hyrax::WorkIndexer
   def generate_solr_document
     super.tap do |solr_doc|
       solr_doc = index_controlled_fields(solr_doc)
-      solr_doc = merge_subjects(solr_doc)
+      solr_doc = merge_fields(:subject, [:subjectTopic,:subjectName,:subjectTemporal,:subjectPlace], solr_doc)
+      solr_doc = merge_fields(:callNumber, [:itemCallNumber,:collectionCallNumber,:boxFolder], solr_doc)
+      solr_doc = merge_title_fields(:titleDisplay, solr_doc)
     end
   end
 
@@ -13,63 +15,89 @@ class WorkIndexer < Hyrax::WorkIndexer
     ScoobySnacks::METADATA_SCHEMA
   end
 
-  def merge_subjects(solr_doc)
-    subject_field_names = ["subjectTopic","subjectName","subjectTemporal","subjectPlace"]
-    subjects = []
-    subject_field_names.each do |subject_field_name| 
-      field = schema.get_field(subject_field_name)
+  def merge_fields(merged_field_name, fields_to_merge, solr_doc)
+    merged_field_contents = []
+    fields_to_merge.each do |field_name|
+      field = schema.get_field(field_name.to_s)
       if (indexed_field_contents = solr_doc[field.solr_search_name])
-        subjects.concat(indexed_field_contents)
+        merged_field_contents.concat(indexed_field_contents)
       end
     end
-    solr_doc[Solrizer.solr_name('subject')] = subjects
-    solr_doc
+    solr_doc[Solrizer.solr_name(merged_field_name)] = merged_field_contents
+    return solr_doc
+  end
+
+  def merge_title_fields(merged_field_name, solr_doc)
+    # If there is a value in the Title or TitleAlternative fields 
+    # this is not blank or a variant of "untitled", return that
+    titles = Array(solr_doc[schema.get_field(:title).solr_name]) + Array(solr_doc[schema.get_field(:titleAlternative).solr_name])
+    titles.each{ |title| return title unless (title.blank? or title.downcase.include?("untitled") ) }
+    # Otherwise, look to the subseries and series, and merge them if we have both
+    subseries = solr_doc[schema.get_field(:subseries).solr_name]
+    series = solr_doc[schema.get_field(:subseries).solr_name]
+    title = ""
+    unless subseries.blank?
+      title = subseries.first
+    end
+    unless series.blank?
+      title += ' - ' unless title.blank?
+      title += series.first
+    end
+    return title unless title.blank?
+    
   end
 
   def index_controlled_fields(solr_doc)
     return unless object.persisted?
 
     schema.controlled_field_names.each do |field_name|
-      Rails.logger.info "indexing controlled field: #{field_name}"
       field = schema.get_field(field_name)
 
       # Clear old values from the solr document
       solr_doc.delete field.solr_search_name
-      solr_doc[field.solr_facet_name] ||= [] if field.facet?
-      solr_doc[field.solr_sort_name] ||= [] if field.sort?
-      label = ""
+      solr_doc.delete field.solr_facet_name if field.facet?
+      solr_doc.delete field.solr_sort_name if field.sort?
 
       # Wrap single objects in arrays if necessary (though it shouldn't be)
       object[field_name] = Array(object[field_name]) if !object[field_name].kind_of?(Array)
 
       # Loop through the different values provided for this property
       object[field_name].each do |val|
-        solr_doc[field.solr_search_name] ||= []
-        solr_doc[field.solr_facet_name] ||= [] if field.facet?
-        solr_doc[field.solr_sort_name] ||= [] if field.sort?
         label = ""
         case val
         when ActiveTriples::Resource
           # We need to fetch the string from an external vocabulary
           label = self.class.fetch_remote_label(val)
-          Rails.logger.info "fetched label #{label} from url #{val.id}"
           # skip indexing this one if we can't retrieve the label
           next unless label
         when String
           # This is just a normal string (from a legacy model, etc)
-          # Set the label index to the string for now
-          # In the future, we will create a new entry in 
-          # the appropriate local vocab
+          # Go ahead and create a new entry in the appropriate local vocab, if there is one
+          auth_name = field.vocabularies.find{|vocab| vocab['authority'].to_s.downcase == 'local'}['subauthority']
+          mintLocalAuthUrl(auth_name, val) if auth_name.present?
           label = val
         else
           raise ArgumentError, "Can't handle #{val.class}"
         end
-        solr_doc[field.solr_search_name] << label
-        solr_doc[field.solr_facet_name] << label if field.facet?
-        solr_doc[field.solr_sort_name] << label if field.sort?
+        (solr_doc[field.solr_search_name] ||= []) << label
+        (solr_doc[field.solr_facet_name] ||= [])  << label if field.facet?
+        (solr_doc[field.solr_sort_name] ||= [])  << label if field.sort?
       end
     end
     solr_doc
+  end
+
+  def mintLocalAuthUrl(auth_name, value) 
+    id = value.parameterize
+    auth = Qa::LocalAuthority.find_or_create_by(name: auth_name)
+    entry = Qa::LocalAuthorityEntry.create(local_authority: auth,
+                                           label: value,
+                                           uri: id)
+    return localIdToUrl(id,auth_name)
+  end
+
+  def localIdToUrl(id,auth_name) 
+    return "https://digitalcollections.library.ucsc.edu/authorities/show/local/#{auth_name}/#{id}"
   end
 
   def self.fetch_remote_label(url)
@@ -102,8 +130,6 @@ class WorkIndexer < Hyrax::WorkIndexer
           uri = URI(url)
         end
 
-        Rails.logger.info "Requesting uri: #{uri.to_s}"
-
         label = JSON.parse(Net::HTTP.get_response(uri).body)["label"]
 
       # handle geonames specially
@@ -120,6 +146,7 @@ class WorkIndexer < Hyrax::WorkIndexer
         label = resource.fetch(headers: { 'Accept'.freeze => default_accept_header }).rdf_label.first.to_s
       end
       
+      Rails.logger.info "Adding buffer entry - label: #{label}, url:  #{uri.to_s}"
       LdBuffer.create(url: url, label: label)
 
       # Delete oldest records if we have more than 5K in the buffer
