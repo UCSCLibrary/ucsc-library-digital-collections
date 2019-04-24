@@ -143,7 +143,12 @@ class WorkIndexer < Hyrax::WorkIndexer
       # fetch from other normal authorities
       else
         resource ||= ActiveTriples::Resource.new(url)
-        label = resource.fetch(headers: { 'Accept'.freeze => default_accept_header }).rdf_label.first.to_s
+        labels = resource.fetch(headers: { 'Accept'.freeze => default_accept_header }).rdf_label
+        if labels.count == 1
+          label = labels.first
+        else
+          label = labels.find{|label| label.language.to_s =~ /en/ }.to_s
+        end
       end
       
       Rails.logger.info "Adding buffer entry - label: #{label}, url:  #{uri.to_s}"
