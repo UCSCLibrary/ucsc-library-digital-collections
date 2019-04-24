@@ -172,8 +172,8 @@ fields:
       - secondary
       - search_result
     vocabulary: 
-      authority: local
-      subauthority: dcmi_types
+      - authority: local
+        subauthority: dcmi_types
     facet: true
     input: dropdown
     OAI: DC:type
@@ -486,8 +486,8 @@ fields:
     definition: "A genre term designates the style or technique of the intellectual content of textual materials or, for graphic materials, aspects such as vantage point, intended purpose, characteristics of the creator, publication status, or method  of representation. Does not capture aboutness. Ex. lectures; underground dance music."
     label: Genre
     vocabulary:
-      authority: local
-      subauthority: genres
+      - authority: local
+        subauthority: genres
     predicate:  MODS:subjectGenre
     input: dropdown
 
