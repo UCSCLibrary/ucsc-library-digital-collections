@@ -551,7 +551,7 @@ GEM
     noid-rails (3.0.1)
       actionpack (>= 5.0.0, < 6)
       noid (~> 0.9)
-    nokogiri (1.10.2)
+    nokogiri (1.10.3)
       mini_portile2 (~> 2.4.0)
     nokogumbo (1.5.0)
       nokogiri
@@ -621,7 +621,7 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.10.0)
       ffi (~> 1.0)
-    rdf (3.0.10)
+    rdf (3.0.12)
       hamster (~> 3.0)
       link_header (~> 0.0, >= 0.0.8)
     rdf-aggregate-repo (2.2.1)
