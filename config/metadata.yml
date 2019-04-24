@@ -179,8 +179,6 @@ fields:
     OAI: DC:type
 #    multiple: false
 
-   
-  
   rightsStatement:
     definition: Information about rights held in and over the resource expressed in general terms (i.e. boilerplate statements).
     label: Copyright Statement
