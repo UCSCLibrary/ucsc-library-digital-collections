@@ -59,11 +59,9 @@ export default class MultiControlledVocab extends FieldManager {
       return new Dropdown(this._maxIndex(),this.element, this.paramKey);
       break;
     case "textbox_autosuggest":
-      console.log("creating new textbox autosuggest")
       return new TextboxAutosuggest(this._maxIndex(),this.element, this.paramKey);
       break;
     default: 
-      console.log("creating new textbox autosuggest from default case")
       return new TextboxAutosuggest(this._maxIndex(),this.element, this.paramKey);
       break;
     }
