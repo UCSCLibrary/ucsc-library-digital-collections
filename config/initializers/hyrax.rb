@@ -77,7 +77,12 @@ Hyrax.config do |config|
   # config.noid_minter_class = ActiveFedora::Noid::Minter::Db
 
   # Store identifier minter's state in a file for later replayability
-  config.minter_statefile = '/srv/ucsc_sufia/minter-state'
+
+  if Rails.env.development? or Rails.env.test?
+    config.minter_statefile = '/srv/minter-state'
+  else
+    config.minter_statefile = '/srv/ucsc_sufia/minter-state'
+  end
 
   # Prefix for Redis keys
   # config.redis_namespace = "hyrax"
@@ -265,6 +270,7 @@ Qa::Authorities::Local.register_subauthority('places', 'Ucsc::Authorities::Local
 Qa::Authorities::Local.register_subauthority('time_periods', 'Ucsc::Authorities::Local::TableBasedAuthority')
 Qa::Authorities::Local.register_subauthority('topics', 'Ucsc::Authorities::Local::TableBasedAuthority')
 Qa::Authorities::Local.register_subauthority('formats', 'Ucsc::Authorities::Local::TableBasedAuthority')
+Qa::Authorities::Local.register_subauthority('genres', 'Ucsc::Authorities::Local::TableBasedAuthority')
 
 Qa::Authorities::Geonames.username = 'UCSC_Library_DI'
 
