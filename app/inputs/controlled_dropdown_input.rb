@@ -37,4 +37,12 @@ class ControlledDropdownInput < ControlledVocabularyInput
     return rv
   end
 
+  private
+
+  def collection
+    @collection ||= super
+    @collection = [ActiveTriples::Resource.new] if @collection.blank?
+    return @collection
+  end
+
 end
