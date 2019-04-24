@@ -4,6 +4,7 @@ class WorkIndexer < Hyrax::WorkIndexer
 
   def generate_solr_document
     super.tap do |solr_doc|
+      return solr_doc unless solr_doc['human_readable_type_tesim'] == "Work"
       solr_doc = index_controlled_fields(solr_doc)
       solr_doc = merge_fields(:subject, [:subjectTopic,:subjectName,:subjectTemporal,:subjectPlace], solr_doc)
       solr_doc = merge_fields(:callNumber, [:itemCallNumber,:collectionCallNumber,:boxFolder], solr_doc)
@@ -65,19 +66,24 @@ class WorkIndexer < Hyrax::WorkIndexer
       object[field_name].each do |val|
         label = ""
         case val
-        when ActiveTriples::Resource
+        when ActiveTriples::Resource, URI::regexp
           # We need to fetch the string from an external vocabulary
           label = self.class.fetch_remote_label(val)
           # skip indexing this one if we can't retrieve the label
           next unless label
         when String
-          # This is just a normal string (from a legacy model, etc)
-          # Go ahead and create a new entry in the appropriate local vocab, if there is one
-          auth_name = field.vocabularies.find{|vocab| vocab['authority'].to_s.downcase == 'local'}['subauthority']
-          mintLocalAuthUrl(auth_name, val) if auth_name.present?
-          label = val
+            # This is just a normal string (from a legacy model, etc)
+            # Go ahead and create a new entry in the appropriate local vocab, if there is one
+          if (local_vocab = field.vocabularies.find{|vocab| vocab['authority'].to_s.downcase == 'local'}).is_a(Hash)
+            auth_name = local_vocab['subauthority']
+            mintLocalAuthUrl(auth_name, val) if auth_name.present?
+            label = val
+          else
+            #If have a random string and no local vocab, just move on for now
+            next
+          end
         else
-          raise ArgumentError, "Can't handle #{val.class}"
+          raise ArgumentError, "Can't handle #{val.class} as a metadata term"
         end
         (solr_doc[field.solr_search_name] ||= []) << label
         (solr_doc[field.solr_facet_name] ||= [])  << label if field.facet?
