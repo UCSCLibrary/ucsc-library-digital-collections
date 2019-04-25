@@ -5,8 +5,9 @@ RSpec.describe WorkIndexer do
   describe "The work indexer class" do
 
     it "can find the label for LOC urls" do
-      expect(described_class.fetch_remote_label("http://id.loc.gov/authorities/subjects/sh85021262")).to eq("Cats")
+      expect(described_class.fetch_remote_label("http://id.loc.gov/authorities/subjects/sh85021262").to_s).to eq("Cats")
       expect(described_class.fetch_remote_label("http://id.loc.gov/vocabulary/iso639-2/eng")).to eq("English")
+      expect(described_class.fetch_remote_label("info:lc/authorities/names/n79059545")).to eq("University of California, Santa Cruz")
     end
 
     it "can find the label for a Geonames url" do
@@ -62,6 +63,7 @@ RSpec.describe WorkIndexer do
     let(:indexer){described_class.new(wrk)}
 
     it "combines the subject fields" do
+
       expect(wrk.to_solr["subject_tesim"].count).to eq(2)
     end
 
