@@ -19,9 +19,13 @@ class Work < ActiveFedora::Base
       props = Array(props) if !props.kind_of?(Array)
       props.each do |node|
         next unless node.respond_to?('id')
-        next unless node.id.starts_with?('info:lc')
-        attributes << {id: fix_loc_id(node.id) }
-        attributes << {id: node.id, _destroy: true}
+        if node.id.starts_with?('info:lc')
+          attributes << {id: fix_loc_id(node.id) }
+          attributes << {id: node.id, _destroy: true}
+        elsif node.id.include?("vocab.getty.edu") && node.id.include?("/page/")
+          attributes << {id: fix_getty_id(node.id) }
+          attributes << {id: node.id, _destroy: true}
+        end
       end
       self.send(field_name.to_s+"_attributes=",attributes) unless attributes.empty?
     end
@@ -35,6 +39,10 @@ class Work < ActiveFedora::Base
     else
       "http://id.loc.gov/authorities/#{split[-2]}/#{split[-1]}"
     end
+  end
+
+  def fix_getty_id getty_id
+    getty_id.gsub('/page/','/')
   end
 
 end
