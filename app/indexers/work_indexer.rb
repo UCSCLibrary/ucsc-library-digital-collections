@@ -4,7 +4,7 @@ class WorkIndexer < Hyrax::WorkIndexer
 
   def generate_solr_document
     super.tap do |solr_doc|
-      return solr_doc unless solr_doc['human_readable_type_tesim'] == "Work"
+      return solr_doc unless solr_doc['has_model_ssim'].include?("Work") or solr_doc['generic_type_sim'].include?("Work") or (solr_doc["human_readable_type_tesim"] == "Work") or (solr_doc["human_readable_type_ssim"] == "Work")
       solr_doc = index_controlled_fields(solr_doc)
       solr_doc = merge_fields(:subject, [:subjectTopic,:subjectName,:subjectTemporal,:subjectPlace], solr_doc)
       solr_doc = merge_fields(:callNumber, [:itemCallNumber,:collectionCallNumber,:boxFolder], solr_doc)
@@ -55,6 +55,7 @@ class WorkIndexer < Hyrax::WorkIndexer
       field = schema.get_field(field_name)
 
       # Clear old values from the solr document
+      solr_doc.delete Solrizer.solr_name(field_name)
       solr_doc.delete field.solr_search_name
       solr_doc.delete field.solr_facet_name if field.facet?
       solr_doc.delete field.solr_sort_name if field.sort?
@@ -106,36 +107,39 @@ class WorkIndexer < Hyrax::WorkIndexer
     return "https://digitalcollections.library.ucsc.edu/authorities/show/local/#{auth_name}/#{id}"
   end
 
+  def self.destroy_buffer(url)
+    LdBuffer.where(url: url).each{|buffer| buffer.destroy }
+  end
+
   def self.fetch_remote_label(url)
     if url.is_a? ActiveTriples::Resource
       resource = url
       url = resource.id 
     end
-    
+
     # if it's buffered, return the buffer
     if (buffer = LdBuffer.find_by(url: url))
       if (Time.now - buffer.updated_at).seconds > 1.year
-        buffer.destroy
+        LdBuffer.where(url: url).each{|buffer| buffer.destroy }
       else
         return buffer.label
       end
     end
 
     begin
+
       if url.to_s.include?("ucsc.edu")
-        Rails.logger.info "handling as ucsc resource"
-        # TODO replace hard-coded URLs
         # Swap for correct hostname in non-prod environments
-        case ENV['RAILS_ENV']
+        case Rails.env
         when 'staging'
           (uri = URI(url.gsub("digitalcollections.library","digitalcollections-staging.library").gsub("https://","http://")))
         when 'development', 'test'
-#          (uri = URI(url.gsub("digitalcollections.library.ucsc.edu","localhost"))).port=(3000) 
           uri = URI(url.gsub("https://digitalcollections.library.ucsc.edu","http://localhost"))
+          uri.port = 3000
         else
           uri = URI(url)
         end
-
+    
         label = JSON.parse(Net::HTTP.get_response(uri).body)["label"]
 
       # handle geonames specially
@@ -148,7 +152,11 @@ class WorkIndexer < Hyrax::WorkIndexer
 
       # fetch from other normal authorities
       else
-        resource ||= ActiveTriples::Resource.new(url)
+        # Smoothly handle some common syntax issues
+        cleaned_url = url
+        cleaned_url.gsub!("info:lc","http://id.loc.gov") if (url[0..6] == "info:lc")
+        cleaned_url.gsub!("/page/","/") if url.include?("vocab.getty.edu")
+        resource ||= ActiveTriples::Resource.new(cleaned_url)
         labels = resource.fetch(headers: { 'Accept'.freeze => default_accept_header }).rdf_label
         if labels.count == 1
           label = labels.first
@@ -176,9 +184,9 @@ class WorkIndexer < Hyrax::WorkIndexer
         end
       end
 
-      raise Exception if label == url
+      raise Exception if label.to_s == url.to_s
 
-      return label
+      return label.to_s
 
     rescue Exception => e
       # IOError could result from a 500 error on the remote server
