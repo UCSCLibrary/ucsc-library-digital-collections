@@ -104,3 +104,5 @@ gem 'riiif', '~> 1.1'
 gem "octokit", "~> 4.0"
 
 gem 'actionview', '>= 5.0.7.2'
+
+gem 'bundler', '>= 2'
