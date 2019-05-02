@@ -13,7 +13,7 @@ RSpec.describe ScoobySnacks::Field do
       end
 
       it "has a solr name consistent with being stored but not searchable or faceted" do 
-        expect(field.solr_name).to match(/\A#{field.name}_tesm?\z/)
+        expect(field.solr_name).to match(/\A#{field.name}_ssm?\z/)
       end
 
       it "returns default values for all boolean attributes" do 
@@ -75,10 +75,10 @@ RSpec.describe ScoobySnacks::Field do
     end
     
     context "that's indexed as a date" do
-      let(:raw_array) {default_attributes.deep_merge({"data_type" => "date"})}
+      let(:raw_array) {default_attributes.deep_merge({"data_type" => "date", "searchable" => "true"})}
       let(:field) {described_class.new("testFieldname",raw_array)}
       it "sets the solr name properly" do
-        expect(field.solr_name).to eq("#{field.name}_dsm")
+        expect(field.solr_names).to include("#{field.name}_dtsim")
       end
     end
     
@@ -95,7 +95,7 @@ RSpec.describe ScoobySnacks::Field do
       let(:field) {described_class.new("testFieldname",raw_array)}
       
       it "sets up the index property and solr name properly" do
-        expect(field.solr_facet_name).to eq("#{field.name}_ssim")
+        expect(field.solr_facet_name).to eq("#{field.name}_sim")
         expect(field.facet?).to be(true)
       end
     end 

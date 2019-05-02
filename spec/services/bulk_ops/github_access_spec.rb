@@ -3,6 +3,10 @@ require 'rails_helper'
 RSpec.describe BulkOps::GithubAccess do
   let!(:usr) { create(:user) }
   let!(:git) {described_class.new("rspec test branch")}
+  
+  after(:all) do
+    User.all.each{|usr| usr.destroy}
+  end
 
   before(:each) do
     git.create_branch!

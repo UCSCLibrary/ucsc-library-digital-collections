@@ -42,13 +42,18 @@ RSpec.describe WorkIndexer do
 
     it "retrieves buffered labels" do
       url = "httq://NOTAREALURL/THISISFAKE"
-      LdBuffer.create(url: url, label: "Sample Label")
+      buff = LdBuffer.create(url: url, label: "Sample Label")
       expect(described_class.fetch_remote_label(url)).to eq("Sample Label")
+      buff.destroy
     end    
 
   end
   
   describe "An indexer for a work" do
+
+    after(:all) do
+      Work.all.each{|wrk| wrk.destroy}
+    end
 
     let(:work_properties){{title: ["untitled"],
                            depositor: usr.email,
@@ -58,12 +63,11 @@ RSpec.describe WorkIndexer do
                            subjectName_attributes: [{id: "info:lc/authorities/names/n79059545"}],
                            collectionCallNumber: ["1"], 
                            itemCallNumber: ["2"] }}
-    let(:usr) {User.create(email:"test user email")}
+    let(:usr) {User.find_by_email('test-email') || User.create(email:"test-email")}
     let!(:wrk){Work.create(work_properties)}
     let(:indexer){described_class.new(wrk)}
 
     it "combines the subject fields" do
-
       expect(wrk.to_solr["subject_tesim"].count).to eq(2)
     end
 
@@ -72,7 +76,7 @@ RSpec.describe WorkIndexer do
     end
 
     it "combines the title fields" do
-      title = wrk.to_solr["titleDisplay"].first
+      title = wrk.to_solr["titleDisplay_tesim"].first
       expect(title).to start_with("Men walking dogs in parks")
       expect(title).to end_with("Canine Insanity")
     end

@@ -2,12 +2,16 @@ require 'rails_helper'
 
 RSpec.describe Work do
 
-  before do
-    @usr = User.create!({email:"test@test.test",password:"testpass"})
-#    @wrk = Work.new({title: "test title",
+  before(:all) do
+    @usr = User.find_by_email('test-email') || User.create(email:"test-email")
     @wrk = Work.new({title: ["test title"],
                      depositor: @usr.email})
   end
+  
+  after(:all) do
+    @wrk.destroy
+  end
+
 
   it "can be saved with simple metadata" do
     @wrk.save

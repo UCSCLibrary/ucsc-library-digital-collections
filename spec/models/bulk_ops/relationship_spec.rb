@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe BulkOps::Relationship do
   
   describe "A relationship" do
-    let(:usr) {User.create(email:"test user email")}
+    let(:usr) {User.find_by_email('test-email') || User.create(email:"test-email")}
     let(:wrk) {Work.create(depositor: usr.email, title:["test title"])}
     let(:wrk2) {Work.create(depositor: usr.email, title:["Another test title"])}
     let(:wrk3) {Work.create(depositor: usr.email, title:["A third test title"])}
@@ -16,6 +16,10 @@ RSpec.describe BulkOps::Relationship do
                                                  relationship_type: "parent",
                                                  object_identifier: wrk2.id,
                                                  status: "new"})}
+
+    after(:all) do
+      Work.all.each{|wrk| wrk.destroy}
+    end
 
     it "can find an object work by id" do
       relationship.identifier_type = "id"

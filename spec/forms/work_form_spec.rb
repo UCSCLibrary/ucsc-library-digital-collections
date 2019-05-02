@@ -3,14 +3,14 @@ require 'rails_helper'
 RSpec.describe Hyrax::WorkForm do
  
   before(:all)  do 
-    @usr = User.create(email:"test user email")
+    @usr = User.find_by_email('test-email') || User.create(email:"test-email")
     @wrk = Work.create(depositor: @usr.email, title:["test title"])
     @frm = described_class.new(@wrk, nil, nil) 
   end
-#  let(:usr) {User.create(email:"test user email")}
-#  let(:wrk){Work.create(work_properties)}
-#  let(:work_properties){{title: ["untitled"],depositor: usr.email}}
-#  let(:frm){described_class.new(wrk, nil, nil) }
+
+  after(:all)  do 
+    @wrk.destroy
+  end
 
   describe "#required_fields" do
     subject { @frm.required_fields }

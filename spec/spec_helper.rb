@@ -14,9 +14,36 @@
 
 require 'factory_bot_rails'
 
+class JsonStrategy
+  def initialize
+    @strategy = FactoryBot.strategy_by_name(:create).new
+  end
+
+  delegate :association, to: :@strategy
+
+  def result(evaluation)
+    @strategy.result(evaluation).to_json
+  end
+end
+
+FactoryBot.register_strategy(:json, JsonStrategy)
+FactoryBot.definition_file_paths = [File.expand_path("../factories", __FILE__)]
+#FactoryBot.find_definitions
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
+
+  config.after(:all) do
+    Work.all.each{|wrk| wrk.destroy}
+    Collection.all.each{|col| col.destroy}
+    User.all.each{|usr| usr.destroy}
+  end
+
+  config.before :suite do
+#    DatabaseCleaner.clean_with(:truncation)
+    # Noid minting causes extra LDP requests which slow the test suite.
+    Hyrax.config.enable_noids = false
+  end
 
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
