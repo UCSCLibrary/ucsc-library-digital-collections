@@ -261,10 +261,12 @@ fields:
     label: Subject (Place)
     predicate: DC:spatial
     vocabularies: 
+      - authority: geonames
+      - subauthority:
       - authority: loc
-        subauthority: geographic_areas
-      - authority: usgs
-        subauthority: gnis
+        subauthority: geographicAreas
+#      - authority: usgs
+#        subauthority: gnis
       - authority: local
         subauthority: places
     facet: true
