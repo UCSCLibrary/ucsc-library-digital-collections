@@ -1,12 +1,14 @@
 require 'nokogiri'
 require 'open-uri'
+require 'linkeddata'
 class WorkIndexer < Hyrax::WorkIndexer
 
   def generate_solr_document
     super.tap do |solr_doc|
       return solr_doc unless solr_doc['has_model_ssim'].include?("Work") or solr_doc['generic_type_sim'].include?("Work") or (solr_doc["human_readable_type_tesim"] == "Work") or (solr_doc["human_readable_type_ssim"] == "Work")
       solr_doc = index_controlled_fields(solr_doc)
-      solr_doc = merge_fields(:subject, [:subjectTopic,:subjectName,:subjectTemporal,:subjectPlace], solr_doc)
+      solr_doc = merge_fields(:subject, [:subjectTopic,:subjectName,:subjectTemporal,:subjectPlace], solr_doc, :stored_searchable)
+      solr_doc = merge_fields(:subject, [:subjectTopic,:subjectName,:subjectTemporal,:subjectPlace], solr_doc, :facetable)
       solr_doc = merge_fields(:callNumber, [:itemCallNumber,:collectionCallNumber,:boxFolder], solr_doc)
       solr_doc = merge_title_fields(:titleDisplay, solr_doc)
     end
@@ -16,15 +18,16 @@ class WorkIndexer < Hyrax::WorkIndexer
     ScoobySnacks::METADATA_SCHEMA
   end
 
-  def merge_fields(merged_field_name, fields_to_merge, solr_doc)
+  def merge_fields(merged_field_name, fields_to_merge, solr_doc, solr_descriptor = :stored_searchable)
     merged_field_contents = []
     fields_to_merge.each do |field_name|
       field = schema.get_field(field_name.to_s)
-      if (indexed_field_contents = solr_doc[field.solr_search_name])
+      if (indexed_field_contents = solr_doc[field.solr_name])
         merged_field_contents.concat(indexed_field_contents)
       end
     end
-    solr_doc[Solrizer.solr_name(merged_field_name)] = merged_field_contents
+    solr_name = Solrizer.solr_name(merged_field_name, solr_descriptor)
+    solr_doc[solr_name] = merged_field_contents unless merged_field_contents.blank?
     return solr_doc
   end
 
@@ -32,36 +35,39 @@ class WorkIndexer < Hyrax::WorkIndexer
     # If there is a value in the Title or TitleAlternative fields 
     # this is not blank or a variant of "untitled", return that
     titles = Array(solr_doc[schema.get_field(:title).solr_name]) + Array(solr_doc[schema.get_field(:titleAlternative).solr_name])
-    titles.each{ |title| return title unless (title.blank? or title.downcase.include?("untitled") ) }
-    # Otherwise, look to the subseries and series, and merge them if we have both
-    subseries = solr_doc[schema.get_field(:subseries).solr_name]
-    series = solr_doc[schema.get_field(:subseries).solr_name]
-    title = ""
-    unless subseries.blank?
-      title = subseries.first
-    end
-    unless series.blank?
-      title += ' - ' unless title.blank?
-      title += series.first
-    end
-    return title unless title.blank?
+    titles = titles.select{|existing_title| existing_title.present? && !existing_title.downcase.include?("untitled")}
     
+    # As a backup, look to the subseries and series, and merge them if we have both
+    subseries = solr_doc[schema.get_field(:subseries).solr_name]
+    series = solr_doc[schema.get_field(:series).solr_name]
+    
+    if subseries.present? && series.present? && (subseries.count==1) && (series.count==1)
+      titles << "#{subseries.first} - #{series.first}"
+    else
+      titles.concat subseries if subseries.present?
+      titles.concat series if series.present?
+    end
+
+    solr_doc[Solrizer.solr_name(merged_field_name)] = titles if titles.present?
+    return solr_doc
   end
 
   def index_controlled_fields(solr_doc)
-    return unless object.persisted?
+    return solr_doc unless object.persisted?
 
     schema.controlled_field_names.each do |field_name|
       field = schema.get_field(field_name)
 
       # Clear old values from the solr document
       solr_doc.delete Solrizer.solr_name(field_name)
-      solr_doc.delete field.solr_search_name
-      solr_doc.delete field.solr_facet_name if field.facet?
-      solr_doc.delete field.solr_sort_name if field.sort?
+      solr_doc.delete Solrizer.solr_name(field_name.to_sym)
+      field.solr_names.each do |solr_name| 
+        solr_doc.delete(solr_name)
+        solr_doc.delete(solr_name.to_sym)
+      end
 
       # Wrap single objects in arrays if necessary (though it shouldn't be)
-      object[field_name] = Array(object[field_name]) if !object[field_name].kind_of?(Array)
+#      object[field_name] = Array.wrap(object[field_name])
 
       # Loop through the different values provided for this property
       object[field_name].each do |val|
@@ -73,9 +79,9 @@ class WorkIndexer < Hyrax::WorkIndexer
           # skip indexing this one if we can't retrieve the label
           next unless label
         when String
-            # This is just a normal string (from a legacy model, etc)
-            # Go ahead and create a new entry in the appropriate local vocab, if there is one
-          if (local_vocab = field.vocabularies.find{|vocab| vocab['authority'].to_s.downcase == 'local'}).is_a(Hash)
+          # This is just a normal string (from a legacy model, etc)
+          # Go ahead and create a new entry in the appropriate local vocab, if there is one
+          if (local_vocab = field.vocabularies.find{|vocab| vocab['authority'].to_s.downcase == 'local'}).is_a?(Hash)
             auth_name = local_vocab['subauthority']
             mintLocalAuthUrl(auth_name, val) if auth_name.present?
             label = val
@@ -86,9 +92,9 @@ class WorkIndexer < Hyrax::WorkIndexer
         else
           raise ArgumentError, "Can't handle #{val.class} as a metadata term"
         end
-        (solr_doc[field.solr_search_name] ||= []) << label
-        (solr_doc[field.solr_facet_name] ||= [])  << label if field.facet?
-        (solr_doc[field.solr_sort_name] ||= [])  << label if field.sort?
+        field.solr_names.each do |solr_name| 
+          (solr_doc[solr_name] ||= []) << label
+        end
       end
     end
     solr_doc
@@ -139,7 +145,7 @@ class WorkIndexer < Hyrax::WorkIndexer
         else
           uri = URI(url)
         end
-    
+        
         label = JSON.parse(Net::HTTP.get_response(uri).body)["label"]
 
       # handle geonames specially
@@ -153,7 +159,7 @@ class WorkIndexer < Hyrax::WorkIndexer
       # fetch from other normal authorities
       else
         # Smoothly handle some common syntax issues
-        cleaned_url = url
+        cleaned_url = url.dup
         cleaned_url.gsub!("info:lc","http://id.loc.gov") if (url[0..6] == "info:lc")
         cleaned_url.gsub!("/page/","/") if url.include?("vocab.getty.edu")
         resource ||= ActiveTriples::Resource.new(cleaned_url)
@@ -195,9 +201,9 @@ class WorkIndexer < Hyrax::WorkIndexer
       return false
     end
   end
-    
+  
   def self.default_accept_header
     RDF::Util::File::HttpAdapter.default_accept_header.sub(/, \*\/\*;q=0\.1\Z/, '')
   end
-    
+  
 end
