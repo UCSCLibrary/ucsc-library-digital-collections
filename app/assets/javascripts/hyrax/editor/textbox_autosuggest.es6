@@ -15,10 +15,8 @@ export default class TextboxAutosuggest extends ControlledVocabInput {
     let textbox = $('input.multi-text-field', element)
     textbox.focus()
 
-    let authSelect = $('select.auth-select',element)
-
-    //link the text box to the authority
-    new LinkedData(textbox,authSelect.val())
+    //link the text box to the primary authority
+    new LinkedData(textbox,this.primary_vocabulary_endpoint)
 
     //when you make a selection from the autosuggest, hide the authority control and mark it selected
     textbox.on('change',function(){
@@ -27,17 +25,18 @@ export default class TextboxAutosuggest extends ControlledVocabInput {
     })
 
     // When you select a new authority, link the text box to the new authority
-    authSelect.change(function(){
-      textbox.select2("destroy")
-      textbox.off("change")
-      new LinkedData(textbox,$(this).val())
-      textbox.on('change',function(){
-        $(this).siblings('div.auth-select-div').hide()
+    if (this.multiple_vocabularies) {
+      $('select.auth-select',element).change(function(){
+        textbox.select2("destroy")
+        textbox.off("change")
+        new LinkedData(textbox,$(this).val())
+        textbox.on('change',function(){
+          $(this).siblings('div.auth-select-div').hide()
+        })
       })
-    })
-
+    }
     super._addBehaviorsToInput(element)
   }
-
-
 }
+
+
