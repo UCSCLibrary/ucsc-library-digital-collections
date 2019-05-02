@@ -28,8 +28,16 @@ module UcscRecordsHelper
       Rails.logger.debug "here are some vocabularies:"
       Rails.logger.debug vocabularies.inspect
       
-      authority_options = vocabularies.reject{|voc| voc['authority'].nil? || voc['subauthority'].nil?}.map{|voc| [voc['authority'].titleize+" "+voc['subauthority'].titleize, 
-                                                                                                                  "/authorities/search/#{voc['authority']}/#{voc['subauthority']}"]} 
+
+      authority_options = vocabularies.reject{|voc| voc['authority'].nil?}.map do |voc| 
+        voc_name = voc['authority'].titleize
+        voc_url = "/authorities/search/#{voc['authority']}"
+        if voc['subauthority'].present?
+          voc_url += "/#{voc['subauthority']}" 
+          voc_name += " #{voc['subauthority'].titleize}"
+        end
+        [voc_name,voc_url]
+      end
 
       data = {'autocomplete-url' => authority_options.first.last,
               'autocomplete' => field_name,
