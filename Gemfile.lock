@@ -19,12 +19,6 @@ GIT
       tilt (~> 2.0)
 
 PATH
-  remote: /srv/bulk_ops
-  specs:
-    bulk_ops (0.1.2)
-      rails (~> 5)
-
-PATH
   remote: /srv/samvera_hls
   specs:
     samvera_hls (0.2.0)
@@ -172,6 +166,8 @@ GEM
       sass-rails
       signet
     builder (3.2.3)
+    bulk_ops (0.1.4)
+      rails (~> 5)
     byebug (11.0.1)
     cancancan (1.17.0)
     capistrano (3.11.0)
@@ -858,7 +854,7 @@ DEPENDENCIES
   blacklight_advanced_search (~> 6.0)
   blacklight_oai_provider (>= 6.0.0)
   browse-everything
-  bulk_ops!
+  bulk_ops (= 0.1.4)
   bundler (>= 2)
   byebug
   capistrano
