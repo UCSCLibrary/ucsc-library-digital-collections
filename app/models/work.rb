@@ -34,10 +34,10 @@ class Work < ActiveFedora::Base
 
   def fix_loc_id loc_id
     split = loc_id.split('/')
-    if split[-2] == "authorities"
-      "http://id.loc.gov/authorities/#{split[-1]}"
+    if (split[-2] == "authorities") or (split[-2] == "vocabulary")
+      "http://id.loc.gov/#{split[-2]}/#{split[-1]}"
     else
-      "http://id.loc.gov/authorities/#{split[-2]}/#{split[-1]}"
+      "http://id.loc.gov/#{split[-3]}/#{split[-2]}/#{split[-1]}"
     end
   end
 
