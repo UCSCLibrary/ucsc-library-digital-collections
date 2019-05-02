@@ -82,7 +82,8 @@ class CatalogController < ApplicationController
     #   The ordering of the field names is the order of the display
 
     ScoobySnacks::BlacklightConfiguration.add_search_result_display_fields(config)
-    config.add_index_field solr_name("subject"), label: "Subject"
+    config.add_index_field solr_name("subject", :stored_searchable), label: "Subject"
+    config.add_index_field solr_name("subject", :facetable), label: "Subject"
     config.add_index_field solr_name("titleDisplay"), label: "Title"
     config.add_index_field solr_name("callNumber"), label: "Call Number"
 
@@ -90,7 +91,7 @@ class CatalogController < ApplicationController
     #   The ordering of the field names is the order of the display
 
     ScoobySnacks::BlacklightConfiguration.add_show_fields(config)
-    config.add_show_field solr_name("subject"), label: "Subject"
+    config.add_show_field solr_name("subject", :stored_searchable), label: "Subject"
     config.add_show_field solr_name("titleDisplay"), label: "Title"
     config.add_show_field solr_name("callNumber"), label: "Call Number"
 
@@ -114,7 +115,7 @@ class CatalogController < ApplicationController
 
     ScoobySnacks::BlacklightConfiguration.add_search_fields(config)
 
-    config.add_search_field('all_fields', label: 'All Fields', include_in_advanced_search: false) do |field|
+    config.add_search_field('all_fields', label: 'All Fields', include_in_advanced_search: true) do |field|
       all_names = config.show_fields.values.map(&:field).join(" ")
       title_name = solr_name("title", :stored_searchable)
       field.solr_parameters = {
