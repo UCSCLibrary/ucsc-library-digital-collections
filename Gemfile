@@ -62,9 +62,8 @@ gem 'devise'
 gem 'devise-guests', '~> 0.5'
 
 group :development, :test do
-  gem 'fcrepo_wrapper'
-  gem 'rspec-rails'
-  gem 'factory_bot_rails'
+  gem 'rspec-rails', :require => false
+  gem 'factory_bot_rails', :require => false
   gem 'rails-controller-testing'
   gem 'capybara'
 end
@@ -82,7 +81,12 @@ gem 'browse-everything'
 #gem 'hydra-remote_identifier'
 
 gem 'samvera_hls', path: "/srv/samvera_hls/"
-gem 'scooby_snacks', '0.3.2'
+
+# Uncomment this when developing scooby snacks
+#gem 'scooby_snacks', path: '/srv/scooby_snacks/'
+gem 'scooby_snacks', '0.3.3'
+
+
 gem 'bulk_ops', path: "/srv/bulk_ops/"
 
 #gem 'ldfwrapper', github: 'boston-library/ldf-wrapper', branch: "master"
