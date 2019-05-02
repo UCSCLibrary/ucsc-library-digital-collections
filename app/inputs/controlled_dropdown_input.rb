@@ -29,8 +29,17 @@ class ControlledDropdownInput < ControlledVocabularyInput
     vocab = field.vocabularies.first 
     vocab = {"authority" => "local", "subauthority" => vocab} if vocab.is_a? String 
     options['aria-labelledby'] = label_id
-    
+
+    # Just use the subauthority name (only local vocabs are supported by this service)
     collection =  Hyrax::QaSelectService.new(vocab["subauthority"]).select_all_options
+    # 'select_all_options' may return urls or local ids depending on context. Fix that here.
+    collection = collection.map do |entry| 
+      if (entry.last =~ URI::regexp)
+        entry
+      else
+        [entry.first,local_id_to_url(entry.last, vocab["subauthority"])] 
+      end
+    end
 
     rv = @builder.collection_select(attribute_name,collection,:last,:first,options, options)
     rv = rv + destroy_widget(attribute_name, index)
@@ -38,6 +47,10 @@ class ControlledDropdownInput < ControlledVocabularyInput
   end
 
   private
+
+  def local_id_to_url(id,auth_name) 
+    return "https://digitalcollections.library.ucsc.edu/authorities/show/local/#{auth_name}/#{id}"
+  end
 
   def collection
     @collection ||= super
