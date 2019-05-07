@@ -99,6 +99,17 @@ body {
         max-width: 100%
     }
 
+    img.primary-media.raw-image {
+        max-height: 600px;
+    }
+
+    label#primary-image-label {
+            display: block;
+            margin: 2px 0 10px 10px;
+            font-size: 0.9em;
+            font-style: italic;
+    }
+
     //    padding-top:0px !important;
 
     nav#masthead {
@@ -125,6 +136,34 @@ body {
         ul.navbar-nav li > a {
             color:$ucsc-gold;
         }
+    }
+
+    div.searchbar-right form#search-form-header div.form-group {
+        margin-right: 10px;
+    }
+    
+    form#search-form-header div.form-group {
+        select#search_field {
+            width: 22%;
+            height: 2.5em;
+        }
+
+        div.input-group {
+            width: 50%;
+            float: right;
+        }
+        a#advanced-search-link {
+            float: right;
+            clear: right;
+        }
+    }
+
+    div#appliedParams.constraints-container {
+        margin-bottom: 5px;
+    }
+
+    div#new-targeted-search.row {
+        margin-bottom: 20px
     }
     
     div.form-group.textbox_autosuggest {
