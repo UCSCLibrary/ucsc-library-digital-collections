@@ -14,7 +14,7 @@ module Ucsc
     end
 
     def universal_viewer?
-      true
+      "click"
     end
 
     def display_image_url

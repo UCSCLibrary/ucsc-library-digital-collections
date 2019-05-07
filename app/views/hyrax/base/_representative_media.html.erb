@@ -1,24 +1,25 @@
 <% if presenter.representative_id.present? && presenter.representative_presenter.present? %>
-    <% if defined?(viewer) && (viewer == "click")  %>
-        <%= PulUvRails::UniversalViewer.script_tag %>
-        <div class="viewer-wrapper primary-media" style="display:none">
-            <div class="uv viewer" data-config="/uv_config.json" data-uri="<%= main_app.polymorphic_path [main_app, :manifest, presenter] %>"></div>
-        </div>
-        <%= image_tag @presenter.display_image_url, class: "raw-image primary-media",role: "presentation"%>
-        <script type="javascript">
-         $(div.primary-media).click(function(){
-             $('this').toggle();
-             $('this').siblings('div.primary-media').toggle();
-         });
-        </script>
-    <% elsif defined?(viewer) && viewer %>
-
+    <% if (defined?(viewer) && viewer.to_s == "true") || params['universal_viewer'] %>
         <%= PulUvRails::UniversalViewer.script_tag %>
         <div class="viewer-wrapper">
-            <div class="uv viewer" data-uri="<%= main_app.polymorphic_path [main_app, :manifest, presenter] %>"></div>
+            <div class="uv viewer" data-config="/uv_config.json" data-uri="<%= main_app.polymorphic_path [main_app, :manifest, presenter] %>"></div>
         </div>
+    <% elsif defined?(viewer) && (viewer == "click")  %>
+        <a href="<%= request.path%>?locale=<%=params['locale']%>&universal_viewer=true" > 
+            <%= image_tag(@presenter.display_image_url, class: "raw-image primary-media",role: "presentation") %>
+            <label id="primary-image-label">Click image to load zoomable viewer</label>
+        </a>
+        <script type="javascript">
+         console.log('Does this even run?');
+         $(document).ready(function() {
+             console.log('Loading js after page load I guess?');
+             $('div.raw-image-wrapper').click(function(){
+                 console.log('is this working?');
+             });
+         });
+        </script>
     <% else %>
-        <%= media_display presenter.representative_presenter %>
+        <%= image_tag @presenter.display_image_url, class: "primary-media",role: "presentation"%>
     <% end %>
     <%# else %>
     <%#= image_tag 'default.png', class: "canonical-image" %>
