@@ -3,37 +3,33 @@
 <%= render 'shared/citations' %>
 
 <div itemscope itemtype="http://schema.org/CreativeWork" class="row">
-  <div class="col-xs-12">
-    <header>
-      <%= render 'work_title', presenter: @presenter %>
-    </header>
-  </div>
+    <div class="col-xs-12">
+        <header>
+            <%= render 'work_title', presenter: @presenter %>
+        </header>
+    </div>
 
-  <div class="col-sm-8">
-    <%# = render 'work_description', presenter: @presenter %>
-     <% if @presenter.universal_viewer? %>
-         <%= render 'primary_media', presenter: @presenter, viewer: true, av_files: (av_files = @presenter.all_av_files) %>
-     <% else %>
-         <%= render 'primary_media', presenter: @presenter, viewer: false, av_files: (av_files = @presenter.all_av_files) %>
-     <% end %>
-    <%= render 'metadata', presenter: @presenter %>
-    <%= render 'relationships', presenter: @presenter %>
-  </div>
-  <div class="col-sm-4">
-    <%= render "show_actions", presenter: @presenter %>
-    <%# Use the fully qualified path to avoid RSpec error: translation missing: en.hyrax.base.show.html.erb.last_modified %>
-    <%= render 'representative_media', presenter: @presenter unless av_files.any? or @presenter.image? %>
-    <%= render 'social_media' %>
-    <%= render 'permalink', presenter: @presenter %>
-  </div>
+    <div class="col-sm-8">
+        <%# = render 'work_description', presenter: @presenter %>
+        <%= render 'primary_media', presenter: @presenter, viewer: @presenter.universal_viewer?, av_files: (av_files = @presenter.all_av_files) %>
+        <%= render 'metadata', presenter: @presenter %>
+        <%= render 'relationships', presenter: @presenter %>
+    </div>
+    <div class="col-sm-4">
+        <%= render "show_actions", presenter: @presenter %>
+        <%# Use the fully qualified path to avoid RSpec error: translation missing: en.hyrax.base.show.html.erb.last_modified %>
+        <%= render 'representative_media', presenter: @presenter unless av_files.any? or @presenter.image? %>
+        <%= render 'social_media' %>
+        <%= render 'permalink', presenter: @presenter %>
+    </div>
 </div>
 
 <div class="row">
-  <div class="col-sm-12">
-    <%= render 'items', presenter: @presenter %>
-    <%= render 'workflow_actions_widget', presenter: @presenter %>
-    <%# TODO: we may consider adding these partials in the future %>
-    <%#= render 'sharing_with', presenter: @presenter %>
-    <%#= render 'user_activity', presenter: @presenter %>
-  </div>
+    <div class="col-sm-12">
+        <%= render 'items', presenter: @presenter %>
+        <%= render 'workflow_actions_widget', presenter: @presenter %>
+        <%# TODO: we may consider adding these partials in the future %>
+        <%#= render 'sharing_with', presenter: @presenter %>
+        <%#= render 'user_activity', presenter: @presenter %>
+    </div>
 </div>
