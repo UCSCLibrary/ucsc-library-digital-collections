@@ -1,32 +1,10 @@
 
 <% isPlaylist = file_set_ids.count > 1 %>
-<% playlistOptions =  ',
-                         "autoClosePlaylist": true,
-                         "currentMessage": "now playing: ",
-                         "features": ["playpause", 
-                                      "current", 
-                                      "progress", 
-                                      "duration", 
-                                      "tracks", 
-                                      "volume", 
-                                      "fullscreen",
-                                      "playlist",
-                                      "prevtrack", 
-                                      "nexttrack", 
-                                      "shuffle", 
-                                      "loop"]'%>
 <audio controls="controls"
-       class="hls_media mejs__player"
-       preload="auto"
-       data-mejsoptions='{"pluginPath": "/mejs/",
-                         "showPlaylist": <%= isPlaylist ? "true" : "false" %>, 
-                         "audioWidth": "100%"<%= playlistOptions if isPlaylist %>}'>
-
-    <% i = 1 %>
-    <% file_set_ids.each do |file_set_id| %>
-        <!-- <source src="<%= File.join(request.base_url,"file_set",file_set_id,"hls.m3u8") %>" title="<%= "Track #{i}" %>" type="application/x-mpegurl"/>  -->        
-        <source src="<%= hyrax.download_path(file_set, file: 'mp3') %>" title="<%= "Track #{i}" %>" type="audio/mpeg"/>
-        <% i += 1 %>
+       class="hls_media <%= isPlaylist ? "playlist" : 'single' %>"
+       preload="auto">
+    <% file_set_ids.map{|id| SolrDocument.find(id) }.each_with_index do |file_set, i| %>
+        <source src="<%= hyrax.download_path(file_set, file: 'mp3') %>" title="<%= "Track #{i + 1}" %>" type="audio/mpeg"/>
     <%end %>
         Your browser does not support the audio tag.
 </audio>
