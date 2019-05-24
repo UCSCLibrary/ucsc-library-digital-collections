@@ -18,12 +18,6 @@ GIT
       rack-protection (= 2.0.5)
       tilt (~> 2.0)
 
-PATH
-  remote: /srv/samvera_hls
-  specs:
-    samvera_hls (0.2.0)
-      rails (>= 4.2.6)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -728,6 +722,8 @@ GEM
     rubyzip (1.2.2)
     samvera-nesting_indexer (2.0.0)
       dry-equalizer
+    samvera_hls (0.3.0)
+      rails (>= 4.2.6)
     sass (3.7.4)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
@@ -883,7 +879,7 @@ DEPENDENCIES
   riiif (~> 1.1)
   rsolr (~> 1.0)
   rspec-rails
-  samvera_hls!
+  samvera_hls (= 0.3.0)
   sass-rails (~> 5.0)
   scooby_snacks (= 0.3.3)
   sidekiq

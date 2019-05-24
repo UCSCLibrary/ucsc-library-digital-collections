@@ -80,7 +80,9 @@ gem 'hydra-role-management'
 gem 'browse-everything'
 #gem 'hydra-remote_identifier'
 
-gem 'samvera_hls', path: "/srv/samvera_hls/"
+# Uncomment this when developing samvera_hls
+#gem 'samvera_hls', path: "/srv/samvera_hls/"
+gem 'samvera_hls', '0.3.0'
 
 # Uncomment this when developing scooby snacks
 #gem 'scooby_snacks', path: '/srv/scooby_snacks/'
