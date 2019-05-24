@@ -1,8 +1,8 @@
-require 'config/environment'
 namespace :hycruz  do 
-  task :link_stream => :environment do
+  task :link_stream do
     on roles(:app), in: :sequence, wait: 5 do
       print "Linking stream folder..."
+      print "Rails.env = #{Rasil.env}"
       execute "ln -s /dams_derivatives/#{Rails.env} #{current_path}/public/stream"
     end
   end
