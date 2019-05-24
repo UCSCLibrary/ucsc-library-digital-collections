@@ -1,22 +1,3 @@
-#-------------------
-# Other Schema Files
-#-------------------
-# This section specifies other configuration files that contain
-# metadata information. Each other metadata file may contain 
-# any information that would be valid in this file. Schema information
-# from all files is merged together.
-# When possible, information from all files is combined. For example, 
-# if a property is defined in one file, it cannot be un-defined in 
-# another file, though more options can be added.
-# Some options associated with properties can be defined in one file
-# and overwritten by another. Options like this include 'required'
-# and 'multiple'. 
-# Other options must be defined only once per property
-# and cannot be overwritten. These include "predicate" and "definition". 
-
-
-# NO OTHER SCHEMA FILES USED 
-
 
 #-------------------
 # Property Settings
