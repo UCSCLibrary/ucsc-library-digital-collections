@@ -25,13 +25,11 @@ Rails.application.routes.draw do
   mount SamveraHls::Engine => '/'
   mount BulkOps::Engine => '/'
 
-#  mount Sidekiq::Web => '/sidekiq' unless Rails.env.production?
   mount Sidekiq::Web => '/sidekiq' 
 
-#  soon! so soon...
-#  mount Riiif::Engine => 'images', as: :riiif if Hyrax.config.iiif_image_server?
-  
   mount Blacklight::Engine => '/'
+  mount BlacklightAdvancedSearch::Engine => '/'
+
   
   concern :searchable, Blacklight::Routes::Searchable.new
 

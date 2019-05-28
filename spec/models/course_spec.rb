@@ -4,10 +4,14 @@ require 'rails_helper'
 
 RSpec.describe Course do
 
-  before do
-    @usr = User.create!({email:"test@test.test",password:"testpass"})
+  before(:all) do
+    @usr = User.create(email:"test user email")
     @crs = Course.new({title: ["test title"],
                      depositor: @usr.email})
+  end
+
+  after(:all) do
+    @crs.destroy
   end
 
   it "can be saved with simple metadata" do

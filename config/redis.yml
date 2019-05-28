@@ -7,6 +7,7 @@ test:
   port: 6379
 production:
   host: digitalcollections-ingests.library.ucsc.edu
+  port: 6379
 staging:
   host: digitalcollections-ingests.library.ucsc.edu
   port: 6380

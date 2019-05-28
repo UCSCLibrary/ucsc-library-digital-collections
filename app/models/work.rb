@@ -13,28 +13,36 @@ class Work < ActiveFedora::Base
 #  self.human_readable_type = 'Work'
 
   def save *args
-    controlled_properties.each do |property|
+    ::ScoobySnacks::METADATA_SCHEMA.controlled_field_names.each do |field_name|
       attributes = []
-      props =  self.send(property)
+      props =  self.send(field_name)
       props = Array(props) if !props.kind_of?(Array)
       props.each do |node|
         next unless node.respond_to?('id')
-        next unless node.id.starts_with?('info:lc')
-        attributes << {id: fix_loc_id(node.id) }
-        attributes << {id: node.id, _destroy: true}
+        if node.id.starts_with?('info:lc')
+          attributes << {id: fix_loc_id(node.id) }
+          attributes << {id: node.id, _destroy: true}
+        elsif node.id.include?("vocab.getty.edu") && node.id.include?("/page/")
+          attributes << {id: fix_getty_id(node.id) }
+          attributes << {id: node.id, _destroy: true}
+        end
       end
-      self.send(property.to_s+"_attributes=",attributes) unless attributes.empty?
+      self.send(field_name.to_s+"_attributes=",attributes) unless attributes.empty?
     end
     super *args
   end
 
   def fix_loc_id loc_id
     split = loc_id.split('/')
-    if split[-2] == "authorities"
-      "http://id.loc.gov/authorities/#{split[-1]}"
+    if (split[-2] == "authorities") or (split[-2] == "vocabulary")
+      "http://id.loc.gov/#{split[-2]}/#{split[-1]}"
     else
-      "http://id.loc.gov/authorities/#{split[-2]}/#{split[-1]}"
+      "http://id.loc.gov/#{split[-3]}/#{split[-2]}/#{split[-1]}"
     end
+  end
+
+  def fix_getty_id getty_id
+    getty_id.gsub('/page/','/')
   end
 
 end

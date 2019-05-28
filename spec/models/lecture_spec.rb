@@ -4,7 +4,7 @@ RSpec.describe Lecture do
 
 
   before do
-    @usr = User.create!({email:"test@test.test",password:"testpass"})
+    @usr =  User.find_by_email('test-email') || User.create(email:"test-email")
     @lec = Lecture.new({title: ["test title"],
                      depositor: @usr.email})
   end

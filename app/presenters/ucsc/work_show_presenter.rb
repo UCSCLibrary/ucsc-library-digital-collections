@@ -2,7 +2,7 @@ module Ucsc
   class WorkShowPresenter < Hyrax::WorkShowPresenter
     include ScoobySnacks::PresenterBehavior
 
-    delegate :file_set_ids, :display_image_url,:display_image_path, to: :solr_document
+    delegate :file_set_ids, to: :solr_document
 
     delegate :member_av_files, :ordered_work_ids, to: :member_presenter_factory
 
@@ -14,8 +14,18 @@ module Ucsc
     end
 
     def universal_viewer?
-      # disable universal viewer for now
-      false
+      "click"
+    end
+
+    def display_image_url
+      if representative_id
+        return nil unless current_ability.can?(:read, representative_id)
+        representative_image = SolrDocument.find(representative_id)
+        return nil unless representative_image.image?
+        representative_image.display_image_url
+      elsif solr_document.image?
+        solr_document.display_image_url
+      end
     end
 
     def all_av_files
@@ -24,7 +34,7 @@ module Ucsc
 
     def image?
       return false unless representative_id
-      solr_document.resourceType_label.each do |type|
+      solr_document.resourceType.each do |type|
         return true if type.to_s.downcase.include? "image"
       end
       return solr_document.image?

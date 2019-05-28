@@ -1,11 +1,8 @@
 import RelationshipsControl from 'hyrax/relationships/control'
 import SaveWorkControl from 'hyrax/save_work/save_work_control'
 import AdminSetWidget from 'hyrax/editor/admin_set_widget'
-import ControlledVocabulary from 'hyrax/editor/controlled_vocabulary'
-import MultiControlledVocabulary from 'hyrax/editor/multi_controlled_vocabulary'
-import Autocomplete from 'hyrax/autocomplete'
-import AuthoritySelect from 'hyrax/authority_select'
-
+import MultiControlledVocab from 'hyrax/editor/controlled_vocab'
+import Dropdown from 'hyrax/editor/dropdown'
 
 export default class {
   /**
@@ -16,8 +13,11 @@ export default class {
     this.element = element
     this.paramKey = element.data('paramKey') // The work type
     this.adminSetWidget = new AdminSetWidget(element.find('select[id$="_admin_set_id"]'))
-    this.sharingTabElement = $('#tab-share')
-    this.autocomplete()
+    this.sharingTabElement = $('#tab-share') 
+  }
+
+  init() {
+    this.fixNewElements()
     this.controlledVocabularies()
     this.sharingTab()
     this.relationshipsControl()
@@ -26,33 +26,39 @@ export default class {
   }
 
   // Autocomplete fields for the work edit form 
-  autocomplete() {
-      var autocomplete = new Autocomplete()
-
-      $('[data-autocomplete]').each((function() {
-        var elem = $(this)
-        autocomplete.setup(elem, elem.data('autocomplete'), elem.data('autocompleteUrl'))
-      }))
-
-      $('.multi_value.form-group').manage_fields({
-        add: function(e, element) {
-          var elem = $(element)
-          // Don't mark an added element as readonly even if previous element was
-          // Enable before initializing, as otherwise LinkedData fields remain disabled
-          elem.attr('readonly', false)
-          autocomplete.setup(elem, elem.data('autocomplete'), elem.data('autocompleteUrl'))
-        }
-      })
+  fixNewElements() {
+    $('.multi_value.form-group').manage_fields({
+      add: function(e, element) {
+        var elem = $(element)
+        elem.attr('readonly', false)
+      }
+    })
   }
 
   // initialize any controlled vocabulary widgets
   controlledVocabularies() {
-    this.element.find('.controlled_vocabulary.form-group').each((_idx, controlled_field) =>
-      new ControlledVocabulary(controlled_field, this.paramKey)
+    this.element.find('.textbox_autosuggest.form-group').each((_idx, controlled_field) =>
+      new MultiControlledVocab(controlled_field, this.paramKey)
     )
-    this.element.find('.multi_controlled_vocabulary.form-group').each((_idx, controlled_field) =>
-      new MultiControlledVocabulary(controlled_field, this.paramKey)
-    )
+    this.element.find('.controlled_dropdown.form-group select').each((_idx, controlled_dropdown) =>
+      $(controlled_dropdown).change(function(){
+        console.log("thing changed")
+        var destructor = $(this).siblings("input")
+        // If the new value is the same as the one stored in the DB
+        if(this.value == $(this).data("stored")) {
+          // disable the destructor and remove the element name so it won't submit
+          destructor.val("");
+          $(this).attr("name","")
+        } else {
+          // If we've picked something new, enable the desctructor and name the element
+          destructor.val("true")
+          if (this.value == "")
+            $(this).attr("name","")
+          else
+            $(this).attr("name", $(this).data("name"))
+
+        }
+      }))
   }
 
   // Display the sharing tab if they select an admin set that permits sharing
@@ -71,10 +77,23 @@ export default class {
   }
 
   relationshipsControl() {
-      new RelationshipsControl(this.element.find('[data-behavior="child-relationships"]'),
-                               'work_members_attributes',
-                               'tmpl-child-work')
+    let collections = this.element.find('[data-behavior="collection-relationships"]')
+    collections.each((_idx, element) =>
+                     new RelationshipsControl(element,
+                                              collections.data('members'),
+                                              collections.data('paramKey'),
+                                              'member_of_collections_attributes',
+                                              'tmpl-collection').init())
+
+    let works = this.element.find('[data-behavior="child-relationships"]')
+    works.each((_idx, element) =>
+               new RelationshipsControl(element,
+                                        works.data('members'),
+                                        works.data('paramKey'),
+                                        'work_members_attributes',
+                                        'tmpl-child-work').init())
   }
+
 
   saveWorkControl() {
       new SaveWorkControl(this.element.find("#form-progress"), this.adminSetWidget)

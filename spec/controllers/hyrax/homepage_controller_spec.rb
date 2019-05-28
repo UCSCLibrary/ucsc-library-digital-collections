@@ -12,6 +12,12 @@ RSpec.describe Hyrax::HomepageController, type: :controller do
       sign_in user
     end
 
+    after(:all) do
+      Work.all.each{|wrk| wrk.destroy}
+      User.all.each{|usr| usr.destroy}
+      FeaturedWork.all.each{|fwrk| fwrk.destroy}
+    end
+    
     context 'with existing featured researcher' do
       let!(:frodo) { ContentBlock.create!(name: ContentBlock::NAME_REGISTRY[:researcher], value: 'Frodo Baggins', created_at: Time.zone.now) }
 
@@ -19,6 +25,7 @@ RSpec.describe Hyrax::HomepageController, type: :controller do
         get :index
         expect(response).to be_success
         expect(assigns(:featured_researcher)).to eq frodo
+        frodo.destroy
       end
     end
 

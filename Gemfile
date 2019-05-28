@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.0.0', '>= 5.0.0.1'
+gem 'rails', '~> 5.0.0', '>= 5.0.7.2'
 # Use sqlite3 as the database for Active Record
 #gem 'sqlite3'
 gem 'mysql2'
@@ -62,9 +62,8 @@ gem 'devise'
 gem 'devise-guests', '~> 0.5'
 
 group :development, :test do
-  gem 'fcrepo_wrapper'
-  gem 'rspec-rails'
-  gem 'factory_bot_rails'
+  gem 'rspec-rails', :require => false
+  gem 'factory_bot_rails', :require => false
   gem 'rails-controller-testing'
   gem 'capybara'
 end
@@ -81,9 +80,17 @@ gem 'hydra-role-management'
 gem 'browse-everything'
 #gem 'hydra-remote_identifier'
 
-gem 'samvera_hls', path: "/srv/samvera_hls/"
-gem 'scooby_snacks', path: "/srv/scooby_snacks/"
-gem 'bulk_ops', path: "/srv/bulk_ops/"
+# Uncomment this when developing samvera_hls
+#gem 'samvera_hls', path: "/srv/samvera_hls/"
+gem 'samvera_hls', '0.3.1'
+
+# Uncomment this when developing scooby snacks
+#gem 'scooby_snacks', path: '/srv/scooby_snacks/'
+gem 'scooby_snacks', '0.3.3'
+
+# Uncomment this when developing Bulk Ops
+#gem 'bulk_ops', path: "/srv/bulk_ops/"
+gem 'bulk_ops', '0.1.4'
 
 #gem 'ldfwrapper', github: 'boston-library/ldf-wrapper', branch: "master"
 
@@ -102,3 +109,7 @@ gem 'blacklight_oai_provider', '>= 6.0.0'
 gem 'riiif', '~> 1.1'
 
 gem "octokit", "~> 4.0"
+
+gem 'actionview', '>= 5.0.7.2'
+
+gem 'bundler', '>= 2'

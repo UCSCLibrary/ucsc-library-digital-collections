@@ -9,6 +9,11 @@ RSpec.describe BulkOps::OperationsController, type: :controller do
   let(:work) { create(:work, title: ['Titacular'], with_admin_set: true) }
   let(:solr_work) { SolrDocument.find(work.id) }
 
+  after(:all) do
+    Work.all.each{|wrk| wrk.destroy}
+    User.all.each{|usr| usr.destroy}
+  end
+
   before do  
     admin = Role.find_by(name: "admin") || Role.create(name: "admin")
     admin.users << user

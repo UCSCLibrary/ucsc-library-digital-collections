@@ -11,13 +11,11 @@ RSpec.describe BulkOps::Operation do
     let!(:proxy1) {draft.work_proxies.create(work_id: wrk1.id,status:"new")}
     let!(:proxy2) {draft.work_proxies.create(work_id: wrk2.id,status:"new")}
 
+    after(:all) do
+      Work.all.each{|wrk| wrk.destroy}
+    end
+
     before(:each)  do 
-#      @usr = User.create(email:"test user email")
-#      @draft = described_class.create(name: "rspec test branch", user_id: @usr.id, stage: "draft", operation_type: "update", status: "new")
-#      wrk1 = Work.create(depositor: @usr.email, title:["test title"])
-#      wrk2 = Work.create(depositor: @usr.email, title:["test title"])
-#      @draft.work_proxies.create(work_id: wrk1.id,status:"new")
-#      @draft.work_proxies.create(work_id: wrk2.id,status:"new")    
       draft.create_branch
     end
     after(:each) {draft.delete_branch}

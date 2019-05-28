@@ -1,18 +1,22 @@
 require 'rails_helper'
 
 RSpec.describe BulkOps::SearchBuilder do
-  let(:me) {build :user}
+  let(:usr) {User.find_by_email('test-email') || User.create(email:"test-email")}
   let(:context) { double("context", 
                          blacklight_config: CatalogController.blacklight_config,
                          current_ability: Ability.new(me),
                          current_user: me) }
   let(:solr_params) { { fq: [] } }
-  let(:work) {Work.create(title:["test work"], depositor: me.email)}
+  let(:work) {Work.create(title:["test work"], depositor: usr.email)}
 #  let(:collection) { Collection.create!(title:["test_collection"], depositor: me.email)}
   let(:collection) { build(:collection, id: '12345', title:["test_collection"]) }
   let(:builder) { described_class.new(scope: context, collection: collection) }
   let(:repository) {CatalogController.new.repository}
 
+  after(:all) do
+    Work.all.each{|wrk| wrk.destroy}
+  end
+  
   describe ".default_processor_chain" do
     subject { builder.default_processor_chain }
 

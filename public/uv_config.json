@@ -1,0 +1,14 @@
+{
+  "modules":
+  {
+    "footerPanel":
+    {
+      "options":
+      {
+        "downloadEnabled": false,
+        "preserveViewport": true
+      }
+    }
+  }
+}
+ 

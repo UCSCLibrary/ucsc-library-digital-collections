@@ -2,13 +2,16 @@ require 'rails_helper'
 
 RSpec.describe Work do
 
-  
-  before do
-    @usr = User.create!({email:"test@test.test",password:"testpass"})
-#    @wrk = Work.new({title: "test title",
+  before(:all) do
+    @usr = User.find_by_email('test-email') || User.create(email:"test-email")
     @wrk = Work.new({title: ["test title"],
                      depositor: @usr.email})
   end
+  
+  after(:all) do
+    @wrk.destroy
+  end
+
 
   it "can be saved with simple metadata" do
     @wrk.save
@@ -32,44 +35,6 @@ RSpec.describe Work do
 #    expect !@wrk.description.empty?
   end
 
-  context "when accepting controlled metadata" do
-
-    def test_fetch_label(url) 
-      @wrk.creator_attributes= [{id: url}]
-      @wrk.save
-      creator = @wrk.creator.first
-      expect !creator.nil?
-      creator.fetch
-      expect !creator.rdf_label.blank?
-      expect creator.rdf_label != creator.id 
-    end
-
-    it "can fetch LOC names from URLs" do
-      test_fetch_label("http://id.loc.gov/authorities/names/n80095119")
-    end
-
-    it "can fetch LOC subjects from URLs" do
-      test_fetch_label("http://id.loc.gov/authorities/subjects/sh85133890")
-    end
-
-    it "can fetch LOC subjects from old crappy URLs" do
-      test_fetch_label("info:lc/authorities/sh85133890")
-    end
-
-    it "can fetch LOC MARC languages" do
-      test_fetch_label("http://id.loc.gov/vocabulary/languages/eng")
-    end
-
-    it "can fetch Getty ULAN from URLs" do
-      test_fetch_label("http://vocab.getty.edu/ulan/500112651")
-    end
-
-    it "can fetch Getty AAT from URLs" do
-      test_fetch_label("http://vocab.getty.edu/aat/300001667")
-    end
-
-  end
-
   it "persists edited metadata after saving" do
     expect !@wrk.description.nil?
     expect !@wrk.accessionNumber.nil?
@@ -77,6 +42,14 @@ RSpec.describe Work do
     expect !@wrk.dateCreated.nil?
     expect !@wrk.language.nil?
     expect !@wrk.keyword.nil?
+  end
+
+  it "has all metadata properties defined as methods" do
+    expect(@wrk.methods).to include(*ScoobySnacks::METADATA_SCHEMA.fields.keys.map{|key| key.to_sym})
+  end
+
+  it "has controlled properties properly defined" do
+    expect(@wrk.methods).to include(*ScoobySnacks::METADATA_SCHEMA.controlled_field_names.map{|field_name| "#{field_name}_attributes=".to_sym })
   end
 
 end

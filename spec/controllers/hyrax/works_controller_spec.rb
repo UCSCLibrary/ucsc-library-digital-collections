@@ -9,6 +9,11 @@ RSpec.describe Hyrax::WorksController do
   let(:user) { create(:user) }
   let(:work) { create(:work) }
 
+  after(:all) do
+    Work.all.each{|wrk| wrk.destroy}
+    User.all.each{|usr| usr.destroy}
+  end
+
   before do 
     sign_in user 
   end
@@ -22,7 +27,7 @@ RSpec.describe Hyrax::WorksController do
         expect(assigns[:form].depositor).to eq user.user_key
         expect(assigns[:curation_concern]).to be_kind_of Work
         expect(assigns[:curation_concern].depositor).to eq user.user_key
-        expect(response).to render_template("layouts/dashboard")
+        expect(response).to render_template("layouts/hyrax/dashboard")
       end
     end
   end

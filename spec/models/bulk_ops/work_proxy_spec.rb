@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe BulkOps::WorkProxy do
   
   describe "A work proxy" do
-    let(:usr) {User.create(email:"test user email")}
+    let(:usr) { create(:admin) }
     let(:op_name) {BulkOps::Operation.unique_name("rspec test branch", usr)}
     let!(:operation) {BulkOps::Operation.create(name: op_name, user_id: usr.id, operation_type: "ingest", status: "new", stage: "new")}
     let(:template_data){ {"Title" => "Test Title", "description ": "This is a test description of a test item"} }
@@ -14,6 +14,15 @@ RSpec.describe BulkOps::WorkProxy do
     let(:proxy) {described_class.create(operation_id: operation.id, work_id: wrk.id, status:"new")}
     let(:sample_url) {"http://id.loc.gov/authorities/names/no90012358"}
     let(:sample_filenames) {["cat.jpg","Domestic_Cat.jpg","cat-cute-cute-pets.jpg"]}
+
+    before(:all) do
+      @coltype = Hyrax::CollectionType.first or Hyrax::CollectionType.create(title: "User Collection", description: "A User Collection can be created by any user to or...", machine_id: "user_collection", nestable: true, discoverable: true, sharable: true, allow_multiple_membership: true, require_membership: false, assigns_workflow: false, assigns_visibility: false, share_applies_to_new_works: false, brandable: true, badge_color: "#705070")
+    end
+
+    after(:all) do
+      Work.all.each{|wrk| wrk.destroy}
+      @coltype.destroy
+    end
 
     before(:each) do
       operation.create_branch
@@ -37,7 +46,7 @@ RSpec.describe BulkOps::WorkProxy do
       sample_data = template_data
       metadata = proxy.interpret_data(sample_data)
       expect(metadata).to be_a(Hash)
-      expect(metadata.count).to eq(sample_data.count)
+      expect(metadata.count).to be > sample_data.count
     end
 
     it "can interpret scalar sample_data with multiple columns per parameter and multiple values per cell" do
@@ -45,7 +54,7 @@ RSpec.describe BulkOps::WorkProxy do
       sample_data["description"] = "another description;Yet another description"
       metadata = proxy.interpret_data(sample_data)
       expect(metadata).to be_a(Hash)
-      expect(metadata.count).to eq(2)
+      expect(metadata.count).to be > 2
       expect(metadata["description"].count).to eq(3)
     end
 
@@ -111,7 +120,7 @@ RSpec.describe BulkOps::WorkProxy do
 
     it "can interpret fields that indicate membership in an existing collection" do
       sample_collection_names = ["Test Collection","Other Test Collection"]
-      collection_ids = sample_collection_names.map{ |name| Collection.create(title: [name] ).id}
+      collection_ids = sample_collection_names.map{ |name| Collection.create(title: [name], depositor: usr.email, collection_type: @coltype ).id}
       sample_data = template_data.dup
       sample_data["Collection"] = sample_collection_names.first 
       sample_data["collection_title"] = sample_collection_names.last

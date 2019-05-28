@@ -45,6 +45,10 @@ en:
   hyrax:
     product_name: "Digital Assets"
     institution_name:  &INSTITUTION_NAME "UC Santa Cruz"
+    collections:
+      search_form:
+        button_label: Search
+        label: ""
     division:
       name: "Digital Library Initiatives"
       homepage_url: "http://library.ucsc.edu/exhibits/"
@@ -83,9 +87,11 @@ en:
     institution_name:   "UC Santa Cruz"
     institution_name_full:   "University of California Santa Cruz"
     search:
+      button:
+        html: '<span class="glyphicon glyphicon-search" aria-hidden=true></span>Search'
       form:
         q:
-          label:          "Search Collections"
+          label:          ""
           placeholder:    "Enter search terms"
         option:
           all:
