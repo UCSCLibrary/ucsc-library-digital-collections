@@ -722,7 +722,7 @@ GEM
     rubyzip (1.2.2)
     samvera-nesting_indexer (2.0.0)
       dry-equalizer
-    samvera_hls (0.3.6)
+    samvera_hls (0.3.7)
       rails (>= 4.2.6)
     sass (3.7.4)
       sass-listen (~> 4.0.0)
@@ -879,7 +879,7 @@ DEPENDENCIES
   riiif (~> 1.1)
   rsolr (~> 1.0)
   rspec-rails
-  samvera_hls (= 0.3.6)
+  samvera_hls (= 0.3.7)
   sass-rails (~> 5.0)
   scooby_snacks (= 0.3.3)
   sidekiq
