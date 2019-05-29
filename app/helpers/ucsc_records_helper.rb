@@ -4,6 +4,7 @@ module UcscRecordsHelper
 
     schema = ScoobySnacks::METADATA_SCHEMA
     field = schema.get_field(field_name.to_s)
+    return if field.nil?
     f = locals[:f]
     options = {label: field.label,
                required: f.object.required?(field_name),
