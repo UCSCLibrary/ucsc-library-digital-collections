@@ -1,6 +1,7 @@
 
 <% isPlaylist = file_set_ids.count > 1 %>
 <audio controls="controls"
+       id="primary-media-player"
        class="hls_media <%= isPlaylist ? "playlist" : 'single' %>"
        preload="auto">
     <% file_set_ids.map{|id| SolrDocument.find(id) }.each_with_index do |file_set, i| %>
