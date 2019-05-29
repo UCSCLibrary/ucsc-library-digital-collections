@@ -6,7 +6,7 @@
        class="hls_media playlist playlist_shown"
        preload="auto">
     <% @presenter.lecture_files.each do |lecture| %>
-        <source src="<%= hyrax.download_path(SolrDocument.find(lecture[:id]), file: 'mp3') %>" title="<%= lecture[:title]%>" type="audio/mpeg" />
+        <source src="<%= File.join(request.base_url,"file_set",lecture[:id],"hls.m3u8") %>" title="<%= lecture[:title]%>"  type="application/x-mpegurl" />
     <%end %>
         Your browser does not support the audio tag.
 </audio>

@@ -1,12 +1,8 @@
 <audio controls="controls"
-       class="hls_media mejs__player"
-       preload="auto"
-       data-mejsoptions='{"pluginPath": "/mejs/",
-                         "showPlaylist":  "false", 
-                         "audioWidth": "100%"}'>
+       id="primary-media-player"
+       class="hls_media single"
+       preload="auto">
     <% fs = SolrDocument.find(file_set_id) %>
-
-        <source src="<%= File.join(request.base_url,"file_set",file_set_id,"hls.m3u8") %>" title="<%= fs.title %>" type="application/x-mpegurl"/>
-
-        Your browser does not support the audio tag.
+    <source src="<%= File.join(request.base_url,"file_set",file_set_id,"hls.m3u8") %>" title="<%= fs.title %>" type="application/x-mpegurl"/>
+    Your browser does not support the audio tag.
 </audio>
