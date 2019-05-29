@@ -1,4 +1,4 @@
-class LectureShowPresenter < Hyrax::WorkShowPresenter
+class LectureShowPresenter < Ucsc::WorkShowPresenter
 
   delegate :file_set_ids,:digital_extent,:parent_course, to: :solr_document 
 
