@@ -317,6 +317,13 @@ nav#masthead {
     
 }
 
+div.uv.viewer iframe {
+// This fixes display problem that occurs when
+// downsizing maximized viewer after clicking 'full screen' then 'esc'
+    max-width: 100%;
+    max-height: 100%;
+}
+
 .related-files td.thumbnail.small-thumb {
     width: 60px;
     margin-bottom:0px;
