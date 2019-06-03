@@ -65,6 +65,7 @@ class SolrDocument
   end
 
   def display_image_url(size: "800,")
+    return nil unless hydra_model.to_s == "FileSet"
     return nil unless FileSet.exists?(id)
     return nil unless image?
     @original_file_id ||= FileSet.find(id).original_file.id

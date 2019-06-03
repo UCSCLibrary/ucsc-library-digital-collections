@@ -4,7 +4,7 @@
         <li class="featured-item" data-id="<%= collection.id %>">
             <div class="main row">
                 <div class="col-sm-3">
-                    <%= render_thumbnail_tag collection, { width: 200 } %>
+                    <%= render_thumbnail_tag collection, { width: 200, style: "width:200px;" } %>
                 </div>
                 <div class="col-sm-9">
                     <%= render 'featured_fields', featured: collection %>
