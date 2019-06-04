@@ -7,6 +7,8 @@ namespace :hycruz  do
     end
     on roles(:ingest,:app), in: :sequence, wait: 5 do
       set :rails_env, fetch(:stage)
+      print "creating temp folder if necessary..."
+      execute "mkdir -p #{current_path}/tmp"
       print "Linking temp upload folder..."
       execute "ln -s /dams_derivatives/tmp/#{fetch(:stage)}/uploads #{current_path}/tmp/uploads"
     end
