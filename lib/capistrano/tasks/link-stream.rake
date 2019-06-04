@@ -8,7 +8,7 @@ namespace :hycruz  do
     on roles(:ingest,:app), in: :sequence, wait: 5 do
       set :rails_env, fetch(:stage)
       print "Linking temp upload folder..."
-      execute "ln -s /dams_derivatives/#{fetch(:stage)}/tmp/uploads #{current_path}/tmp/uploads"
+      execute "ln -s /dams_derivatives/tmp/#{fetch(:stage)}/uploads #{current_path}/tmp/uploads"
     end
   end
 end
