@@ -32,7 +32,6 @@ fields:
     predicate: "DC:title"
     label: "Title"
     required: true
-#    multiple: false
     primary: true
     display_groups: 
       - primary
@@ -50,8 +49,6 @@ fields:
       - admin_only
       - editor_primary
     predicate: "DC:identifier"
-    data_type: string
-#    multiple: false
 
   titleAlternative:
     definition: "An alternative title for the resource."
@@ -209,7 +206,6 @@ fields:
     label: Staff Note
     display_group: admin_only
     predicate: MODS:note
-    stored_in_solr: false
   
   coordinates:
     definition: Cartographic data that identifies characteristics of the resource, such as coordinates, projection, etc.
@@ -300,7 +296,6 @@ fields:
       - editor_primary
       - search_result
     OAI: DC:subject
-
   
   dateCreated:
     definition: Date of creation of the original resource.
@@ -435,12 +430,6 @@ fields:
     predicate: DC:accessRights
     OAI: dc:rights
     
-#  collection:
-#    definition: A related resource in which the described resource is physi#cally or logically included.
-#    label: Collection Title
-#    predicate: DC:isPartOf
-#    facet: true
-  
   itemCallNumber:
     definition: Classification number in any scheme.
     label: Item Call Number
