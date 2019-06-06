@@ -82,11 +82,11 @@ gem 'browse-everything'
 
 # Uncomment this when developing samvera_hls
 #gem 'samvera_hls', path: "/srv/samvera_hls/"
-gem 'samvera_hls', '0.3.7'
+gem 'samvera_hls', '0.4.2'
 
 # Uncomment this when developing scooby snacks
 #gem 'scooby_snacks', path: '/srv/scooby_snacks/'
-gem 'scooby_snacks', '0.3.3'
+gem 'scooby_snacks', '0.3.4'
 
 # Uncomment this when developing Bulk Ops
 #gem 'bulk_ops', path: "/srv/bulk_ops/"

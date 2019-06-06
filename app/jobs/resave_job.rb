@@ -9,7 +9,7 @@ class ResaveJob < Hyrax::ApplicationJob
       until start > num_works
         works = ActiveFedora::SolrService.instance.conn.get(ActiveFedora::SolrService.select_path, params: { fq: query, rows: rows, start: start})["response"]["docs"]
         works.each do  |wrk|
-          ActiveFedora::Base.find(wrk['id']).savem
+          ActiveFedora::Base.find(wrk['id']).save
         end
         start = start + rows
       end

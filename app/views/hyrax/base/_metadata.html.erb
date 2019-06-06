@@ -2,6 +2,10 @@
 <table class="table table-striped <%= dom_class(presenter) %> attributes" <%= presenter.microdata_type_to_html %>>
    <tbody>
     <%= render 'primary_attribute_rows', presenter: presenter %>
+    <% if  ((can? :manage, Work) or (can? :review, :submissions)) %>
+        <%= presenter.attribute_to_html(:masterFilename, {label: "Master Filename"})  %>
+        <%= presenter.attribute_to_html(:accessionNumber, {label: "Accession Number"}) %>
+    <% end %>
   </tbody>
 </table>
 
@@ -12,7 +16,7 @@
         <tbody>
             <%= render 'secondary_attribute_rows', presenter: presenter %>
 
-            <%= render 'admin_only_attribute_rows', presenter: presenter if can? :edit, Work %>
+            <%= render 'admin_only_attribute_rows', presenter: presenter if ((can? :manage, Work) or (can? :review, :submissions)) %>
 
             <%= presenter.attribute_to_html(:embargo_release_date, render_as: :date) %>
             <%= presenter.attribute_to_html(:lease_expiration_date, render_as: :date) %>
@@ -24,9 +28,9 @@
 
 <script>
 
-function toggleMoreMetadata() {
-    jQuery('#more-metadata').toggle;
-    jQuery('#show-more-metadata').toggle;
-}
+ function toggleMoreMetadata() {
+     jQuery('#more-metadata').toggle;
+     jQuery('#show-more-metadata').toggle;
+ }
 
 </script>
