@@ -76,6 +76,8 @@ group :development do
   gem 'capistrano-rvm'
 end
 
+gem 'whenever', require: false
+
 gem 'hydra-role-management'
 gem 'browse-everything'
 #gem 'hydra-remote_identifier'
