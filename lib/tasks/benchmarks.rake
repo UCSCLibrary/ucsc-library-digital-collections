@@ -6,7 +6,6 @@ task benchmark: :environment do
 
   timestamp = Time.now.to_i
   fs_query = ActiveFedora::SolrQueryBuilder.construct_query_for_rel("has_model" => "FileSet")
-  num_filesets = ActiveFedora::SolrService.instance.conn.get(ActiveFedora::SolrService.select_path, params: { fq: fs_query, rows: 0})["response"]["numFound"]
   ingest_jobs = Sidekiq::Queue.new("ingest").size
   sample_metadata = {depositor: User.first.email,
                      title: ["Test Benchmark Title"],
@@ -15,15 +14,16 @@ task benchmark: :environment do
   create = Benchmark.measure { work = Work.create(sample_metadata)}
   edit = Benchmark.measure {work.description = ["a sample description"]; work.save}
 
-   "#{host}/concern/works/#{work.id}"
-
   fedora_find = Benchmark.measure { work = Work.find(work.id)}
   solr_find = Benchmark.measure { solr_doc = SolrDocument.find(work.id) }
+  num_filesets = 0
   solr_search_general = Benchmark.measure do 
-    sleep(0.1)
+    fs_query = ActiveFedora::SolrQueryBuilder.construct_query_for_rel("has_model" => "FileSet")
+    num_filesets = ActiveFedora::SolrService.instance.conn.get(ActiveFedora::SolrService.select_path, params: { fq: fs_query, rows: 100})["response"]["numFound"]
   end
   solr_search_specific = Benchmark.measure do 
-    sleep(0.1)
+    fs_query = ActiveFedora::SolrQueryBuilder.construct_query_for_rel("has_model" => "FileSet", "description" => "sample")
+    ActiveFedora::SolrService.instance.conn.get(ActiveFedora::SolrService.select_path, params: { fq: fs_query, rows: 100})
   end
   delete = Benchmark.measure { work.destroy }
 
