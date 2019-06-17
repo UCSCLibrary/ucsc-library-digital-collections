@@ -239,7 +239,7 @@ fields:
     predicate: DC:spatial
     vocabularies: 
       - authority: geonames
-      - subauthority:
+        subauthority:
       - authority: loc
         subauthority: geographicAreas
 #      - authority: usgs
