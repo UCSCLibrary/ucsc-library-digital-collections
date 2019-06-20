@@ -134,20 +134,9 @@ class WorkIndexer < Hyrax::WorkIndexer
 
     begin
 
-      if url.to_s.include?("ucsc.edu")
-        # Swap for correct hostname in non-prod environments
-        case Rails.env
-        when 'staging'
-          (uri = URI(url.gsub("digitalcollections.library","digitalcollections-staging.library").gsub("https://","http://")))
-        when 'development', 'test'
-          uri = URI(url.gsub("https://digitalcollections.library.ucsc.edu","http://localhost"))
-          uri.port = 3000
-        else
-          uri = URI(url)
-        end
-        
-        label = JSON.parse(Net::HTTP.get_response(uri).body)["label"]
-
+      # handle local qa table based vocabs
+      if url.to_s.include?("ucsc.edu") or url.to_s.include?("http://localhost")
+        label = JSON.parse(Net::HTTP.get_response(URI(uri)).body)["label"]
       # handle geonames specially
       elsif url.include? "geonames.org"
         unless (res_url = url).include? "/about.rdf"

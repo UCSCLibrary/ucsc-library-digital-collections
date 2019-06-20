@@ -11,14 +11,14 @@ module Ucsc::Authorities::Local
       # first entries include full query all together
       entries = base_relation.where("lower(label) like '%#{q}%'").limit(25)
 
-      # next entries include all words
       words = q.gsub(/\s+/m, ' ').strip.split(" ")
-      entries += base_relation.where("lower(label) like '%" + words.join("%' AND '%") + "%'").limit(25)
-
-      # entries with any of the words are included at the end
-      entries += base_relation.where("lower(label) like '%" + words.join("%' OR '%") + "%'").limit(25)
-
-      output_set(entries)
+      if words.count > 1 
+        # next entries include all words
+        entries += base_relation.where("lower(label) like '%" + words.join("%' AND '%") + "%'").limit(25)
+        # entries with any of the words are included at the end
+        entries += base_relation.where("lower(label) like '%" + words.join("%' OR '%") + "%'").limit(25)
+      end
+      output_set(entries.uniq)
     end
 
     private
