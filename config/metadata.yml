@@ -413,7 +413,7 @@ fields:
     predicate: EBUCore:filename
     label: Master File Name
     display_groups: 
-      - admin_only
+      - secondary
       - editor_primary
   
   physicalDescription:
