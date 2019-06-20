@@ -4,7 +4,7 @@ module Ucsc::Authorities::Local
     def find(uri)
       record = base_relation.find_by(uri: uri)
       return unless record
-      ucsc_output(record)
+      output(record)
     end
 
     def search(q)
@@ -18,12 +18,13 @@ module Ucsc::Authorities::Local
         # entries with any of the words are included at the end
         entries += base_relation.where("lower(label) like '%" + words.join("%' OR '%") + "%'").limit(25)
       end
+      
       output_set(entries.uniq)
     end
 
     private
 
-      def ucsc_output(item)
+      def output(item)
         { id: url_for(item[:uri]), label: item[:label] }.with_indifferent_access
       end
 
