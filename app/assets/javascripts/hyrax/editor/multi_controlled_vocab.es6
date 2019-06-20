@@ -53,7 +53,6 @@ export default class MultiControlledVocab extends FieldManager {
 
   // Overrides FieldManager in order to avoid doing a clone of the existing field
   createNewField($activeField) {
-    console.log("switching on: "+this.inputStyle.underscore)
     switch (this.inputStyle.underscore) {
     case "dropdown":
       return new Dropdown(this._maxIndex(),this.element, this.paramKey);
@@ -65,7 +64,6 @@ export default class MultiControlledVocab extends FieldManager {
       return new TextboxAutosuggest(this._maxIndex(),this.element, this.paramKey);
       break;
     }
-
   }
 
   /* This gives the index for the editor */
