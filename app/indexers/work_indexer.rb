@@ -136,7 +136,7 @@ class WorkIndexer < Hyrax::WorkIndexer
 
       # handle local qa table based vocabs
       if url.to_s.include?("ucsc.edu") or url.to_s.include?("http://localhost")
-        label = JSON.parse(Net::HTTP.get_response(URI(uri)).body)["label"]
+        label = JSON.parse(Net::HTTP.get_response(URI(url)).body)["label"]
       # handle geonames specially
       elsif url.include? "geonames.org"
         unless (res_url = url).include? "/about.rdf"
@@ -160,7 +160,7 @@ class WorkIndexer < Hyrax::WorkIndexer
         end
       end
       
-      Rails.logger.info "Adding buffer entry - label: #{label}, url:  #{uri.to_s}"
+      Rails.logger.info "Adding buffer entry - label: #{label}, url:  #{url.to_s}"
       LdBuffer.create(url: url, label: label)
 
       # Delete oldest records if we have more than 5K in the buffer
@@ -171,7 +171,7 @@ class WorkIndexer < Hyrax::WorkIndexer
       
       if label == url && url.include?("id.loc.gov")
         #handle weird alternative syntax
-        response = JSON.parse(Net::HTTP.get_response(uri).body)
+        response = JSON.parse(Net::HTTP.get_response(URI(url)).body)
         response.each do |index, node|
           if node["@id"] == url
             label = node["http://www.loc.gov/mads/rdf/v1#authoritativeLabel"].first["@value"]
