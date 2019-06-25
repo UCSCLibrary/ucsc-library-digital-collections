@@ -89,8 +89,8 @@ gem 'samvera_hls', '0.4.2'
 gem 'scooby_snacks', '0.3.4'
 
 # Uncomment this when developing Bulk Ops
-gem 'bulk_ops', path: "/srv/bulk_ops/"
-#gem 'bulk_ops', '0.1.6'
+#gem 'bulk_ops', path: "/srv/bulk_ops/"
+gem 'bulk_ops', '0.1.7'
 
 #gem 'ldfwrapper', github: 'boston-library/ldf-wrapper', branch: "master"
 

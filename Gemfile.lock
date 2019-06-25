@@ -18,12 +18,6 @@ GIT
       rack-protection (= 2.0.5)
       tilt (~> 2.0)
 
-PATH
-  remote: /srv/bulk_ops
-  specs:
-    bulk_ops (0.1.6)
-      rails (~> 5)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -166,6 +160,8 @@ GEM
       sass-rails
       signet
     builder (3.2.3)
+    bulk_ops (0.1.7)
+      rails (~> 5)
     byebug (11.0.1)
     cancancan (1.17.0)
     capistrano (3.11.0)
@@ -854,7 +850,7 @@ DEPENDENCIES
   blacklight_advanced_search (~> 6.0)
   blacklight_oai_provider (>= 6.0.0)
   browse-everything
-  bulk_ops!
+  bulk_ops (= 0.1.7)
   bundler (>= 2)
   byebug
   capistrano
