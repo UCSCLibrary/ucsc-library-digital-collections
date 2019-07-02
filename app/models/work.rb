@@ -5,12 +5,17 @@ class Work < ActiveFedora::Base
 #  include ::Hyrax::BasicMetadata
 
   include ::ScoobySnacks::WorkModelBehavior
+  include ::Ucsc::UntitledBehavior
   self.indexer = ::WorkIndexer
   # Change this to restrict which works can be added as a child.
   # self.valid_child_concerns = []
-  validates :title, presence: { message: 'Your work must have a title.' }
+#  validates :title, presence: { message: 'Your work must have a title.' }
   
 #  self.human_readable_type = 'Work'
+
+  def first_title
+    SolrDocument.find(id).titleDisplay.first
+  end
 
   def save *args
     ::ScoobySnacks::METADATA_SCHEMA.controlled_field_names.each do |field_name|
