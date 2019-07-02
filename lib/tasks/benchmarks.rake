@@ -1,6 +1,6 @@
-desc "run some speed benchmarks for Solr & Fedora"
+desc "run some speed tests for Solr & Fedora"
 
-task benchmark: :environment do
+task worker_benchmark: :environment do
 
   require 'benchmark'
 
@@ -34,9 +34,46 @@ task benchmark: :environment do
                  edit,
                  fedora_find,
                  solr_find,
-                 solr_search_specific, 
+                 solr_search_specific,
                  solr_search_general, 
                  delete].map{ |measurement| measurement.to_s.delete("()\n").split }.reduce(:+)
+  report_string = report_data.join(',')
+
+  puts "logging benchmark data: #{report_string}"
+  File.open("/srv/hyrax/log/benchmarks.log", "a"){|f| f.write(report_string)}
+
+end 
+
+task webapp_benchmark: :environment do
+
+  require 'benchmark'
+
+  timestamp = Time.now.to_i
+  fs_query = ActiveFedora::SolrQueryBuilder.construct_query_for_rel("has_model" => "FileSet")
+  ingest_jobs = Sidekiq::Queue.new("ingest").size
+  sample_metadata = {depositor: User.first.email,
+                     title: ["Test Benchmark Title"],
+                     creator_attributes: [{id: "http://id.loc.gov/authorities/subjects/sh2017004659"}]}
+
+  work = nil
+  fedora_find = Benchmark.measure { work = Work.last}
+  solr_find = Benchmark.measure { solr_doc = SolrDocument.find(work.id) }
+  num_filesets = 0
+  solr_search_general = Benchmark.measure do 
+    num_filesets = ActiveFedora::SolrService.instance.conn.get(ActiveFedora::SolrService.select_path, params: { fq: fs_query, rows: 100})["response"]["numFound"]
+  end
+  solr_search_specific = Benchmark.measure do 
+    specific_query = ActiveFedora::SolrQueryBuilder.construct_query_for_rel("has_model" => "FileSet", "description" => "sample")
+    ActiveFedora::SolrService.instance.conn.get(ActiveFedora::SolrService.select_path, params: { fq: specific_query, rows: 100})
+  end
+
+  report_data = [timestamp,
+                 num_filesets, 
+                 ingest_jobs] +
+                [fedora_find,
+                 solr_find,
+                 solr_search_specific,
+                 solr_search_general].map{ |measurement| measurement.to_s.delete("()\n").split }.reduce(:+)
   report_string = report_data.join(',')
 
   puts "logging benchmark data: #{report_string}"
