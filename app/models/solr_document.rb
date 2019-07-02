@@ -12,6 +12,9 @@ class SolrDocument
   # Adds ScoobySnacks metadata attribute definitions
   include ScoobySnacks::SolrBehavior
 
+  # Add merged title solr attribute
+  attribute(:titleDisplay,Solr::Array,Solrizer.solr_name(:titleDisplay))
+
   # add collection membership in OAI-PMH feed
   add_field_semantics('isPartOf','member_of_collections_ssim')
 
