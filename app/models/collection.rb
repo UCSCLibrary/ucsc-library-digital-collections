@@ -4,4 +4,8 @@ class Collection < ActiveFedora::Base
   # You can replace these metadata if they're not suitable
   include Hyrax::BasicMetadata
 
+  def reindex_extent
+    @reindex_extent ||= Hyrax::Adapters::NestingIndexAdapter::LIMITED_REINDEX
+  end
+
 end
