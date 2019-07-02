@@ -41,11 +41,7 @@ module Ucsc
     end
 
     def page_title
-      return super unless super == "Untitled"
-      return titleAlternative.first unless titleAlternative.blank?
-      return subseries.first unless subseries.blank?
-      return series.first unless series.blank?
-      return I18n.t('hyrax.product_name')
+      "#{solr_document.titleDisplay} | UCSC Digital Library Collections"
     end
 
     delegate :titleAlternative, :subseries, :series, to: :solr_document
