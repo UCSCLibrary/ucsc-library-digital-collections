@@ -33,21 +33,18 @@ class WorkIndexer < Hyrax::WorkIndexer
 
   def merge_title_fields(merged_field_name, solr_doc)
     # If there is a value in the Title or TitleAlternative fields 
-    # this is not blank or a variant of "untitled", return that
+    # that is not blank or a variant of "untitled", return that
     titles = Array(solr_doc[schema.get_field(:title).solr_name]) + Array(solr_doc[schema.get_field(:titleAlternative).solr_name])
-    titles = titles.select{|existing_title| existing_title.present? && !existing_title.downcase.include?("untitled")}
-    
-    # As a backup, look to the subseries and series, and merge them if we have both
-    subseries = solr_doc[schema.get_field(:subseries).solr_name]
-    series = solr_doc[schema.get_field(:series).solr_name]
-    
-    if subseries.present? && series.present? && (subseries.count==1) && (series.count==1)
-      titles << "#{subseries.first} - #{series.first}"
-    else
-      titles.concat subseries if subseries.present?
-      titles.concat series if series.present?
+    titles.reject!{|existing_title| existing_title.blank? || (existing_title.downcase.gsub(/[^a-z]/, '') == "untitled") }
+    if titles.blank?
+      if (subseries = solr_doc[schema.get_field(:subseries).solr_name]).present? 
+        titles << "#{subseries.first} [Untitled]"
+      elsif (series = solr_doc[schema.get_field(:series).solr_name]).present? 
+        titles << "#{series.first} [Untitled]"
+      else
+        titles << "[Untitled]"
+      end
     end
-
     solr_doc[Solrizer.solr_name(merged_field_name)] = titles if titles.present?
     return solr_doc
   end
