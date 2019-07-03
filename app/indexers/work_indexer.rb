@@ -107,7 +107,11 @@ class WorkIndexer < Hyrax::WorkIndexer
   end
 
   def localIdToUrl(id,auth_name) 
-    return "https://digitalcollections.library.ucsc.edu/authorities/show/local/#{auth_name}/#{id}"
+    root_urls = {production: "https://digitalcollections.library.ucsc.edu",
+                 staging: "http://digitalcollections-staging.library.ucsc.edu",
+                 development: "http://#{Socket.gethostname}",
+                 test: "http://#{Socket.gethostname}"}
+    return "#{root_urls[Rails.env.to_sym]}/authorities/show/local/#{auth_name}/#{id}"
   end
 
   def self.destroy_buffer(url)
@@ -136,12 +140,13 @@ class WorkIndexer < Hyrax::WorkIndexer
         label = JSON.parse(Net::HTTP.get_response(URI(url)).body)["label"]
       # handle geonames specially
       elsif url.include? "geonames.org"
-        unless (res_url = url).include? "/about.rdf"
-          res_url = File.join(url,'about.rdf')
+        # make sure we fetch the rdf record, not the normal html one
+        if (res_url = url) =~ /geonames.org\/[0-9]+.*\z/ && !res_url.include?("/about.rdf")
+          res_url = url.gsub(/(geonames.org\/[0-9]+).*\z/,"\\1/about.rdf")
         end
+        # Interpret the xml result ourselves
         doc = Nokogiri::XML(open(res_url))
         label = doc.xpath('//gn:name').first.children.first.text
-
       # fetch from other normal authorities
       else
         # Smoothly handle some common syntax issues
@@ -162,7 +167,7 @@ class WorkIndexer < Hyrax::WorkIndexer
 
       # Delete oldest records if we have more than 5K in the buffer
       if (cnt = LdBuffer.count - 5000) > 0
-        ids = LdBuffer.order('created_at DESC').limit(cnt).pluck(:id)
+        ids = LdBuffer.order('created_at ASC').limit(cnt).pluck(:id)
         LdBuffer.where(id: ids).delete_all
       end
       
