@@ -21,7 +21,7 @@ GIT
 PATH
   remote: /srv/bulk_ops
   specs:
-    bulk_ops (0.1.7)
+    bulk_ops (0.1.8)
       rails (~> 5)
 
 GEM
