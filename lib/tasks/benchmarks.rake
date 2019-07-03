@@ -37,7 +37,7 @@ task worker_benchmark: :environment do
                  solr_search_specific,
                  solr_search_general, 
                  delete].map{ |measurement| measurement.to_s.delete("()\n").split }.reduce(:+)
-  report_string = report_data.join(',')
+  report_string = report_data.join(',')+"\n"
 
   puts "logging benchmark data: #{report_string}"
   File.open("/srv/hyrax/log/benchmarks.log", "a"){|f| f.write(report_string)}
@@ -51,12 +51,8 @@ task webapp_benchmark: :environment do
   timestamp = Time.now.to_i
   fs_query = ActiveFedora::SolrQueryBuilder.construct_query_for_rel("has_model" => "FileSet")
   ingest_jobs = Sidekiq::Queue.new("ingest").size
-  sample_metadata = {depositor: User.first.email,
-                     title: ["Test Benchmark Title"],
-                     creator_attributes: [{id: "http://id.loc.gov/authorities/subjects/sh2017004659"}]}
-
   work = nil
-  fedora_find = Benchmark.measure { work = Work.last}
+  fedora_find = Benchmark.measure { work = Work.find("bv73c102v")}
   solr_find = Benchmark.measure { solr_doc = SolrDocument.find(work.id) }
   num_filesets = 0
   solr_search_general = Benchmark.measure do 
@@ -74,7 +70,7 @@ task webapp_benchmark: :environment do
                  solr_find,
                  solr_search_specific,
                  solr_search_general].map{ |measurement| measurement.to_s.delete("()\n").split }.reduce(:+)
-  report_string = report_data.join(',')
+  report_string = report_data.join(',') + "\n"
 
   puts "logging benchmark data: #{report_string}"
   File.open("/srv/hyrax/log/benchmarks.log", "a"){|f| f.write(report_string)}
