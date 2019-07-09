@@ -18,7 +18,12 @@ module Workflow
       end
 
       def count
-        solr_documents.count
+        actionable_roles = roles_for_user
+        ActiveFedora::SolrService.instance.conn.get(ActiveFedora::SolrService.select_path, params: { fq: query(actionable_roles), rows: 0})["response"]["numFound"]
+      end
+
+      def first(num)
+        solr_documents.first(num)
       end
 
       private
