@@ -3,7 +3,9 @@ module Ucsc
     extend ActiveSupport::Concern
     
     def title
-      return attributes["title"] if attributes["title"].present?
+      if (title = get_values(:title))
+        return title
+      end
       solr_array = to_solr
       untitled_label = solr_array[ solr_array.keys.detect{|key| key.include? "titleDisplay"} ].first
       UntitledArray.new(untitled_label)
