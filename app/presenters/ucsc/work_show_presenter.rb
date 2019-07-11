@@ -37,6 +37,7 @@ module Ucsc
       solr_document.resourceType.each do |type|
         return true if type.to_s.downcase.include? "image"
       end
+      return true if solr_document.member_ids.all?{|id| SolrDocument.find(id).image? }
       return solr_document.image?
     end
 
