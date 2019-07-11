@@ -20,15 +20,6 @@
                 <%= image_tag(@presenter.display_image_url, class: "raw-image primary-media",role: "presentation") %>
                 <label id="primary-image-label">Click image to load zoomable viewer</label>
             </a>
-            <script type="javascript">
-             console.log('Does this even run?');
-             $(document).ready(function() {
-                 console.log('Loading js after page load I guess?');
-                 $('div.raw-image-wrapper').click(function(){
-                     console.log('is this working?');
-                 });
-             });
-            </script>
         <% else %>
             <%= image_tag @presenter.display_image_url, class: "primary-media",role: "presentation"%>
         <% end %>
