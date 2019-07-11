@@ -25,7 +25,7 @@ Hyrax.config do |config|
   # config.default_active_workflow_name = 'default'
 
   # Email recipient of messages sent via the contact form
-  config.contact_email = "ethenry@ucsc.edu"
+  config.contact_email = "speccoll@library.ucsc.edu"
 
   # Text prefacing the subject entered in the contact form
   config.subject_prefix = "UCSC Digital Collections inquiry:"
