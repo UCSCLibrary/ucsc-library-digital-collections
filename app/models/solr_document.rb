@@ -16,9 +16,9 @@ class SolrDocument
   attribute(:titleDisplay,Solr::Array,Solrizer.solr_name(:titleDisplay))
 
   # add collection membership in OAI-PMH feed
-  add_field_semantics('isPartOf','member_of_collections_ssim')
+  add_field_semantics('source','member_of_collections_ssim')
 
-  add_field_semantics('identifier','thumbnail_path')
+#  add_field_semantics('identifier','thumbnail_path_ss')
 
   # self.unique_key = 'id'
 
@@ -68,10 +68,17 @@ class SolrDocument
   end
 
   def display_image_url(size: "800,")
-    return nil unless hydra_model.to_s == "FileSet"
-    return nil unless FileSet.exists?(id)
     return nil unless image?
-    @original_file_id ||= FileSet.find(id).original_file.id
+    if hydra_model.to_s == "FileSet"
+      return nil unless FileSet.exists?(id)
+      fs = FileSet.find(id)
+    elsif representative_id.present?
+      return nil unless FileSet.exists?(representative_id)
+      fs = FileSet.find(representative_id)
+    else
+      return nil
+    end
+    @original_file_id ||= fs.original_file.id
     Hyrax.config.iiif_image_url_builder.call(@original_file_id,"nil",size)
   end
 
