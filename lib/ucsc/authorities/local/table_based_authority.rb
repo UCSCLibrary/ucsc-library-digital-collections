@@ -8,10 +8,11 @@ module Ucsc::Authorities::Local
     end
 
     def search(q)
+      qq = Mysql2::Client.escape(q)
       # first entries include full query all together
-      entries = base_relation.where("lower(label) like '%#{q}%'").limit(25)
+      entries = base_relation.where("lower(label) like '%#{ qq}%'").limit(25)
 
-      words = q.gsub(/\s+/m, ' ').strip.split(" ")
+      words = q.gsub(/\s+/m, ' ').strip.split(" ").map{|word|  Mysql2::Client.escape(word)}
       if words.count > 1 
         # next entries include all words
         entries += base_relation.where("lower(label) like '%" + words.join("%' AND '%") + "%'").limit(25)
