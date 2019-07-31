@@ -2,6 +2,11 @@
   <span class="sr-only">Title</span>
   <%= truncate(featured.title.first, length: 128, separator: ' ') %>
 </h3>
+<% if featured.human_readable_type.to_s.downcase.include?("course") && featured.creator.present? %>
+  <div class="subtitle">
+   <%= " Lectures by #{featured.creator.first}" %>
+  </div>
+<% end %>
 <div>
   <%= featured.description.first %>
 </div>
