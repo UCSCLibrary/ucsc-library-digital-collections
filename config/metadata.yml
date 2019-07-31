@@ -415,6 +415,7 @@ fields:
     display_groups: 
       - secondary
       - editor_primary
+    OAI: DC:identifier
   
   physicalDescription:
     definition: Description or statement indicating the extent, size, or duration of the original, physical resource for digitized content.
@@ -428,7 +429,7 @@ fields:
       - editor_primary
     label: Access Rights
     predicate: DC:accessRights
-    OAI: dc:rights
+    OAI: DC:rights
     
   itemCallNumber:
     definition: Classification number in any scheme.
@@ -437,6 +438,7 @@ fields:
     display_groups:
       - secondary
       - editor_primary
+    OAI: DC:identifier
 
   collectionCallNumber:
     definition: The identifier for the collection to which the resource belongs.
