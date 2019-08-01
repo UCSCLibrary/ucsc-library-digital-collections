@@ -1,0 +1,55 @@
+
+# You can use any metadata element defined in metadata.yml here,
+#  and can also use the following extra keywords: 
+#   'collection' - the title of the first containing User Collection of the object
+#   'image_url' - the url of an image representing the object
+#   'permalink' - the permanent url of the object in the system
+default:
+  title:
+    - title
+  alternative:
+    - titleAlternative
+    - subseries
+  creator:
+    - creator
+  contributor:
+    - contributor
+  publisher:
+    - originalPublisher
+  type:
+    - resourceType
+  rights:
+    - rightsHolder
+    - accessRights
+  subject:
+    - subjectName
+    - subjectPlace
+    - subjectTemporal
+    - subjectTopic
+  date:
+    - dateCreated
+    - dateCreatedDisplay
+  description:
+    - description
+  format:
+    - physicalformat
+  language:
+    - language   
+  identifier:
+    - masterFilename
+    - itemCallNumber
+  source:
+    - collection
+    - collectionCallNumber   
+DC:
+  parent_schema: DC
+  identifier:
+    - masterFilename
+    - itemCallNumber
+    - permalink
+DPLA:
+  parent_schema: default
+  object:
+    - display_image_url
+  isShownAt:
+    - permalink
