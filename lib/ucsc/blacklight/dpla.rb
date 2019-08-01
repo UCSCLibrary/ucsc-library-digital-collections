@@ -30,11 +30,6 @@ module Ucsc::Blacklight::Dpla
     dc_field_names + dcterms_field_names + edm_field_names
   end
 
-  def to_semantic_values
-#    super.merge({object: display_image_url, isShownAt: permalink, alternative: subseries})
-    super.merge({object: display_image_url, isShownAt: permalink})
-  end
-
   # dublin core elements are mapped against the #dublin_core_field_names whitelist.
   def export_as_oai_dpla_xml
     xml = Builder::XmlMarkup.new
