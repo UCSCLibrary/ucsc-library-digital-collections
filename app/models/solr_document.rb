@@ -12,13 +12,13 @@ class SolrDocument
   # Adds ScoobySnacks metadata attribute definitions
   include ScoobySnacks::SolrBehavior
 
-  # Add merged title solr attribute
-  attribute(:titleDisplay,Solr::Array,Solrizer.solr_name(:titleDisplay))
+  def self.add_field_semantics(label,solr_name,schema=nil)
+    label = "#{schema}:#{label}" if schema
+    field_semantics.merge!(label => Array.wrap(solr_name)) {|key, old_val, new_val| Array.wrap(old_val) + Array.wrap(new_val)}
+  end
 
-  # add collection membership in OAI-PMH feed
+  # add collection membership in OAI-PMH feed source element for all schemas
   add_field_semantics('source','member_of_collections_ssim')
-
-#  add_field_semantics('identifier','thumbnail_path_ss')
 
   # self.unique_key = 'id'
 
@@ -41,22 +41,56 @@ class SolrDocument
   use_extension( Hydra::ContentNegotiation )
 
 
-  def to_semantic_values
+  # create field semantics hash from oai.yml file
+  namespaces =  YAML.load_file(File.join(Rails.root.to_s,'config/oai.yml'))
+  namespaces.each do |namespace, properties|
+    next if namespace.to_s.downcase == "default"
+    if properties["parent_schema"].present? && (parent = namespaces[properties["parent_schema"]]).present?
+      properties = parent.deep_merge(properties).reject{|key,value| key == "parent_schema"}
+    end
+    properties.each do |property,field_names|
+      field_names.each do |field_name|
+        add_field_semantics(property, field_name, namespace)
+      end
+    end
+  end
+
+  def title
+    schema = ScoobySnacks::METADATA_SCHEMA
+    title_solr_name = schema.get_field('title').solr_name
+    subseries_solr_name = schema.get_field('subseries').solr_name
+    titles = self[title_solr_name]
+    # return the normal titles unless the work is untitled
+    return titles unless  titles.blank? or titles.all?{|title| title.downcase.strip == "untitled"}
+    # The work must be untitled
+    subseries = self[subseries_solr_name]
+    # Tack on a subseries if we have one
+    if subseries.present?
+      return "Untitled: #{subseries.first}"
+    end
+    # Return "Untitled" if there is no title and no subseries
+    return "Untitled"
+  end
+
+  def to_semantic_values(schema=nil)
     @semantic_value_hash ||= self.class.field_semantics.each_with_object(Hash.new([])) do |(key, field_names), hash|
+
+      if (val_schema, attribute = key.split(':')).length == 2
+        # Skip this one unless it is in the right schema
+        # (or if we are requesting all schemas, or if it is registered without a specific schema)
+        next unless schema.nil? || val_schema.nil? || schema.to_s.downcase == val_schema.to_s.downcase
+        key = attribute
+      end
       
       ##
       # Handles single string field_name or an array of field_names
       value = Array.wrap(field_names).map do |field_name| 
-        raw_value = self[field_name]
-        raw_value = self.send(field_name) if raw_value.blank? and self.respond_to? field_name.to_sym
-        raw_value = display_image_url if field_name == "thumbnail_path"
+        raw_value = self.send(field_name) if self.respond_to?(field_name.to_sym)
+        raw_value = self[field_name] if raw_value.blank? and self[field_name].present?
         raw_value
       end
                
       value = value.flatten.compact
-
-      # Make single and multi-values all arrays, so clients
-      # don't have to know.
       hash[key] = value unless value.empty?
     end
     
@@ -67,19 +101,21 @@ class SolrDocument
     "#{root_url}/records/#{record.id}"
   end
 
+  # The original file id should be indexed with each work with a representative image. 
+  # Then image viewer links can be created dynamically.
+  # We don't want to load fileset objects when viewing works.
   def display_image_url(size: "800,")
-    return nil unless image?
     if hydra_model.to_s == "FileSet"
       return nil unless FileSet.exists?(id)
       fs = FileSet.find(id)
+      @original_file_id ||= fs.original_file.id
+      Hyrax.config.iiif_image_url_builder.call(@original_file_id,"nil",size)
     elsif representative_id.present?
-      return nil unless FileSet.exists?(representative_id)
-      fs = FileSet.find(representative_id)
+      SolrDocument.find(representative_id).display_image_url(size: size)
     else
       return nil
     end
-    @original_file_id ||= fs.original_file.id
-    Hyrax.config.iiif_image_url_builder.call(@original_file_id,"nil",size)
+
   end
 
   def root_url
