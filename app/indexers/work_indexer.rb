@@ -5,12 +5,12 @@ class WorkIndexer < Hyrax::WorkIndexer
 
   def generate_solr_document
     super.tap do |solr_doc|
+      
       return solr_doc unless solr_doc['has_model_ssim'].include?("Work") or solr_doc['generic_type_sim'].include?("Work") or (solr_doc["human_readable_type_tesim"] == "Work") or (solr_doc["human_readable_type_ssim"] == "Work")
       solr_doc = index_controlled_fields(solr_doc)
       solr_doc = merge_fields(:subject, [:subjectTopic,:subjectName,:subjectTemporal,:subjectPlace], solr_doc, :stored_searchable)
       solr_doc = merge_fields(:subject, [:subjectTopic,:subjectName,:subjectTemporal,:subjectPlace], solr_doc, :facetable)
       solr_doc = merge_fields(:callNumber, [:itemCallNumber,:collectionCallNumber,:boxFolder], solr_doc)
-      solr_doc = merge_title_fields(:titleDisplay, solr_doc)
     end
   end
 
@@ -28,24 +28,6 @@ class WorkIndexer < Hyrax::WorkIndexer
     end
     solr_name = Solrizer.solr_name(merged_field_name, solr_descriptor)
     solr_doc[solr_name] = merged_field_contents unless merged_field_contents.blank?
-    return solr_doc
-  end
-
-  def merge_title_fields(merged_field_name, solr_doc)
-    # If there is a value in the Title or TitleAlternative fields 
-    # that is not blank or a variant of "untitled", return that
-    titles = Array(solr_doc[schema.get_field(:title).solr_name]) + Array(solr_doc[schema.get_field(:titleAlternative).solr_name])
-    titles.reject!{|existing_title| existing_title.blank? || (existing_title.downcase.gsub(/[^a-z]/, '') == "untitled") }
-    if titles.blank?
-      if (subseries = solr_doc[schema.get_field(:subseries).solr_name]).present? 
-        titles << "#{subseries.first} [Untitled]"
-      elsif (series = solr_doc[schema.get_field(:series).solr_name]).present? 
-        titles << "#{series.first} [Untitled]"
-      else
-        titles << "[Untitled]"
-      end
-    end
-    solr_doc[Solrizer.solr_name(merged_field_name)] = titles if titles.present?
     return solr_doc
   end
 
