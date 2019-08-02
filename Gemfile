@@ -113,3 +113,6 @@ gem "octokit", "~> 4.0"
 gem 'actionview', '>= 5.0.7.2'
 
 gem 'bundler', '>= 2'
+
+gem "mini_magick", ">= 4.9.4"
+
