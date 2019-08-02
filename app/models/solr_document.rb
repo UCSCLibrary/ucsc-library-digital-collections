@@ -101,21 +101,17 @@ class SolrDocument
     "#{root_url}/records/#{record.id}"
   end
 
-  # The original file id should be indexed with each work with a representative image. 
-  # Then image viewer links can be created dynamically.
-  # We don't want to load fileset objects when viewing works.
   def display_image_url(size: "800,")
-    if hydra_model.to_s == "FileSet"
-      return nil unless FileSet.exists?(id)
-      fs = FileSet.find(id)
-      @original_file_id ||= fs.original_file.id
-      Hyrax.config.iiif_image_url_builder.call(@original_file_id,"nil",size)
+    if self['relatedImageId_ss'].present?
+      Hyrax.config.iiif_image_url_builder.call(self['relatedImageId_ss'],"nil",size)
+    elsif human_readable_type == "FileSet"
+      file_id = FileSet.find(id).original_file.id
+      Hyrax.config.iiif_image_url_builder.call(file_id,"nil",size)
     elsif representative_id.present?
       SolrDocument.find(representative_id).display_image_url(size: size)
     else
-      return nil
+      nil
     end
-
   end
 
   def root_url
