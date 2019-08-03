@@ -91,7 +91,7 @@ class CatalogController < ApplicationController
     ScoobySnacks::BlacklightConfiguration.add_search_result_display_fields(config)
     config.add_index_field solr_name("subject", :stored_searchable), label: "Subject"
     config.add_index_field solr_name("subject", :facetable), label: "Subject"
-    config.add_index_field solr_name("titleDisplay"), label: "Title"
+#    config.add_index_field solr_name("titleDisplay"), label: "Title"
     config.add_index_field solr_name("callNumber"), label: "Call Number"
 
     # solr fields to be displayed in the show (single result) view
@@ -99,7 +99,7 @@ class CatalogController < ApplicationController
 
     ScoobySnacks::BlacklightConfiguration.add_show_fields(config)
     config.add_show_field solr_name("subject", :stored_searchable), label: "Subject"
-    config.add_show_field solr_name("titleDisplay"), label: "Title"
+#    config.add_show_field solr_name("titleDisplay"), label: "Title"
     config.add_show_field solr_name("callNumber"), label: "Call Number"
 
     # "fielded" search configuration. Used by pulldown among other places.
