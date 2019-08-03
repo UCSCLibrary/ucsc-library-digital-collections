@@ -5,10 +5,11 @@ module Ucsc
     def title
       if (title = get_values(:title))
         return title
+      else
+        untitled_label = "Untitled"
+        untitled_label = "Untitled: #{subseries.first}" if subseries.present?
+        return UntitledArray.new(untitled_label)
       end
-      solr_array = to_solr
-      untitled_label = solr_array[ solr_array.keys.detect{|key| key.include? "titleDisplay"} ].first
-      UntitledArray.new(untitled_label)
     end
 
     class UntitledArray < Array
