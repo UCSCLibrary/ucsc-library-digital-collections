@@ -66,10 +66,10 @@ class SolrDocument
     subseries = self[subseries_solr_name]
     # Tack on a subseries if we have one
     if subseries.present?
-      return "Untitled: #{subseries.first}"
+      return ["Untitled: #{subseries.first}"]
     end
     # Return "Untitled" if there is no title and no subseries
-    return "Untitled"
+    return ["Untitled"]
   end
 
   def to_semantic_values(schema=nil)
@@ -104,7 +104,7 @@ class SolrDocument
   def display_image_url(size: "800,")
     if self['relatedImageId_ss'].present?
       Hyrax.config.iiif_image_url_builder.call(self['relatedImageId_ss'],"nil",size)
-    elsif human_readable_type == "FileSet"
+    elsif human_readable_type.downcase.include? "file"
       file_id = FileSet.find(id).original_file.id
       Hyrax.config.iiif_image_url_builder.call(file_id,"nil",size)
     elsif representative_id.present?
