@@ -17,6 +17,7 @@ module Ucsc
       "click"
     end
 
+    # We should delegate this to the solrDocument, which should have it already indexed (for works at least).
     def display_image_url
       if representative_id
         return nil unless current_ability.can?(:read, representative_id)
@@ -42,7 +43,7 @@ module Ucsc
     end
 
     def page_title
-      "#{solr_document.titleDisplay} | UCSC Digital Library Collections"
+      "#{solr_document.title.first} | UCSC Digital Library Collections"
     end
 
     delegate :titleAlternative, :subseries, :series, to: :solr_document
