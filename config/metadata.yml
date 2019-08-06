@@ -40,7 +40,6 @@ fields:
     work_title: true
     searchable: true
     full_text_searchable: true
-    OAI: DC:title
 
   accessionNumber:
     definition: "An archival accession number for the resource."
@@ -60,7 +59,6 @@ fields:
       - search_result
     searchable: true
     full_text_searchable: true
-    OAI: DC:alternative
 
   subseries:
     definition: "A subseries title for the resource."
@@ -72,7 +70,6 @@ fields:
       - search_result
     searchable: true
     full_text_searchable: true    
-    OAI: DC:alternative
 
   theme:
     definition: "A theme or something theme-like."
@@ -101,7 +98,6 @@ fields:
       - search_result
     facet: true
     input: textbox_autosuggest
-    OAI: DC:creator
 
   contributor:
     definition: "A person or organization responsible for making contributions to the resource."
@@ -117,20 +113,17 @@ fields:
     searchable: true
     index_itemprop: contributor
     input: textbox_autosuggest
-    OAI: DC:contributor
 
   originalPublisher:
     predicate: MODS:publisher
     definition: The name of the entity that published, printed, distributed, released, issued, or produced the resource.
     label: Original Publisher
-    OAI: MODS:publisher
   
   publisher:
     predicate: "DC:publisher"
     definition: "The organization responsible for publishing the work digitally"
     label: "Digital Publisher & Contact Info"
 #    multiple: false
-    OAI: DC:publisher
   
   publisherHomepage:
     label: "Publisher Homepage"
@@ -154,7 +147,6 @@ fields:
         subauthority: dcmi_types
     facet: true
     input: dropdown
-    OAI: DC:type
 #    multiple: false
 
   rightsStatement:
@@ -162,7 +154,6 @@ fields:
     label: Copyright Statement
     predicate: DC:rights
 #    required: 'true'
-    OAI: DC:rights
   
   rightsHolder:
     definition: A person or organization owning or managing rights over the resource.
@@ -177,7 +168,6 @@ fields:
       - authority: local
         subauthority: agents
     input: textbox_autosuggest
-    OAI: DC:rights
   
   scale:
     definition: Ratio of the dimensions of a form contained or embodied in a resource to the dimensions of the entity it represents, e.g., for images or cartographic resources.
@@ -231,7 +221,6 @@ fields:
       - secondary
       - editor_primary
       - search_result
-    OAI: DC:subject
   
   subjectPlace:
     definition: Spatial characteristics of the resource.
@@ -253,7 +242,6 @@ fields:
       - secondary
       - editor_primary
       - search_result
-    OAI: DC:subject
 
   
   subjectTemporal:
@@ -274,7 +262,6 @@ fields:
       - secondary
       - editor_primary
       - search_result
-    OAI: DC:subject
 
   
   subjectTopic:
@@ -295,7 +282,6 @@ fields:
       - secondary
       - editor_primary
       - search_result
-    OAI: DC:subject
   
   dateCreated:
     definition: Date of creation of the original resource.
@@ -309,7 +295,6 @@ fields:
       - secondary
       - editor_primary
 #      - search_result   
-#    OAI: DC:date
 
   dateCreatedDisplay:
     definition: Textual representation of the creation date (temporary fix)
@@ -319,7 +304,6 @@ fields:
       - editor_primary 
       - search_result
     predicate: MODS:dateCreated
-    OAI: DC:date
 
   dateDigitized:
     definition: Date on which the resource was changed, i.e., digitized.
@@ -352,7 +336,6 @@ fields:
 #    index_helper_method: "iconify_auto_link"
     searchable: true
     full_text_serachable: true
-    OAI: dc:description
 
   
   relatedResource:
@@ -375,7 +358,6 @@ fields:
     display_groups:
       - secondary
       - editor_primary
-    OAI: DC:format
   
   keyword:
     definition: Keywords (i.e. non-standard terms) assigned to the resource.
@@ -401,7 +383,6 @@ fields:
     display_groups:
       - secondary
       - editor_primary
-    OAI: DC:language
   
   license:
     definition: An associated license for the object (i.e. Creative Commons license, software licenses, etc.). Defines use/reuse of resources.
@@ -417,7 +398,6 @@ fields:
     display_groups: 
       - secondary
       - editor_primary
-    OAI: DC:identifier
   
   physicalDescription:
     definition: Description or statement indicating the extent, size, or duration of the original, physical resource for digitized content.
@@ -431,7 +411,6 @@ fields:
       - editor_primary
     label: Access Rights
     predicate: DC:accessRights
-    OAI: DC:rights
     
   itemCallNumber:
     definition: Classification number in any scheme.
@@ -440,7 +419,6 @@ fields:
     display_groups:
       - secondary
       - editor_primary
-    OAI: DC:identifier
 
   collectionCallNumber:
     definition: The identifier for the collection to which the resource belongs.
@@ -449,7 +427,6 @@ fields:
     display_groups:
       - secondary
       - editor_primary
-    OAI: DC:source
 
   donorProvenance:
     definition: "A statement of any changes in ownership and custody of the resource since its creation that are significant for its authenticity, integrity, and interpretation."
