@@ -23,6 +23,7 @@ default:
     - subjectTemporal
     - subjectTopic
   date:
+    - dateCreated
     - dateCreatedDisplay
   description:
     - description
