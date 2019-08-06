@@ -1,9 +1,6 @@
 
-# You can use any metadata element defined in metadata.yml here,
-#  and can also use the following extra keywords: 
-#   'collection' - the title of the first containing User Collection of the object
-#   'image_url' - the url of an image representing the object
-#   'permalink' - the permanent url of the object in the system
+# You can use any metadata element defined in metadata.yml 
+# or any valid method of a SolrDocument that requires no arguments
 default:
   title:
     - title
@@ -20,14 +17,12 @@ default:
     - resourceType
   rights:
     - rightsHolder
-    - accessRights
   subject:
     - subjectName
     - subjectPlace
     - subjectTemporal
     - subjectTopic
   date:
-    - dateCreated
     - dateCreatedDisplay
   description:
     - description
