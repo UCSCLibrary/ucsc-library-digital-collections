@@ -3,13 +3,15 @@ module Ucsc
     extend ActiveSupport::Concern
     
     def title
-      if (title = get_values(:title))
-        return title
-      else
-        untitled_label = "Untitled"
-        untitled_label = "Untitled: #{subseries.first}" if subseries.present?
-        return UntitledArray.new(untitled_label)
+      if (normal_title = get_values(:title)).present?
+        if (normal_title.first.downcase == "untitled") && (subseries = get_values(:subseries)).present?
+          return ["Untitled: #{subseries.first}"]
+        else
+         return normal_title
+        end
       end
+      untitled_label = subseries.present? ? "Untitled: #{subseries.first}" : "Untitled"
+      return UntitledArray.new(untitled_label)
     end
 
     class UntitledArray < Array
