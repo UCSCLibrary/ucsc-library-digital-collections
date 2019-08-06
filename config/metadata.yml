@@ -411,6 +411,8 @@ fields:
   masterFilename:
     definition: "The name of the file (usually attached to this work) that is considered the master digital file to represent the work."
     predicate: EBUCore:filename
+    searchable: true
+    full_text_searchable: true
     label: Master File Name
     display_groups: 
       - secondary
