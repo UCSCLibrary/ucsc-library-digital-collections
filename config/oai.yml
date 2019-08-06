@@ -46,7 +46,7 @@ DC:
   identifier:
     - masterFilename
     - itemCallNumber
-    - permalink
+    - display_image_url
 DPLA:
   parent_schema: default
   object:
