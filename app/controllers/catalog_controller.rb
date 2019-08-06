@@ -48,7 +48,7 @@ class CatalogController < ApplicationController
       }
     }
 
-    config.view.gallery.partials = [:index_header, :index]
+    config.view.gallery.partials = [:index_header]
     config.view.gallery.default = true
 #    config.gallery.title_only_by_default = true
 
@@ -70,11 +70,10 @@ class CatalogController < ApplicationController
       qf: schema.default_text_search_solrized_field_names
     }
 
-    # solr field configuration for document/show views
+    # solr field configuration for index views
     config.index.title_field = solr_name("title", :stored_searchable)
     config.index.display_type_field = solr_name("has_model", :symbol)
     config.index.thumbnail_field = 'thumbnail_path_ss'
-
 
     # solr fields that will be treated as facets by the blacklight application
     #   The ordering of the field names is the order of the display
