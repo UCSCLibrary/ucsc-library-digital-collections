@@ -42,10 +42,10 @@ class SolrDocument
 
 
   # create field semantics hash from oai.yml file
-  namespaces =  YAML.load_file(File.join(Rails.root.to_s,'config/oai.yml'))
-  namespaces.each do |namespace, properties|
+  oai_namespaces =  YAML.load_file(File.join(Rails.root.to_s,'config/oai.yml'))
+  oai_namespaces.each do |namespace, properties|
     next if namespace.to_s.downcase == "default"
-    if properties["parent_schema"].present? && (parent = namespaces[properties["parent_schema"]]).present?
+    if properties["parent_schema"].present? && (parent = oai_namespaces[properties["parent_schema"]]).present?
       properties = parent.deep_merge(properties).reject{|key,value| key == "parent_schema"}
     end
     properties.each do |property,field_names|
@@ -72,13 +72,13 @@ class SolrDocument
     return ["Untitled"]
   end
 
-  def to_semantic_values(schema=nil)
-    @semantic_value_hash ||= self.class.field_semantics.each_with_object(Hash.new([])) do |(key, field_names), hash|
+  def to_semantic_values(schema="dc")
+    (@semantic_value_hash ||= {})[schema] ||= self.class.field_semantics.each_with_object(Hash.new([])) do |(key, field_names), hash| 
 
       if (val_schema, attribute = key.split(':')).length == 2
         # Skip this one unless it is in the right schema
         # (or if we are requesting all schemas, or if it is registered without a specific schema)
-        next unless schema.nil? || val_schema.nil? || schema.to_s.downcase == val_schema.to_s.downcase
+        next unless schema.blank? || val_schema.blank? || (schema.to_s.downcase == val_schema.to_s.downcase)
         key = attribute
       end
       
@@ -89,14 +89,12 @@ class SolrDocument
         raw_value = self[field_name] if raw_value.blank? and self[field_name].present?
         raw_value
       end
-               
+      
       value = value.flatten.compact
       hash[key] = value unless value.empty?
     end
-    
-    @semantic_value_hash ||= {}
   end
-  
+
   def permalink(record = self)
     "#{root_url}/records/#{record.id}"
   end
