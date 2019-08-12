@@ -40,7 +40,7 @@ module Ucsc::Blacklight::Dpla
              'xmlns:edm' => "http://www.europeana.eu/schemas/edm/",
              'xmlns:xsi' => "http://www.w3.org/2001/XMLSchema-instance",
              'xsi:schemaLocation' => %(https://digitalcollections.library.ucsc.edu/oai_dpla/ https://digitalcollections.library.ucsc.edu/oai_dpla/oai_dpla.xsd)) do
-      to_semantic_values.select { |field, _values| dpla_field_name? field  }.each do |field, values|
+      to_semantic_values("dpla").select { |field, _values| dpla_field_name? field  }.each do |field, values|
         Array.wrap(values).each do |v|
           xml.tag! "#{field_prefix(field)}:#{field}", v
         end
