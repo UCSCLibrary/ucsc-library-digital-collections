@@ -35,10 +35,10 @@ default:
     - masterFilename
     - itemCallNumber
   source:
-    - collection
+    - member_of_collections_ssim
     - collectionCallNumber   
 DC:
-  parent_schema: DC
+  parent_schema: default
   identifier:
     - masterFilename
     - itemCallNumber
