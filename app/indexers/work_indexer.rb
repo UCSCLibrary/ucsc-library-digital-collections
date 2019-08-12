@@ -5,7 +5,7 @@ class WorkIndexer < Hyrax::WorkIndexer
 
   def generate_solr_document
     super.tap do |solr_doc|
-      if (image_id = solr_doc['hasRelatedImage_ss']).present?
+      if (image_id = solr_doc['hasRelatedImage_ssim']).present?
         solr_doc['relatedImageId_ss'] = solr_doc['hasRelatedImage_ssim'].map{|fsid|FileSet.find(fsid).original_file.id}.first
       end
       return solr_doc unless solr_doc['has_model_ssim'].include?("Work") or solr_doc['generic_type_sim'].include?("Work") or (solr_doc["human_readable_type_tesim"] == "Work") or (solr_doc["human_readable_type_ssim"] == "Work")
