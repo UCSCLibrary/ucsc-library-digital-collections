@@ -112,6 +112,17 @@ class SolrDocument
     end
   end
 
+  def image?
+    return true if super
+    return false unless representative_id
+    resourceType.each do |type|
+      return true if type.to_s.downcase.include? "image"
+    end
+#    return true if member_ids.all?{|id| SolrDocument.find(id).image? }
+    return true if member_ids.any?{|id| SolrDocument.find(id).image? }
+    return false
+  end
+  
   def root_url
     "https://"+Socket.gethostname
   end
@@ -120,7 +131,7 @@ class SolrDocument
     fetch('member_ids_ssim', [])
   end
 
-  def file_set_ids    
+  def file_set_ids
     fetch('file_set_ids_ssim', [])
   end
 
@@ -149,14 +160,40 @@ class SolrDocument
     @parent_course_solr_document = SolrDocument.new(response)
   end
 
-  def parent_work
-    return @parent_work_solr_document unless @parent_work_solr_document.nil?
+  def parent_works
+    return @parent_work_solr_documents unless @parent_work_solr_documents.nil?
     query = ActiveFedora::SolrQueryBuilder.construct_query_for_rel("member_ids" => id, "has_model" => "Work")
-    response = ActiveFedora::SolrService.instance.conn.get(ActiveFedora::SolrService.select_path, params: { fq: query, rows: 1})["response"]["docs"][0]
+    response = ActiveFedora::SolrService.instance.conn.get(ActiveFedora::SolrService.select_path, params: { fq: query, rows: 1})["response"]["docs"]
     return nil if response.nil?
-    @parent_work_solr_document = SolrDocument.new(response)
+    @parent_work_solr_documents = response.map{|doc| SolrDocument.new(doc)}
   end
 
+  def parent_work
+    parent_works.first
+  end
 
+  def parent_work_ids
+    parent_works.map{|wrk| wrk.id}
+  end
+
+  def parent_work_id
+    parent_work.id
+  end
+
+  def parent_id
+    parent_work_id
+  end
+
+  def sibling_work_ids
+    parent_works.reduce([]){|siblings,parent| siblings += parent.ordered_ids} - [id]
+  end
+
+  def sibling_works
+    sibling_works.map(SolrDocument.find(sibling_work_ids))
+  end
+
+  def grandchild_file_set_ids
+    self["grandchild_file_set_ids_ssm"] || []
+  end
 
 end
