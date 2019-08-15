@@ -2,7 +2,7 @@ module Ucsc
   class WorkShowPresenter < Hyrax::WorkShowPresenter
     include ScoobySnacks::PresenterBehavior
 
-    delegate :file_set_ids, to: :solr_document
+    delegate :file_set_ids, :image?, to: :solr_document
 
     delegate :member_av_files, :ordered_work_ids, to: :member_presenter_factory
 
@@ -33,14 +33,6 @@ module Ucsc
       @all_av_files ||= generate_all_av_file_list
     end
 
-    def image?
-      return false unless representative_id
-      solr_document.resourceType.each do |type|
-        return true if type.to_s.downcase.include? "image"
-      end
-      return true if solr_document.member_ids.all?{|id| SolrDocument.find(id).image? }
-      return solr_document.image?
-    end
 
     def page_title
       "#{solr_document.title.first} | UCSC Digital Library Collections"
