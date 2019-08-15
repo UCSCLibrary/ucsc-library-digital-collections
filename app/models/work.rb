@@ -34,6 +34,10 @@ class Work < ActiveFedora::Base
       end
       self.send(field_name.to_s+"_attributes=",attributes) unless attributes.empty?
     end
+    if representative_id.blank? && members.present? && members.first.representative_id.present?
+      representative_id = members.first.representative_id
+    end
+    thumbnail_id = representative_id if (thumbnail_id.blank? && representative_id.present?)
     super *args
   end
 
