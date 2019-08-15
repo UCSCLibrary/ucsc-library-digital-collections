@@ -5,14 +5,50 @@ class WorkIndexer < Hyrax::WorkIndexer
 
   def generate_solr_document
     super.tap do |solr_doc|
-      if (image_id = solr_doc['hasRelatedImage_ssim']).present?
-        solr_doc['relatedImageId_ss'] = solr_doc['hasRelatedImage_ssim'].map{|fsid|FileSet.find(fsid).original_file.id}.first
-      end
       return solr_doc unless solr_doc['has_model_ssim'].include?("Work") or solr_doc['generic_type_sim'].include?("Work") or (solr_doc["human_readable_type_tesim"] == "Work") or (solr_doc["human_readable_type_ssim"] == "Work")
+
       solr_doc = index_controlled_fields(solr_doc)
       solr_doc = merge_fields(:subject, [:subjectTopic,:subjectName,:subjectTemporal,:subjectPlace], solr_doc, :stored_searchable)
       solr_doc = merge_fields(:subject, [:subjectTopic,:subjectName,:subjectTemporal,:subjectPlace], solr_doc, :facetable)
       solr_doc = merge_fields(:callNumber, [:itemCallNumber,:collectionCallNumber,:boxFolder], solr_doc)
+      
+      #fix child file indexing for nested works
+      solr_doc['file_set_ids_ssim'] = solr_doc['file_set_ids_ssim'].select do |fileset_id| 
+        begin
+          child_doc = SolrDocument.find(fileset_id)
+          puts "checking work #{fileset_id} with model type #{ child_doc.hydra_model.to_s}"
+          case child_doc.hydra_model.to_s
+          when "FileSet"
+            true
+          when "Work","Course","Lecture"
+            puts "adding grandchild: #{fileset_id}"
+            solr_doc['grandchild_file_set_ids_ssm'] ||= []
+            solr_doc['grandchild_file_set_ids_ssm'] += child_doc.file_set_ids
+            false
+          else
+            false
+          end
+        rescue Blacklight::Exceptions::RecordNotFound
+          false
+        end
+      end
+
+      # add any grandchild media fragments to this work's media fragment index
+      if solr_doc['grandchild_file_set_ids_ssm'].present?
+        solr_doc["hasRelatedMediaFragment_ssim"] ||= [] 
+        solr_doc["hasRelatedMediaFragment_ssim"] += solr_doc['grandchild_file_set_ids_ssm'] 
+      end
+
+      # If there is no image for this work, but grandchild filesets exist, try to use one of those as an image
+      if solr_doc["hasRelatedImage_ssim"].blank? && solr_doc['grandchild_file_set_ids_ssm'].present?
+        solr_doc["hasRelatedMediaFragment_ssim"] += solr_doc['grandchild_file_set_ids_ssm']
+        solr_doc["hasRelatedImage_ssim"] = solr_doc['grandchild_file_set_ids_ssm'].select{|fsid| SolrDocument.find(fsid).image? }
+      end
+
+      # If there is an image attached, also index the file id for fast display via universalviewer
+      if (image_id = solr_doc['hasRelatedImage_ssim']).present?
+        solr_doc['relatedImageId_ss'] = solr_doc['hasRelatedImage_ssim'].map{|fsid|FileSet.find(fsid).original_file.id}.first
+      end
     end
   end
 
