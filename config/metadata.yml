@@ -263,6 +263,24 @@ fields:
       - editor_primary
       - search_result
 
+  subjectTitle:
+    definition: The title of a work that is the subject of this work.
+    label: Subject (Title)
+    predicate: MODS:subjectTitle
+    vocabularies: 
+      - authority: loc
+        subauthority: subjects
+      - authority: local
+        subauthority: topics
+    facet: true
+    searchable: true
+    full_text_searchable: true
+    index_itemprop: about
+    input: textbox_autosuggest
+    display_groups:
+      - secondary
+      - editor_primary
+      - search_result
   
   subjectTopic:
     definition: The topic of the resource.
@@ -271,6 +289,8 @@ fields:
     vocabularies: 
       - authority: loc
         subauthority: subjects
+      - authority: getty
+        subauthority: aat
       - authority: local
         subauthority: topics
     facet: true
@@ -303,7 +323,14 @@ fields:
       - secondary
       - editor_primary 
       - search_result
-    predicate: MODS:dateCreated
+    predicate: MODS:dateCreated  
+
+  dateOfSituation:
+    definition: A date of a situation depicted in the work or associated with the subject of the work.
+    label: 'Date of Situation'
+    predicate: local:dateOfSituation
+#    data_type: date
+#    input: date
 
   dateDigitized:
     definition: Date on which the resource was changed, i.e., digitized.
@@ -333,10 +360,38 @@ fields:
       - primary
       - search_result
     index_itemprop: description
-#    index_helper_method: "iconify_auto_link"
     searchable: true
-    full_text_serachable: true
+    full_text_searachable: true
 
+  descriptionAddress:
+    definition: An address depicted in or associated with the work
+    label: Address
+    predicate: schema:address
+    full_text_searchable: true
+
+  descriptionFeature:
+    definition: A Feature depicted in or associated with the work
+    label: Features
+    predicate: local:feature
+    full_text_searchable: true
+
+  descriptionNeighborhood:
+    definition: A neighborhood depicted in or associatd with the work
+    label: Neighborhood
+    predicate: local:neighborhood
+    full_text_searchable: true
+ 
+  descriptionStreet:
+    definition: A street depicted in or associated with the work
+    label: Street
+    predicate: local:street
+    full_text_searchable: true
+
+  descriptionTownshipRange:
+    definition: A Township and/or range depicted in or associated with the work
+    label: Township & Range
+    predicate: local:townshipRange
+    full_text_searchable: true
   
   relatedResource:
     definition: A link to a relatd resource.
@@ -460,3 +515,5 @@ namespaces:
   opaque: "http://opaquenamespace.org/ns/"
   schema: "http://schema.org/"
   purlOnt: "http://purl.org/ontology/"
+  local: "http://digitalcollections.library.ucsc.edu/ontology/"
+#  foaf: "http://xmlns.com/foaf/0.1/"
