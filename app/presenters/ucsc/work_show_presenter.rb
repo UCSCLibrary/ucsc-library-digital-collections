@@ -38,6 +38,10 @@ module Ucsc
       "#{solr_document.title.first} | UCSC Digital Library Collections"
     end
 
+    def manifest_metadata *args
+      super.reject{|md| md["value"].blank?}
+    end
+
     delegate :titleAlternative, :subseries, :series, to: :solr_document
 
     private 
