@@ -1,0 +1,5 @@
+predicates:
+ - feature
+ - neighborhood
+ - street
+ - townshipRange
