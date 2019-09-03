@@ -41,13 +41,17 @@ class WorkIndexer < Hyrax::WorkIndexer
 
       # If there is no image for this work, but grandchild filesets exist, try to use one of those as an image
       if solr_doc["hasRelatedImage_ssim"].blank? && solr_doc['grandchild_file_set_ids_ssm'].present?
-        solr_doc["hasRelatedMediaFragment_ssim"] += solr_doc['grandchild_file_set_ids_ssm']
+        solr_doc["hasRelatedMediaFragment_ssim"] = (solr_doc["hasRelatedMediaFragment_ssim"] + solr_doc['grandchild_file_set_ids_ssm']).uniq
         solr_doc["hasRelatedImage_ssim"] = solr_doc['grandchild_file_set_ids_ssm'].select{|fsid| SolrDocument.find(fsid).image? }
       end
 
       # If there is an image attached, also index the file id for fast display via universalviewer
-      if (image_id = solr_doc['hasRelatedImage_ssim']).present?
-        solr_doc['relatedImageId_ss'] = solr_doc['hasRelatedImage_ssim'].map{|fsid|FileSet.find(fsid).original_file.id}.first
+      # if the file has been processed. Otherwise it will be added by the file processing job upon completion.
+      if (image_ids = solr_doc['hasRelatedImage_ssim']).present?
+        fileset = FileSet.find(image_ids.first)
+        unless fileset.original_file.blank?
+          solr_doc['relatedImageId_ss'] = fileset.original_file.id
+        end
       end
     end
   end
