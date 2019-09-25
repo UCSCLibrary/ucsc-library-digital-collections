@@ -8,4 +8,6 @@ class Collection < ActiveFedora::Base
     @reindex_extent ||= Hyrax::Adapters::NestingIndexAdapter::LIMITED_REINDEX
   end
 
+  property :metadataInheritance, predicate: "https://digitalcollections.library.ucsc.edu/ontology/metadataInheritance", multiple: false
+
 end

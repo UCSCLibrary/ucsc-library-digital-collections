@@ -34,10 +34,22 @@ class Work < ActiveFedora::Base
       end
       self.send(field_name.to_s+"_attributes=",attributes) unless attributes.empty?
     end
+
     if representative_id.blank? && members.present? && members.first.representative_id.present?
       representative_id = members.first.representative_id
     end
+
     thumbnail_id = representative_id if (thumbnail_id.blank? && representative_id.present?)
+
+    # set metadataInheritance based on collection or admin set if applicable
+    if metadataInheritance.blank?
+      if (collection = member_of.find{|col| col.class == Collection && col.metadataInheritance.present?})
+        metadataInheritance = collection.metadataInheritance 
+      elsif admin_set.present? && admin_set.responds_to(:metadataInheritance) && admin_set.metadataInheritance.present?
+        metadataInheritance = admin_set.metadataInheritance 
+      end
+    end
+
     super *args
   end
 
