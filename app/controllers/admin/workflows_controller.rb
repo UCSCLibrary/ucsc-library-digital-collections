@@ -15,10 +15,10 @@ class Admin::WorkflowsController < Hyrax::Admin::WorkflowsController
     workflow.workflow_states.each do |state|
       label = state.name.titleize
       if claimed_states.include? state.name
-        
         list = Workflow::Claim.where(user_id: current_user.id, sipity_workflow_states_id: state.id ).map{|claim| SolrDocument.find(claim.work_id)}
+        num = list.count
       else
-        list = ::Workflow::StatusListService.new(self, "workflow_state_name_ssim:#{state.name}", 9999)
+        list = ::Workflow::StatusListService.new(self, "workflow_state_name_ssim:#{state.name}")
       end
       
       actions = Sipity::WorkflowStateAction.where(originating_workflow_state_id: state.id).map{|sa| sa.workflow_action}
@@ -27,7 +27,7 @@ class Admin::WorkflowsController < Hyrax::Admin::WorkflowsController
                   name: state.name,
                   id: state.id,
                   list: list,
-                  num: list.each.reduce(0){|i,wrk| i+1},
+                  num: list.count,
                   actions: actions,
                   order: preferred_order(state.name)}
     end
