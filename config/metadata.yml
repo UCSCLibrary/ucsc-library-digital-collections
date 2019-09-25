@@ -25,6 +25,7 @@ fields:
     stored_in_solr: true
     full_text_searchable: false
     sortable: false
+    inheritable: true
 
   title:
     definition: "The title of the resource."
@@ -44,6 +45,7 @@ fields:
   accessionNumber:
     definition: "An archival accession number for the resource."
     label: "Accession Number"
+    inheritable: false
     display_groups: 
       - admin_only
       - editor_primary
@@ -448,6 +450,7 @@ fields:
     definition: "The name of the file (usually attached to this work) that is considered the master digital file to represent the work."
     predicate: EBUCore:filename
     searchable: true
+    inheritable: false
     full_text_searchable: true
     label: Master File Name
     display_groups: 
@@ -465,11 +468,13 @@ fields:
       - secondary
       - editor_primary
     label: Access Rights
+    inheritable: false
     predicate: DC:accessRights
     
   itemCallNumber:
     definition: Classification number in any scheme.
     label: Item Call Number
+    inheritable: false
     predicate: BF2:classification
     display_groups:
       - secondary
@@ -482,6 +487,38 @@ fields:
     display_groups:
       - secondary
       - editor_primary
+
+  metadataInheritance:
+    definition: Determines whether and how a work inherits metadata from another work, usually its parent
+    label: Inheritance
+    hidden: true
+    predicate: local:inheritance
+    display_group: admin_only
+    inheritable: false
+
+  independentlyDisplayed:
+    definition: determines whether a work will show up in search results and/or have its own display page (rather than displaying through a parent work).
+    label: Independently Displayed
+    hidden: true
+    predicate: local:independentlyDisplayed
+    display_group: admin_only
+    inheritable: false
+     
+  displayOrder:
+    definition: determines the order in which this work displays relative to its sibling works. If we implement proxy-based ordering for works, they would override this property when defined.
+    label: Display Order
+    hidden: true
+    predicate: local:displayOrder
+    display_group: admin_only
+    inheritable: false
+     
+  displayRole:
+    definition: The role this work plays in the context of its sibling works
+    label: Display Role
+    hidden: true
+    predicate: local:displayRole
+    display_group: admin_only
+    inheritable: false    
 
   donorProvenance:
     definition: "A statement of any changes in ownership and custody of the resource since its creation that are significant for its authenticity, integrity, and interpretation."
@@ -516,4 +553,4 @@ namespaces:
   schema: "http://schema.org/"
   purlOnt: "http://purl.org/ontology/"
   local: "http://digitalcollections.library.ucsc.edu/ontology/"
-#  foaf: "http://xmlns.com/foaf/0.1/"
+
