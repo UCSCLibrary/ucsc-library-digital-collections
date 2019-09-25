@@ -41,8 +41,17 @@ module Ucsc
     def manifest_metadata *args
       super.reject{|md| md["value"].blank?}
     end
+    
+    def inherits?
+      Array(solr_document.metadataInheritance).any?{|inh| inh.to_s.downcase.include?("display")}
+    end
 
     delegate :titleAlternative, :subseries, :series, to: :solr_document
+
+    def parent_presenter
+      return nil unless (parent_id = solr_document.parent_id).present?
+      @parent_presenter ||= Ucsc::WorkShowPresenter.new(SolrDocument.find(parent_id), current_ability,request)
+    end
 
     private 
 
@@ -59,7 +68,6 @@ module Ucsc
     def member_presenter_factory
       WorkMemberPresenterFactory.new(solr_document, current_ability, request)
     end
-
 
     def find_renderer_class(name)
       return ::FacetedAttributeRenderer if name == :faceted
