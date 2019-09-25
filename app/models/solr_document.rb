@@ -177,6 +177,7 @@ class SolrDocument
   end
 
   def parent_work_id
+    return nil unless parent_work.present? 
     parent_work.id
   end
 
