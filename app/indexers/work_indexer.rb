@@ -8,6 +8,7 @@ class WorkIndexer < Hyrax::WorkIndexer
       return solr_doc unless solr_doc['has_model_ssim'].include?("Work") or solr_doc['generic_type_sim'].include?("Work") or (solr_doc["human_readable_type_tesim"] == "Work") or (solr_doc["human_readable_type_ssim"] == "Work")
 
       solr_doc = index_controlled_fields(solr_doc)
+      solr_doc = inherit_fields(solr_doc)
       solr_doc = merge_fields(:subject, [:subjectTopic,:subjectName,:subjectTemporal,:subjectPlace], solr_doc, :stored_searchable)
       solr_doc = merge_fields(:subject, [:subjectTopic,:subjectName,:subjectTemporal,:subjectPlace], solr_doc, :facetable)
       solr_doc = merge_fields(:callNumber, [:itemCallNumber,:collectionCallNumber,:boxFolder], solr_doc)
@@ -16,12 +17,10 @@ class WorkIndexer < Hyrax::WorkIndexer
       solr_doc['file_set_ids_ssim'] = solr_doc['file_set_ids_ssim'].select do |fileset_id| 
         begin
           child_doc = SolrDocument.find(fileset_id)
-          puts "checking work #{fileset_id} with model type #{ child_doc.hydra_model.to_s}"
           case child_doc.hydra_model.to_s
           when "FileSet"
             true
           when "Work","Course","Lecture"
-            puts "adding grandchild: #{fileset_id}"
             solr_doc['grandchild_file_set_ids_ssm'] ||= []
             solr_doc['grandchild_file_set_ids_ssm'] += child_doc.file_set_ids
             false
@@ -58,6 +57,14 @@ class WorkIndexer < Hyrax::WorkIndexer
 
   def schema
     ScoobySnacks::METADATA_SCHEMA
+  end
+
+  def inherit_fields solr_doc
+    return solr_doc unless Array(object.metadataInheritance).any?{|inh| inh.to_s.downcase.include?("index")}
+    return solr_doc unless object.member_of.present?
+    parent = SolrDocument.find(object.member_of.first.id)
+    ScoobySnacks::METADATA_SCHEMA.inheritable_fields.each{ |field| solr_doc[field.solr_name] = parent[field.solr_name] }
+    return solr_doc
   end
 
   def merge_fields(merged_field_name, fields_to_merge, solr_doc, solr_descriptor = :stored_searchable)
