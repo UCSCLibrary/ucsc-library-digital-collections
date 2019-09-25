@@ -1,7 +1,12 @@
 
+<% inheritable_fields = (ScoobySnacks::METADATA_SCHEMA.primary_display_fields & ScoobySnacks::METADATA_SCHEMA.inheritable_fields) %>
 <% ScoobySnacks::METADATA_SCHEMA.primary_display_fields.each do |field| %>
     <% next if (field.name == "dateCreated") && !presenter.attribute_to_html(:dateCreatedDisplay, label: "Date Created").blank? %>
-    <%= presenter.attribute_to_html(field.name.to_sym, field.display_options) %>
-<% end %>
 
+    <% if (html = presenter.attribute_to_html(field.name.to_sym, field.display_options)).present? %>
+        <%= html %>
+    <% elsif inheritable_fields.include?(field) && presenter.inherits? && presenter.parent_presenter.present? %>
+        <%= presenter.parent_presenter.attribute_to_html(field.name.to_sym, field.display_options) %>
+    <% end %>
+<% end %>
 
