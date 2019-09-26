@@ -58,7 +58,7 @@ group :development, :test do
 end
 
 gem 'rsolr', '~> 1.0'
-gem 'devise'
+gem "devise", ">= 4.7.1"
 gem 'devise-guests', '~> 0.5'
 
 group :development, :test do
@@ -85,12 +85,12 @@ gem 'browse-everything'
 gem 'samvera_hls', '0.4.2'
 
 # Uncomment this when developing scooby snacks
-gem 'scooby_snacks', path: '/srv/scooby_snacks/'
-#gem 'scooby_snacks', '0.3.5'
+#gem 'scooby_snacks', path: '/srv/scooby_snacks/'
+gem 'scooby_snacks', '0.3.6'
 
 # Uncomment this when developing Bulk Ops
 #gem 'bulk_ops', path: "/srv/bulk_ops/"
-gem 'bulk_ops', '0.1.11'
+gem 'bulk_ops', '0.1.13'
 
 #gem 'ldfwrapper', github: 'boston-library/ldf-wrapper', branch: "master"
 
