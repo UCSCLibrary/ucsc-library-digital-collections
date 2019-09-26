@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190924200548) do
+ActiveRecord::Schema.define(version: 20190924200549) do
 
   create_table "bookmarks", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.integer  "user_id",                     null: false
@@ -121,6 +121,7 @@ ActiveRecord::Schema.define(version: 20190924200548) do
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
     t.string   "next"
+    t.string   "previous_sibling"
   end
 
   create_table "bulk_ops_work_proxies", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
