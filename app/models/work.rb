@@ -45,7 +45,7 @@ class Work < ActiveFedora::Base
     if metadataInheritance.blank?
       if (collection = member_of.find{|col| col.class == Collection && col.metadataInheritance.present?})
         metadataInheritance = collection.metadataInheritance 
-      elsif admin_set.present? && admin_set.responds_to(:metadataInheritance) && admin_set.metadataInheritance.present?
+      elsif admin_set.present? && admin_set.responds_to?(:metadataInheritance) && admin_set.metadataInheritance.present?
         metadataInheritance = admin_set.metadataInheritance 
       end
     end
