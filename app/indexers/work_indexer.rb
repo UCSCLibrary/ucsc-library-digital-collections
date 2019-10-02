@@ -7,6 +7,8 @@ class WorkIndexer < Hyrax::WorkIndexer
     super.tap do |solr_doc|
       return solr_doc unless solr_doc['has_model_ssim'].include?("Work") or solr_doc['generic_type_sim'].include?("Work") or (solr_doc["human_readable_type_tesim"] == "Work") or (solr_doc["human_readable_type_ssim"] == "Work")
 
+      solr_doc['member_ids_ssim'] = object.ordered_member_ids
+
       solr_doc = index_controlled_fields(solr_doc)
       solr_doc = inherit_fields(solr_doc)
       solr_doc = merge_fields(:subject, [:subjectTopic,:subjectName,:subjectTemporal,:subjectPlace], solr_doc, :stored_searchable)
@@ -14,9 +16,9 @@ class WorkIndexer < Hyrax::WorkIndexer
       solr_doc = merge_fields(:callNumber, [:itemCallNumber,:collectionCallNumber,:boxFolder], solr_doc)
       
       #fix child file indexing for nested works
-      solr_doc['file_set_ids_ssim'] = solr_doc['file_set_ids_ssim'].select do |fileset_id| 
+      solr_doc['file_set_ids_ssim'] = solr_doc['member_ids_ssim'].select do |member_id| 
         begin
-          child_doc = SolrDocument.find(fileset_id)
+          child_doc = SolrDocument.find(member_id)
           case child_doc.hydra_model.to_s
           when "FileSet"
             true
