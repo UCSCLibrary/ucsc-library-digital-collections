@@ -2,4 +2,4 @@
 :queues:
   - default
   - ingest
-:concurrency: 7
+:concurrency: 3
