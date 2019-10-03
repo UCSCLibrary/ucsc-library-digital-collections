@@ -35,8 +35,9 @@ class Work < ActiveFedora::Base
       self.send(field_name.to_s+"_attributes=",attributes) unless attributes.empty?
     end
 
-    if representative_id.blank? && members.present? && members.first.representative_id.present?
-      representative_id = members.first.representative_id
+    if representative_id.blank? && members.present?
+       member = members.select{|member| member.representative_id.present?}.first
+      representative_id = member.representative_id if representative_id
     end
 
     thumbnail_id = representative_id if (thumbnail_id.blank? && representative_id.present?)
@@ -45,7 +46,7 @@ class Work < ActiveFedora::Base
     if metadataInheritance.blank?
       if (collection = member_of.find{|col| col.class == Collection && col.metadataInheritance.present?})
         metadataInheritance = collection.metadataInheritance 
-      elsif admin_set.present? && admin_set.responds_to?(:metadataInheritance) && admin_set.metadataInheritance.present?
+      elsif admin_set.present? && admin_set.respond_to?(:metadataInheritance) && admin_set.metadataInheritance.present?
         metadataInheritance = admin_set.metadataInheritance 
       end
     end
