@@ -51,6 +51,8 @@ class Work < ActiveFedora::Base
       end
     end
 
+    inherit_metadata
+
     super *args
   end
 
@@ -65,6 +67,25 @@ class Work < ActiveFedora::Base
 
   def fix_getty_id getty_id
     getty_id.gsub('/page/','/')
+  end
+
+  private
+
+  def inherit_metadata
+    # Inheriting here is the default, so skip it only if another valid option is explicitly specified
+    return if ["index","display","none","false","no","off"].any?{|valid_option| Array(metadataInheritance).first.to_s.downcase.include?(valid_option)}
+    schema = ScoobySnacks::METADATA_SCHEMA
+    member_of.each do |parent_doc|
+      parent = ActiveFedora::Base.find(parent_doc.id)
+      schema.inheritable_fields.each do |field| 
+        next if self.send(field.name).present?
+        if field.controlled?
+          self.send("#{field.name}_attributes=",parent.send(field.name).map{|resource| {id: resource.id}})
+        else
+          self.send("#{field.name}=",parent.send(field.name))
+        end
+      end
+    end
   end
 
 end
