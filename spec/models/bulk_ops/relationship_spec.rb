@@ -47,7 +47,7 @@ RSpec.describe BulkOps::Relationship do
       parent_work.save
       sleep(1)
       relationship.resolve!
-      expect(SolrDocument.find(parent_work.id).member_ids).to eq([inserted_child_work.id,first_child_work.id])
+      expect(SolrDocument.find(parent_work.id).member_ids).to eq([first_child_work.id,inserted_child_work.id])
     end
 
     it "can correctly order a child work between existing siblings" do
@@ -63,7 +63,7 @@ RSpec.describe BulkOps::Relationship do
       parent_work.save
       sleep(1)
       inserted_relationship.resolve!
-      expect(SolrDocument.find(parent_work.id).member_ids).to eq([first_child_work.id,inserted_child_work.id,last_child_work.id])
+      expect(SolrDocument.find(parent_work.id).member_ids).to eq([last_child_work.id,first_child_work.id,inserted_child_work.id])
     end
 
 
@@ -80,7 +80,7 @@ RSpec.describe BulkOps::Relationship do
       parent_work.save
       sleep(1)
       inserted_relationship.resolve!
-      expect(SolrDocument.find(parent_work.id).member_ids).to eq([inserted_child_work.id,last_child_work.id])
+      expect(SolrDocument.find(parent_work.id).member_ids).to eq([last_child_work.id,inserted_child_work.id])
     end
 
     it "can correctly order a child work between siblings which do not all exist yet" do
