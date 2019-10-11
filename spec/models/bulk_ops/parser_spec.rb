@@ -10,16 +10,19 @@ RSpec.describe BulkOps::Parser do
 #    let(:wrk2) {Work.create(depositor: usr.email, title:["Another test title"])}
     let(:template_data) {[{"Title" => "Parent Work", "description " => "This is a test description of a test parent item"},
                           {"Title" => "First Child Work", "description " => "This is a test description of a test child item", "parent" => "id:#{wrk.id}"},
-                          {"Title" => "Second Child Work", "description " => "This is a test description of a test child item", "parent" => "row:-2"},
-                          {"Title" => "Third Child Work", "description " => "This is a test description of a test child item", "parent" => "row:prev"}]}
+                          {"Title" => "Second Child Work", "description " => "This is a test description of a test child item", "parent" => "row:2"},
+                          {"Title" => "Third Child Work", "description " => "This is a test description of a test child item", "parent" => "row:-3"},
+                          {"Title" => "Last Child Work", "description " => "This is a test description of a test child item", "parent" => "row:prev"}]}
     let(:parent_proxy) {operation.work_proxies.create( work_id: wrk.id, status:"new", row_number: 0)}
     let(:first_child_proxy) {operation.work_proxies.create(status:"new", row_number: 1)}
     let(:second_child_proxy) {operation.work_proxies.create(status:"new", row_number: 2)}
     let(:third_child_proxy) {operation.work_proxies.create(status:"new", row_number: 3)}
+    let(:last_child_proxy) {operation.work_proxies.create(status:"new", row_number: 4)}
     let(:parent_parser) {described_class.new(parent_proxy, template_data)}
     let(:first_child_parser) {described_class.new(first_child_proxy, template_data)}
     let(:second_child_parser) {described_class.new(second_child_proxy, template_data)}
     let(:third_child_parser) {described_class.new(third_child_proxy, template_data)}
+    let(:last_child_parser) {described_class.new(last_child_proxy, template_data)}
     let(:parser) {parent_parser}
     let(:sample_url) {"http://id.loc.gov/authorities/names/no90012358"}
     let(:sample_filenames) {["cat.jpg","Domestic_Cat.jpg","cat-cute-cute-pets.jpg"]}
@@ -175,6 +178,14 @@ RSpec.describe BulkOps::Parser do
       expect(rel).not_to be_nil
       expect(rel.relationship_type).to eq("parent")
     end
+
+    it "can interpret parent/child relationships based on the previous non-child row" do
+      last_child_parser.interpret_data
+      rel = BulkOps::Relationship.find_by(work_proxy_id: last_child_proxy.id, identifier_type: "row", object_identifier: 0)
+      expect(rel).not_to be_nil
+      expect(rel.relationship_type).to eq("parent")
+    end
+
 #    it "can interpret order related relationships" do
 #      sample_data = template_data.dup
 #      sample_data["order"] = "2.2"
