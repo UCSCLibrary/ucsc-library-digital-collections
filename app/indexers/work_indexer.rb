@@ -19,7 +19,8 @@ class WorkIndexer < Hyrax::WorkIndexer
             (solr_doc["hasRelatedImage_ssim"] ||= []) << member_id unless solr_doc["hasRelatedImage_ssim"].include?(member_id)
             (solr_doc["file_set_ids_ssim"] ||= []) << member_id unless solr_doc["file_set_ids_ssim"].include?(member_id)
           when "Work"
-            (solr_doc["hasRelatedImage_ssim"] ||= []) += member["hasRelatedImage_ssim"]
+            solr_doc["hasRelatedImage_ssim"] ||= []
+            solr_doc["hasRelatedImage_ssim"] += member["hasRelatedImage_ssim"]
           end
         end
         solr_doc["hasRelatedImage_ssim"] = (solr_doc["hasRelatedImage_ssim"] || []).uniq
