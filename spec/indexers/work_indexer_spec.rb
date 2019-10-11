@@ -27,7 +27,7 @@ RSpec.describe WorkIndexer do
       entry = Qa::LocalAuthorityEntry.create(local_authority: auth,
                                              label: "Cataract",
                                              uri: "cataract")
-      expect(described_class.fetch_remote_label("https://digitalcollections.library.ucsc.edu/authorities/show/local/agents/cataract")).to eq("Cataract")
+      expect(described_class.fetch_remote_label("http://localhost/authorities/show/local/agents/cataract")).to eq("Cataract")
     end
 
     it "buffers retrieved labels" do
@@ -75,12 +75,26 @@ RSpec.describe WorkIndexer do
       expect(wrk.to_solr["callNumber_tesim"]).to include("1","2")
     end
 
-    it "combines the title fields" do
-      title = wrk.to_solr["titleDisplay_tesim"].first
-      expect(title).to start_with("Men walking dogs in parks")
-      expect(title).to end_with("Canine Insanity")
-    end
-    
+#    it "combines the title fields" do
+#      title = wrk.to_solr["titleDisplay_tesim"].first
+#      expect(title).to start_with("Men walking dogs in parks")
+#      expect(title).to end_with("Canine Insanity")
+#    end
+
+#   We currently have no plans to have metadata inherited in Solr but not in Fedora,
+#   so the metadata inheritance features of the work indexer are not in use and are not tested.
+#    it "inherits metadata when appropriate" do
+#
+#    end
+#    
+#    it "does not inherit metadata from the wrong fields" do
+#
+#    end
+#    
+#    it "does not overwrite existing metadata with inherited metadata" do
+#
+#    end
+#    
   end
   
 end
