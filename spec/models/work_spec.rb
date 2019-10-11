@@ -72,6 +72,12 @@ RSpec.describe Work do
   end
 
   it "does not inherit metadata if it is explicitly set not to" do 
+    parent_work.send("#{simple_inheritable_field_name}=",["parent value"])
+    parent_work.ordered_members << work
+    parent_work.save
+    work.send("#{metadataInheritance}=",["false"])
+    work.save
+    expect(Work.find(work.id).send(simple_inheritable_field_name.to_s)).not_to include "parent value"    
   end
 
 
