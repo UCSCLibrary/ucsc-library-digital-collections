@@ -17,6 +17,10 @@ module Ucsc
       @file_set_presenters ||= member_presenters(((ordered_ids & file_set_ids) + grandchild_file_set_ids).uniq)
     end
 
+    def ordered_ids
+      super.reverse
+    end
+
     private 
 
     def generate_member_av_file_list
