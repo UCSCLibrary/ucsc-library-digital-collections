@@ -3,55 +3,43 @@ require 'open-uri'
 require 'linkeddata'
 class WorkIndexer < Hyrax::WorkIndexer
 
+  THUMBNAIL_WIDTH = 300
+
   def generate_solr_document
     super.tap do |solr_doc|
-      return solr_doc unless solr_doc['has_model_ssim'].include?("Work") or solr_doc['generic_type_sim'].include?("Work") or (solr_doc["human_readable_type_tesim"] == "Work") or (solr_doc["human_readable_type_ssim"] == "Work")
-
-      solr_doc['member_ids_ssim'] = object.ordered_member_ids
-
-      solr_doc = index_controlled_fields(solr_doc)
-      solr_doc = inherit_fields(solr_doc)
-      solr_doc = merge_fields(:subject, [:subjectTopic,:subjectName,:subjectTemporal,:subjectPlace], solr_doc, :stored_searchable)
-      solr_doc = merge_fields(:subject, [:subjectTopic,:subjectName,:subjectTemporal,:subjectPlace], solr_doc, :facetable)
-      solr_doc = merge_fields(:callNumber, [:itemCallNumber,:collectionCallNumber,:boxFolder], solr_doc)
-      
-      #fix child file indexing for nested works
-      solr_doc['file_set_ids_ssim'] = solr_doc['member_ids_ssim'].select do |member_id| 
-        begin
-          child_doc = SolrDocument.find(member_id)
-          case child_doc.hydra_model.to_s
+      case solr_doc['has_model_ssim'].first
+      when "FileSet"
+        solr_doc["file_id_ss"] = object.original_file_id
+      when "Work"
+        solr_doc['member_ids_ssim'] = object.ordered_member_ids
+        object.ordered_member_ids.each do |member_id|
+          next unless (member = SolrDocument.find(member_id)).image?
+          case member['has_model_ssim'].first
           when "FileSet"
-            true
-          when "Work","Course","Lecture"
-            solr_doc['grandchild_file_set_ids_ssm'] ||= []
-            solr_doc['grandchild_file_set_ids_ssm'] += child_doc.file_set_ids
-            false
-          else
-            false
+            (solr_doc["hasRelatedImage_ssim"] ||= []) << member_id unless solr_doc["hasRelatedImage_ssim"].include?(member_id)
+            (solr_doc["file_set_ids_ssim"] ||= []) << member_id unless solr_doc["file_set_ids_ssim"].include?(member_id)
+          when "Work"
+            (solr_doc["hasRelatedImage_ssim"] ||= []) += member["hasRelatedImage_ssim"]
           end
-        rescue Blacklight::Exceptions::RecordNotFound
-          false
         end
-      end
+        solr_doc["hasRelatedImage_ssim"] = (solr_doc["hasRelatedImage_ssim"] || []).uniq
+        solr_doc = index_controlled_fields(solr_doc)
+        solr_doc = inherit_fields(solr_doc)
 
-      # add any grandchild media fragments to this work's media fragment index
-      if solr_doc['grandchild_file_set_ids_ssm'].present?
-        solr_doc["hasRelatedMediaFragment_ssim"] ||= [] 
-        solr_doc["hasRelatedMediaFragment_ssim"] += solr_doc['grandchild_file_set_ids_ssm'] 
-      end
-
-      # If there is no image for this work, but grandchild filesets exist, try to use one of those as an image
-      if solr_doc["hasRelatedImage_ssim"].blank? && solr_doc['grandchild_file_set_ids_ssm'].present?
-        solr_doc["hasRelatedMediaFragment_ssim"] = (solr_doc["hasRelatedMediaFragment_ssim"] + solr_doc['grandchild_file_set_ids_ssm']).uniq
-        solr_doc["hasRelatedImage_ssim"] = solr_doc['grandchild_file_set_ids_ssm'].select{|fsid| SolrDocument.find(fsid).image? }
-      end
-
-      # If there is an image attached, also index the file id for fast display via universalviewer
-      # if the file has been processed. Otherwise it will be added by the file processing job upon completion.
-      if (image_ids = solr_doc['hasRelatedImage_ssim']).present?
-        fileset = FileSet.find(image_ids.first)
-        unless fileset.original_file.blank?
-          solr_doc['relatedImageId_ss'] = fileset.original_file.id
+        # I think that merging fields is now supported by blacklight on the display end. Look in to that?
+        solr_doc = merge_fields(:subject, [:subjectTopic,:subjectName,:subjectTemporal,:subjectPlace], solr_doc, :stored_searchable)
+        solr_doc = merge_fields(:subject, [:subjectTopic,:subjectName,:subjectTemporal,:subjectPlace], solr_doc, :facetable)
+        solr_doc = merge_fields(:callNumber, [:itemCallNumber,:collectionCallNumber,:boxFolder], solr_doc)
+        
+        # If there is an image attached, also index the file id for fast display via universalviewer
+        # if the file has been processed. Otherwise it will be added by the file processing job upon completion.
+        if (image_ids = solr_doc['hasRelatedImage_ssim']).present?
+          fileset = FileSet.find(image_ids.first)
+          unless fileset.original_file.blank?
+            solr_doc['relatedImageId_ss'] = fileset.original_file.id
+            endfix
+            solr_doc[thumbnail_path_ss] = "/downloads/#{solr_doc['hasRelatedImage_ssim'].last}?file=thumbnail"
+          end
         end
       end
     end
@@ -62,10 +50,15 @@ class WorkIndexer < Hyrax::WorkIndexer
   end
 
   def inherit_fields solr_doc
-    return solr_doc unless Array(object.metadataInheritance).any?{|inh| inh.to_s.downcase.include?("index")}
+    return solr_doc unless Array(object.metadataInheritance).first.to_s.downcase.include?("index")
     return solr_doc unless object.member_of.present?
-    parent = SolrDocument.find(object.member_of.first.id)
-    ScoobySnacks::METADATA_SCHEMA.inheritable_fields.each{ |field| solr_doc[field.solr_name] = parent[field.solr_name] }
+    object.member_of.each do |parent_work|
+      parent_doc = SolrDocument.find(parent_work.id)
+      ScoobySnacks::METADATA_SCHEMA.inheritable_fields.each do |field| 
+        next if solr_doc[field.solr_name].present?
+        solr_doc[field.solr_name] = parent_doc[field.solr_name]
+      end
+    end
     return solr_doc
   end
 
@@ -97,7 +90,7 @@ class WorkIndexer < Hyrax::WorkIndexer
       end
 
       # Wrap single objects in arrays if necessary (though it shouldn't be)
-#      object[field_name] = Array.wrap(object[field_name])
+      #      object[field_name] = Array.wrap(object[field_name])
 
       # Loop through the different values provided for this property
       object[field_name].each do |val|
