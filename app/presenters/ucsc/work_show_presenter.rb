@@ -43,7 +43,7 @@ module Ucsc
     end
     
     def inherits?
-      Array(solr_document.metadataInheritance).any?{|inh| inh.to_s.downcase.include?("display")}
+      Array(solr_document.metadataInheritance).first.to_s.downcase.include?("display")
     end
 
     delegate :titleAlternative, :subseries, :series, to: :solr_document
