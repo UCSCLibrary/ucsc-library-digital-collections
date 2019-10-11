@@ -38,6 +38,7 @@ fields:
       - primary
       - search_result
     index_itemprop: name
+    inheritable: false
     work_title: true
     searchable: true
     full_text_searchable: true
@@ -500,6 +501,7 @@ fields:
     definition: determines whether a work will show up in search results and/or have its own display page (rather than displaying through a parent work).
     label: Independently Displayed
     hidden: true
+    searchable: true
     predicate: local:independentlyDisplayed
     display_group: admin_only
     inheritable: false
