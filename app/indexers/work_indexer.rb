@@ -38,8 +38,7 @@ class WorkIndexer < Hyrax::WorkIndexer
           fileset = FileSet.find(image_ids.first)
           unless fileset.original_file.blank?
             solr_doc['relatedImageId_ss'] = fileset.original_file.id
-            endfix
-            solr_doc[thumbnail_path_ss] = "/downloads/#{solr_doc['hasRelatedImage_ssim'].last}?file=thumbnail"
+            solr_doc['thumbnail_path_ss'] ||= "/downloads/#{solr_doc['hasRelatedImage_ssim'].last}?file=thumbnail"
           end
         end
       end
