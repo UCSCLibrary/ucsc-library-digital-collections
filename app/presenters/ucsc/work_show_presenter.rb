@@ -56,12 +56,8 @@ module Ucsc
     private 
 
     def generate_all_av_file_list
-      own_av_files = []
-      file_set_ids.each do |id|
-        fs = SolrDocument.find(id)
-        next unless fs.audio? || fs.video?
-        own_av_files << id
-      end 
+      own_av_files = file_set_ids.map{|id| SolrDocument.find(id)}.select{|sd| sd.audio? || sd.video?}
+      own_av_files.map!{|doc| {id: doc.id, title: doc.title.first}}
       own_av_files + member_av_files
     end
 
