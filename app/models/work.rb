@@ -50,10 +50,20 @@ class Work < ActiveFedora::Base
         metadataInheritance = admin_set.metadataInheritance 
       end
     end
-
+    
     inherit_metadata
+    rv = super *args
+    cache_manifest
+    return rv
+  end
 
-    super *args
+  def cache_manifest
+    @cache_key = "manifest/#{id}"
+    ability = User.first.ability
+    dummy_request = Class.new{def base_url; CatalogController.root_url; end;}.new
+    dummy_presenter = Ucsc::WorkShowPresenter.new(SolrDocument.find(id), User.first.ability, dummy_request)
+    manifest_builder = ::IIIFManifest::ManifestFactory.new(dummy_presenter)
+    Rails.cache.write(@cache_key,manifest_builder.to_h.to_json)
   end
 
   def fix_loc_id loc_id
