@@ -19,11 +19,12 @@ module Hyrax
 
     def cached_manifest
       modified = presenter.solr_document.modified_date || DateTime.now
-      @cache_key = "manifest/#{presenter.id}"
-      if (entry = Rails.cache.send(:read_entry,@cache_key,{})).present?
-        Rails.cache.delete(@cache_key) if (Time.at(entry.instance_variable_get(:@created_at)) < presenter.solr_document.modified)
-      end
-      Rails.cache.fetch(@cache_key){ manifest_builder.to_h.to_json}
+#      @cache_key = "manifest/#{presenter.id}"
+#      if (entry = Rails.cache.send(:read_entry,@cache_key,{})).present?
+#        Rails.cache.delete(@cache_key) if (Time.at(entry.instance_variable_get(:@created_at)) < presenter.solr_document.modified)
+#      end
+#      Rails.cache.fetch(@cache_key){ manifest_builder.to_h.to_json}
+      Rails.cache.fetch("manifest/#{presenter.id}"){ manifest_builder.to_h.to_json}
     end
   end
 end
