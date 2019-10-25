@@ -29,11 +29,11 @@ module Ucsc
         work = SolrDocument.find(work_id)
         next if work.nil?
         i=1 #index for works with multiple audio files
-        solr_docs = work.file_set_ids.map {|file_set_id| SolrDocument.find(file_set_id)}.select{fs.audio? || fs.video?}
+        solr_docs = work.file_set_ids.map {|file_set_id| SolrDocument.find(file_set_id)}.select{|fs| fs.audio? || fs.video?}
         solr_docs.map do |doc|
           track_title = work.title.first
           track_title += " #{i}" if work.file_set_ids.count > 1
-          member_av_files += [{id: file_set_id, title: track_title}]
+          member_av_files += [{id: doc.id, title: track_title}]
         end
       end
       member_av_files
