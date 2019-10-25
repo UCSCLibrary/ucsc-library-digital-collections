@@ -13,6 +13,7 @@ class FileSet < ActiveFedora::Base
     
     if self.image?
       Hydra::Derivatives::ImageDerivatives.create(filename, outputs: image_outputs)
+      image_server_cache_derivatives if ["production","staging"].include?(Rails.env.to_s)
     else
       # This is the behavior I am overwriting
       # (this method was previously delegated to
@@ -30,6 +31,20 @@ class FileSet < ActiveFedora::Base
        format: 'jpg', 
        size: '200x150>', 
        url: derivative_url('thumbnail') }]
+  end
+  
+  def image_server_derivative_sizes
+    ['90,',
+     '!200,150',
+     '!300,300',
+     '800,']
+  end
+
+  def image_server_cache_derivatives
+    image_server_derivative_sizes.each do |derivative_size|
+      url = Hyrax.config.iiif_image_url_builder.call(original_file.id,"nil",derivative_size)
+      Net::HTTP.get_response(URI(url))
+    end
   end
   
 #  delegate :derivative_url, to: :file_set_derivatives_service
