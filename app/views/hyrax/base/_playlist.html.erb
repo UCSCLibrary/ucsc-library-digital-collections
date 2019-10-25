@@ -2,8 +2,8 @@
 <button id="playlist-toggle" style="display:none; background:transparent; border:none;color:lightgray; right:0px;top:0px;margin-right:10px;width:35px;position:absolute;" class="mejs__button" onclick="jQuery('.hls_media').toggleClass('playlist_hidden').toggleClass('playlist_shown')">▲▼</button>
 
 <audio controls="controls"
-       id = "primary-media-player"
-       class="hls_media playlist_shown"
+       id="primary-media-player"
+       class="hls_media playlist playlist_shown"
        preload="auto">
     <% file_set_ids.each do |file_set_id| %>
         <source src="<%= File.join(request.base_url,"file_set",file_set_id[:id],"hls.m3u8") %>" title="<%= file_set_id[:title]%>" type="application/x-mpegurl" />
