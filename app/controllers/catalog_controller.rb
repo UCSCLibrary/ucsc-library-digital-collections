@@ -20,6 +20,18 @@ class CatalogController < ApplicationController
 #    solr_name('date_modified', :stored_sortable, type: :date)
   end
 
+  def self.root_url(environment=nil)
+    environment ||= Rails.env
+    case environment.to_sym
+        when :production 
+          "https://digitalcollections.library.ucsc.edu"
+        when :staging 
+          "http://digitalcollections-staging.library.ucsc.edu"
+        when :development, :test
+          "http://#{Socket.gethostname}"
+    end
+  end
+
   configure_blacklight do |config|
     # default advanced config values
     config.advanced_search ||= Blacklight::OpenStructWithHashAccess.new
@@ -34,7 +46,7 @@ class CatalogController < ApplicationController
     config.oai = {
       provider: {
         repository_name: 'UC Santa Cruz Library Digital Collections',
-        repository_url: 'http://digitalcollections.library.ucsc.edu/catalog/oai',
+        repository_url: "#{CatalogController.root_url(:production)}/catalog/oai",
         record_prefix: 'oai:ucsc',
         admin_email: 'ethenry@ucsc.edu',
         sample_id: 'q811kj606'

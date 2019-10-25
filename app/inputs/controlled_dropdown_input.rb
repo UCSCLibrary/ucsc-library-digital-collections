@@ -49,7 +49,7 @@ class ControlledDropdownInput < ControlledVocabularyInput
   private
 
   def local_id_to_url(id,auth_name) 
-    return "https://digitalcollections.library.ucsc.edu/authorities/show/local/#{auth_name}/#{id}"
+    return "#{CatalogController.root_url}/authorities/show/local/#{auth_name}/#{id}"
   end
 
   def collection

@@ -30,11 +30,7 @@ module Ucsc::Authorities::Local
       end
 
       def url_for(id)
-        root_urls = {production: "https://digitalcollections.library.ucsc.edu",
-                     staging: "http://digitalcollections-staging.library.ucsc.edu",
-                     development: "http://#{Socket.gethostname}",
-                     test: "http://#{Socket.gethostname}"}
-        return "#{root_urls[Rails.env.to_sym]}/authorities/show/local/#{subauthority}/#{id}"
+        return "#{CatalogController.root_url}/authorities/show/local/#{subauthority}/#{id}"
       end
 
   end
