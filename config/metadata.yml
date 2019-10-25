@@ -461,7 +461,14 @@ fields:
   physicalDescription:
     definition: Description or statement indicating the extent, size, or duration of the original, physical resource for digitized content.
     label: Physical Description
+    predicate: modsrdf:extent
+    display_group: primary
+  
+  extent:
+    definition: The size or duration of the resource.
+    label: Extent
     predicate: DC:extent
+    inheritable: false
   
   accessRights:
     definition: Information about who can access the resource or an indication of its security status.
@@ -547,4 +554,4 @@ namespaces:
   schema: "http://schema.org/"
   purlOnt: "http://purl.org/ontology/"
   local: "http://digitalcollections.library.ucsc.edu/ontology/"
-
+  modsrdf: "http://www.loc.gov/standards/mods/modsrdf/v1/#"
