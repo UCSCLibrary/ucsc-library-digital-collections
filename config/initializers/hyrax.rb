@@ -136,28 +136,27 @@ Hyrax.config do |config|
 
    # If we have an external IIIF server, use it for image requests; else, use riiif
    config.iiif_image_url_builder = lambda do |file_id, base_url, size|
-     if ENV['IIIF_SERVER_URL'].present?
-       iiif_url = File.join(ENV['IIIF_SERVER_URL'],
-                            file_id.gsub('/', '%2F'),
-                            "full",
-                            size,
-                            "0",
-                            "default.jpg")
-       Rails.logger.debug "event: iiif_image_request: #{iiif_url}"
-       iiif_url
-     else
-       Riiif::Engine.routes.url_helpers.image_url(file_id, host: base_url, size: size)
+     unless (image_server_root_url = ENV['IIIF_SERVER_URL'])
+       port = (Rails.env.to_s == "production") ? 8183 : 8185
+       image_server_root_url = "https://digitalcollections-image.library.ucsc.edu:#{port}/iiif/2/"
      end
+     iiif_url = File.join(image_server_root_url,
+                          file_id.gsub('/', '%2F'),
+                          "full",
+                          size,
+                          "0",
+                          "default.jpg")
+     Rails.logger.debug "event: iiif_image_request: #{iiif_url}"
+     iiif_url
    end
 
    # If we have an external IIIF server, use it for info.json; else, use riiif
    config.iiif_info_url_builder = lambda do |file_id, base_url|
-     if ENV['IIIF_SERVER_URL'].present?
-       File.join(ENV['IIIF_SERVER_URL'], file_id.gsub('/', '%2F'))
-     else
-       uri = Riiif::Engine.routes.url_helpers.info_url(file_id, host: base_url)
-       uri.sub(%r{/info\.json\Z}, '')
+     unless (image_server_root_url = ENV['IIIF_SERVER_URL'])
+       port = (Rails.env.to_s == "production") ? 8183 : 8185
+       image_server_root_url = "https://digitalcollections-image.library.ucsc.edu:#{port}/iiif/2/"
      end
+     File.join(image_server_root_url, file_id.gsub('/', '%2F'))
    end
 
   # Returns a URL that indicates your IIIF image server compliance level
