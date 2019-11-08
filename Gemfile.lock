@@ -1,21 +1,21 @@
 GIT
-  remote: git://github.com/seuros/capistrano-sidekiq.git
-  revision: 047a131084fc78364f74615e7ccf3a4833b97c11
+  remote: https://github.com/seuros/capistrano-sidekiq.git
+  revision: 92bf51eae4bdcc2eee2c1d0b2883d77e5e3f1ab8
   specs:
-    capistrano-sidekiq (1.0.2)
+    capistrano-sidekiq (1.0.3)
       capistrano (>= 3.9.0)
-      sidekiq (>= 3.4)
+      sidekiq (>= 3.4, < 6.0)
 
 GIT
-  remote: git://github.com/sinatra/sinatra.git
-  revision: 5e2e41f28395d68a922b60bc851951d46accf2b7
+  remote: https://github.com/sinatra/sinatra.git
+  revision: 04a02ac2b7400ab456126dbfce5519cbc200b61a
   specs:
-    rack-protection (2.0.5)
+    rack-protection (2.0.7)
       rack
-    sinatra (2.0.5)
+    sinatra (2.0.7)
       mustermann (~> 1.0)
       rack (~> 2.0)
-      rack-protection (= 2.0.5)
+      rack-protection (= 2.0.7)
       tilt (~> 2.0)
 
 GEM
@@ -201,7 +201,7 @@ GEM
     coffee-script-source (1.12.2)
     concurrent-ruby (1.1.5)
     connection_pool (2.2.2)
-    crass (1.0.4)
+    crass (1.0.5)
     declarative (0.0.10)
     declarative-option (0.1.0)
     deprecation (1.0.0)
@@ -506,7 +506,7 @@ GEM
     listen (3.0.8)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
-    loofah (2.2.3)
+    loofah (2.3.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
@@ -541,7 +541,7 @@ GEM
     noid-rails (3.0.1)
       actionpack (>= 5.0.0, < 6)
       noid (~> 0.9)
-    nokogiri (1.10.4)
+    nokogiri (1.10.5)
       mini_portile2 (~> 2.4.0)
     nokogumbo (1.5.0)
       nokogiri
