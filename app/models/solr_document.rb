@@ -100,11 +100,14 @@ class SolrDocument
   end
 
   def display_image_url(size: "800,")
-    if self['relatedImageId_ss'].present?
+    if representative_id.present?
+      SolrDocument.find(representative_id).display_image_url(size: size)
+    elsif self['hasRelatedImage_ssim'].present?
+      Hyrax.config.iiif_image_url_builder.call(self['hasRelatedImage_ssim'].first,"nil",size)
+    elsif self['relatedImageId_ss'].present?
       Hyrax.config.iiif_image_url_builder.call(self['relatedImageId_ss'],"nil",size)
     elsif human_readable_type.downcase.include? "file"
-      file_id = FileSet.find(id).original_file.id
-      Hyrax.config.iiif_image_url_builder.call(file_id,"nil",size)
+      Hyrax.config.iiif_image_url_builder.call(id,"nil",size)
     elsif representative_id.present?
       SolrDocument.find(representative_id).display_image_url(size: size)
     else
@@ -122,7 +125,7 @@ class SolrDocument
     return true if member_ids.any?{|id| SolrDocument.find(id).image? }
     return false
   end
-  
+
   def root_url
     "https://"+Socket.gethostname
   end
