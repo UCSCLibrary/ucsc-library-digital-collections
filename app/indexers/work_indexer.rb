@@ -16,14 +16,15 @@ class WorkIndexer < Hyrax::WorkIndexer
           next unless (member = SolrDocument.find(member_id)).image?
           case member['has_model_ssim'].first
           when "FileSet"
-            (solr_doc["hasRelatedImage_ssim"] ||= []) << member_id unless solr_doc["hasRelatedImage_ssim"].include?(member_id)
-            (solr_doc["file_set_ids_ssim"] ||= []) << member_id unless solr_doc["file_set_ids_ssim"].include?(member_id)
+            (solr_doc["hasRelatedImage_ssim"] ||= []) << member_id
+            (solr_doc["file_set_ids_ssim"] ||= []) << member_id 
           when "Work"
-            solr_doc["hasRelatedImage_ssim"] ||= []
-            solr_doc["hasRelatedImage_ssim"] += member["hasRelatedImage_ssim"]
+            (solr_doc["hasRelatedImage_ssim"] ||= []) << member["hasRelatedImage_ssim"]
           end
         end
         solr_doc["hasRelatedImage_ssim"] = (solr_doc["hasRelatedImage_ssim"] || []).uniq
+        solr_doc["file_set_ids_ssim"] = (solr_doc["file_set_ids_ssim"] || []).uniq
+
         solr_doc = index_controlled_fields(solr_doc)
         solr_doc = inherit_fields(solr_doc)
 
@@ -32,15 +33,10 @@ class WorkIndexer < Hyrax::WorkIndexer
         solr_doc = merge_fields(:subject, [:subjectTopic,:subjectName,:subjectTemporal,:subjectPlace], solr_doc, :facetable)
         solr_doc = merge_fields(:callNumber, [:itemCallNumber,:collectionCallNumber,:boxFolder], solr_doc)
         
-        # If there is an image attached, also index the file id for fast display via universalviewer
-        # if the file has been processed. Otherwise it will be added by the file processing job upon completion.
         if (image_ids = solr_doc['hasRelatedImage_ssim']).present?
-          fileset = FileSet.find(image_ids.first)
-          unless fileset.original_file.blank?
-            solr_doc['relatedImageId_ss'] = fileset.original_file.id
             solr_doc['thumbnail_path_ss'] ||= "/downloads/#{solr_doc['hasRelatedImage_ssim'].last}?file=thumbnail"
-          end
         end
+
       end
     end
   end
