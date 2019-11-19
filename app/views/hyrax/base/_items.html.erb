@@ -12,7 +12,7 @@
             </thead>
             <tbody>
                 
-                <%= render partial: 'member', collection: presenter.work_presenters %>
+                <%= render partial: 'member', collection: presenter.work_presenters.reverse %>
             </tbody>
         </table>
     <% elsif can? :edit, presenter.id %>
