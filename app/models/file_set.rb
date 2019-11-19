@@ -13,6 +13,7 @@ class FileSet < ActiveFedora::Base
     
     if self.image?
       Hydra::Derivatives::ImageDerivatives.create(filename, outputs: image_outputs)
+      Hydra::Derivatives::Jpeg2kImageDerivatives.create(filename, outputs: jpeg2k_image_outputs)
       image_server_cache_derivatives if ["production","staging"].include?(Rails.env.to_s)
     else
       # This is the behavior I am overwriting
@@ -33,6 +34,12 @@ class FileSet < ActiveFedora::Base
        url: derivative_url('thumbnail') }]
   end
   
+  def jpeg2k_image_outputs
+    [{recipe: :default,
+      output_path: derivative_path_factory.derivative_path_for_reference(self,"j2c"),
+      url: derivative_url('j2c')}]
+  end
+  
   def image_server_derivative_sizes
     ['90,',
      '!200,150',
@@ -42,7 +49,7 @@ class FileSet < ActiveFedora::Base
 
   def image_server_cache_derivatives
     image_server_derivative_sizes.each do |derivative_size|
-      url = Hyrax.config.iiif_image_url_builder.call(original_file.id,"nil",derivative_size)
+      url = Hyrax.config.iiif_image_url_builder.call(id,"nil",derivative_size)
       Net::HTTP.get_response(URI(url))
     end
   end
@@ -66,10 +73,6 @@ class FileSet < ActiveFedora::Base
       derivative_path_factory.derivatives_for_reference(self).each do |path|
         FileUtils.rm_f(path)
       end
-    end
-
-    def derivative_path_factory
-      ::DerivativePath
     end
 
   private
