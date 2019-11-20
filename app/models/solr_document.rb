@@ -100,7 +100,7 @@ class SolrDocument
   end
 
   def display_image_url(size: "800,")
-    if representative_id.present?
+    if representative_id.present? && (representative_id != id)
       SolrDocument.find(representative_id).display_image_url(size: size)
     elsif self['hasRelatedImage_ssim'].present?
       Hyrax.config.iiif_image_url_builder.call(self['hasRelatedImage_ssim'].first,"nil",size)
@@ -108,8 +108,6 @@ class SolrDocument
       Hyrax.config.iiif_image_url_builder.call(self['relatedImageId_ss'],"nil",size)
     elsif human_readable_type.downcase.include? "file"
       Hyrax.config.iiif_image_url_builder.call(id,"nil",size)
-    elsif representative_id.present?
-      SolrDocument.find(representative_id).display_image_url(size: size)
     else
       nil
     end
