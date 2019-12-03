@@ -160,7 +160,7 @@ GEM
       sass-rails
       signet
     builder (3.2.3)
-    bulk_ops (0.1.21)
+    bulk_ops (0.1.22)
       rails (~> 5)
     byebug (11.0.1)
     cancancan (1.17.0)
@@ -850,7 +850,7 @@ DEPENDENCIES
   blacklight_advanced_search (~> 6.0)
   blacklight_oai_provider (>= 6.0.0)
   browse-everything
-  bulk_ops (= 0.1.21)
+  bulk_ops (= 0.1.22)
   bundler (>= 2)
   byebug
   capistrano
