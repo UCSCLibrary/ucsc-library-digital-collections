@@ -33,8 +33,11 @@ class WorkIndexer < Hyrax::WorkIndexer
         solr_doc = merge_fields(:subject, [:subjectTopic,:subjectName,:subjectTemporal,:subjectPlace], solr_doc, :facetable)
         solr_doc = merge_fields(:callNumber, [:itemCallNumber,:collectionCallNumber,:boxFolder], solr_doc)
         
+        # If this work has a related images but the thumbnail has not been set correctly, set the thumbnail
         if (image_ids = solr_doc['hasRelatedImage_ssim']).present?
-            solr_doc['thumbnail_path_ss'] ||= "/downloads/#{solr_doc['hasRelatedImage_ssim'].last}?file=thumbnail"
+          if solr_doc['thumbnail_path_ss'].blank? or solr_doc['thumbnail_path_ss'].to_s.downcase.include?("assets/work")
+            solr_doc['thumbnail_path_ss'] = "/downloads/#{image_ids.last}?file=thumbnail"
+          end
         end
 
       end
