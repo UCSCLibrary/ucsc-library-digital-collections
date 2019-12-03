@@ -47,6 +47,7 @@ fields:
     definition: "An archival accession number for the resource."
     label: "Accession Number"
     inheritable: false
+    searchable: true
     display_groups: 
       - admin_only
       - editor_primary
