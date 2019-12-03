@@ -61,7 +61,7 @@ class Work < ActiveFedora::Base
     @cache_key = "manifest/#{id}"
     ability = User.first.ability
     dummy_request = Class.new{def base_url; CatalogController.root_url; end;}.new
-    dummy_presenter = Ucsc::WorkShowPresenter.new(SolrDocument.find(id), User.first.ability, dummy_request)
+    dummy_presenter = Ucsc::WorkShowPresenter.new(SolrDocument.find(id), ability, dummy_request)
     manifest_builder = ::IIIFManifest::ManifestFactory.new(dummy_presenter)
     Rails.cache.write(@cache_key,manifest_builder.to_h.to_json)
   end
@@ -88,6 +88,7 @@ class Work < ActiveFedora::Base
     member_of.each do |parent_doc|
       parent = ActiveFedora::Base.find(parent_doc.id)
       schema.inheritable_fields.each do |field| 
+        next unless parent.respond_to?(field.name)
         next if self.send(field.name).present?
         if field.controlled?
           self.send("#{field.name}_attributes=",parent.send(field.name).map{|resource| {id: resource.id}})
