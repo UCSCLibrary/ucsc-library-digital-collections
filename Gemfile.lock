@@ -1,21 +1,21 @@
 GIT
-  remote: git://github.com/seuros/capistrano-sidekiq.git
-  revision: 047a131084fc78364f74615e7ccf3a4833b97c11
+  remote: https://github.com/seuros/capistrano-sidekiq.git
+  revision: 92bf51eae4bdcc2eee2c1d0b2883d77e5e3f1ab8
   specs:
-    capistrano-sidekiq (1.0.2)
+    capistrano-sidekiq (1.0.3)
       capistrano (>= 3.9.0)
-      sidekiq (>= 3.4)
+      sidekiq (>= 3.4, < 6.0)
 
 GIT
-  remote: git://github.com/sinatra/sinatra.git
-  revision: 5e2e41f28395d68a922b60bc851951d46accf2b7
+  remote: https://github.com/sinatra/sinatra.git
+  revision: 04a02ac2b7400ab456126dbfce5519cbc200b61a
   specs:
-    rack-protection (2.0.5)
+    rack-protection (2.0.7)
       rack
-    sinatra (2.0.5)
+    sinatra (2.0.7)
       mustermann (~> 1.0)
       rack (~> 2.0)
-      rack-protection (= 2.0.5)
+      rack-protection (= 2.0.7)
       tilt (~> 2.0)
 
 GEM
@@ -719,7 +719,7 @@ GEM
       multipart-post
       oauth2
     ruby-progressbar (1.10.0)
-    rubyzip (1.2.2)
+    rubyzip (2.0.0)
     samvera-nesting_indexer (2.0.0)
       dry-equalizer
     samvera_hls (0.4.2)
