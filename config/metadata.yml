@@ -48,6 +48,7 @@ fields:
     label: "Accession Number"
     inheritable: false
     searchable: true
+    data_type: string
     display_groups: 
       - admin_only
       - editor_primary
@@ -455,6 +456,7 @@ fields:
     inheritable: false
     full_text_searchable: true
     label: Master File Name
+    data_type: string
     display_groups: 
       - secondary
       - editor_primary
