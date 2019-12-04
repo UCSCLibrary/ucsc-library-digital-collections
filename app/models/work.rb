@@ -2,9 +2,17 @@
 #  `rails generate hyrax:work Work`
 class Work < ActiveFedora::Base
   include ::Hyrax::WorkBehavior
+
+  #overwrite date_modified property so as not to conflict with dateDigitized
+  property :date_modified, predicate: ::RDF::URI.new("http://digitalcollections.library.ucsc.edu/ontology/modified"), multiple: false do |index|
+    index.type :date
+    index.as :stored_sortable
+  end
+
 #  include ::Hyrax::BasicMetadata
 
   include ::ScoobySnacks::WorkModelBehavior
+
   include ::Ucsc::UntitledBehavior
   self.indexer = ::WorkIndexer
   # Change this to restrict which works can be added as a child.
