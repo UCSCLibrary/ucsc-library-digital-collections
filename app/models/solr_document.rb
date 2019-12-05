@@ -12,6 +12,10 @@ class SolrDocument
   # Adds ScoobySnacks metadata attribute definitions
   include ScoobySnacks::SolrBehavior
 
+  def audio?
+    FileSet.audio_mime_types.include? mime_type
+  end
+
   def self.add_field_semantics(label,solr_name,schema=nil)
     label = "#{schema}:#{label}" if schema
     field_semantics.merge!(label => Array.wrap(solr_name)) {|key, old_val, new_val| Array.wrap(old_val) + Array.wrap(new_val)}
