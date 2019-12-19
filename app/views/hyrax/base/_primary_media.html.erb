@@ -16,10 +16,16 @@
         <% elsif defined?(viewer) && (viewer == "click")  %>
             <% uv_link = "#{request.path}?universal_viewer=true" %>
             <% uv_link += "&locale=#{params['locale']}" if params['locale'] %>
-            <a href="<%= uv_link%>"> 
-                <%= image_tag(@presenter.display_image_url, class: "raw-image primary-media",role: "presentation") %>
-                <label id="primary-image-label">Click image to load zoomable viewer</label>
-            </a>
+            <div id="display-work-img">
+                <a href="<%= uv_link%>"> 
+                    <%= image_tag(@presenter.display_image_url, class: "raw-image primary-media",role: "presentation") %>
+                    <label id="primary-image-label" class="sr-only">Click image to load zoomable viewer</label>
+                    <div class="glyph-wrap">
+                        <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+                        <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span>
+                    </div>
+                </a>
+            </div>
         <% else %>
             <%= image_tag @presenter.display_image_url, class: "primary-media",role: "presentation"%>
         <% end %>
