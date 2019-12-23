@@ -1,5 +1,5 @@
 GIT
-  remote: git://github.com/seuros/capistrano-sidekiq.git
+  remote: https://github.com/seuros/capistrano-sidekiq.git
   revision: 92bf51eae4bdcc2eee2c1d0b2883d77e5e3f1ab8
   specs:
     capistrano-sidekiq (1.0.3)
@@ -7,7 +7,7 @@ GIT
       sidekiq (>= 3.4, < 6.0)
 
 GIT
-  remote: git://github.com/sinatra/sinatra.git
+  remote: https://github.com/sinatra/sinatra.git
   revision: d423f565ca9f461f3c2f1fe8bb08f708fef5d4e5
   specs:
     rack-protection (2.0.7)
@@ -574,7 +574,8 @@ GEM
     power_converter (0.1.2)
     public_suffix (4.0.1)
     pul_uv_rails (2.0.1)
-    puma (3.12.2)
+    puma (4.3.1)
+      nio4r (~> 2.0)
     qa (2.2.0)
       activerecord-import
       deprecation
@@ -877,7 +878,7 @@ DEPENDENCIES
   mini_magick (>= 4.9.4)
   mysql2
   octokit (~> 4.0)
-  puma (~> 3.0)
+  puma (~> 4.3)
   rails (~> 5.0.0, >= 5.0.7.2)
   rails-controller-testing
   redis (~> 3.0)
