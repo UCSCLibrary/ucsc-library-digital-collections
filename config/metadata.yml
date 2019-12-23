@@ -164,6 +164,7 @@ fields:
     definition: A person or organization owning or managing rights over the resource.
     label: Copyright Holder
     predicate: DC:rightsHolder
+    data_type: string
     display_groups:
       - secondary
       - editor_primary
