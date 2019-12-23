@@ -14,12 +14,13 @@ class WorkIndexer < Hyrax::WorkIndexer
         solr_doc['member_ids_ssim'] = object.ordered_member_ids
         object.ordered_member_ids.each do |member_id|
           next unless (member = SolrDocument.find(member_id)).image?
+          solr_doc["hasRelatedImage_ssim"] ||= []
           case member['has_model_ssim'].first
           when "FileSet"
-            (solr_doc["hasRelatedImage_ssim"] ||= []) << member_id
+            solr_doc["hasRelatedImage_ssim"] << member_id
             (solr_doc["file_set_ids_ssim"] ||= []) << member_id 
           when "Work"
-            (solr_doc["hasRelatedImage_ssim"] ||= []) += member["hasRelatedImage_ssim"]
+            solr_doc["hasRelatedImage_ssim"]  += member["hasRelatedImage_ssim"]
           end
         end
         solr_doc["hasRelatedImage_ssim"] = (solr_doc["hasRelatedImage_ssim"] || []).uniq
