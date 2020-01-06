@@ -90,7 +90,7 @@ gem 'scooby_snacks', '0.3.7'
 
 # Uncomment this when developing Bulk Ops
 #gem 'bulk_ops', path: "/srv/bulk_ops/"
-gem 'bulk_ops', '0.1.22'
+gem 'bulk_ops', '0.1.23'
 
 #gem 'ldfwrapper', github: 'boston-library/ldf-wrapper', branch: "master"
 

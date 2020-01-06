@@ -1,5 +1,5 @@
 GIT
-  remote: git://github.com/seuros/capistrano-sidekiq.git
+  remote: https://github.com/seuros/capistrano-sidekiq.git
   revision: 92bf51eae4bdcc2eee2c1d0b2883d77e5e3f1ab8
   specs:
     capistrano-sidekiq (1.0.3)
@@ -7,7 +7,7 @@ GIT
       sidekiq (>= 3.4, < 6.0)
 
 GIT
-  remote: git://github.com/sinatra/sinatra.git
+  remote: https://github.com/sinatra/sinatra.git
   revision: d423f565ca9f461f3c2f1fe8bb08f708fef5d4e5
   specs:
     rack-protection (2.0.7)
@@ -161,7 +161,7 @@ GEM
       sass-rails
       signet
     builder (3.2.4)
-    bulk_ops (0.1.22)
+    bulk_ops (0.1.23)
       rails (~> 5)
     byebug (11.0.1)
     cancancan (1.17.0)
@@ -855,7 +855,7 @@ DEPENDENCIES
   blacklight_advanced_search (~> 6.0)
   blacklight_oai_provider (>= 6.0.0)
   browse-everything
-  bulk_ops (= 0.1.22)
+  bulk_ops (= 0.1.23)
   bundler (>= 2)
   byebug
   capistrano
