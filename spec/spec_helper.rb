@@ -36,7 +36,10 @@ RSpec.configure do |config|
   config.after(:all) do
     Work.all.each{|wrk| wrk.destroy}
     Collection.all.each{|col| col.destroy}
-    User.all.each{|usr| usr.destroy}
+    begin
+      User.all.each{|usr| usr.destroy unless usr.id == 1}
+    rescue Mysql2::Error
+    end
   end
 
   config.before :suite do
