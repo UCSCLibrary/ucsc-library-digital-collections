@@ -36,7 +36,7 @@ class WorkIndexer < Hyrax::WorkIndexer
         
         # If this work has a related images but the thumbnail has not been set correctly, set the thumbnail
         if (image_ids = solr_doc['hasRelatedImage_ssim']).present?
-          if solr_doc['thumbnail_path_ss'].blank? or solr_doc['thumbnail_path_ss'].to_s.downcase.include?("assets/work")
+          if solr_doc['thumbnail_path_ss'].blank? or solr_doc['thumbnail_path_ss'].to_s.downcase.include?("work")
             solr_doc['thumbnail_path_ss'] = "/downloads/#{image_ids.last}?file=thumbnail"
           end
         end
