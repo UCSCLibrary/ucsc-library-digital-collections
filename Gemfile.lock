@@ -1,5 +1,5 @@
 GIT
-  remote: https://github.com/seuros/capistrano-sidekiq.git
+  remote: git://github.com/seuros/capistrano-sidekiq.git
   revision: 92bf51eae4bdcc2eee2c1d0b2883d77e5e3f1ab8
   specs:
     capistrano-sidekiq (1.0.3)
@@ -7,7 +7,7 @@ GIT
       sidekiq (>= 3.4, < 6.0)
 
 GIT
-  remote: https://github.com/sinatra/sinatra.git
+  remote: git://github.com/sinatra/sinatra.git
   revision: a4dd24add24f2dd0e7299b9e68e12038138294d3
   specs:
     rack-protection (2.0.8.1)
@@ -727,7 +727,7 @@ GEM
       multipart-post
       oauth2
     ruby-progressbar (1.10.1)
-    ruby2_keywords (0.0.1)
+    ruby2_keywords (0.0.2)
     rubyzip (2.0.0)
     samvera-nesting_indexer (2.0.0)
       dry-equalizer

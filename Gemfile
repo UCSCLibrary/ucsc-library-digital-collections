@@ -97,12 +97,12 @@ gem 'bulk_ops', '0.1.23'
 #gem 'nokogiri'
 #gem 'equivalent-xml'
 
-gem 'sinatra', github: 'sinatra'
+gem 'sinatra', git: 'git://github.com/sinatra/sinatra.git'
 
 gem 'resque-pool'
 gem 'sidekiq'
-gem 'capistrano-sidekiq', github: 'seuros/capistrano-sidekiq'
-
+gem 'capistrano-sidekiq', git: 'git://github.com/seuros/capistrano-sidekiq.git'
+'git://github.com/libgit2/rugged.git'
 
 gem 'blacklight_advanced_search', '~> 6.0'
 gem 'blacklight_oai_provider', '>= 6.0.0'
