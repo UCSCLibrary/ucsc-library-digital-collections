@@ -337,24 +337,3 @@ div.uv.viewer iframe {
     margin-bottom:0px;
     padding:0;
 }
-
-/* Style single work page */
-#display-work-img {
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
-    padding: 20px 0;
-    text-align: center;
-    background-color: #000;
-    position: relative;
-    .glyph-wrap {
-        position: absolute;
-        bottom: 30px;
-        left: 30px;
-    }
-    .glyphicon {
-        float: left;
-        margin-right:20px;
-        color: #fff;
-        font-size: 200%;
-    }
-}
