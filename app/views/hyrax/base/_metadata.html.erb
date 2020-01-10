@@ -1,18 +1,20 @@
 <!-- <h2><%= t('.header') %></h2> -->
-<table class="table table-striped <%= dom_class(presenter) %> attributes" <%= presenter.microdata_type_to_html %>>
+<h2 class="metadata">About this item:</h2>
+<table class="<%= dom_class(presenter) %> attributes" <%= presenter.microdata_type_to_html %>>
    <tbody>
     <%= render 'primary_attribute_rows', presenter: presenter %>
     <% if  ((can? :manage, Work) or (can? :review, :submissions)) %>
         <%= presenter.attribute_to_html(:masterFilename, {label: "Master Filename"})  %>
         <%= presenter.attribute_to_html(:accessionNumber, {label: "Accession Number"}) %>
     <% end %>
+    <%= render 'relationships', presenter: @presenter %> <%# Moved from show.html.erb to here %>
   </tbody>
 </table>
 
-<button class="more-metadata" onclick="jQuery('.more-metadata').toggle()">Show More</button>
+<span id="show-more-metadata" class="more-metadata" onclick="jQuery('.more-metadata').toggle()"><a>More information +</a></span>
 
 <div class="more-metadata" style="display:none">
-    <table class="table table-striped <%= dom_class(presenter) %> attributes" <%= presenter.microdata_type_to_html %>>
+    <table class="<%= dom_class(presenter) %> attributes" <%= presenter.microdata_type_to_html %>>
         <tbody>
             <%= render 'secondary_attribute_rows', presenter: presenter %>
 
@@ -23,7 +25,7 @@
         </tbody>
     </table>
 
-    <button id="hide-more-metadata" onclick="jQuery('.more-metadata').toggle()">Show less</button>
+    <span id="hide-more-metadata" onclick="jQuery('.more-metadata').toggle()"><a>Show less information -</a></span>
 </div>
 
 <script>

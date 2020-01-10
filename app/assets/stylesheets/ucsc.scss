@@ -337,3 +337,56 @@ div.uv.viewer iframe {
     margin-bottom:0px;
     padding:0;
 }
+
+/* Style single work page */
+#display-work-img {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    padding: 20px 0;
+    text-align: center;
+    background-color: #000;
+    position: relative;
+    .glyph-wrap {
+        position: absolute;
+        bottom: 30px;
+        left: 30px;
+    }
+    .glyphicon {
+        float: left;
+        margin-right:20px;
+        color: #fff;
+        font-size: 200%;
+    }
+}
+
+/* Style works page metadata */
+h2.metadata {
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 25px;
+}
+table.work.attributes {
+    th {
+        width: 165px;
+        text-align: right;
+        color: #838282;
+        &:after {
+            content: ':';
+        }
+    }
+    th.fix-colon:after {
+        content: '';
+    }
+    ul {
+        margin: 5px 0 5px 15px;
+    }
+}
+#show-more-metadata,
+#hide-more-metadata {
+    display:inline-block;
+    margin: 25px 0 0 180px;
+    &:hover {
+        cursor: pointer;
+    }
+}
