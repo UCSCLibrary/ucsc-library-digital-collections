@@ -42,6 +42,7 @@ en:
           rights_tesim: Rights
           subject_tesim: Subject
           title_tesim: Title
+          admin_set: In Administrative Set
   hyrax:
     product_name: "Digital Assets"
     institution_name:  &INSTITUTION_NAME "UC Santa Cruz"
