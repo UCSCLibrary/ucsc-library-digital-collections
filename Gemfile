@@ -90,19 +90,19 @@ gem 'scooby_snacks', '0.3.7'
 
 # Uncomment this when developing Bulk Ops
 #gem 'bulk_ops', path: "/srv/bulk_ops/"
-gem 'bulk_ops', '0.1.22'
+gem 'bulk_ops', '0.1.23'
 
 #gem 'ldfwrapper', github: 'boston-library/ldf-wrapper', branch: "master"
 
 #gem 'nokogiri'
 #gem 'equivalent-xml'
 
-gem 'sinatra', github: 'sinatra'
+gem 'sinatra', git: 'git://github.com/sinatra/sinatra.git'
 
 gem 'resque-pool'
 gem 'sidekiq'
-gem 'capistrano-sidekiq', github: 'seuros/capistrano-sidekiq'
-
+gem 'capistrano-sidekiq', git: 'git://github.com/seuros/capistrano-sidekiq.git'
+'git://github.com/libgit2/rugged.git'
 
 gem 'blacklight_advanced_search', '~> 6.0'
 gem 'blacklight_oai_provider', '>= 6.0.0'

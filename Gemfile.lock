@@ -8,14 +8,14 @@ GIT
 
 GIT
   remote: git://github.com/sinatra/sinatra.git
-  revision: d423f565ca9f461f3c2f1fe8bb08f708fef5d4e5
+  revision: a4dd24add24f2dd0e7299b9e68e12038138294d3
   specs:
-    rack-protection (2.0.7)
+    rack-protection (2.0.8.1)
       rack
-    sinatra (2.0.7)
+    sinatra (2.0.8.1)
       mustermann (~> 1.0)
       rack (~> 2.0)
-      rack-protection (= 2.0.7)
+      rack-protection (= 2.0.8.1)
       tilt (~> 2.0)
 
 GEM
@@ -161,7 +161,7 @@ GEM
       sass-rails
       signet
     builder (3.2.4)
-    bulk_ops (0.1.22)
+    bulk_ops (0.1.23)
       rails (~> 5)
     byebug (11.0.1)
     cancancan (1.17.0)
@@ -534,7 +534,8 @@ GEM
     multi_json (1.14.1)
     multi_xml (0.6.0)
     multipart-post (2.1.1)
-    mustermann (1.0.3)
+    mustermann (1.1.1)
+      ruby2_keywords (~> 0.0.1)
     mysql2 (0.5.3)
     nest (3.2.0)
       redic
@@ -726,6 +727,7 @@ GEM
       multipart-post
       oauth2
     ruby-progressbar (1.10.1)
+    ruby2_keywords (0.0.2)
     rubyzip (2.0.0)
     samvera-nesting_indexer (2.0.0)
       dry-equalizer
@@ -855,7 +857,7 @@ DEPENDENCIES
   blacklight_advanced_search (~> 6.0)
   blacklight_oai_provider (>= 6.0.0)
   browse-everything
-  bulk_ops (= 0.1.22)
+  bulk_ops (= 0.1.23)
   bundler (>= 2)
   byebug
   capistrano
