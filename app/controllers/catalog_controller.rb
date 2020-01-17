@@ -22,12 +22,14 @@ class CatalogController < ApplicationController
 
   def self.root_url(environment=nil)
     environment ||= Rails.env
-    case environment.to_sym
-        when :production 
+    case environment.to_s
+        when "production"
           "https://digitalcollections.library.ucsc.edu"
-        when :staging 
+        when "staging"
           "http://digitalcollections-staging.library.ucsc.edu"
-        when :development, :test
+        when 'sandbox'
+          "http://digitalcollections-staging-sandbox.library.ucsc.edu"
+        when "development", "test"
           "http://#{Socket.gethostname}"
     end
   end

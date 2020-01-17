@@ -14,7 +14,7 @@ class FileSet < ActiveFedora::Base
     if self.image?
       Hydra::Derivatives::ImageDerivatives.create(filename, outputs: image_outputs)
       Hydra::Derivatives::Jpeg2kImageDerivatives.create(filename, outputs: jpeg2k_image_outputs)
-      image_server_cache_derivatives if ["production","staging"].include?(Rails.env.to_s)
+      image_server_cache_derivatives if ["production","staging","sandbox"].include?(Rails.env.to_s)
     else
       # This is the behavior I am overwriting
       # (this method was previously delegated to
