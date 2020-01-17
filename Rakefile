@@ -5,4 +5,4 @@ require_relative 'config/application'
 
 Rails.application.load_tasks
 
-require 'solr_wrapper/rake_task' unless Rails.env.production? or Rails.env.staging?
+require 'solr_wrapper/rake_task' if (Rails.env.test? or Rails.env.development?)
