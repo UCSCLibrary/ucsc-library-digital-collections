@@ -151,7 +151,7 @@ Hyrax.config do |config|
      encoded_id = "#{fid[0..1]}_#{fid[2..3]}_#{fid[4..5]}_#{fid[6..7]}_#{fid[8]}"
 
      unless (image_server_root_url = ENV['IIIF_SERVER_URL'])
-       suffix = (Rails.env.to_s == "production") ? "" : "staging/"
+       suffix = ["production","staging"].include?(Rails.env.to_s) ? "" : "staging/"
        image_server_root_url = "https://digitalcollections-image.library.ucsc.edu/#{suffix}iiif/2/"
      end
 
@@ -172,7 +172,7 @@ Hyrax.config do |config|
      end
      fid=fileset_id
      unless (image_server_root_url = ENV['IIIF_SERVER_URL'])
-       suffix = (Rails.env.to_s == "production") ? "" : "staging/"
+       suffix = ["production","staging"].include?(Rails.env.to_s) ? "" : "staging/"
        image_server_root_url = "https://digitalcollections-image.library.ucsc.edu/#{suffix}iiif/2/"
      end
      # Divide the file id with underscores for the image server to handle more easily
@@ -210,6 +210,7 @@ Hyrax.config do |config|
   # Location on local file system where derivatives will be stored
   # If you use a multi-server architecture, this MUST be a shared volume
   config.derivatives_path = "/dams_derivatives/#{Rails.env}"
+  config.derivatives_path = "/dams_derivatives/production" if Rails.env.to_s == "staging"
 
   # Should schema.org microdata be displayed?
   # config.display_microdata = true

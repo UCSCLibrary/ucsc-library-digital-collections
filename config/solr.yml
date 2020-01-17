@@ -3,8 +3,10 @@ development:
   url: http://index:8983/solr/hycruz
 test:
   url: http://index:8983/solr/hycruz-test
-staging:
+sandbox:
   url: http://digitalcollections-index.library.ucsc.edu:8983/solr/hycruz-staging
+staging:
+  url: http://digitalcollections-index.library.ucsc.edu:8983/solr/hycruz
 production:
   url: http://digitalcollections-index.library.ucsc.edu:8983/solr/hycruz
 

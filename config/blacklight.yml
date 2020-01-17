@@ -4,9 +4,12 @@ development:
 test: &test
   adapter: solr
   url: http://index:8983/solr/hycruz-test
-staging:
+sandbox:
   adapter: solr
   url: http://digitalcollections-index.library.ucsc.edu:8983/solr/hycruz-staging
+staging:
+  adapter: solr
+  url: http://digitalcollections-index.library.ucsc.edu:8983/solr/hycruz
 production:
   adapter: solr
   url: http://digitalcollections-index.library.ucsc.edu:8983/solr/hycruz

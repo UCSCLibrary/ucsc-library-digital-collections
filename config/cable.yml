@@ -6,6 +6,10 @@ test:
 
 staging:
   adapter: redis
+  url: redis://digitalcollections-ingests.library.ucsc.edu:6379/1
+
+sandbox:
+  adapter: redis
   url: redis://digitalcollections-ingests.library.ucsc.edu:6380/1
 
 production:

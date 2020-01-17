@@ -22,6 +22,10 @@ staging:
   archivist:
     - archivist1@example.com
     - ethenry@ucsc.edu
+sandbox:
+  archivist:
+    - archivist1@example.com
+    - ethenry@ucsc.edu
 production:
   archivist:
     - archivist1@example.com
