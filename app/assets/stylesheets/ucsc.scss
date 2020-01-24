@@ -396,8 +396,22 @@ table.work.attributes {
     button {
         float: left;
         margin-right: 10px;
+        &:hover {
+            background-color: $ucsc-lightblue;
+        }
     }
 }
+#downloadWork {
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+    li {
+        margin-bottom: 10px;
+    }
+}
+
+/* Modals */
 .modal .modal-body {
     .modal-title {
         margin-bottom: 20px;
@@ -409,14 +423,15 @@ table.work.attributes {
         font-weight: bold;
     }
     .close {
-        padding: 2px 3px;
+        padding: 2px 3px 3px 3px;
         border: solid 1px #fff;
         border-radius: 50%;
         color: #5f98f7;
         background-color: #f3f9ff;
         opacity: 1;
         &:hover {
-            border-color: #5f98f7;
+            color: #f3f9ff;
+            background-color: #5f98f7;
         }
     }
 }
