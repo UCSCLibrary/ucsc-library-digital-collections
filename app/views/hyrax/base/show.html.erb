@@ -12,7 +12,15 @@
     <div class="col-xs-12">
         <%# = render 'work_description', presenter: @presenter %>
         <%= render 'primary_media', presenter: @presenter, viewer: @presenter.universal_viewer?, av_files: (av_files = @presenter .all_av_files) %>
-        <%= render 'metadata', presenter: @presenter %>
+        <div class="col-sm-6">
+            <%= render 'metadata', presenter: @presenter %>
+        </div>
+        <div class="col-sm-6">
+            <div id="download-share-cite">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#downloadWork">
+                    <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> Download</button>
+            </div>
+        </div>
     </div>
     <div class="col-sm-4">
         <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
@@ -33,3 +41,5 @@
         <%#= render 'user_activity', presenter: @presenter %>
     </div>
 </div>
+
+<%= render 'modals', presenter: @presenter %>
