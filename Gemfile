@@ -86,7 +86,7 @@ gem 'samvera_hls', '0.4.3'
 
 # Uncomment this when developing scooby snacks
 #gem 'scooby_snacks', path: '/srv/scooby_snacks/'
-gem 'scooby_snacks', '0.3.7'
+gem 'scooby_snacks', '0.3.8'
 
 # Uncomment this when developing Bulk Ops
 #gem 'bulk_ops', path: "/srv/bulk_ops/"
