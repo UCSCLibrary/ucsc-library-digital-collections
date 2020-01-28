@@ -1,15 +1,16 @@
 desc "create test works for a development environment"
 
-task create_objects: :environment do
-  
+task create_objects: :environment do 
 
+  user = User.first
+  ability = user.ability
   puts "simulating upload of sample media files"
-  uploaded_images = Dir[Rails.root.join('public','test_images')].map{|path| Hyrax::UploadedFile.create(file:  File.open(path), user: User.first)}
-  uploaded_audio = Dir[Rails.root.join('public','test_audio')].map{|path| Hyrax::UploadedFile.create(file:  File.open(path), user: User.first)}
+  uploaded_images = Dir[Rails.root.join('public','example_media','images','*')].map{|path| Hyrax::UploadedFile.create(file:  File.open(path), user: user)}
+  uploaded_audio = Dir[Rails.root.join('public','example_media','audio','*')].map{|path| Hyrax::UploadedFile.create(file:  File.open(path), user: user)}
 
   puts "generating sample metadata"
   schema = ScoobySnacks::METADATA_SCHEMA
-  metadata = schema.all_fields.reduce({depositor: User.first.email}) do |field, data|
+  metadata = schema.all_fields.reduce({depositor: user.email}) do |metadata,field|
     if field.controlled?
       key = "#{field.name}_attributes"
       value = {id: field.example}
@@ -18,38 +19,54 @@ task create_objects: :environment do
       value = field.example
     end
     value = Array.wrap(value) if field.multiple?
-    data[key] = value unless data[key].present?    
+    metadata[key] = value unless metadata[key].present?
+    metadata
   end
 
-  puts "creating test collection"
-  collection = Collection.create(title: ["Test Collection"], 
-                                 depositor: User.first.email, 
-                                 collection_type: Hyrax::CollectionType.find_by(title:"User Collection") )
+  example_collection_title = "Example Collection"
+  if( existing_collections = Collection.where(title: example_collection_title) ).present?
+    collection = existing_collections.first
+  else
+    collection =  Collection.create(title: [example_collection_title], 
+                                    depositor: user.email,
+                                    collection_type: Hyrax::CollectionType.find_by(title:"User Collection") )
+  end
+ 
   metadata["member_of_collection_ids"] = [collection.id]
 
-  #puts creating test images
-  child_image_1 = Work.create(metadata.merge({title: ["An Image Work that is the First Child of Another Work"],
-                                              uploaded_files: [uploaded_images[0]]}))
-  child_image_2 = Work.create(metadata.merge({title: ["An Image Work that is the Second Child of Another Work"],
-                                              uploaded_files: [uploaded_images[1]]}))
-  parent_image = Work.create(metadata.merge({title: ["A Work with Multiple Child Works that are Images"],
-                                             ordered_members: [child_image_1,child_image_2]}))
-  parent_image = Work.create(metadata.merge({title: ["A Work with Multiple Filesets that are Images"],
-                                              uploaded_files: [uploaded_images[2], uploaded_images[3]]}))
-  simple_image = Work.create(metadata.merge({title: ["A Simple Image"],
-                                              uploaded_files: [uploaded_images[4]]}))
+  attributes = [
+#    {title: ["An Image Work that is the First Child of Another Work"], uploaded_files: [uploaded_images[0]], type: :image, rel: :child},
+#    {title: ["An Image Work that is the Second Child of Another Work"], uploaded_files: [uploaded_images[4]], type: :image, rel: :child},
+#    {title: ["An Audio Work that is the First Child of Another work"], uploaded_files: [uploaded_audio[0]], type: :audio, rel: :child},
+#    {title: ["An Audio Work that is the Second Child of Another work"], uploaded_files: [uploaded_audio[1]], type: :audio, rel: :child},
+    {title: ["A Simple Public Image"], visibility: "open", uploaded_files: [uploaded_images[1]], type: :image},
+    {title: ["A Simple Private Image"], visibility: "restricted",uploaded_files: [uploaded_images[1]], type: :image},
+#    {title: ["Simple Audio Work"], uploaded_files: [uploaded_audio[4]], type: :audio},
+#    {title: ["A Work with Multiple Filesets that are Images"], uploaded_files: [uploaded_images[2], uploaded_images[3]], type: :image},
+#    {title: ["Work with Multiple Filesets that are Audio"], uploaded_files: [uploaded_audio[2], uploaded_audio[3]], type: :audio},
+#    {title: ["A Work with Multiple Child Works that are Images"], type: :image, rel: :parent},
+#    {title: ["Work with Multiple Child Works that are Audio"], type: :audio, rel: :parent}
+  ]
+  
+  child_image_work_ids = []
+  child_audio_work_ids = []
+  attributes.each_with_index do |atts, i| 
+    if atts[:rel] == :child 
+      work_action = :update
+      work = Work.create(atts.merge({depositor: user.email}).except(:uploaded_files, :type, :rel))
+      child_image_work_ids << work.id if atts[:type] == :image 
+      child_audio_work_ids << work.id if atts[:type] == :audio 
+    else
+      work_action = :create
+      work = Work.new
+    end
+    if atts[:rel] == :parent
+      atts[:ordered_member_ids] = child_image_work_ids if (atts[:type] == :image)
+      atts[:ordered_member_ids] = child_audio_work_ids if (atts[:type] == :audio)
+    end
+    env = Hyrax::Actors::Environment.new(work, ability, metadata.merge(atts.except(:rel, :type))) 
+    Hyrax::CurationConcern.actor.send(work_action,env)
+  end
 
-
-  #puts creating test audio
-  child_audio_1 = Work.create(metadata.merge({title: ["An Audio Work that is the First Child of Another work"],
-                                              uploaded_files: [uploaded_audio[0]]}))
-  child_audio_2 = Work.create(metadata.merge({title: ["An Audio Work that is the Second Child of Another work"],
-                                              uploaded_files: [uploaded_audio[1]]}))
-  parent_audio = Work.create(metadata.merge({title: ["Work with Multiple Child Works that are Audio"],
-                                             ordered_members: [child_audio_1,child_audio_2]}))
-  parent_audio = Work.create(metadata.merge({title: ["Work with Multiple Filesets that are Audio"],
-                                              uploaded_files: [uploaded_audio[2], uploaded_audio[3]]}))
-  simple_audio = Work.create(metadata.merge({title: ["Simple Audio Work"],
-                                              uploaded_files: [uploaded_audio[4]]}))
-
+  
 end
