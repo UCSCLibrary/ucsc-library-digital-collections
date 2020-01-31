@@ -86,11 +86,12 @@ gem 'samvera_hls', '0.4.3'
 
 # Uncomment this when developing scooby snacks
 #gem 'scooby_snacks', path: '/srv/scooby_snacks/'
-gem 'scooby_snacks', '0.3.8'
+#gem 'scooby_snacks', '0.3.8'
+gem 'scooby_snacks', git: 'git://github.com/UCSCLibrary/ScoobySnacks.git'
 
 # Uncomment this when developing Bulk Ops
 #gem 'bulk_ops', path: "/srv/bulk_ops/"
-gem 'bulk_ops', '0.1.23'
+gem 'bulk_ops', git: 'git://github.com/UCSCLibrary/BulkOps.git'
 
 #gem 'ldfwrapper', github: 'boston-library/ldf-wrapper', branch: "master"
 

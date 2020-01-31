@@ -1,4 +1,17 @@
 GIT
+  remote: git://github.com/UCSCLibrary/BulkOps.git
+  revision: c9bf0b4747904923134de172546989e3950d1cbb
+  specs:
+    bulk_ops (0.2.0)
+      rails (~> 5)
+
+GIT
+  remote: git://github.com/UCSCLibrary/ScoobySnacks.git
+  revision: fc12f8ebd180be80a3fda5b68cea7cb79bc6e6ce
+  specs:
+    scooby_snacks (0.3.8)
+
+GIT
   remote: git://github.com/seuros/capistrano-sidekiq.git
   revision: 92bf51eae4bdcc2eee2c1d0b2883d77e5e3f1ab8
   specs:
@@ -161,8 +174,6 @@ GEM
       sass-rails
       signet
     builder (3.2.4)
-    bulk_ops (0.1.23)
-      rails (~> 5)
     byebug (11.0.1)
     cancancan (1.17.0)
     capistrano (3.11.2)
@@ -749,7 +760,6 @@ GEM
     sawyer (0.8.2)
       addressable (>= 2.3.5)
       faraday (> 0.8, < 2.0)
-    scooby_snacks (0.3.8)
     select2-rails (3.5.10)
       thor (~> 0.14)
     shex (0.6.0)
@@ -857,7 +867,7 @@ DEPENDENCIES
   blacklight_advanced_search (~> 6.0)
   blacklight_oai_provider (>= 6.0.0)
   browse-everything
-  bulk_ops (= 0.1.23)
+  bulk_ops!
   bundler (>= 2)
   byebug
   capistrano
@@ -889,7 +899,7 @@ DEPENDENCIES
   rspec-rails
   samvera_hls (= 0.4.3)
   sass-rails (~> 5.0)
-  scooby_snacks (= 0.3.8)
+  scooby_snacks!
   sidekiq
   sinatra!
   solr_wrapper (>= 0.3)

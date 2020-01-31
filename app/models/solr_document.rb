@@ -12,11 +12,7 @@ class SolrDocument
   # Adds ScoobySnacks metadata attribute definitions
   include ScoobySnacks::SolrBehavior
 
-  def audio?
-    FileSet.audio_mime_types.include? mime_type
-  end
-
-  def self.add_field_semantics(label,solr_name,schema=nil)
+ def self.add_field_semantics(label,solr_name,schema=nil)
     label = "#{schema}:#{label}" if schema
     field_semantics.merge!(label => Array.wrap(solr_name)) {|key, old_val, new_val| Array.wrap(old_val) + Array.wrap(new_val)}
   end
@@ -117,15 +113,23 @@ class SolrDocument
     end
   end
 
+  def is_type?(type)
+    return false unless ["audio","video","image"].include? type.to_s
+  end
+
+  def audio?
+    #todo index this
+    return true if FileSet.audio_mime_types.include? mime_type
+    return true if resourceType.any?{|restype| ["audio","sound"].include? restype.to_s.downcase}
+    file_set_ids.any?{|fs| SolrDocument.find(fs.id).audio?}
+  end
+ 
   def image?
+    #todo index this
     return true if super
-    return false unless representative_id
-    resourceType.each do |type|
-      return true if type.to_s.downcase.include? "image"
-    end
-#    return true if member_ids.all?{|id| SolrDocument.find(id).image? }
-    return true if member_ids.any?{|id| SolrDocument.find(id).image? }
-    return false
+    return true if FileSet.image_mime_types.include? mime_type
+    return true if resourceType.any?{|restype| ["photograph","image","picture","photo"].include? restype.to_s.downcase}
+    file_set_ids.any?{|id| SolrDocument.find(id).image?}
   end
 
   def root_url

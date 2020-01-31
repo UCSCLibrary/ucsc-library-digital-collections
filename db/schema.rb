@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190924200549) do
+ActiveRecord::Schema.define(version: 20200122234235) do
 
   create_table "bookmarks", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.integer  "user_id",                     null: false
@@ -112,18 +112,6 @@ ActiveRecord::Schema.define(version: 20190924200549) do
     t.index ["user_id"], name: "index_bulk_ops_operations_on_user_id", using: :btree
   end
 
-  create_table "bulk_ops_relationships", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
-    t.integer  "work_proxy_id"
-    t.string   "object_identifier"
-    t.string   "identifier_type"
-    t.string   "relationship_type"
-    t.string   "status"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
-    t.string   "next"
-    t.string   "previous_sibling"
-  end
-
   create_table "bulk_ops_work_proxies", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.integer  "operation_id"
     t.string   "work_id"
@@ -137,6 +125,8 @@ ActiveRecord::Schema.define(version: 20190924200549) do
     t.string   "order"
     t.datetime "created_at",                         null: false
     t.datetime "updated_at",                         null: false
+    t.integer  "parent_id"
+    t.integer  "previous_sibling_id"
   end
 
   create_table "checksum_audit_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
