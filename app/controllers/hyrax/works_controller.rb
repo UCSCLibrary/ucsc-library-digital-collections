@@ -18,7 +18,7 @@ module Hyrax
     end
 
     def cached_manifest
-      modified = presenter.solr_document.modified_date || DateTime.now
+#      modified = presenter.solr_document.modified_date || DateTime.now
 #      @cache_key = "manifest/#{presenter.id}"
 #      if (entry = Rails.cache.send(:read_entry,@cache_key,{})).present?
 #        Rails.cache.delete(@cache_key) if (Time.at(entry.instance_variable_get(:@created_at)) < presenter.solr_document.modified)

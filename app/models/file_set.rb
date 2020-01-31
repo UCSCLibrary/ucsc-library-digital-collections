@@ -6,6 +6,10 @@ class FileSet < ActiveFedora::Base
 
   Hydra::Derivatives.output_file_service = ::PersistDerivatives
 
+  def self.audio_mime_types
+    SamveraHls::FileSetBehavior.audio_mime_types
+  end
+
   def create_derivatives(filename)
     # create hls derivatives instead of normal ones 
     # for audio or video
