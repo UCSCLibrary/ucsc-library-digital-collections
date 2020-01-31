@@ -338,7 +338,7 @@ div.uv.viewer iframe {
     padding:0;
 }
 
-/* Style single work page */
+/* Single work page */
 #display-work-img {
     width: 100vw;
     margin-left: calc(50% - 50vw);
@@ -357,10 +357,9 @@ div.uv.viewer iframe {
         color: #fff;
         font-size: 200%;
     }
-
 }
 
-/* Style works page metadata */
+/* Works page metadata */
 h2.metadata {
     font-size: 16px;
     font-weight: bold;
@@ -389,5 +388,50 @@ table.work.attributes {
     margin: 25px 0 0 180px;
     &:hover {
         cursor: pointer;
+    }
+}
+
+#download-share-cite {
+    margin-top: 30px;
+    button {
+        float: left;
+        margin-right: 10px;
+        &:hover {
+            background-color: $ucsc-lightblue;
+        }
+    }
+}
+#downloadWork {
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+    li {
+        margin-bottom: 10px;
+    }
+}
+
+/* Modals */
+.modal .modal-body {
+    .modal-title {
+        margin-bottom: 20px;
+        font-size: 16px;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+    h5 {
+        font-weight: bold;
+    }
+    .close {
+        padding: 2px 3px 3px 3px;
+        border: solid 1px #fff;
+        border-radius: 50%;
+        color: #5f98f7;
+        background-color: #f3f9ff;
+        opacity: 1;
+        &:hover {
+            color: #f3f9ff;
+            background-color: #5f98f7;
+        }
     }
 }
