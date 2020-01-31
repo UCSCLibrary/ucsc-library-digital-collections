@@ -128,7 +128,7 @@ class SolrDocument
     #todo index this
     return true if super
     return true if FileSet.image_mime_types.include? mime_type
-    return true if resourceType.any?{|restype| ["photograph","image","picture","photo"].restype.to_s.downcase}
+    return true if resourceType.any?{|restype| ["photograph","image","picture","photo"].include? restype.to_s.downcase}
     file_set_ids.any?{|fs| SolrDocument.find(fs.id).image?}
   end
 
