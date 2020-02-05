@@ -4,6 +4,8 @@ $ucsc-gold: #ffd700;
 $ucsc-footer-back:#c1c1c1;
 $ucsc-footer-color:#6e6e6e;
 $header-height: 40px;
+$screen-xs: 480px;
+$screen-sm: 768px;
 
 body.dashboard div#bulk-review-buttons {
     min-height: 50px;
@@ -264,19 +266,6 @@ body {
     div#extended-terms {
         margin-top: 30px;
     }
-
-    footer {
-        margin-top:20px;
-        div.container-fluid {
-            background-color:$ucsc-footer-back;
-            div.navbar-text {
-                color:$ucsc-footer-color;
-                a.navbar-link {
-                    color: darken($ucsc-footer-color,20%);
-                }
-            }            
-        }
-    }
 }
 
 nav#masthead {
@@ -323,6 +312,49 @@ nav#masthead {
         min-width:135px;
     }
     
+}
+
+/* Footer */
+footer {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: $ucsc-blue;
+    color: #fff;
+    a {
+        color: #fff;
+        &:hover,
+        &:active,
+        &:focus {
+            color: #fff;
+        }
+    }
+    ul {
+        list-style: none;
+        padding-left: 0;
+    }
+    li {
+        padding-bottom: 5px;
+    }
+    /* Move login link to bottom on mobile */
+    @media (max-width: $screen-sm) {
+        ul {
+            margin-top: 20px;
+        }
+        .last ul {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            li {
+                flex-width: 100%;
+                order: 1;
+                &:first-child {
+                order: 2;
+                margin-top: 20px;
+                }
+
+            }
+        }
+    }
 }
 
 div.uv.viewer iframe {
