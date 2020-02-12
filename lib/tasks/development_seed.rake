@@ -35,34 +35,36 @@ task create_objects: :environment do
   metadata["member_of_collection_ids"] = [collection.id]
 
   attributes = [
-#    {title: ["An Image Work that is the First Child of Another Work"], uploaded_files: [uploaded_images[0]], type: :image, rel: :child},
-#    {title: ["An Image Work that is the Second Child of Another Work"], uploaded_files: [uploaded_images[4]], type: :image, rel: :child},
-#    {title: ["An Audio Work that is the First Child of Another work"], uploaded_files: [uploaded_audio[0]], type: :audio, rel: :child},
-#    {title: ["An Audio Work that is the Second Child of Another work"], uploaded_files: [uploaded_audio[1]], type: :audio, rel: :child},
+    {title: ["An Image Work that is the First Child of Another Work"], uploaded_files: [uploaded_images[0]], type: :image, rel: :child},
+    {title: ["An Image Work that is the Second Child of Another Work"], uploaded_files: [uploaded_images[4]], type: :image, rel: :child},
+    {title: ["An Audio Work that is the First Child of Another work"], uploaded_files: [uploaded_audio[0]], type: :audio, rel: :child},
+    {title: ["An Audio Work that is the Second Child of Another work"], uploaded_files: [uploaded_audio[1]], type: :audio, rel: :child},
     {title: ["A Simple Public Image"], visibility: "open", uploaded_files: [uploaded_images[1]], type: :image},
     {title: ["A Simple Private Image"], visibility: "restricted",uploaded_files: [uploaded_images[1]], type: :image},
-#    {title: ["Simple Audio Work"], uploaded_files: [uploaded_audio[4]], type: :audio},
-#    {title: ["A Work with Multiple Filesets that are Images"], uploaded_files: [uploaded_images[2], uploaded_images[3]], type: :image},
-#    {title: ["Work with Multiple Filesets that are Audio"], uploaded_files: [uploaded_audio[2], uploaded_audio[3]], type: :audio},
-#    {title: ["A Work with Multiple Child Works that are Images"], type: :image, rel: :parent},
-#    {title: ["Work with Multiple Child Works that are Audio"], type: :audio, rel: :parent}
+    {title: ["Simple Audio Work"], uploaded_files: [uploaded_audio[4]], type: :audio},
+    {title: ["A Work with Multiple Filesets that are Images"], uploaded_files: [uploaded_images[2].id, uploaded_images[3].id], type: :image},
+    {title: ["Work with Multiple Filesets that are Audio"], uploaded_files: [uploaded_audio[2].id, uploaded_audio[3].id], type: :audio},
+    {title: ["A Work with Multiple Child Works that are Images"], type: :image, rel: :parent},
+    {title: ["Work with Multiple Child Works that are Audio"], type: :audio, rel: :parent}
   ]
   
-  child_image_work_ids = []
-  child_audio_work_ids = []
+  child_image_works = []
+  child_audio_works = []
   attributes.each_with_index do |atts, i| 
-    if atts[:rel] == :child 
+    if atts[:rel] == :child
       work_action = :update
       work = Work.create(atts.merge({depositor: user.email}).except(:uploaded_files, :type, :rel))
-      child_image_work_ids << work.id if atts[:type] == :image 
-      child_audio_work_ids << work.id if atts[:type] == :audio 
+      child_image_works << work if atts[:type] == :image 
+      child_audio_works << work if atts[:type] == :audio 
     else
       work_action = :create
       work = Work.new
     end
     if atts[:rel] == :parent
-      atts[:ordered_member_ids] = child_image_work_ids if (atts[:type] == :image)
-      atts[:ordered_member_ids] = child_audio_work_ids if (atts[:type] == :audio)
+      work_action = :update
+      work = Work.create(atts.merge({depositor: user.email}).except(:uploaded_files, :type, :rel))
+      work.ordered_members = child_image_works
+      work.save
     end
     env = Hyrax::Actors::Environment.new(work, ability, metadata.merge(atts.except(:rel, :type))) 
     Hyrax::CurationConcern.actor.send(work_action,env)
