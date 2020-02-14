@@ -121,7 +121,7 @@ class SolrDocument
     #todo index this
     return true if FileSet.audio_mime_types.include? mime_type
     return true if resourceType.any?{|restype| ["audio","sound"].include? restype.to_s.downcase}
-    file_set_ids.any?{|fs| SolrDocument.find(fs.id).audio?}
+    file_set_ids.any?{|id| SolrDocument.find(id).audio?}
   end
  
   def image?
