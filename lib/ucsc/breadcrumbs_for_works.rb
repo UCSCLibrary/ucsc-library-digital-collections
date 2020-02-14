@@ -7,8 +7,8 @@ module Ucsc
       hide_breadcrumbs = true;
 
       begin
-        unless (col_id = presenter.member_of_collection_ids.first).nil?
-          add_breadcrumb col.title.first, "/records/#{col_id}"
+        if (col = presenter.member_of_collection_presenters.first).present?
+          add_breadcrumb col.title.first, "/records/#{col.id}"
           hide_breadcrumbs = false;
         end
         unless (crs = presenter.solr_document.parent_course).nil?
@@ -22,7 +22,7 @@ module Ucsc
           add_breadcrumb wrk_title, "/records/#{wrk.id}"
           hide_breadcrumbs = false;
         end
-      rescue Blacklight::Exceptions::RecordNotFound
+      rescue ::Blacklight::Exceptions::RecordNotFound
         # If the work mistakenly thinks it is a part of a nonexistent collection, 
         # log it and ignore it.
         Rails.logger.error("WORK #{presenter.id} PART OF NONEXISTENT PARENT")
