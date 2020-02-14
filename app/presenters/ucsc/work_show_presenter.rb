@@ -14,6 +14,7 @@ module Ucsc
     end
 
     def universal_viewer?
+      return true if (image? && (file_set_ids.count > 1))
       "click"
     end
 
