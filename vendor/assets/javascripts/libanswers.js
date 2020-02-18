@@ -360,4 +360,4 @@ if (typeof springSpace.la.fbwidget_loader == 'undefined') {
 
 document.addEventListener("turbolinks:load", function() {
   springSpace.la.load_6282 = new springSpace.la.fbwidget_loader(6282);
-})();
+});
