@@ -29,7 +29,7 @@ task create_objects: :environment do
   else
     collection =  Collection.create(title: [example_collection_title], 
                                     depositor: user.email,
-                                    collection_type: Hyrax::CollectionType.find_by(title:"User Collection") )
+                                    collection_type: Hyrax::CollectionType.find_or_create_default_collection_type )
   end
  
   metadata["member_of_collection_ids"] = [collection.id]
