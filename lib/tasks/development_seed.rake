@@ -63,7 +63,7 @@ task create_objects: :environment do
     if atts[:rel] == :parent
       work_action = :update
       work = Work.create(atts.merge({depositor: user.email}).except(:uploaded_files, :type, :rel))
-      work.ordered_members = child_image_works
+      work.ordered_members = (atts[:type] == image) ? child_image_works : child_audio_works
       work.save
     end
     env = Hyrax::Actors::Environment.new(work, ability, metadata.merge(atts.except(:rel, :type))) 
