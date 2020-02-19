@@ -84,7 +84,7 @@ module Ucsc
           link = "#{link}##{fs.id}"
         end 
         # If the fileset title has been customized, then use that for the title
-        title = fs.title.first unless fs.title.first =~ /^[\w,\s-]+\.[A-Za-z]{3}$/
+        title = fs.title.first unless fs.title.first =~ /^[\w,\s-]+\.[A-Za-z0-9]{3,4}$/
         {id: fs.id,
          title: title, 
          link: link,
