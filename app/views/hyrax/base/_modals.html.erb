@@ -8,10 +8,12 @@
         <h5>Rights Information:</h5>
         <p><%= presenter.solr_document.rightsStatement.first %></p>
         <ul>
-          <li><a href="">Download Small (250px)</a></li>
-          <li><a href="">Download Large (1000px)</a></li>
+          <li><a href="<%= Hyrax.config.iiif_image_url_builder.call(@presenter.representative_id,"nil","250,") %>">Download Small (250px)</a></li>
+          <li><a href="<%= Hyrax.config.iiif_image_url_builder.call(@presenter.representative_id,"nil","1000,") %>">Download Large (1000px)</a></li>
+<!--
           <li><a href="">Download Small (250px) + Citation (Zip File)</a></li>
           <li><a href="">Download Large (1000px) + Citation (Zip File)</a></li>
+-->
         </ul>
       </div>
     </div>
