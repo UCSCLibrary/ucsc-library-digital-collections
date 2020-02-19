@@ -6,7 +6,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="downloadLabel">Download</h4>
         <h5>Rights Information:</h5>
-        <p>I'm a test, please don't copy me.</p>
+        <p><%= presenter.solr_document.rightsStatement.first %></p>
         <ul>
           <li><a href="">Download Small (250px)</a></li>
           <li><a href="">Download Large (1000px)</a></li>
