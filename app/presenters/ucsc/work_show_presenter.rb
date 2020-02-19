@@ -2,9 +2,8 @@ module Ucsc
   class WorkShowPresenter < Hyrax::WorkShowPresenter
     include ScoobySnacks::PresenterBehavior
 
-    delegate :file_set_ids, :image?, to: :solr_document
-
-    delegate :member_av_files, :ordered_work_ids, to: :member_presenter_factory
+    delegate :file_set_ids, :image?, :audio?, to: :solr_document
+    delegate :titleAlternative, :subseries, :series, to: :solr_document
 
     def representative_presenter
       return nil unless representative_id
@@ -14,6 +13,7 @@ module Ucsc
     end
 
     def universal_viewer?
+      return true if (image? && (file_set_ids.count > 1))
       "click"
     end
 
@@ -29,10 +29,15 @@ module Ucsc
       end
     end
 
-    def all_av_files
-      @all_av_files ||= generate_all_av_file_list
+    def parent
+      return nil unless solr_document.parent_id.present?
+      @parent ||= SolrDocument.find(solr_document.parent_id)
     end
 
+    def parent_presenter
+      return nil unless parent.present?
+      @parent_presenter ||= Ucsc::WorkShowPresenter.new(parent, current_ability,request)
+    end
 
     def page_title
       "#{solr_document.title.first} | UCSC Digital Library Collections"
@@ -46,19 +51,49 @@ module Ucsc
       Array(solr_document.metadataInheritance).first.to_s.downcase.include?("display")
     end
 
-    delegate :titleAlternative, :subseries, :series, to: :solr_document
+    # If this is an audio work and its parent is also an audio work,
+    # return its siblings. Otherwise, return its children.
+    def all_av_files
+      return @all_av_files if @all_av_files
+      if parent.present? && parent.audio?
+        @all_av_files = descendent_av_file_list(parent)
+      else
+        @all_av_files = descendent_av_file_list(solr_document)
+      end
+      unless @all_av_files.blank? or @all_av_files.find{|file| file[:playing]}
+        @all_av_files[0][:playing] = true
+      end
+      return @all_av_files
+    end
 
-    def parent_presenter
-      return nil unless (parent_id = solr_document.parent_id).present?
-      @parent_presenter ||= Ucsc::WorkShowPresenter.new(SolrDocument.find(parent_id), current_ability,request)
+    def playing_now
+      all_av_files.find{|file| file[:playing]}
     end
 
     private 
 
-    def generate_all_av_file_list
-      own_av_files = file_set_ids.map{|id| SolrDocument.find(id)}.select{|sd| sd.audio? || sd.video?}
-      own_av_files.map!{|doc| {id: doc.id, title: doc.title.first}}
-      own_av_files + member_av_files
+    # Return an array of filesets that belong to this work or its child works & descendent works
+    def descendent_av_file_list(doc, root_parent=nil)
+      av_filesets = doc.file_set_ids.map{|id| SolrDocument.find(id)}.select{|sd| sd.audio? || sd.video?}
+      list = av_filesets.map.with_index(1) do |fs,i| 
+        title = doc.title.first
+        link = "/records/#{doc.id}"
+        #link = "records/#{root_parent_id}##{fs.id}"
+        if av_filesets.count > 1
+          title = "#{title} - Track #{i}" 
+          link = "#{link}##{fs.id}"
+        end 
+        # If the fileset title has been customized, then use that for the title
+        title = fs.title.first unless fs.title.first =~ /^[\w,\s-]+\.[A-Za-z]{3}$/
+        {id: fs.id,
+         title: title, 
+         link: link,
+         fileset: fs,
+#         work: doc,
+         playing: (id == doc.id) && (i == 1),
+        }
+      end
+      doc.member_work_ids.map{|id| descendent_av_file_list(SolrDocument.find(id), root_parent)}.reduce(list,:+)
     end
 
     def member_presenter_factory
@@ -69,6 +104,8 @@ module Ucsc
       return ::FacetedAttributeRenderer if name == :faceted
       super
     end
+
+
 
   end
 end

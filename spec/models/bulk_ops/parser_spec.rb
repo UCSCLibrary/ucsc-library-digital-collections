@@ -28,7 +28,7 @@ RSpec.describe BulkOps::Parser do
     let(:sample_filenames) {["cat.jpg","Domestic_Cat.jpg","cat-cute-cute-pets.jpg"]}
 
     before(:all) do
-      @coltype = Hyrax::CollectionType.first or Hyrax::CollectionType.create(title: "User Collection", description: "A User Collection can be created by any user to or...", machine_id: "user_collection", nestable: true, discoverable: true, sharable: true, allow_multiple_membership: true, require_membership: false, assigns_workflow: false, assigns_visibility: false, share_applies_to_new_works: false, brandable: true, badge_color: "#705070")
+      @coltype = Hyrax::CollectionType.find_or_create_default_collection_type
     end
 
     after(:all) do

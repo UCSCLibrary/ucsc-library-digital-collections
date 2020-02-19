@@ -25,7 +25,9 @@ Rails.application.routes.draw do
   mount SamveraHls::Engine => '/'
   mount BulkOps::Engine => '/'
 
-  mount Sidekiq::Web => '/sidekiq' 
+  authenticate :user, lambda { |u| u.admin? } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 
   mount Blacklight::Engine => '/'
   mount BlacklightAdvancedSearch::Engine => '/'
