@@ -11,6 +11,7 @@ class WorkIndexer < Hyrax::WorkIndexer
       when "FileSet"
         solr_doc["file_id_ss"] = object.original_file_id
       when "Work"
+        solr_doc['file_set_ids_ssim'] = object.file_set_ids
         solr_doc['member_ids_ssim'] = object.ordered_member_ids
         object.ordered_member_ids.each do |member_id|
           next unless (member = SolrDocument.find(member_id)).image?
