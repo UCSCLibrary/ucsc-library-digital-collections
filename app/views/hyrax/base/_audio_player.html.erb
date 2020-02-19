@@ -1,0 +1,26 @@
+
+
+<div id="primary-audio-div" >
+
+    <div id="mep-container">
+        <%= render "single_player", file_set_id: @presenter.playing_now[:id], title: @presenter.playing_now[:title] %>
+    </div>
+    <div id="track-list">
+        <p>Track List</p>
+        <% av_files.each do |av_file| %>
+            <% if av_file[:playing] %>
+                <span class="glyphicon glyphicon-stats" aria-hidden="true"></span>
+            <% end %>
+            <div class="av_playlist_link <%= "active" if av_file[:playing] %>" id="div-<%= av_file[:id] %>">
+                <% if av_file[:playing] && av_file[:link].include?(@presenter.id) %>
+                    <%= av_file[:title] %>
+                <% else %>
+                    <%= link_to av_file[:title], av_file[:link] %>
+                <% end %>
+            </div>
+        <% end %>
+    </div>
+</div>
+
+<%= javascript_include_tag "include_player" %>
+<%= stylesheet_link_tag "embed" %>
