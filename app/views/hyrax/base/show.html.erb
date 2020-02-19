@@ -15,15 +15,18 @@
         <div class="col-sm-6">
             <%= render 'metadata', presenter: @presenter %>
         </div>
-        <div class="col-sm-6">
-            <div id="download-share-cite">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#downloadWork">
-                    <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> Download</button>
+        
+        <%# if @presenter.image?  %>
+        <% if false %>
+            <div class="col-sm-6">
+                <div id="download-share-cite">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#downloadWork">
+                        <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> Download</button>
+                </div>
             </div>
-        </div>
+        <% end  %>
     </div>
     <div class="col-sm-4">
-        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
         <%= render "show_actions", presenter: @presenter %>
         <%# Use the fully qualified path to avoid RSpec error: translation missing: en.hyrax.base.show.html.erb.last_modified %>
         <%= render 'representative_media', presenter: @presenter unless av_files.any? or @presenter.image? %>
