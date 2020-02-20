@@ -47,6 +47,7 @@ class FileSet < ActiveFedora::Base
   def image_server_derivative_sizes
     ['90,',
      '!200,150',
+     '250,',
      '!300,300',
      '800,']
   end

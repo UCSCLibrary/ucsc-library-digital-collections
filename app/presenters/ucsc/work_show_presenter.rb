@@ -18,14 +18,14 @@ module Ucsc
     end
 
     # We should delegate this to the solrDocument, which should have it already indexed (for works at least).
-    def display_image_url
+    def display_image_url(size="800,")
       if representative_id
         return nil unless current_ability.can?(:read, representative_id)
         representative_image = SolrDocument.find(representative_id)
         return nil unless representative_image.image?
-        representative_image.display_image_url
+        representative_image.display_image_url(size: size)
       elsif solr_document.image?
-        solr_document.display_image_url
+        solr_document.display_image_url(size: size)
       end
     end
 
