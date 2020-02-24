@@ -6,6 +6,31 @@ class Ability
   
   self.ability_logic += [:everyone_can_create_curation_concerns]
 
+
+
+  def test_read(id)
+    # retrieve special access grants for the current user
+    grants = current_user.current_access_grants
+    # grant access if this user is authorized for this record specifically
+    return true if grants.include?(id)
+
+    # perform special checks on filesets
+    if (fs = SolrDocument.find(id))["has_model_ssim"].include? "FileSet"
+      # retrieve the parent work and grant access if it the user has specific permission
+      work = fs.parent_work
+      return true if grants.include? work.id
+      # check whether any of the fileset, work, or any collection the work belongs to has the visibility "request"
+      if work.member_of_collection_ids.map{|col_id| SolrDocument.find(col_id).visibility}.push(work.visibility).push(fs.visibility).include?("request")
+        # if so, grant access only if the user has specific privileges for that collection
+        return work.member_of_collection_ids.any?{|id| grants.include?(id)}
+      end
+      # otherwise, allow access to the fileset if the work it belongs to is public
+      return true if work.visibility == Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+    end
+ 
+    super
+  end
+
   # Define any customized permissions here.
   def custom_permissions
 
