@@ -10,6 +10,14 @@ Rails.application.routes.draw do
 
   get '/admin/workflows(.:format)', to: 'admin/workflows#index'
 
+  resources :collections, only: :show do # public landing show page
+    member do
+      get 'page/:page', action: :index
+      get 'facet/:id', action: :facet, as: :dashboard_facet
+      get :files
+    end
+  end
+  
   mount Hyrax::Engine => '/'
 
   root 'hyrax/homepage#index'
