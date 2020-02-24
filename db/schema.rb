@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200122234235) do
+ActiveRecord::Schema.define(version:  20200220225841) do
 
   create_table "bookmarks", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.integer  "user_id",                     null: false
@@ -642,6 +642,15 @@ ActiveRecord::Schema.define(version: 20200122234235) do
     t.datetime "updated_at",   null: false
     t.index ["file_set_uri"], name: "index_uploaded_files_on_file_set_uri", using: :btree
     t.index ["user_id"], name: "index_uploaded_files_on_user_id", using: :btree
+  end
+
+  create_table "user_access_grants", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "user_id"
+    t.string   "object_id"
+    t.datetime "start"
+    t.datetime "end"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "user_stats", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
