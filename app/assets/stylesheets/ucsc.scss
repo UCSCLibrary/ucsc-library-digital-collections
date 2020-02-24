@@ -425,7 +425,7 @@ table.work.attributes {
         cursor: pointer;
     }
 }
-
+/* Download, Share, and Cite buttons */
 #download-share-cite {
     margin-top: 30px;
     button {
@@ -436,14 +436,12 @@ table.work.attributes {
         }
     }
 }
-#downloadWork {
-    ul {
-        list-style: none;
-        padding: 0;
-    }
-    li {
-        margin-bottom: 10px;
-    }
+.btn-citation span.h1 {
+    margin: 0 8px 0 0;
+    line-height: 20px;
+    position: relative;
+    float: left;
+    top: 7px;
 }
 
 /* Modals */
@@ -467,6 +465,26 @@ table.work.attributes {
         &:hover {
             color: #f3f9ff;
             background-color: #5f98f7;
+        }
+    }
+}
+#downloadWork {
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+    li {
+        margin-bottom: 10px;
+    }
+}
+#citeWork {
+    .citation {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 20px;
+        > span {
+            flex: 2 1 auto;
         }
     }
 }

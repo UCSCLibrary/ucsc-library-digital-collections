@@ -1,21 +1,110 @@
-<%# Download %>
-<div class="modal fade" id="downloadWork" tabindex="-1" role="dialog" aria-labelledby="downloadLabel">
+<% if @presenter.image? %>
+  <%# Download %>
+  <div class="modal fade" id="downloadWork" tabindex="-1" role="dialog" aria-labelledby="downloadLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="downloadLabel">Download</h4>
+          <h5>Rights Information:</h5>
+          <p><%= presenter.solr_document.rightsStatement.first %></p>
+          <ul>
+            <li><a href="<%= Hyrax.config.iiif_image_url_builder.call(@presenter.representative_id,"nil","250,") %>">Download Small (250px)</a></li>
+            <li><a href="<%= Hyrax.config.iiif_image_url_builder.call(@presenter.representative_id,"nil","1000,") %>">Download Large (1000px)</a></li>
+  <!--
+            <li><a href="">Download Small (250px) + Citation (Zip File)</a></li>
+            <li><a href="">Download Large (1000px) + Citation (Zip File)</a></li>
+  -->
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<% if Hyrax.config.citations? %>
+<%# Citations %>
+<div class="modal fade" id="citeWork" tabindex="-1" role="dialog" aria-labelledby="citeLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-body">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="downloadLabel">Download</h4>
-        <h5>Rights Information:</h5>
-        <p><%= presenter.solr_document.rightsStatement.first %></p>
-        <ul>
-          <li><a href="<%= Hyrax.config.iiif_image_url_builder.call(@presenter.representative_id,"nil","250,") %>">Download Small (250px)</a></li>
-          <li><a href="<%= Hyrax.config.iiif_image_url_builder.call(@presenter.representative_id,"nil","1000,") %>">Download Large (1000px)</a></li>
-<!--
-          <li><a href="">Download Small (250px) + Citation (Zip File)</a></li>
-          <li><a href="">Download Large (1000px) + Citation (Zip File)</a></li>
--->
-        </ul>
+        <h4 class="modal-title" id="citeLabel">Cite</h4>
+
+        <h5>APA</h5>
+        <div class="citation">
+          <span id="apa-citation-text"><%= export_as_apa_citation(@presenter) %></span>
+          <button type="button" class="btn btn-primary">Copy</button>
+        </div>
+
+        <h5>MLA</h5>
+        <div class="citation">
+          <span id="mla-citation-text"><%= export_as_mla_citation(@presenter) %></span>
+          <button type="button" class="btn btn-primary">Copy</button>
+        </div>
+
+        <h5>Chicago</h5>
+        <div class="citation">
+          <span id="chicago-citation-text"><%= export_as_chicago_citation(@presenter) %></span>
+          <button type="button" class="btn btn-primary">Copy</button>
+        </div>
       </div>
     </div>
   </div>
 </div>
+<script>
+  /* Load Bootstrap tooltips */
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  })
+
+  function copyCitation(citation) {
+    /* Select the span text, copy it, then clear the selection */
+    var range, selection;
+    if (window.getSelection && document.createRange) {
+      selection = window.getSelection();
+      range = document.createRange();
+      range.selectNodeContents(citation);
+      selection.removeAllRanges();
+      selection.addRange(range);
+      document.execCommand("copy");
+      selection.removeAllRanges();
+    } else if (document.selection && document.body.createTextRange) {
+      range = document.body.createTextRange();
+      range.moveToElementText(citation);
+      range.select();
+      document.execCommand("copy");
+      document.selection.empty();
+    }
+  }
+
+  // Add tooltips to the buttons, and click event listeners
+  $('#citeWork').find('.btn').each(function(){
+    var $this = $(this);
+
+    $this.tooltip({
+      title: 'Click to copy citation',
+      placement: 'top',
+      trigger: 'hover'
+    });
+
+    $this.click(function(e){
+      e.stopPropagation();
+      e.preventDefault();
+      $this.tooltip('destroy');
+      var citation = $this.siblings('span').get(0);
+      copyCitation(citation);
+      // tooltip.destroy is asyncronous, allow time to complete before creating new tooltip
+      setTimeout(function () {
+        $this.tooltip({title: "Copied!", placement: 'top', trigger: 'hover'});
+        $this.tooltip('show');
+      }, 200);
+    }).mouseleave(function(){
+      $this.tooltip('destroy');
+      setTimeout(function () {
+        $this.tooltip({title: 'Click to copy citation', placement: 'top', trigger: 'hover'});
+      }, 200);
+    });
+  });
+</script>
+<% end %>
