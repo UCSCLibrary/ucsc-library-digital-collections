@@ -1,3 +1,8 @@
-<% presenter.title.each_with_index do |title, index| %>
+<% titles = presenter.title %>
+<% if presenter.audio? and (presenter.all_av_files.count > 0) and presenter.parent.present? %>
+    <% titles = presenter.parent.audio? ? presenter.parent.title : presenter.title %>
+<% end %>
+<% titles.each_with_index do |title, index| %>
     <h1><%= title %></h1>
 <% end %>
+

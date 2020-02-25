@@ -126,7 +126,8 @@ class SolrDocument
     #todo index this
     return true if FileSet.audio_mime_types.include? mime_type
     return true if resourceType.any?{|restype| ["audio","sound"].include? restype.to_s.downcase}
-    file_set_ids.any?{|id| SolrDocument.find(id).audio?}
+    return true if file_set_ids.any?{|id| SolrDocument.find(id).audio?}  
+    member_work_ids.present? && member_work_ids.all?{|id| SolrDocument.find(id).audio?}
   end
  
   def image?
@@ -134,7 +135,8 @@ class SolrDocument
     return true if super
     return true if FileSet.image_mime_types.include? mime_type
     return true if resourceType.any?{|restype| ["photograph","image","picture","photo"].include? restype.to_s.downcase}
-    file_set_ids.any?{|id| SolrDocument.find(id).image?}
+    return true if file_set_ids.any?{|id| SolrDocument.find(id).image?}  
+    member_work_ids.present? && member_work_ids.all?{|id| SolrDocument.find(id).image?}
   end
 
   def root_url
@@ -147,6 +149,10 @@ class SolrDocument
 
   def ordered_member_ids
     member_ids
+  end
+
+  def member_work_ids
+    member_ids - file_set_ids
   end
 
   def file_set_ids
