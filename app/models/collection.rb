@@ -8,6 +8,29 @@ class Collection < ActiveFedora::Base
     @reindex_extent ||= Hyrax::Adapters::NestingIndexAdapter::LIMITED_REINDEX
   end
 
+  def visibility=(value)
+    if (value == "request")
+      request_visibility! 
+      return true
+    end
+    super
+  end
+
+  def visibility
+      return "request" if read_groups.include? "request"
+      super
+  end
+
+  def represented_visibility
+    super.push("request")
+  end
+
+  def request_visibility!
+    visibility_will_change! unless visibility == "request"
+    remove_groups = represented_visibility - [ "request", Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC]
+    set_read_groups([ "request", Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC], remove_groups)
+  end
+
   property :metadataInheritance, predicate: "https://digitalcollections.library.ucsc.edu/ontology/metadataInheritance", multiple: false
 
 end

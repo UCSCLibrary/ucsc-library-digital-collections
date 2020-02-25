@@ -11,8 +11,9 @@ class User < ApplicationRecord
   include Hyrax::User
   include Hyrax::UserUsageStats
 
-
-
+  def current_access_grants
+    @current_access_grants ||= UserAccessGrant.where(user_id: id).where("start < ?", DateTime.now).where("end > ?", DateTime.now).map(&:object_id)
+  end
 
   if Blacklight::Utils.needs_attr_accessible?
     attr_accessible :email, :password, :password_confirmation

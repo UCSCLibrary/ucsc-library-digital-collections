@@ -6,6 +6,8 @@ module Ucsc
 
     delegate :member_av_files, :ordered_work_ids, to: :member_presenter_factory
 
+    self.collection_presenter_class = Ucsc::CollectionPresenter
+
     def representative_presenter
       return nil unless representative_id
       file_set = SolrDocument.find(representative_id)

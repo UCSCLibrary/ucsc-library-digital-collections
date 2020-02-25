@@ -7,7 +7,7 @@
     <%= javascript_include_tag "include_player" %>
     <%= stylesheet_link_tag "embed" %>
 <% elsif @presenter.image?%>
-    <% if presenter.representative_id.present? && presenter.representative_presenter.present? %>
+    <% if (image_presenter = presenter.representative_presenter).present? && current_ability.can?(:read,image_presenter.id) %>
         <% if (defined?(viewer) && viewer.to_s == "true") || params['universal_viewer'] %>
             <%= PulUvRails::UniversalViewer.script_tag %>
             <div class="viewer-wrapper">

@@ -98,10 +98,17 @@ en:
           all:
             label_short:  "All"
             label_long:   "All Collections"
+    visibility:
+      request:
+        note_html: "You will have to submit an online request before viewing media in this collection"
+        text: "Media Available by Request"
     directory:
       suffix:           "@ucsc.edu"
     footer:
       copyright_html: "<strong>Copyright &copy; 2016 UC Santa Cruz & The Hydra Project</strong> License currently under negotiation"
     base:
+      citations:
+        citations: "Cite"
+        header:  "Export citation as:"
       metadata:
         header: Description

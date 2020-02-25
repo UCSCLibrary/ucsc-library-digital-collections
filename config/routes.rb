@@ -15,6 +15,14 @@ Rails.application.routes.draw do
   get '/works/:id/zip_media_citation/media_citation.zip', to: 'hyrax/works#zip_media_citation'
   get '/works/:id/zip_media_citation/:size/media_citation.zip', to: 'hyrax/works#zip_media_citation'
 
+  resources :collections, only: :show do # public landing show page
+    member do
+      get 'page/:page', action: :index
+      get 'facet/:id', action: :facet, as: :dashboard_facet
+      get :files
+    end
+  end
+
   mount Hyrax::Engine => '/'
 
   root 'hyrax/homepage#index'

@@ -72,6 +72,11 @@ class SolrDocument
     return ["Untitled"]
   end
 
+  def visibility
+    return "request" if self["visibility_ssi"] == "request"
+    super
+  end
+
   def to_semantic_values(schema="dc")
     (@semantic_value_hash ||= {})[schema] ||= self.class.field_semantics.each_with_object(Hash.new([])) do |(key, field_names), hash| 
 
