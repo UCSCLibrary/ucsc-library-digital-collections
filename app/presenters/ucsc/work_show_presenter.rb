@@ -30,6 +30,10 @@ module Ucsc
       end
     end
 
+    def zip_media_citation_url(size="1000,")
+      "/works/#{id}/zip_media_citation/#{size}/media_citation.zip"
+    end
+
     def all_av_files
       @all_av_files ||= generate_all_av_file_list
     end

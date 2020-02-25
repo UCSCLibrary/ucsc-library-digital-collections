@@ -10,6 +10,11 @@ Rails.application.routes.draw do
 
   get '/admin/workflows(.:format)', to: 'admin/workflows#index'
 
+  get '/works/:id/zip_media_citation', to: 'hyrax/works#zip_media_citation'
+  get '/works/:id/zip_media_citation/:size', to: 'hyrax/works#zip_media_citation'
+  get '/works/:id/zip_media_citation/media_citation.zip', to: 'hyrax/works#zip_media_citation'
+  get '/works/:id/zip_media_citation/:size/media_citation.zip', to: 'hyrax/works#zip_media_citation'
+
   mount Hyrax::Engine => '/'
 
   root 'hyrax/homepage#index'
