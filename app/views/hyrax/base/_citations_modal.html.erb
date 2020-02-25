@@ -1,0 +1,29 @@
+<%# Citations %>
+<div class="modal fade" id="citeWork" tabindex="-1" role="dialog" aria-labelledby="citeLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="citeLabel">Cite</h4>
+
+                <h5>APA</h5>
+                <div class="citation">
+                    <span id="apa-citation-text"><%= export_as_apa_citation(@presenter) %></span>
+                    <button type="button" class="btn btn-primary">Copy</button>
+                </div>
+
+                <h5>MLA</h5>
+                <div class="citation">
+                    <span id="mla-citation-text"><%= export_as_mla_citation(@presenter) %></span>
+                    <button type="button" class="btn btn-primary">Copy</button>
+                </div>
+
+                <h5>Chicago</h5>
+                <div class="citation">
+                    <span id="chicago-citation-text"><%= export_as_chicago_citation(@presenter) %></span>
+                    <button type="button" class="btn btn-primary">Copy</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

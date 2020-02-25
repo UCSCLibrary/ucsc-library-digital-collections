@@ -49,4 +49,5 @@
     </div>
 </div>
 
-<%= render 'modals', presenter: @presenter %>
+<%= render('downloads_modal', presenter: @presenter) if @presenter.image? %>
+<%= render('citations_modal', presenter: @presenter) if Hyrax.config.citations? %>
