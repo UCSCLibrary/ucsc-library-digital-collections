@@ -117,3 +117,4 @@ gem 'bundler', '>= 2'
 
 gem "mini_magick", ">= 4.9.4"
 
+gem 'rubyzip'
