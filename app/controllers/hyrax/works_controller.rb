@@ -16,7 +16,7 @@ module Hyrax
       image_url = Hyrax.config.iiif_image_url_builder.call(presenter.representative_id, nil,size).gsub("localhost","images")
       zip_io = Zip::OutputStream.write_buffer do |zio|
         zio.put_next_entry("image_#{presenter.id}.jpg")
-        zio.write(open(image_url).read)
+        zio.write(open(image_url, "Cookie" => "_ucsc_hyrax_session=#{cookies[:_ucsc_hyrax_session]}" ).read)
         zio.put_next_entry("citation_#{presenter.id}.txt")
         zio.puts "Citations for #{presenter.title.first}\n"
         zio.puts "APA:"
