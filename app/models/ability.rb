@@ -17,7 +17,7 @@ class Ability
     # perform special checks on filesets
     if (fs = SolrDocument.find(id))["has_model_ssim"].include? "FileSet"
       # retrieve the parent work and grant access if it the user has specific permission
-      work = fs.parent_work
+      return false unless (work = fs.parent_work).present?
       return true if grants.include? work.id
       # check whether any of the fileset, work, or any collection the work belongs to has the visibility "request"
       if work.member_of_collection_ids.map{|col_id| SolrDocument.find(col_id).visibility}.push(work.visibility).push(fs.visibility).include?("request")
