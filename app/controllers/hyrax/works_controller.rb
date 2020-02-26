@@ -1,3 +1,4 @@
+require 'zip'
 module Hyrax
   class WorksController < ApplicationController
     # Adds Hyrax behaviors to the controller.
