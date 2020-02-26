@@ -1,19 +1,21 @@
 <%# Download %>
-<div class="modal fade" id="downloadWork" tabindex="-1" role="dialog" aria-labelledby="downloadLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-body">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="downloadLabel">Download</h4>
-        <h5>Rights Information:</h5>
-        <p><%= presenter.solr_document.rightsStatement.first %></p>
-        <ul>
-          <li><%= link_to('Download Small (250px)',@presenter.display_image_url("250,")) %></li>
-          <li><%= link_to('Download Small (1000px)',@presenter.display_image_url("1000,")) %></li>
-          <li><%= link_to('Download Small (250px) + Citation (Zip File)',@presenter.zip_media_citation_url("250,")) %></li>
-          <li><%= link_to('Download Large (1000px) + Citation (Zip File)',@presenter.zip_media_citation_url("1000,")) %></li>
-        </ul>
-      </div>
+<% if @presenter.display_image_url %>
+    <div class="modal fade" id="downloadWork" tabindex="-1" role="dialog" aria-labelledby="downloadLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="downloadLabel">Download</h4>
+                    <h5>Rights Information:</h5>
+                    <p><%= presenter.solr_document.rightsStatement.first %></p>
+                    <ul>
+                        <li><%= link_to('Download Small (250px)',@presenter.display_image_url("250,"), download: "") %></li>
+                        <li><%= link_to('Download Large (1000px)',@presenter.display_image_url("1000,"), download: "") %></li>
+                        <li><%= link_to('Download Small (250px) + Citation (Zip File)',@presenter.zip_media_citation_url("250,")) %></li>
+                        <li><%= link_to('Download Large (1000px) + Citation (Zip File)',@presenter.zip_media_citation_url("1000,")) %></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
+<% end %>
