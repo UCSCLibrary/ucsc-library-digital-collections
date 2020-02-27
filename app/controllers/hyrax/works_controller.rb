@@ -28,8 +28,7 @@ module Hyrax
         zio.puts ActionView::Base.full_sanitizer.sanitize(Hyrax::CitationsBehaviors::Formatters::ChicagoFormatter.new(self).format(presenter)).strip+"\n"
       end
       zip_io.rewind
-      send_data zip_io.read, :filename => "media_citation_#{presenter.id}.zip"
-
+      send_data zip_io.read, :filename => "media_citation_#{presenter.id}.zip", :type => 'application/zip', :disposition => 'attachment'
     end
 
 
