@@ -9,6 +9,7 @@ module Hyrax
     self.curation_concern_type = ::Work
     self.show_presenter = Ucsc::WorkShowPresenter
 
+    skip_authorize_resource :only => [:show, :file_manager, :inspect_work, :manifest, :zip_media_citation]
 
     def zip_media_citation
       #This feature is currently only implemented for Images
@@ -28,7 +29,9 @@ module Hyrax
       end
       zip_io.rewind
       send_data zip_io.read, :filename => "media_citation_#{presenter.id}.zip"
+
     end
+
 
     def manifest
       headers['Access-Control-Allow-Origin'] = '*'
@@ -47,6 +50,24 @@ module Hyrax
 #      end
 #      Rails.cache.fetch(@cache_key){ manifest_builder.to_h.to_json}
       Rails.cache.fetch("manifest/#{presenter.id}"){ manifest_builder.to_h.to_json}
+    end
+
+
+    def deny_access_for_current_user(exception, json_message)
+      if (request.format.to_s.include? 'zip')
+        render 'hyrax/base/unauthorized', status: :unauthorized, :formats => [:html]
+      else
+        super
+      end
+    end
+
+    def deny_access_for_anonymous_user(exception, json_message)
+      if (request.format.to_s.include? 'zip')
+        session['user_return_to'.freeze] = request.url
+        redirect_to main_app.new_user_session_path, alert: exception.message
+      else
+        super
+      end
     end
   end
 end
