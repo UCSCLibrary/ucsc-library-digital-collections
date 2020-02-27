@@ -10,11 +10,6 @@ Rails.application.routes.draw do
 
   get '/admin/workflows(.:format)', to: 'admin/workflows#index'
 
-  get '/works/:id/zip_media_citation', to: 'hyrax/works#zip_media_citation'
-  get '/works/:id/zip_media_citation/:size', to: 'hyrax/works#zip_media_citation'
-  get '/works/:id/zip_media_citation/media_citation.zip', to: 'hyrax/works#zip_media_citation'
-  get '/works/:id/zip_media_citation/:size/media_citation.zip', to: 'hyrax/works#zip_media_citation'
-
   resources :collections, only: :show do # public landing show page
     member do
       get 'page/:page', action: :index
@@ -37,6 +32,15 @@ Rails.application.routes.draw do
 
   mount SamveraHls::Engine => '/'
   mount BulkOps::Engine => '/'
+
+  get '/works/:id/zip_media_citation/media_citation.zip', to: 'hyrax/works#zip_media_citation'
+  get '/works/:id/:zip_media_citation/size/media_citation.zip', to: 'hyrax/works#zip_media_citation'
+  get '/concern/works/:id/zip_media_citation/media_citation.zip', to: 'hyrax/works#zip_media_citation'
+  get '/concern/works/:id/:size/zip_media_citation/media_citation.zip', to: 'hyrax/works#zip_media_citation'
+  get '/works/:id/zip_media_citation', to: 'hyrax/works#zip_media_citation'
+  get '/works/:id/:zip_media_citation/size', to: 'hyrax/works#zip_media_citation'
+  get '/concern/works/:id/zip_media_citation', to: 'hyrax/works#zip_media_citation'
+  get '/concern/works/:id/:size/zip_media_citation', to: 'hyrax/works#zip_media_citation'
 
   authenticate :user, lambda { |u| u.admin? } do
     mount Sidekiq::Web => '/sidekiq'
