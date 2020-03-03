@@ -89,11 +89,11 @@ en:
     institution_name_full:   "University of California Santa Cruz"
     search:
       button:
-        html: '<span class="glyphicon glyphicon-search" aria-hidden=true></span>Search'
+        html: '<span class="sr-only">Search</span> <span class="glyphicon glyphicon-search" aria-hidden=true></span>'
       form:
         q:
           label:          ""
-          placeholder:    "Enter search terms"
+          placeholder:    "Search for images, audio, video, and more..."
         option:
           all:
             label_short:  "All"

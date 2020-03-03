@@ -13,7 +13,11 @@
     </div>
     <div class="col-sm-3 last">
       <ul>
-        <li><a href="http://digitalcollections.library.ucsc.edu/users/sign_in?locale=en">Digital Collections Login</a></li>
+        <% if !user_signed_in? %>
+          <li>
+            <%= link_to main_app.new_user_session_path do %><%= t("Digital Collections Login") %><% end %>
+          </li>
+        <% end %>
         <li><a href="https://guides.library.ucsc.edu/digitalcollections">About the UCSC Digital Collections</a></li>
         <li><a href="https://github.com/UCSCLibrary">UCSC Library GitHub</a></li>
       </ul>

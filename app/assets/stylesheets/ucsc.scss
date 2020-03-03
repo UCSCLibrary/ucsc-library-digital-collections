@@ -3,7 +3,7 @@ $font-1: 'Source Sans Pro', sans-serif;
 $font-2: 'Roboto', sans-serif;
 
 $ucsc-blue: #00457c;
-$ucsc-lightblue: #326aa3;
+$ucsc-lightblue: #02779e;
 $ucsc-gold: #ffd700;
 $header-height: 40px;
 $screen-xs: 480px;
@@ -129,47 +129,6 @@ body {
         font-style: italic;
     }
 
-    //    padding-top:0px !important;
-
-    nav#masthead {
-        //        position:relative;
-        //        display:block;
-    }
-
-
-    .image-masthead nav.navbar {
-        background-color: $ucsc-lightblue;
-        ul.navbar-nav li > a {
-            color:$ucsc-gold;
-        }
-    }
-    nav.navbar-default {
-        background-color: $ucsc-lightblue;
-        ul.navbar-nav li > a {
-            color:$ucsc-gold;
-        }
-    }
-
-    div.searchbar-right form#search-form-header div.form-group {
-        margin-right: 10px;
-    }
-    
-    form#search-form-header div.form-group {
-        select#search_field {
-            width: 22%;
-            height: 2.5em;
-        }
-
-        div.input-group {
-            width: 50%;
-            float: right;
-        }
-        a#advanced-search-link {
-            float: right;
-            clear: right;
-        }
-    }
-
     div#appliedParams.constraints-container {
         margin-bottom: 5px;
     }
@@ -270,51 +229,159 @@ body {
     }
 }
 
-nav#masthead {
-    color: $ucsc-blue;
-    min-height: $header-height;
-    background-color: white;
+/* Header */
+#masthead {
+    color: #fff;
+    background-color: $ucsc-blue;
+    border-bottom: none;
 
-    div.navbar-header a#logo {
-        padding-top:5px;
-        
-        span#icon-ucsc:before {
-            content: image-url('ucsc-logo.jpg');
+    #ucsc-logo {
+        content: image-url('ucsc-logo-white.png');
+        padding: 0;
+    }
+
+    #university-library {
+        display: inline-block;
+        padding: 10px 0 0 20px;
+        font-family: $font-2;
+        font-size: 20px;
+        font-weight: bold;
+        text-transform: uppercase;
+        color: #fff;
+        &:hover {
+            text-decoration: none;
         }
-        
-        span.institution_name {
-            color: $ucsc-blue;
-            position: relative;
-            font-weight:bold;
-            font-size:1.1em;
-            top: -40%;
+        @media (min-width: $screen-xs) {
+            font-size: 26px;
+            padding-top: 6px;
+        }
+        @media (min-width: $screen-sm) {
+            font-size: 30px;
         }
     }
-    
-    ul.nav.navbar-nav {
-        li > a {
-            color:$ucsc-blue;
-        }    
 
-        li.open > a {
-            color:$ucsc-blue;
-        }  
+    /* Main menu */
+    #top-navbar-collapse {
+        background-color: $ucsc-blue;
+        border-top: none;
+        font-size: 16px;
+        font-weight: bold;
+        li {
+            text-align: right;
+        }
+        @media (min-width: $screen-sm) {
+            li {
+                float: right;
+            }
+            li a::after {
+                content: "• ";
+                color: #f2cc38;
+                position: relative;
+                left: 16px;
+            }
+            li.first a::after {
+                content: '';
+            }
+        }
     }
 
-    .navbar-header {
-        min-height:$header-height;
+    /* Logged in user menu */
+    .navbar-user {
+        background-color: black;
     }
-
-    .navbar-nav > .open > a {
-        background-color:darken(white,10%);
-        color:darken($ucsc-blue,10%)
+    #user_utility_links {
+        float: right;
+        margin-top: 0;
+        margin-bottom: 0;
+        > li {
+            float: left !important;
+        }
+        a {
+            padding: 10px;
+        }
+        .dropdown-menu {
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            border-radius: 4px;
+            -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+            a {
+                color: #333333;
+                &:hover {
+                    background-color: #f5f5f5;
+                }
+            }
+            .divider {
+                color: #e5e5e5;
+            }
+        }
     }
-
-    ul#user_utility_links li {
-        min-width:135px;
-    }
-    
 }
+/* Site title and search */
+#digital-collections {
+    background-color: $ucsc-lightblue;
+    .control-label {
+        display: none;
+    }
+    span a {
+        font-family: $font-2 ;
+        font-size: 32px;
+        font-weight: bold;
+        text-transform: uppercase;
+        color: #fff;
+        &:hover {
+           text-decoration: none;
+        }
+    }
+    .navbar-toggle {
+        margin: 0;
+        padding: 14px 0;
+        border: none;
+        color: #fff;
+        font-weight: bold;
+        &:hover {
+            cursor: pointer;
+            background-color: inherit;
+            color: #ccc;
+        }
+    }
+    #search-form-header {
+        border-top: none;
+        position: relative;
+        right: 82vw;
+        width: 94vw;
+    }
+    @media (min-width: $screen-sm) {
+        span a {
+            font-size: 42px;
+        }
+        .searchbar-right {
+            position: relative;
+            top: 35px;
+            right: 10px;
+        }
+        #search-form-header {
+            position: static;
+            width: auto;
+        }
+    }
+    @media (max-width: 533px) {
+        .navbar-toggle {
+            font-size: 12px;
+        }
+    }
+    @media (max-width: 483px) {
+        .navbar-toggle {
+            font-size: 10px;
+        }
+        #search-form-header {
+            margin-top: 95px;
+        }
+    }
+}
+
 
 /* Footer */
 footer {
@@ -425,6 +492,7 @@ table.work.attributes {
         cursor: pointer;
     }
 }
+
 /* Download, Share, and Cite buttons */
 #download-share-cite {
     margin-top: 30px;
