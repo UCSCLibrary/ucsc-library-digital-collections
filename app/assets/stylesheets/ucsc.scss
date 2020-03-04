@@ -367,6 +367,11 @@ body {
             width: auto;
         }
     }
+    @media (min-width: 1155px) {
+        .searchbar-right {
+            top: 5px;
+        }
+    }
     @media (max-width: 533px) {
         .navbar-toggle {
             font-size: 12px;
