@@ -457,7 +457,10 @@ table.work.attributes {
         margin-left: auto;
         display: inline-block;
         margin-right: 2%;
+        vertical-align: top;
     }
+
+    .mejs__container.hls_media {min-width: auto !important}
 
     #track-list{ 
         max-width: 600px;
