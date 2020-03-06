@@ -18,7 +18,7 @@
         
         <div class="col-sm-6">
             <div id="download-share-cite">
-                <% if @presenter.image?  %>
+                <% if (@presenter.image? && !@presenter.audio?) %>
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#downloadWork">
                     <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> Download</button>
                 <% end  %>
@@ -48,5 +48,5 @@
     </div>
 </div>
 
-<%= render('downloads_modal', presenter: @presenter) if @presenter.image? %>
+<%= render('downloads_modal', presenter: @presenter) if (@presenter.image? && !@presenter.audio?) %>
 <%= render('citations_modal', presenter: @presenter) if Hyrax.config.citations? %>
