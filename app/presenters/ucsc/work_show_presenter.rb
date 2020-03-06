@@ -32,7 +32,7 @@ module Ucsc
     end
 
     def zip_media_citation_url(size="1000,")
-      "/works/#{id}/zip_media_citation/#{size}/media_citation.zip"
+      "/concern/works/#{id}/zip_media_citation/#{size}/media_citation.zip"
     end
 
     def all_av_files
