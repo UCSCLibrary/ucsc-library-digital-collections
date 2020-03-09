@@ -1,8 +1,8 @@
 GIT
   remote: git://github.com/UCSCLibrary/BulkOps.git
-  revision: c9bf0b4747904923134de172546989e3950d1cbb
+  revision: 01b735d558f58587851bcb497913c528818d1a70
   specs:
-    bulk_ops (0.2.0)
+    bulk_ops (0.2.1)
       rails (~> 5)
 
 GIT
@@ -211,9 +211,9 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.12.2)
-    concurrent-ruby (1.1.5)
+    concurrent-ruby (1.1.6)
     connection_pool (2.2.2)
-    crass (1.0.5)
+    crass (1.0.6)
     declarative (0.0.10)
     declarative-option (0.1.0)
     deprecation (1.0.0)
@@ -429,7 +429,7 @@ GEM
       signet
       simple_form (~> 3.2, <= 3.5.0)
       tinymce-rails (~> 4.1)
-    i18n (1.7.0)
+    i18n (1.8.2)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
     iiif_manifest (0.5.0)
@@ -540,7 +540,7 @@ GEM
     mini_magick (4.9.5)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
-    minitest (5.13.0)
+    minitest (5.14.0)
     mono_logger (1.1.0)
     multi_json (1.14.1)
     multi_xml (0.6.0)
@@ -560,7 +560,7 @@ GEM
     noid-rails (3.0.1)
       actionpack (>= 5.0.0, < 6)
       noid (~> 0.9)
-    nokogiri (1.10.7)
+    nokogiri (1.10.9)
       mini_portile2 (~> 2.4.0)
     nokogumbo (2.0.2)
       nokogiri (~> 1.8, >= 1.8.4)
@@ -594,7 +594,7 @@ GEM
       nokogiri (~> 1.6)
       rails (~> 5.0)
       rdf
-    rack (2.0.8)
+    rack (2.2.2)
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (5.0.7.2)
@@ -837,7 +837,7 @@ GEM
       actionpack (>= 3.1)
       jquery-rails
       railties (>= 3.1)
-    tzinfo (1.2.5)
+    tzinfo (1.2.6)
       thread_safe (~> 0.1)
     uber (0.1.0)
     uglifier (4.2.0)
