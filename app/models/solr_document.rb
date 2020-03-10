@@ -186,7 +186,7 @@ class SolrDocument
 
   def parent_works
     return @parent_work_solr_documents unless @parent_work_solr_documents.nil?
-    query = ActiveFedora::SolrQueryBuilder.construct_query_for_rel("member_ids" => id, "has_model" => "Work")
+    query = ActiveFedora::SolrQueryBuilder.construct_query_for_rel("file_set_ids" => id, "member_ids" => id).gsub('AND','OR')
     response = ActiveFedora::SolrService.instance.conn.get(ActiveFedora::SolrService.select_path, params: { fq: query, rows: 1})["response"]["docs"]
     return nil if response.nil?
     @parent_work_solr_documents = response.map{|doc| SolrDocument.new(doc)}
