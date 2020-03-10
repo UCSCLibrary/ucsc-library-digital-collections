@@ -3,11 +3,11 @@
     <%= javascript_include_tag "include_player" %>
     <%= stylesheet_link_tag "embed" %>
 <% elsif @presenter.image?%>
-    <% if (image_presenter = presenter.representative_presenter).present? && current_ability.can?(:read,image_presenter.id) %>
+    <% if (image_presenter = @presenter.representative_presenter).present? && current_ability.can?(:read,image_presenter.solr_document) %>
         <% if (defined?(viewer) && viewer.to_s == "true") || params['universal_viewer'] %>
             <%= PulUvRails::UniversalViewer.script_tag %>
             <div class="viewer-wrapper">
-                <div class="uv viewer" data-config="/uv_config.json" data-uri="<%= main_app.polymorphic_path [main_app, :manifest, presenter] %>"></div>
+                <div class="uv viewer" data-config="/uv_config.json" data-uri="<%= main_app.polymorphic_path [main_app, :manifest, @presenter] %>"></div>
             </div>
         <% elsif defined?(viewer) && (viewer == "click")  %>
             <% uv_link = "#{request.path}?universal_viewer=true" %>
