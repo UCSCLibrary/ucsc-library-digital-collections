@@ -152,7 +152,7 @@ div.bulk-ops-options  {
     margin-top:30px;
     margin-bottom:30px;
     div#choose-fields{
-        display:none;
+#        display:none;
         ul#bulk-ops-field-options {
             max-height: 400px;
             overflow:scroll;
@@ -213,7 +213,7 @@ ul#ignored-columns {
 
 form#new-bulk-op {
     div.bulk-ops-options.options-panel {
-        display:none;
+#        display:none;
     }
 }
 
