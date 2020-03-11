@@ -1,4 +1,4 @@
-<% unless presenter.work_presenters.empty? %>
+<% unless presenter.audio? || presenter.work_presenters.empty? %>
     <h2><%= t('.header') %></h2>
     <% if presenter.member_presenters.present? %>
         <table class="table table-striped related-files">
