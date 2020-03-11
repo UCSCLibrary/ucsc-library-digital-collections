@@ -1,9 +1,9 @@
 GIT
   remote: git://github.com/UCSCLibrary/BulkOps.git
-  revision: 8c903ef0f9eb952b1972c70041f9ef9e99000027
+  revision: 3114895002f08f06a711803ee0abe6e6f01c4023
   branch: master
   specs:
-    bulk_ops (0.2.1)
+    bulk_ops (0.2.2)
       rails (~> 5)
 
 GIT
