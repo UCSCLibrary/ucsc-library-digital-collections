@@ -103,7 +103,6 @@ fields:
       - search_result
     facet: true
     input: textbox_autosuggest
-
   contributor:
     definition: "A person or organization responsible for making contributions to the resource."
     predicate: "DC:contributor"
@@ -159,7 +158,7 @@ fields:
     label: Copyright Statement
     predicate: DC:rights
 #    required: 'true'
-  
+    
   rightsHolder:
     definition: A person or organization owning or managing rights over the resource.
     label: Copyright Holder
@@ -445,7 +444,7 @@ fields:
       - secondary
       - editor_primary
   
-  license:
+  rightsStatus:
     definition: An associated license for the object (i.e. Creative Commons license, software licenses, etc.). Defines use/reuse of resources.
     label: Rights License
     predicate: DC:license
