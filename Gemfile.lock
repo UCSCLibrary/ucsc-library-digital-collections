@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/UCSCLibrary/BulkOps.git
-  revision: 7a0f36b4ed9f2583bfcfa0d5d8fd7176023b6206
+  revision: 7edb29b44b8093acb9152cdecf7d4c984a507e2d
   branch: master
   specs:
     bulk_ops (0.2.3)
