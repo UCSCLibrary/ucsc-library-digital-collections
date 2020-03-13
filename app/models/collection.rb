@@ -8,6 +8,7 @@ class Collection < ActiveFedora::Base
 
   include Hyrax::Serializers
   include GlobalID::Identification
+  include Hyrax::WithEvents
 
   self.indexer = ::CollectionIndexer
 
