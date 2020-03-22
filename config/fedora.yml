@@ -1,0 +1,10 @@
+default: &default
+  user:  <%= ENV["FEDORA_USER"] %>
+  password: <%= ENV["FEDORA_PASSWORD"] %>
+  url: http://127.0.0.1:8984/rest
+test:
+  <<: *default
+  base_path: /test
+development:
+  <<: *default
+  base_path: /development
