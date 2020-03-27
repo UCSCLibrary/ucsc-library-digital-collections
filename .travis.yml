@@ -37,7 +37,7 @@ _docker_test_job: &docker_test_job
     - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
     - chmod +x docker-compose
     - sudo mv docker-compose /usr/local/bin
-    - git clone -branch $TEST_BRANCH git@github.com:UCSCLibrary/digital_collections_dev_docker.git /srv/ucsc-docker
+    - git clone -b $TEST_BRANCH git@github.com:UCSCLibrary/digital_collections_dev_docker.git /srv/ucsc-docker
   install:
     - cd /srv/ucsc_docker
     - docker-compose build
