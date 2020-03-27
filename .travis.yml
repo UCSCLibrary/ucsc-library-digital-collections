@@ -5,6 +5,7 @@ git:
   strategy: clone
   depth: 1
   quiet: true
+rvm: 2.4.1
 branches:
   - docker-test
 #  - master
@@ -60,6 +61,7 @@ jobs:
       env:
         - TEST_DIR: integration
         - TEST_BRANCH: integration_test
+  exclude:
     - name: "deployment"
       stage: deployment
       script: bundle exec cap $TRAVIS_BRANCH deploy BRANCH=$TRAVIS_BRANCH
