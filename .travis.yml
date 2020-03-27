@@ -1,0 +1,86 @@
+language: ruby
+cache:
+  bundler: true
+git:
+  strategy: clone
+  depth: 1
+  quiet: true
+rvm: 2.4.1
+branches:
+  - docker-test
+#  - master
+#  - staging
+#  - sandbox
+stages:
+  - unit_tests
+  - integration_tests
+  - deployment
+  - acceptance_tests
+_docker_test_job: &docker_test_job
+  env:
+    - DOCKER_COMPOSE_VERSION: 1.8.0
+  cache:
+    apt: true
+    directories:
+     - /srv/ucsc_docker/
+     - /usr/local/bin/docker-compose
+  services:
+    - docker
+  git:
+    clone: false
+  before_install:
+    - sudo apt-get update
+    - sudo apt-get install -o Dpkg::Options::="--force-confold" --force-yes -y docker-engine
+    - sudo rm /usr/local/bin/docker-compose
+    - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+    - chmod +x docker-compose
+    - sudo mv docker-compose /usr/local/bin
+    - git clone -branch $TEST_BRANCH git@github.com:UCSCLibrary/digital_collections_dev_docker.git /srv/ucsc-docker
+  install:
+    - cd /srv/ucsc_docker
+    - docker-compose build
+    - docker-compose up -d
+    - docker ps
+  before_script:
+    - docker exec /srv/hycruz/wait-for-services.sh localhost:80 -t 180
+    - docker exec /srv/hycruz/wait-for-services.sh db:3306 -t 180
+    - docker exec /srv/hycruz/wait-for-services.sh repo:8080 -t 180
+    - docker exec /srv/hycruz/wait-for-services.sh index:8983 -t 180
+  script: docker exec hycruz "cd /srv/hycruz; bundle exec rspec $TEST_DIR"
+jobs:
+  include:
+    - name: "unit tests"
+      stage: unit_tests
+      <<: *docker_test_job
+      env:
+        - TEST_DIR: unit
+        - TEST_BRANCH: unit_test
+    - name: "integration tests"
+      stage: integration_tests
+      <<: *docker_test_job
+      env:
+        - TEST_DIR: integration
+        - TEST_BRANCH: integration_test
+  exclude:
+    - name: "deployment"
+      stage: deployment
+      script: bundle exec cap $TRAVIS_BRANCH deploy BRANCH=$TRAVIS_BRANCH
+      before_install:
+        - openssl aes-256-cbc -K $encrypted_52af377e3440_key -iv $encrypted_52af377e3440_iv
+        - in hycruz_deploy_rsa.enc -out hycruz_deploy_rsa -d
+    - name: "acceptance tests
+      stage: acceptance_tests
+      script: bundle exec rspec spec/acceptance/
+      after_failure:
+        - openssl aes-256-cbc -K $encrypted_52af377e3440_key -iv $encrypted_52af377e3440_iv
+        - in hycruz_deploy_rsa.enc -out hycruz_deploy_rsa -d
+        - bundle exec cap $TRAVIS_BRANCH rollback BRANCH=$TRAVIS_BRANCH
+      sauce_connect:
+        enabled: true
+        username:
+          secure: ###TODO
+        access_key:
+          secure: ###TODO
+
+
+
