@@ -56,13 +56,13 @@ jobs:
       <<: *docker_test_job
       env:
         - TEST_DIR: unit
-        - TEST_BRANCH: unit_test
+        - TEST_BRANCH: unit-test
     - name: "integration tests"
       stage: integration_tests
       <<: *docker_test_job
       env:
         - TEST_DIR: integration
-        - TEST_BRANCH: integration_test
+        - TEST_BRANCH: integration-test
   exclude:
     - name: "deployment"
       stage: deployment
