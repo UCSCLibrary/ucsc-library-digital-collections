@@ -66,6 +66,7 @@ group :development, :test do
   gem 'factory_bot_rails', :require => false
   gem 'rails-controller-testing'
   gem 'capybara'
+  gem 'selenium-webdriver'
 end
 
 group :development do
