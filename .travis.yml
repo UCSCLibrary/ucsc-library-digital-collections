@@ -18,7 +18,7 @@ stages:
   - acceptance_tests
 _docker_test_job: &docker_test_job
   env:
-    - DOCKER_COMPOSE_VERSION: 1.8.0
+    - DOCKER_COMPOSE_VERSION: 1.25.4
   cache:
     apt: true
     directories:
