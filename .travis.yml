@@ -34,7 +34,7 @@ _docker_test_job: &docker_test_job
     - sudo apt-get update
     - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
     - sudo rm /usr/local/bin/docker-compose
-    - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-Linux-x86_64` > docker-compose
+    - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-Linux-x86_64 > docker-compose
     - chmod +x docker-compose
     - sudo mv docker-compose /usr/local/bin
     - git clone -b $TEST_BRANCH https://github.com/UCSCLibrary/digital_collections_dev_docker.git ${HOME}/ucsc_docker/
