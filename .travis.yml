@@ -43,10 +43,10 @@ _docker_test_job: &docker_test_job
     - docker-compose up -d
     - docker ps
   before_script:
-    - docker exec /srv/hycruz/wait-for-services.sh localhost:80 -t 180
-    - docker exec /srv/hycruz/wait-for-services.sh db:3306 -t 180
-    - docker exec /srv/hycruz/wait-for-services.sh repo:8080 -t 180
-    - docker exec /srv/hycruz/wait-for-services.sh index:8983 -t 180
+    - docker exec hycruz /srv/hycruz/wait-for-services.sh localhost:80 -t 180
+    - docker exec hycruz  /srv/hycruz/wait-for-services.sh db:3306 -t 180
+    - docker exec hycruz  /srv/hycruz/wait-for-services.sh repo:8080 -t 180
+    - docker exec hycruz  /srv/hycruz/wait-for-services.sh index:8983 -t 180
   script: docker exec hycruz "cd /srv/hycruz; bundle exec rspec $TEST_DIR"
 jobs:
   include:
