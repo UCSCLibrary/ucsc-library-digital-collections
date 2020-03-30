@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Work do
-  let(:usr) {User.find_by_email('test-email') || User.create(email:"test-email")}
+  let(:usr) {User.find_by_email('test-email') || User.create(email:"test-email", password: "asfjkhfg8723r91jhk#")}
   let(:schema) {ScoobySnacks::METADATA_SCHEMA}
   let(:simple_inheritable_field_name) {(schema.inheritable_field_names - schema.controlled_field_names).first}
   let(:complex_inheritable_field_name) {(schema.inheritable_field_names & schema.controlled_field_names).first}
