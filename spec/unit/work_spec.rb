@@ -17,7 +17,7 @@ RSpec.describe Work do
     work.send("#{simple_inheritable_field_name}=",["test value 1","test value 2"])
     work.save
     expect(work.send(simple_inheritable_field_name.to_s).count).to eq(2)
-    expect(work.send(simple_inheritable_field_name.to_s).count).to include("test value 1","test value 2")
+    expect(work.send(simple_inheritable_field_name.to_s)).to include("test value 1","test value 2")
   end
 
   it "can be saved with complex metadata" do
@@ -75,7 +75,7 @@ RSpec.describe Work do
     parent_work.send("#{simple_inheritable_field_name}=",["parent value"])
     parent_work.ordered_members << work
     parent_work.save
-    work.send("#{metadataInheritance}=",["false"])
+    work.send("metadataInheritance=",["false"])
     work.save
     expect(Work.find(work.id).send(simple_inheritable_field_name.to_s)).not_to include "parent value"    
   end
