@@ -17,8 +17,6 @@ stages:
   - deployment
   - acceptance_tests
 _docker_test_job: &docker_test_job
-  env:
-    - DOCKER_COMPOSE_VERSION: 1.25.4
   cache:
     apt: true
     directories:
@@ -57,12 +55,14 @@ jobs:
       env:
         - TEST_DIR: unit
         - TEST_BRANCH: unit-test
+        - DOCKER_COMPOSE_VERSION: 1.25.4
     - name: "integration tests"
       stage: integration_tests
       <<: *docker_test_job
       env:
         - TEST_DIR: integration
         - TEST_BRANCH: integration-test
+        - DOCKER_COMPOSE_VERSION: 1.25.4
   exclude:
     - name: "deployment"
       stage: deployment
