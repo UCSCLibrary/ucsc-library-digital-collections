@@ -1,0 +1,27 @@
+<header>
+  <nav id="masthead" class="navbar navbar-inverse navbar-static-top" role="navigation">
+    <% if user_signed_in? %>
+      <%= render '/user_util_links' %>
+    <% end %>
+
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#top-navbar-collapse" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <%= render '/logo' %>
+      </div>
+
+      <div class="collapse navbar-collapse" id="top-navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li class="first"><a href="#" data-toggle="modal" data-target="#feedbackModal">Contact Us</a></li>
+          <li><a href="/">Browse Collections</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
