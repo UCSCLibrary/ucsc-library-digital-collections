@@ -53,3 +53,6 @@ bower.json
 
 # Ignore release builds
 .gem
+
+# Ignore emacs autosave files
+.\#*
