@@ -70,14 +70,13 @@ module Hyrax
     end
 
     def send_email
-      @email_work = Hash.new
-      @email_work[:email] = params[:email]
-      @email_work[:id]  = params[:id]
-      @email_work[:subject] = "#{presenter.page_title}"
-      @email_work[:url] = request.protocol + request.host + "/records/" + @email_work[:id]
+      @message = Hash.new
+      @message[:to] = params[:email]
+      @message[:subject] = "#{presenter.page_title}"
+      @message[:url] = request.protocol + request.host + "/records/" + params[:id]
       # most basic email regex: something @ something . something
-      if "/.+@.+\..+/i".match(@email_work[:email])
-        WorksMailer.sendwork(@email_work).deliver_now
+      if "/.+@.+\..+/i".match(@message[:to])
+        WorksMailer.work_link_email(@message).deliver_now
         flash.now[:notice] = 'Thank you for your message!'
       else
         flash.now[:error] = 'Please enter a valid email address, and try again.'
