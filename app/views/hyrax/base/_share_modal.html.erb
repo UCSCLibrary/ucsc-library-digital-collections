@@ -1,0 +1,18 @@
+<%# Share links %>
+<div class="modal fade" id="shareWork" tabindex="-1" role="dialog" aria-labelledby="shareLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="shareLabel">Share</h4>
+                <%= render 'social_media' %>
+
+                <%= render 'permalink', presenter: @presenter %>
+
+                <% if (@presenter.image? && !@presenter.audio?) %>
+                    <%= render 'embed' %>
+                <% end %>
+            </div>
+        </div>
+    </div>
+</div>

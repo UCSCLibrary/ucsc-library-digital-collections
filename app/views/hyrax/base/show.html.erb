@@ -23,6 +23,8 @@
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#downloadWork">
                             <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> Download</button>
                     <% end  %>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#shareWork">
+                            <span class="fa fa-share-alt" aria-hidden="true"></span> Share</button>
                     <% if Hyrax.config.citations? %>
                         <button type="button" class="btn btn-primary btn-citation" data-toggle="modal" data-target="#citeWork">
                             <span class="h1">&ldquo;</span> Cite</button>
@@ -36,8 +38,6 @@
         <%= render "show_actions", presenter: @presenter %>
         <%# Use the fully qualified path to avoid RSpec error: translation missing: en.hyrax.base.show.html.erb.last_modified %>
         <%= render 'representative_media', presenter: @presenter unless av_files.any? or @presenter.image? %>
-        <%= render 'social_media' %>
-        <%= render 'permalink', presenter: @presenter %>
     </div>
 </div>
 
@@ -53,3 +53,5 @@
 
 <%= render('downloads_modal', presenter: @presenter) if (@presenter.image? && !@presenter.audio?) %>
 <%= render('citations_modal', presenter: @presenter) if Hyrax.config.citations? %>
+<%= render('share_modal', presenter: @presenter) %>
+<%= render('email_work_modal', presenter: @presenter) %>

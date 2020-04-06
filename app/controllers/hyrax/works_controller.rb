@@ -68,5 +68,29 @@ module Hyrax
         super
       end
     end
+
+    def send_email
+      @email_work = Hash.new
+      @email_work[:email] = params[:email]
+      @email_work[:id]  = params[:id]
+      @email_work[:subject] = "#{presenter.page_title}"
+      @email_work[:url] = request.protocol + request.host + "/records/" + @email_work[:id]
+      # most basic email regex: something @ something . something
+      if "/.+@.+\..+/i".match(@email_work[:email])
+        WorksMailer.sendwork(@email_work).deliver_now
+        flash.now[:notice] = 'Thank you for your message!'
+      else
+        flash.now[:error] = 'Please enter a valid email address, and try again.'
+      end
+      redirect_back fallback_location: {action: show, id: params[:id] }
+    rescue RuntimeError => exception
+      email_exception_handler(exception)
+    end
+
+    def email_exception_handler(exception)
+      logger.error("Email Work form failed to send: #{exception.inspect}")
+      flash.now[:error] = 'Sorry, this message was not delivered.'
+      redirect_back fallback_location: {action: show, id: params[:id] }
+    end
   end
 end

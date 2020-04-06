@@ -430,7 +430,7 @@ table.work.attributes {
     margin-top: 30px;
     button {
         float: left;
-        margin-right: 10px;
+        margin-right: 30px;
         &:hover {
             background-color: $ucsc-lightblue;
         }
@@ -492,7 +492,7 @@ table.work.attributes {
         font-weight: bold;
         text-transform: uppercase;
     }
-    h5 {
+    h5, .h5 {
         font-weight: bold;
     }
     .close {
@@ -508,7 +508,6 @@ table.work.attributes {
         }
     }
 }
-
 #downloadWork {
     ul {
         list-style: none;
@@ -516,6 +515,30 @@ table.work.attributes {
     }
     li {
         margin-bottom: 10px;
+    }
+}
+#shareWork {
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+    li {
+        display: inline-block;
+        margin: 0 15px;
+    }
+    .permalink {
+        margin: 25px 0;
+    }
+    .permalink-heading {
+        font-weight: bold;
+    }
+    #embedWidth, #embedHeight {
+        width: 55px;
+    }
+}
+#emailWork {
+    #work-title { 
+        margin-bottom: 7px; 
     }
 }
 #citeWork {
