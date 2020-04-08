@@ -8,6 +8,7 @@ git:
 rvm: 2.4.1
 branches:
 - docker-test
+- staging
 stages:
 - unit_tests
 - integration_tests
@@ -76,8 +77,8 @@ jobs:
     - TEST_DIR: integration
     - TEST_BRANCH: integration-test
     - DOCKER_COMPOSE_VERSION: 1.25.4
-  exclude:
   - name: deployment
+    branch: staging
     stage: deployment
     script:
     - [[ $TRAVIS_BRANCH = master ]] && CAP_ENV="production" || CAP_ENV=$TRAVIS_BRANCH
@@ -85,7 +86,7 @@ jobs:
     before_install:
     - openssl aes-256-cbc -K $encrypted_52af377e3440_key -iv $encrypted_52af377e3440_iv -in hycruz_deploy_rsa.enc -out hycruz_deploy_rsa -d
   - name: acceptance tests
-    branch: master
+    branch: staging
     stage: acceptance_tests
     script: bundle exec rspec spec/acceptance/
     after_failure:
