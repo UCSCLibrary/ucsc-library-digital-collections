@@ -1,20 +1,20 @@
 pipeline {
   agent {
     node {
-      label: 'master'
-      customWorkspace: 'ucsc_docker'
+      label 'master'
+      customWorkspace 'ucsc_docker'
     }
   }
-  environment {       
+//  environment {       
 //    EXAMPLE_ENVIRONMENT_VARIABLE = credentials('example-var-name-defined-in-jenkins-credentials-system')
-  }
+//  }
 
   stages {
     stage('Build') {        
       agent {
         node {
-          label: 'master'
-          reuseNode: true
+          label 'master'
+          reuseNode true
         }
       }
       steps {
@@ -25,8 +25,8 @@ pipeline {
     stage('Test') {
       agent {
         node {
-          label: 'master'
-          reuseNode: true
+          label 'master'
+          reuseNode true
         }
       }
       steps {
