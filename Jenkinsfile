@@ -24,23 +24,24 @@ pipeline {
     }
     stage('Test') {
       agent {
-        label: 'master'
-        reuseNode: true
+        node {
+          label: 'master'
+          reuseNode: true
+        }
       }
       steps {
           sh 'docker exec hycruz bundle exec rspec spec/unit; docker exec hycruz bundle exec rspec spec/integration'
       }
     }
     stage('Deploy') {
-      agent: any
+      agent any
       steps {
         git branch: "${BRANCH_NAME}", url: "https://github.com/UCSCLibrary/digital-collections-ucsc-library-digital-collections"
-        gem install capistrano
         sh 'cap ${BRANCH_NAME/master/production} deploy'
       }
     }
     stage('AcceptanceTest') {
-      agent: any
+      agent any
       steps {
         sh 'bundle install; bundle exec rspec spec/acceptance'
       }
