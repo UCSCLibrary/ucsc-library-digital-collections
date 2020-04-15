@@ -6,7 +6,7 @@ pipeline {
     }
   }
   environment {       
-#    EXAMPLE_ENVIRONMENT_VARIABLE = credentials('example-var-name-defined-in-jenkins-credentials-system')
+//    EXAMPLE_ENVIRONMENT_VARIABLE = credentials('example-var-name-defined-in-jenkins-credentials-system')
   }
 
   stages {
@@ -54,7 +54,6 @@ pipeline {
   post {
     success {
       mail to: ethenry@ucsc.edu, subject: 'Jenkins pipeline success!'
-        #Do success things
     }
     failure {
       mail to: ethenry@ucsc.edu, subject: 'Jenkins pipeline failure'
