@@ -8,7 +8,7 @@ pipeline {
     stage('Build') {        
       steps {
         dir("docker_test_env") {
-          git changelog: false, credentialsId: 'github_user', poll: false,  branch: 'unit-testing', url: "https://github.com/UCSCLibrary/ucsc-library-digital-collections.git"
+          git changelog: false, credentialsId: 'github_user', poll: false,  branch: 'unit-test', url: "https://github.com/UCSCLibrary/ucsc-library-digital-collections.git"
           sh 'docker-compose build; docker-compose up -d'
         }
       }
