@@ -51,6 +51,7 @@ pipeline {
       }
     }
   }
+  /*
   post {
     success {
       mail to: ethenry@ucsc.edu, subject: 'Jenkins pipeline success!'
@@ -59,4 +60,5 @@ pipeline {
       mail to: ethenry@ucsc.edu, subject: 'Jenkins pipeline failure'
     }
   }
+  */
 }
