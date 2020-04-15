@@ -7,13 +7,17 @@ pipeline {
   stages {
     stage('Build') {        
       steps {
-        git branch: 'unit-testing', url: "https://github.com/UCSCLibrary/digital-collections-dev-docker.git"
-        sh 'docker-compose build; docker-compose up -d'
+        dir("docker_test_env") {
+          git changelog: false, credentialsId: 'github_user', poll: false,  branch: 'unit-testing', url: "https://github.com/UCSCLibrary/ucsc-library-digital-collections.git"
+          sh 'docker-compose build; docker-compose up -d'
+        }
       }
     }
     stage('Test') {
       steps {
+        dir("docker_test_env") {
           sh 'docker exec hycruz bundle exec rspec spec/unit; docker exec hycruz bundle exec rspec spec/integration'
+        }
       }
     }
     stage('Deploy') {
