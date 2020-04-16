@@ -47,8 +47,8 @@ RSpec.configure do |config|
   # Note that this build name is specifically for Travis CI execution
   #
   def build_name
-    if ENV['TRAVIS_REPO_SLUG']
-      "#{ENV['TRAVIS_REPO_SLUG'][%r{[^/]+$}]}: #{ENV['TRAVIS_JOB_NUMBER']}"
+    if ENV['GIT_BRANCH']
+      "#{ENV['GIT_BRANCH'][%r{[^/]+$}]}: #{ENV['GIT_COMMIT']}"
     elsif ENV['SAUCE_START_TIME']
       ENV['SAUCE_START_TIME']
     else
