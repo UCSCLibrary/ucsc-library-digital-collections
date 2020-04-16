@@ -61,6 +61,7 @@ gem 'rsolr', '~> 1.0'
 gem "devise", ">= 4.7.1"
 gem 'devise-guests', '~> 0.5'
 
+
 group :development, :test do
   gem 'rspec-rails', :require => false
   gem 'factory_bot_rails', :require => false
@@ -68,6 +69,7 @@ group :development, :test do
   gem 'capybara'
   gem 'selenium-webdriver'
   gem 'webdrivers'
+  gem 'sauce_whisk'
 end
 
 group :development do
