@@ -65,7 +65,7 @@ RSpec.describe WorkIndexer do
                            subjectName_attributes: [{id: "info:lc/authorities/names/n79059545"}],
                            collectionCallNumber: ["1"], 
                            itemCallNumber: ["2"] }}
-    let(:usr) {User.find_by_email('test-email') || User.create(email:"test-email")}
+    let(:usr) {User.find_by_email('test-email') || User.create(email:"test-email@test.test", password: "testpassword")}
     let!(:wrk){Work.create(work_properties)}
     let(:indexer){described_class.new(wrk)}
 
