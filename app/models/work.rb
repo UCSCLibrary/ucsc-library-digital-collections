@@ -26,6 +26,18 @@ class Work < ActiveFedora::Base
   end
 
   def save *args
+
+    ::ScoobySnacks::METADATA_SCHEMA.fields.select{|name, field| field.input == "date"}.each do |field_name, field|
+      date_changed = false
+      dateUpdate = self.send(field_name.to_sym).map do |date|
+        next date unless date.to_s.match?(/[12][0-9]{3}-[0-9]{1,2}/)
+        year, month = date.split('-')
+        date_changed = true
+        "#{month}/#{year}"
+      end
+      self.send("#{field_name.to_s}=".to_sym,dateUpdate) if date_changed
+    end
+
     ::ScoobySnacks::METADATA_SCHEMA.controlled_field_names.each do |field_name|
       attributes = []
       props =  self.send(field_name)
@@ -44,7 +56,7 @@ class Work < ActiveFedora::Base
     end
 
     if representative_id.blank? && members.present?
-       member = members.select{|member| member.representative_id.present?}.first
+      member = members.select{|member| member.representative_id.present?}.first
       representative_id = member.representative_id if representative_id
     end
 

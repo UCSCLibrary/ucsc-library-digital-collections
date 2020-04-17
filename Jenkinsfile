@@ -1,14 +1,10 @@
 pipeline {
   agent any
-/*  environment {       
-//    EXAMPLE_ENVIRONMENT_VARIABLE = credentials('example-var-name-defined-in-jenkins-credentials-system')
-  }*/
-
   stages {
     stage('Build') {        
       steps {
         dir("docker_test_env") {
-          git branch: 'unit-testing', url: "https://github.com/UCSCLibrary/digital-collections-dev-docker.git"
+          git changelog: false, credentialsId: 'github_user', poll: false,  branch: 'unit-test', url: "https://github.com/UCSCLibrary/digital_collections_dev_docker.git"
           sh 'docker-compose build; docker-compose up -d'
         }
       }
@@ -35,14 +31,6 @@ pipeline {
           sh 'cap ${BRANCH_NAME/master/production} deploy:rollback'
         }
       }
-    }
-  }
-  post {
-    success {
-      mail to: ethenry@ucsc.edu, subject: 'Jenkins pipeline success!'
-    }
-    failure {
-      mail to: ethenry@ucsc.edu, subject: 'Jenkins pipeline failure'
     }
   }
 }
