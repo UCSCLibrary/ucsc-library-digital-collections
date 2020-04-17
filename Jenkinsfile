@@ -12,7 +12,7 @@ pipeline {
     stage('Test') {
       steps {
         dir("docker_test_env") {
-          sh 'docker exec hycruz bundle exec rspec spec/unit; docker exec hycruz bundle exec rspec spec/integration'
+          sh 'docker exec hycruz /srv/hycruz/run-unit-tests-when-ready.sh'
         }
       }
     }
