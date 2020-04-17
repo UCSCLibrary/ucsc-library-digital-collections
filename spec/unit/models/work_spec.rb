@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Work do
-  let(:usr) {User.find_by_email('test-email') || User.create(email:"test-email")}
+  let(:usr) {User.find_by_email('test-email') || User.create(email:"fakeaccount@fakedomain.net", password: "asfjkhfg8723r91jhk#")}
   let(:schema) {ScoobySnacks::METADATA_SCHEMA}
   let(:simple_inheritable_field_name) {(schema.inheritable_field_names - schema.controlled_field_names).first}
   let(:complex_inheritable_field_name) {(schema.inheritable_field_names & schema.controlled_field_names).first}
@@ -17,7 +17,7 @@ RSpec.describe Work do
     work.send("#{simple_inheritable_field_name}=",["test value 1","test value 2"])
     work.save
     expect(work.send(simple_inheritable_field_name.to_s).count).to eq(2)
-    expect(work.send(simple_inheritable_field_name.to_s).count).to include("test value 1","test value 2")
+    expect(work.send(simple_inheritable_field_name.to_s)).to include("test value 1","test value 2")
   end
 
   it "can be saved with complex metadata" do
@@ -75,7 +75,7 @@ RSpec.describe Work do
     parent_work.send("#{simple_inheritable_field_name}=",["parent value"])
     parent_work.ordered_members << work
     parent_work.save
-    work.send("#{metadataInheritance}=",["false"])
+    work.send("metadataInheritance=",["false"])
     work.save
     expect(Work.find(work.id).send(simple_inheritable_field_name.to_s)).not_to include "parent value"    
   end

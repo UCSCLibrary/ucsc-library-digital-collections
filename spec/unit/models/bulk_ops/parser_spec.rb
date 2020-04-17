@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe BulkOps::Parser do
   
   describe "A parser" do
-    let(:usr) { create(:admin) }
+    let(:usr) {User.find_by_email('test-email') || User.create(email:"fakeaccount@fakedomain.net", password: "asfjkhfg8723r91jhk#")}
     let(:op_name) {BulkOps::Operation.unique_name("rspec test branch", usr)}
     let!(:operation) {BulkOps::Operation.create(name: op_name, user_id: usr.id, operation_type: "ingest", status: "new", stage: "new")}
     let(:wrk) {Work.create(depositor: usr.email, title:["test title"])}
@@ -34,7 +34,6 @@ RSpec.describe BulkOps::Parser do
     after(:all) do
       Work.all.each{|wrk| wrk.destroy}
       BulkOps::WorkProxy.all.each{|proxy| proxy.destroy}
-      BulkOps::Relationship.all.each{|rel| rel.destroy}
     end
 
     before(:each) do
@@ -158,34 +157,34 @@ RSpec.describe BulkOps::Parser do
       end
     end
 
-    it "can interpret parent relationships based on existing work id" do
-      first_child_parser.interpret_data
-      rel = BulkOps::Relationship.find_by(work_proxy_id: first_child_proxy.id, identifier_type: "id", object_identifier: wrk.id)
-      expect(rel).not_to be_nil
-      expect(rel.relationship_type).to eq("parent")
-    end
-
-    it "can interpret parent/child relationships based on absolute row number" do
-      second_child_parser.interpret_data
-      rel = BulkOps::Relationship.find_by(work_proxy_id: second_child_proxy.id, identifier_type: "row", object_identifier: 0)
-      expect(rel).not_to be_nil
-      expect(rel.relationship_type).to eq("parent")
-    end
-
-    it "can interpret parent/child relationships based on relative row number" do
-      third_child_parser.interpret_data
-      rel = BulkOps::Relationship.find_by(work_proxy_id: third_child_proxy.id, identifier_type: "row", object_identifier: 0)
-      expect(rel).not_to be_nil
-      expect(rel.relationship_type).to eq("parent")
-    end
-
-    it "can interpret parent/child relationships based on the previous non-child row" do
-      last_child_parser.interpret_data
-      rel = BulkOps::Relationship.find_by(work_proxy_id: last_child_proxy.id, identifier_type: "row", object_identifier: 0)
-      expect(rel).not_to be_nil
-      expect(rel.relationship_type).to eq("parent")
-    end
-
+#    it "can interpret parent relationships based on existing work id" do
+#      first_child_parser.interpret_data
+#      rel = BulkOps::Relationship.find_by(work_proxy_id: first_child_proxy.id, identifier_type: "id", object_identifier: wrk.id)
+#      expect(rel).not_to be_nil
+#      expect(rel.relationship_type).to eq("parent")
+#    end
+#
+#    it "can interpret parent/child relationships based on absolute row number" do
+#      second_child_parser.interpret_data
+#      rel = BulkOps::Relationship.find_by(work_proxy_id: second_child_proxy.id, identifier_type: "row", object_identifier: 0)
+#      expect(rel).not_to be_nil
+#      expect(rel.relationship_type).to eq("parent")
+#    end
+#
+#    it "can interpret parent/child relationships based on relative row number" do
+#      third_child_parser.interpret_data
+#      rel = BulkOps::Relationship.find_by(work_proxy_id: third_child_proxy.id, identifier_type: "row", object_identifier: 0)
+#      expect(rel).not_to be_nil
+#      expect(rel.relationship_type).to eq("parent")
+#    end
+#
+#    it "can interpret parent/child relationships based on the previous non-child row" do
+#      last_child_parser.interpret_data
+#      rel = BulkOps::Relationship.find_by(work_proxy_id: last_child_proxy.id, identifier_type: "row", object_identifier: 0)
+#      expect(rel).not_to be_nil
+#      expect(rel.relationship_type).to eq("parent")
+#    end
+#
 #    it "can interpret order related relationships" do
 #      sample_data = template_data.dup
 #      sample_data["order"] = "2.2"

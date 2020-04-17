@@ -1,9 +1,5 @@
 pipeline {
   agent any
-//  environment {       
-//    EXAMPLE_ENVIRONMENT_VARIABLE = credentials('example-var-name-defined-in-jenkins-credentials-system')
-//  }
-
   stages {
     stage('Build') {        
       steps {
