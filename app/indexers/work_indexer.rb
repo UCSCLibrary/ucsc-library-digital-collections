@@ -7,7 +7,6 @@ class WorkIndexer < Hyrax::WorkIndexer
 
   def generate_solr_document
     super.tap do |solr_doc|
-      puts "running work indexer"
       case solr_doc['has_model_ssim'].first
       when "FileSet"
         solr_doc["file_id_ss"] = object.original_file_id
