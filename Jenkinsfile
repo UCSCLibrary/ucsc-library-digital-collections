@@ -19,7 +19,6 @@ pipeline {
     }
     stage('Deploy') {
       steps {
-        git branch: "${GIT_BRANCH/origin\\/}", url: "https://github.com/UCSCLibrary/digital-collections-ucsc-library-digital-collections"
         sh 'BRANCH_NAME=${GIT_BRANCH/origin\\/}; cap ${BRANCH_NAME/master/production} deploy'
       }
     }
