@@ -12,6 +12,7 @@ pipeline {
     stage('Test') {
       steps {
         dir("docker_test_env") {
+          sh 'echo ${BRANCH_NAME}'
           sh 'docker exec hycruz /srv/run-unit-tests-when-ready.sh'
         }
       }
