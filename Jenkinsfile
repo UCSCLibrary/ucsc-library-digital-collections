@@ -5,8 +5,7 @@ pipeline {
       steps {
         dir("docker_test_env") {
           git changelog: false, credentialsId: 'github_user', poll: false,  branch: 'unit-test', url: "https://github.com/UCSCLibrary/digital_collections_dev_docker.git"
-          sh 'echo ${GIT_BRANCH/origin\\//}'
-          sh 'docker-compose build; docker-compose up -d'
+          sh 'BRANCH=${GIT_BRANCH/origin\\/} docker-compose build; docker-compose up -d'
         }
       }
     }
@@ -19,8 +18,8 @@ pipeline {
     }
     stage('Deploy') {
       steps {
-        git branch: "${BRANCH_NAME}", url: "https://github.com/UCSCLibrary/digital-collections-ucsc-library-digital-collections"
-        sh 'cap ${BRANCH_NAME/master/production} deploy'
+        git branch: "${GIT_BRANCH/origin\\/}", url: "https://github.com/UCSCLibrary/digital-collections-ucsc-library-digital-collections"
+        sh 'BRANCH_NAME=${GIT_BRANCH/origin\\/}; cap ${BRANCH_NAME/master/production} deploy'
       }
     }
     stage('AcceptanceTest') {
@@ -29,7 +28,7 @@ pipeline {
       }
       post {
         unsuccessful {
-          sh 'cap ${BRANCH_NAME/master/production} deploy:rollback'
+          sh 'BRANCH_NAME=${GIT_BRANCH/origin\\/}; cap ${BRANCH_NAME/master/production} deploy:rollback'
         }
       }
     }
