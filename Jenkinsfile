@@ -5,6 +5,7 @@ pipeline {
       steps {
         dir("docker_test_env") {
           git changelog: false, credentialsId: 'github_user', poll: false,  branch: 'unit-test', url: "https://github.com/UCSCLibrary/digital_collections_dev_docker.git"
+          sh 'echo ${BRANCH_NAME}'
           sh 'docker-compose build; docker-compose up -d'
         }
       }
@@ -12,7 +13,6 @@ pipeline {
     stage('Test') {
       steps {
         dir("docker_test_env") {
-          sh 'echo ${BRANCH_NAME}'
           sh 'docker exec hycruz /srv/run-unit-tests-when-ready.sh'
         }
       }
