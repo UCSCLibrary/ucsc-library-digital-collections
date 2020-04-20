@@ -70,9 +70,6 @@ group :development, :test do
   gem 'selenium-webdriver'
   gem 'webdrivers'
   gem 'sauce_whisk'
-end
-
-group :development do
   gem 'capistrano'
   gem 'capistrano-bundler'
   gem 'capistrano-passenger', '>= 0.1.1'
