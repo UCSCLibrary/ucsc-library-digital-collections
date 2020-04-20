@@ -1,7 +1,7 @@
 require 'rails_helper'
 RSpec.describe 'Collection', type: :model do
   let(:user){User.create(email:"ethenry@ucsc.edu", password: "thistestpass")}
-  let(:collection) { ::Collection.create(depositor: user.email, title: ["test collection"], collection_type: Hyrax::CollectionType.first) }
+  let(:collection) { ::Collection.create(depositor: user.email, title: ["test collection"], collection_type: Hyrax::CollectionType.find_or_create_default_collection_type) }
   let(:work) { ::Work.create(depositor: User.first.email, title: ["test work"]) }
   let(:schema) {ScoobySnacks::METADATA_SCHEMA}
   let(:standard_field) {schema.get_field "description"}
