@@ -35,7 +35,9 @@ pipeline {
   }
   post {
     always {
-      sh 'docker-compose down'
+      dir("docker_test_env") {
+        sh 'docker-compose down'
+      }
     }
   }
 }
