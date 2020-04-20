@@ -26,10 +26,12 @@ RSpec.describe WorkIndexer do
 
     it "can find the label for a local url" do
       auth = Qa::LocalAuthority.find_or_create_by(name: "agents")
-      entry = Qa::LocalAuthorityEntry.create(local_authority: auth,
-                                             label: "Cataract",
-                                             uri: "cataract")
-      sleep(5)
+      unless Qa::LocalAuthorityEntry.any?{|entry| entry.uri == "cataract" && entry.local_authority_id == auth.id}
+        entry = Qa::LocalAuthorityEntry.create(local_authority: auth,
+                                               label: "Cataract",
+                                               uri: "cataract")
+        sleep(5)
+      end
       expect(described_class.fetch_remote_label("http://localhost:3000/authorities/show/local/agents/cataract")).to eq("Cataract")
     end
 
