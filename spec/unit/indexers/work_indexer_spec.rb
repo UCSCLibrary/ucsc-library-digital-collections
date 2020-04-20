@@ -29,6 +29,7 @@ RSpec.describe WorkIndexer do
       entry = Qa::LocalAuthorityEntry.create(local_authority: auth,
                                              label: "Cataract",
                                              uri: "cataract")
+      sleep(5)
       expect(described_class.fetch_remote_label("http://localhost:3000/authorities/show/local/agents/cataract")).to eq("Cataract")
     end
 
