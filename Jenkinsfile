@@ -19,7 +19,7 @@ pipeline {
     }
     stage('Deploy') {
       steps {
-        sh 'BRANCH_NAME=${GIT_BRANCH/origin\\/}; cap ${BRANCH_NAME/master/production} deploy'
+        sh 'gem install capistrano; BRANCH_NAME=${GIT_BRANCH/origin\\/}; cap ${BRANCH_NAME/master/production} deploy'
       }
     }
     stage('AcceptanceTest') {
