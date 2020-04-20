@@ -7,7 +7,6 @@ class CollectionIndexer < Hyrax::CollectionIndexer
 
   def generate_solr_document
     super.tap do |solr_doc|
-      puts "running collection indexer"
       solr_doc = index_controlled_fields(solr_doc)
     end
   end
