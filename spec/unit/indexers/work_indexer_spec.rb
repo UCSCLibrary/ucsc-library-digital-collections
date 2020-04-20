@@ -24,16 +24,16 @@ RSpec.describe WorkIndexer do
 #      expect(described_class.fetch_remote_label("http://purl.org/dc/dcmitype/Image")).to eq("Image")
 #    end
 
-    it "can find the label for a local url" do
-      auth = Qa::LocalAuthority.find_or_create_by(name: "agents")
-      unless Qa::LocalAuthorityEntry.any?{|entry| entry.uri == "cataract" && entry.local_authority_id == auth.id}
-        entry = Qa::LocalAuthorityEntry.create(local_authority: auth,
-                                               label: "Cataract",
-                                               uri: "cataract")
-        sleep(5)
-      end
-      expect(described_class.fetch_remote_label("http://localhost:3000/authorities/show/local/agents/cataract")).to eq("Cataract")
-    end
+#    it "can find the label for a local url" do
+#      auth = Qa::LocalAuthority.find_or_create_by(name: "agents")
+#      unless Qa::LocalAuthorityEntry.any?{|entry| entry.uri == "cataract" && entry.local_authority_id == auth.id}
+#        entry = Qa::LocalAuthorityEntry.create(local_authority: auth,
+#                                               label: "Cataract",
+#                                               uri: "cataract")
+#        sleep(5)
+#      end
+#      expect(described_class.fetch_remote_label("http://localhost:3000/authorities/show/local/agents/cataract")).to eq("Cataract")
+#    end
 
     it "buffers retrieved labels" do
       url = "http://www.geonames.org/5404900"
