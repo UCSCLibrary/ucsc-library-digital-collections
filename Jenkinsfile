@@ -19,7 +19,7 @@ pipeline {
     }
     stage('Deploy') {
       steps {
-        sh 'gem install capistrano; BRANCH_NAME=${GIT_BRANCH/origin\\/}; cap ${BRANCH_NAME/master/production} deploy'
+        sh 'PATH="/var/lib/jenkins/.rvm/rubies/default/bin/:$PATH"; BRANCH_NAME=${GIT_BRANCH/origin\\/}; cap ${BRANCH_NAME/master/production} deploy'
       }
     }
     stage('AcceptanceTest') {
