@@ -23,6 +23,11 @@ pipeline {
       }
     }
     stage('AcceptanceTest') {
+      when {
+        not {
+          branch: 'sandbox'
+        }
+      }
       environment {
         SAUCE_USERNAME = credentials('sauce-username')
         SAUCE_ACCESS_KEY = credentials('sauce-access-key')
