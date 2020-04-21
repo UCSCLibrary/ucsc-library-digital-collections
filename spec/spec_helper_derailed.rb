@@ -14,10 +14,10 @@ end
 Capybara.configure do |config|
   config.run_server = false
 
-  if (username = ENV['STAGING_USERNAME']).present? && (password = ENV['STAGING_PASSWORD']).present? && !Rails.env.production?
-    host_url = "https://#{username}:#{password}@#{Rails.config.hostname}"
+  unless (user = ENV['STAGING_USERNAME']).nil? or (pass = ENV['STAGING_PASSWORD']).nil? or (ENV['RAILS_ENV'] == 'production')
+    host_url = "https://#{user}:#{pass}@#{ENV['TARGET_HOSTNAME']}"
   else
-    host_url = "https://#{Rails.config.hostname}"
+    host_url = "https://#{ENV['TARGET_HOSTNAME']}"
   end
   config.app_host = host_url
   host_parsed = URI.parse host_url
