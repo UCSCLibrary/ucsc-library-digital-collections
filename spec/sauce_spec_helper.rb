@@ -9,9 +9,9 @@ RSpec.configure do |config|
   config.before do |test|
     Capybara.register_driver :sauce do |app|
 
-        opt = platform(test.full_description)
-        caps = Selenium::WebDriver::Remote::Capabilities.send(opt.delete(:browser_name).to_sym, opt)
-      end
+      opt = platform(test.full_description)
+      caps = Selenium::WebDriver::Remote::Capabilities.send(opt.delete(:browser_name).to_sym, opt)
+
       url = 'https://ondemand.saucelabs.com:443/wd/hub'
       Capybara::Selenium::Driver.new(app,
                                      browser: :remote,
