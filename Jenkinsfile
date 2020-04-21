@@ -23,12 +23,21 @@ pipeline {
       }
     }
     stage('AcceptanceTest') {
+      environment {
+        SAUCE_USERNAME = credentials('sauce-username')
+        SAUCE_ACCESS_KEY = credentials('sauce-access-key')
+        STAGING_USERNAME = credentials('staging-access-user')
+        STAGING_PASSWORD = credentials('staging-access-password')
+        ADMIN_USERNAME = credentials('app-admin-username')
+        ADMIN_PASSWORD = credentials('app-admin-password')
+      }
       steps {
-        sh 'bundle install; bundle exec rspec spec/acceptance'
+        sh 'BROWSER=chrome PLATFORM="Windows 10" PATH="/var/lib/jenkins/.rvm/rubies/default/bin/:$PATH"; bundle install; bundle exec rspec spec/acceptance'
+        sh 'BROWSER=safari PLATFORM="macOS 10.15" PATH="/var/lib/jenkins/.rvm/rubies/default/bin/:$PATH"; bundle exec rspec spec/acceptance'
       }
       post {
         unsuccessful {
-          sh 'BRANCH_NAME=${GIT_BRANCH/origin\\/}; cap ${BRANCH_NAME/master/production} deploy:rollback'
+          sh 'PATH="/var/lib/jenkins/.rvm/rubies/default/bin/:$PATH"; BRANCH_NAME=${GIT_BRANCH/origin\\/}; cap ${BRANCH_NAME/master/production} deploy:rollback'
         }
       }
     }
