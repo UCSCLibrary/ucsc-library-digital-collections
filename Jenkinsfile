@@ -25,7 +25,7 @@ pipeline {
     stage('AcceptanceTest') {
       when {
         not {
-          branch: 'sandbox'
+          branch 'sandbox'
         }
       }
       environment {
