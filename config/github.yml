@@ -1,0 +1,13 @@
+default: &default
+  repo: <%= ENV.fetch('GITHUB_REPO') %>
+  client_id: <%= ENV.fetch('GITHUB_CLIENT_ID') %>
+  client_secret: <%= ENV.fetch('GITHUB_CLIENT_SECRET') %> 
+  webhook_secret: <%= ENV.fetch('GITHUB_WEBHOOK_SECRET') %> 
+development:
+  <<: *default
+test:
+  <<: *default
+staging:
+  <<: *default
+production:
+  <<: *default

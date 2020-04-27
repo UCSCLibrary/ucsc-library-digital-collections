@@ -1,5 +1,9 @@
+
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
+
+  config.hostname = "digitalcollections.library.ucsc.edu"
 
 #  config.web_console.whitelisted_ips = ['127.0.0.1']
 

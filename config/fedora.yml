@@ -1,0 +1,19 @@
+default: &default
+  user:  <%= ENV["FEDORA_USER"] %>
+  password: <%= ENV["FEDORA_PASSWORD"] %>
+  url: <%= ENV["FEDORA_URL"] %>
+test:
+  <<: *default
+  base_path: /test
+development:
+  <<: *default
+  base_path: /development
+sandbox:
+  <<: *default
+  base_path: /sandbox
+staging:
+  <<: *default
+  base_path: /prod
+production:
+  <<: *default
+  base_path: /prod

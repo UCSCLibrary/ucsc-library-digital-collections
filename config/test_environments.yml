@@ -1,0 +1,43 @@
+platforms:
+  macOS:
+    versions:
+      - 10.15
+      - 10.12
+    browsers:
+      safari:
+        always: true
+      firefox:
+      chrome:
+  Windows:
+    versions:
+      - 10
+      - 7
+    browsers:
+      firefox:
+        always: true
+      chrome:
+        always: true
+      edge:
+        min-version: 10
+      ie:
+        max-version: 7
+browsers:
+  edge:
+    versions:
+      - latest
+  ie:
+    versions:
+      - latest
+  safari:
+    versions:
+      - latest
+  firefox:
+    versions:
+      - latest
+      - 40.0    
+  chrome:
+    versions:
+      - latest
+      - 42.0
+
+ 
