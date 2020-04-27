@@ -26,6 +26,8 @@ pipeline {
       when {
         not {
           branch 'sandbox'
+          branch 'staging'
+          branch 'master'
         }
       }
       environment {
