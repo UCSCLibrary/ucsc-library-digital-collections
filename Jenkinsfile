@@ -24,11 +24,7 @@ pipeline {
     }
     stage('AcceptanceTest') {
       when {
-        not {
-          branch 'sandbox'
-          branch 'staging'
-          branch 'master'
-        }
+          branch 'docker-test'
       }
       environment {
         SAUCE_USERNAME = credentials('sauce-username')
