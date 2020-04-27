@@ -61,14 +61,15 @@ gem 'rsolr', '~> 1.0'
 gem "devise", ">= 4.7.1"
 gem 'devise-guests', '~> 0.5'
 
+
 group :development, :test do
   gem 'rspec-rails', :require => false
   gem 'factory_bot_rails', :require => false
   gem 'rails-controller-testing'
   gem 'capybara'
-end
-
-group :development do
+  gem 'selenium-webdriver'
+  gem 'webdrivers'
+  gem 'sauce_whisk'
   gem 'capistrano'
   gem 'capistrano-bundler'
   gem 'capistrano-passenger', '>= 0.1.1'
@@ -91,7 +92,7 @@ gem 'scooby_snacks', git: 'git://github.com/UCSCLibrary/ScoobySnacks.git'
 
 # Uncomment this when developing Bulk Ops
 #gem 'bulk_ops', path: "/srv/bulk_ops/"
-gem 'bulk_ops', git: 'git://github.com/UCSCLibrary/BulkOps.git'
+gem 'bulk_ops', git: 'git://github.com/UCSCLibrary/BulkOps.git', branch: 'master'
 
 #gem 'ldfwrapper', github: 'boston-library/ldf-wrapper', branch: "master"
 

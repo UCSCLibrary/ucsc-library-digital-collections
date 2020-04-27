@@ -22,11 +22,6 @@ pickle-email-*.html
 !/log/.keep
 !/tmp/.keep
 
-/config/database.yml
-/config/secrets.yml
-/config/fedora.yml
-/config/github.yml
-
 /public/uploads/batch_metadata_ingests/*
 /public/assets/*
 /public/stream
@@ -58,3 +53,6 @@ bower.json
 
 # Ignore release builds
 .gem
+
+# Ignore emacs autosave files
+.\#*

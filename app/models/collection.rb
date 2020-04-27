@@ -2,7 +2,15 @@
 class Collection < ActiveFedora::Base
   include ::Hyrax::CollectionBehavior
   # You can replace these metadata if they're not suitable
-  include Hyrax::BasicMetadata
+#  include Hyrax::BasicMetadata
+
+  include ::ScoobySnacks::WorkModelBehavior
+
+  include Hyrax::Serializers
+  include GlobalID::Identification
+  include Hyrax::WithEvents
+
+  self.indexer = ::CollectionIndexer
 
   def reindex_extent
     @reindex_extent ||= Hyrax::Adapters::NestingIndexAdapter::LIMITED_REINDEX
