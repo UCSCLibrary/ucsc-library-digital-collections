@@ -77,7 +77,7 @@ module Hyrax
       # most basic email regex: something @ something . something
       if @message[:to].match(/.+@.+\..+/i)
         WorksMailer.work_link_email(@message).deliver_now
-        @flash_message = 'Thank you for your message!'
+        @flash_message = 'Your email has been sent.'
       else
         @flash_message = 'Please enter a valid email address, and try again.'
       end
