@@ -73,22 +73,22 @@ module Hyrax
       @message = Hash.new
       @message[:to] = params[:email]
       @message[:subject] = "#{presenter.page_title}"
-      @message[:url] = request.protocol + request.host + "/records/" + params[:id]
+      @message[:url] = request.protocol + request.host_with_port + "/records/" + params[:id]
       # most basic email regex: something @ something . something
-      if "/.+@.+\..+/i".match(@message[:to])
+      if @message[:to].match(/.+@.+\..+/i)
         WorksMailer.work_link_email(@message).deliver_now
-        flash.now[:notice] = 'Thank you for your message!'
+        @flash_message = 'Thank you for your message!'
       else
-        flash.now[:error] = 'Please enter a valid email address, and try again.'
+        @flash_message = 'Please enter a valid email address, and try again.'
       end
-      redirect_back fallback_location: {action: show, id: params[:id] }
+      redirect_to @message[:url], notice: @flash_message
     rescue RuntimeError => exception
       email_exception_handler(exception)
     end
 
     def email_exception_handler(exception)
       logger.error("Email Work form failed to send: #{exception.inspect}")
-      flash.now[:error] = 'Sorry, this message was not delivered.'
+      @flash_message = 'Sorry, this message was not delivered.'
       redirect_back fallback_location: {action: show, id: params[:id] }
     end
   end

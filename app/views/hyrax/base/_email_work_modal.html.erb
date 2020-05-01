@@ -1,4 +1,4 @@
-<% subject ||= content_for?(:page_title) ? content_for(:page_title) : default_page_title %>
+<% @subject ||= content_for?(:page_title) ? content_for(:page_title) : default_page_title %>
 <%# Email work modal %>
 <div class="modal fade" id="emailWork" tabindex="-1" role="dialog" aria-labelledby="emailLabel">
     <div class="modal-dialog" role="document">
@@ -12,8 +12,9 @@
                 <div class="row">
                     <%= form_tag(@presenter.send_email_url, method: "post") do %>
                         <div class="form-group">
-                            <label for="work-title" class="col-sm-2">Subject:</label>
-                            <span id="work-title" class="col-sm-10"><%= subject %></span>
+                            <%= label_tag :subject, "Subject:", class: "col-sm-2 control-label" %>
+                            <div class="col-sm-10" id="work-title">
+                                <%= text_field_tag :subject, @subject, class: 'form-control', readonly: true %>
                         </div>
                         <div class="form-group">
                             <%= label_tag :email, "Send to:", class: "col-sm-2 control-label" %>
