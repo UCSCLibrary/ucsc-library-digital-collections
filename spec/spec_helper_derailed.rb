@@ -20,7 +20,7 @@ Capybara.configure do |config|
     host_url = "https://#{ENV['TARGET_HOSTNAME']}"
   end
   config.app_host = host_url
-  host_parsed = URI.parse host_url
+  host_parsed = URI.parse "https://#{ENV['TARGET_HOSTNAME']}"
   config.server_host = host_parsed.host
   config.server_port = host_parsed.port
 end
