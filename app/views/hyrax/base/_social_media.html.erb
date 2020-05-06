@@ -1,0 +1,15 @@
+<% page_title ||= content_for?(:page_title) ? content_for(:page_title) : default_page_title %>
+<% share_url ||= request.original_url %>
+<ul>
+  <li>
+    <%= link_to "https://twitter.com/intent/tweet/?#{{text: page_title, url: share_url}.to_param}", target: '_blank', rel: 'noopener noreferrer', title: t('hyrax.base.social_media.twitter') do %>
+      <span class="fa fa-3x fa-twitter" aria-hidden="true"></span><span class="sr-only">Twitter</span>
+    <% end %>
+  </li>
+  <li>
+    <%= link_to "https://facebook.com/sharer/sharer.php?#{{u: share_url}.to_param}", target: '_blank', rel: 'noopener noreferrer', title: t('hyrax.base.social_media.facebook') do %>
+      <span class="fa fa-3x fa-facebook" aria-hidden="true"></span><span class="sr-only">Facebook</span>
+    <% end %>
+  </li>
+  <li><a data-dismiss="modal" data-toggle="modal" data-target="#emailWork" href="#emailWork"><span class="fa fa-3x fa-envelope" aria-hidden="true"></span><span class="sr-only">Email</span></a></li>
+</ul>
