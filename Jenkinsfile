@@ -13,7 +13,7 @@ pipeline {
     stage('Test') {
       steps {
         dir("docker_test_env") {
-          sh 'docker exec hycruz /srv/run-unit-tests-when-ready.sh'
+          sh 'BRANCH=${GIT_BRANCH/origin\\//} docker exec hycruz /srv/run-unit-tests-when-ready.sh'
         }
       }
     }
