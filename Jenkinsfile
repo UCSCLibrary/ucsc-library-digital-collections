@@ -37,8 +37,8 @@ pipeline {
         ADMIN_PASSWORD = credentials('app-admin-password')
       }
       steps {
-        sh 'BROWSER=chrome PLATFORM="Windows 10" PATH="/var/lib/jenkins/.rvm/rubies/default/bin/:$PATH"; bundle install; bundle exec rspec spec/acceptance'
-        sh 'BROWSER=safari PLATFORM="macOS 10.15" PATH="/var/lib/jenkins/.rvm/rubies/default/bin/:$PATH"; bundle exec rspec spec/acceptance'
+        sh 'PATH="/var/lib/jenkins/.rvm/rubies/default/bin/:$PATH" bundle install; BROWSER=chrome PLATFORM="Windows 10" PATH="/var/lib/jenkins/.rvm/rubies/default/bin/:$PATH" bundle exec rspec spec/acceptance'
+        sh 'PATH="/var/lib/jenkins/.rvm/rubies/default/bin/:$PATH" bundle install; BROWSER=safari PLATFORM="macOS 10.15" PATH="/var/lib/jenkins/.rvm/rubies/default/bin/:$PATH" bundle exec rspec spec/acceptance'
       }
       post {
         unsuccessful {
