@@ -20,7 +20,7 @@ $(document).ready(function() {
 
   // Create work URI, script URI, and initalize the embed code
   var dataUri = window.location.pathname + '/manifest?locale=en';
-  var scriptSrc = window.location.protocol + '//' + window.location.hostname + '/universalviewer/dist/uv-2.0.1/lib/embed.js';
+  var scriptSrc = 'https://' + window.location.hostname + '/universalviewer/dist/uv-2.0.1/lib/embed.js';
   updateEmbedCode(dataUri, iframeWidth, iframeHeight, scriptSrc);
 
   // Act on changes to the size dropdown
