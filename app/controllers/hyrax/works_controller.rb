@@ -9,7 +9,7 @@ module Hyrax
     self.curation_concern_type = ::Work
     self.show_presenter = Ucsc::WorkShowPresenter
 
-    skip_authorize_resource :only => [:show, :file_manager, :inspect_work, :manifest, :zip_media_citation]
+    skip_authorize_resource :only => [:show, :file_manager, :inspect_work, :manifest, :zip_media_citation, :send_email]
 
     def zip_media_citation
       #This feature is currently only implemented for Images
