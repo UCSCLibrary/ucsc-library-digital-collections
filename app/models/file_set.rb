@@ -45,16 +45,25 @@ class FileSet < ActiveFedora::Base
   end
   
   def image_server_derivative_sizes
+    short_side = [height_is,width_is].min
+    start_x = (width_is - short_side)/2
+    start_y = (height_is - short_side)/2
+    square_region = "#{start_x},#{end_x},#{short_side},#{short_side}"
     ['90,',
      '!200,150',
      '250,',
      '!300,300',
-     '800,']
+     '800,',
+     {region: square_region, size: "150"}]
   end
 
   def image_server_cache_derivatives
-    image_server_derivative_sizes.each do |derivative_size|
-      url = Hyrax.config.iiif_image_url_builder.call(id,"nil",derivative_size)
+    image_server_derivative_sizes.each do |size|
+      image_config = {size: size} if size.is_a?(String)
+      region = image_config[:region] || "full"
+      rotation = image_config[:rotation] || "0"
+      size = image_config[:size]
+      url = Hyrax.config.iiif_image_url_builder.call(id,"nil",size,region,rotation)
       Net::HTTP.get_response(URI(url))
     end
   end
