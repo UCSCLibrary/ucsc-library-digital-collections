@@ -25,7 +25,7 @@ video:
           r: 29.97 
           pix_fmt: yuv420p 
           vcodec: libx264
-          acodec: aac
+          acodec: libfdk_aac
           profile_v: main 
           level: 3.1 
           codec_code: "mp4a.40.2,avc1.4d001f"
@@ -40,7 +40,7 @@ audio:
           bitrate: 64000
           maxrate: 70000
      default:
-          acodec: aac
+          acodec: libfdk_aac
           flags: "-f segment -global_header" 
           segment_time: 9
           segment_format: mpeg_ts 

@@ -13,7 +13,7 @@ pipeline {
     stage('Test') {
       steps {
         dir("docker_test_env") {
-          sh 'docker exec hycruz /srv/run-unit-tests-when-ready.sh'
+          sh 'BRANCH=${GIT_BRANCH/origin\\//} docker exec hycruz /srv/run-unit-tests-when-ready.sh'
         }
       }
     }
@@ -27,16 +27,11 @@ pipeline {
           branch 'docker-test'
       }
       environment {
-        SAUCE_USERNAME = credentials('sauce-username')
-        SAUCE_ACCESS_KEY = credentials('sauce-access-key')
-        STAGING_USERNAME = credentials('staging-access-user')
-        STAGING_PASSWORD = credentials('staging-access-password')
         ADMIN_USERNAME = credentials('app-admin-username')
         ADMIN_PASSWORD = credentials('app-admin-password')
       }
       steps {
-        sh 'BROWSER=chrome PLATFORM="Windows 10" PATH="/var/lib/jenkins/.rvm/rubies/default/bin/:$PATH"; bundle install; bundle exec rspec spec/acceptance'
-        sh 'BROWSER=safari PLATFORM="macOS 10.15" PATH="/var/lib/jenkins/.rvm/rubies/default/bin/:$PATH"; bundle exec rspec spec/acceptance'
+        sh 'PATH="/var/lib/jenkins/.rvm/rubies/default/bin/:$PATH" bundle install; PATH="/var/lib/jenkins/.rvm/rubies/default/bin/:$PATH" bundle exec rspec spec/acceptance'
       }
       post {
         unsuccessful {

@@ -1,0 +1,16 @@
+<div id="embedView">
+    <div class="form-group">
+        <label for="embedCode" class="h5">Embed Code:</label>
+        <input id="embedCode" class="form-control" type="text" readonly="true">
+    </div>
+    <div class="customSize form-group">
+        <label for="embedSize">Size:</label>
+        <select id="embedSize">
+            <option value="small" data-width="560" data-height="420" selected="selected">560 x 420</option>
+            <option value="medium" data-width="640" data-height="480">640 x 480</option>
+            <option value="large" data-width="800" data-height="600">800 x 600</option>
+            <option value="custom">custom</option>
+        </select>
+        <input id="embedWidth" type="text" maxlength="10" style="display: none;"><span id="embedX" class="x" style="display: none;">x</span><input id="embedHeight" type="text" maxlength="10" style="display: none;">
+    </div>
+</div>

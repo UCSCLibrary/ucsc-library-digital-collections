@@ -16,6 +16,11 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   skip_after_action :discard_flash_if_xhr
 
+
+  def current_ability
+    @current_ability ||= Ability.new(current_user, request.remote_ip)
+  end
+  
   private
 
   def set_image_token

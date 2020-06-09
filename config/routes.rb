@@ -42,6 +42,9 @@ Rails.application.routes.draw do
   get '/concern/works/:id/zip_media_citation', to: 'hyrax/works#zip_media_citation'
   get '/concern/works/:id/:size/zip_media_citation', to: 'hyrax/works#zip_media_citation'
 
+  post 'concern/works/:id/email' => 'hyrax/works#send_email'
+  get 'concern/works/:id/email' => 'hyrax/works#show'
+
   authenticate :user, lambda { |u| u.admin? } do
     mount Sidekiq::Web => '/sidekiq'
   end

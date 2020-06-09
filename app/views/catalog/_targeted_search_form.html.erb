@@ -8,7 +8,7 @@
 
         <% searchable_fields =  ScoobySnacks::METADATA_SCHEMA.searchable_fields.unshift ScoobySnacks::Field.new('all_fields', {'label' => "All Fields"}) %>
         <% search_field_options = options_from_collection_for_select(searchable_fields, :name, :label, "all_fields") %>
-        <%= select_tag('search_field', search_field_options,) %>
+        <%= select_tag('search_field', search_field_options, {"aria-label" => "Select the field to search"}) %>
         <div class="input-group">
             <%= text_field_tag :q, current_search_parameters , class: "q form-control", id: "search-field-header", placeholder: t("hyrax.search.form.q.placeholder") %>
 
