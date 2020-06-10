@@ -22,6 +22,7 @@ pipeline {
         sh 'PATH="/var/lib/jenkins/.rvm/rubies/default/bin/:$PATH"; BRANCH_NAME=${GIT_BRANCH/origin\\/}; cap ${BRANCH_NAME/master/production} deploy'
       }
     }
+/*
     stage('AcceptanceTest') {
       when {
           branch 'docker-test'
@@ -39,6 +40,8 @@ pipeline {
         }
       }
     }
+    
+    */
   }
   post {
     always {
