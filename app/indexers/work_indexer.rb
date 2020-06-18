@@ -5,11 +5,26 @@ class WorkIndexer < Hyrax::WorkIndexer
   THUMBNAIL_WIDTH = 300
   include ControlledIndexerBehavior
 
+  def ancestor_ids(doc)
+    return [] if doc.nil? 
+    ids = [doc.id]
+    ids += doc.member_of_collection_ids
+    ids += ancestor_ids(doc.parent_work)
+    return ids.uniq
+  end
+  
   def generate_solr_document
     super.tap do |solr_doc|
       case solr_doc['has_model_ssim'].first
       when "FileSet"
         solr_doc["file_id_ss"] = object.original_file_id
+        solr_doc["ancestor_ids_ssim"] = ancestor_ids(solr_doc)
+        visibilities = solr_doc["ancestor_ids_ssim"].map{|id| SolrDocument.find(id).visibility}
+        if (special_vis = (['request','campus'] & visibilities)).present?
+          solr_doc["visibility_ssi"] = special_vis.first
+        else
+          solr_doc["visibility_ssi"] = "open" if solr_doc.parent_work.visibility == 'open'
+        end
       when "Work"
         solr_doc['file_set_ids_ssim'] = object.file_set_ids
         solr_doc['member_ids_ssim'] = object.ordered_member_ids

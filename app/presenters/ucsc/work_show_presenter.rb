@@ -35,12 +35,27 @@ module Ucsc
       "/concern/works/#{id}/zip_media_citation/#{size}/media_citation.zip"
     end
 
-    def send_email_url
-      "/concern/works/#{id}/email"
+    def primary_media_partial
+      if all_av_files.any?
+        return "campus_lockout" if all_av_files.any?{|av_file| campus_lockout?(av_file)}
+        return 'primary_audio_player'
+      elsif image? && (image = representative_presenter).present?
+        return "campus_lockout" if campus_lockout?(representative_presenter.solr_document)
+        return "uv_image_primary" if params['universal_viewer']
+        if defined?(viewer)
+          return "uv_image_primary" if viewer.to_s == "true"
+          return "uv_image_clickthrough" if viewer.to_s == "click"
+        end
+      end
+        
     end
 
-    def all_av_files
-      @all_av_files ||= generate_all_av_file_list
+    def campus_lockout? fs
+      fs["visibility_ssi"] == "campus" && !current_ability.can?(:read, fs)
+    end
+    
+    def send_email_url
+      "/concern/works/#{id}/email"
     end
 
     def parent
@@ -69,6 +84,8 @@ module Ucsc
     # return its siblings. Otherwise, return its children.
     def all_av_files
       return @all_av_files if @all_av_files
+      # TODO index whether each work has AV files attached
+      #      return (@all_av_files = []) unless solr_document.has_av_files?
       if parent.present? && parent.audio?
         @all_av_files = descendent_av_file_list(parent)
       else
@@ -88,7 +105,7 @@ module Ucsc
 
     # Return an array of filesets that belong to this work or its child works & descendent works
     def descendent_av_file_list(doc, root_parent=nil)
-      av_filesets = doc.file_set_ids.map{|id| SolrDocument.find(id)}.select{|sd| sd.audio? || sd.video?}
+      av_filesets = doc.file_sets.select{|sd| sd.audio? || sd.video?}
       list = av_filesets.map.with_index(1) do |fs,i| 
         title = doc.title.first
         link = "/records/#{doc.id}"
