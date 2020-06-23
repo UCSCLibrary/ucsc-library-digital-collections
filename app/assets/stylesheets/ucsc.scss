@@ -9,6 +9,11 @@ $header-height: 40px;
 $screen-xs: 480px;
 $screen-sm: 768px;
 
+/* Helper classes */
+.flex {
+    display: flex;
+}
+
 body.dashboard div#bulk-review-buttons {
     min-height: 50px;
     div#selections {
@@ -498,8 +503,35 @@ table.work.attributes {
     }
 }
 
+/* Works page About the Collection section */
+#collection-metadata {
+    margin: 20px 0;
+    padding: 5px 15px;
+    border-radius: 10px;
+    background-color: #f4f4f4;
+    h3 {
+        font-size: 18px;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+    ul.tabular,
+    .flex > a {
+        padding-left: 50px;
+        background: url('icon-circle-end.png') -8px -15px no-repeat;
+        background-size: 55px 50px;
+    }
+    .flex > a:first-child {
+        padding-left: 0;
+        background: none;
+    }
+    ul.list-unstyled {
+        margin-top: 40px;
+    }
+}
+
 /* Download, Share, and Cite buttons */
 #download-share-cite {
+    height: 40px;
     margin-top: 30px;
     button {
         float: left;
