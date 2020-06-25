@@ -10,7 +10,7 @@ class WorkIndexer < Hyrax::WorkIndexer
     ids = [doc.id]
     ids += doc.member_of_collection_ids
     ids += ancestor_ids(doc.parent_work)
-    return ids.uniq
+    return (ids.uniq - [doc.id])
   end
   
   def generate_solr_document
