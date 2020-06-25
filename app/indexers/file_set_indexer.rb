@@ -10,4 +10,5 @@ class FileSetIndexer < Hyrax::FileSetIndexer
         solr_doc["visibility_ssi"] = "open" if solr_doc.parent_work.visibility == 'open'
       end
     end
+  end
 end
