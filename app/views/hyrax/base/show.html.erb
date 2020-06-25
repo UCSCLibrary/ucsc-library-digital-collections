@@ -12,8 +12,8 @@
     <div class="col-sm-12">
         <div class="row">
             <%# = render 'work_description', presenter: @presenter %>
-            <%= render @presenter.primary_media_partial, presenter: @presenter,
-                viewer: @presenter.universal_viewer?,
+            <%= render @presenter.primary_media_partial(params['universal_viewer']),
+                presenter: @presenter,
                 av_files: (av_files = @presenter.all_av_files) %>
             <div class="col-sm-6">
                 <%= render 'metadata', presenter: @presenter %>

@@ -1,8 +1,3 @@
-<%= PulUvRails::UniversalViewer.script_tag %>
-<div class="viewer-wrapper">
-  <div class="uv viewer" data-config="/uv_config.json" data-uri="<%= main_app.polymorphic_path [main_app, :manifest, @presenter] %>"></div>
-</div>
-<% elsif defined?(viewer) && (viewer == "click")  %>
 <% uv_link = "#{request.path}?universal_viewer=true" %>
 <% uv_link += "&locale=#{params['locale']}" if params['locale'] %>
 <div id="display-work-img">

@@ -14,7 +14,8 @@ module Ucsc
       Hyrax::FileSetPresenter.new(file_set,current_ability)
     end
 
-    def universal_viewer?
+    def universal_viewer?(override=nil)
+      return override if override.present?
       return true if (image? && (file_set_ids.count > 1))
       "click"
     end
@@ -35,19 +36,21 @@ module Ucsc
       "/concern/works/#{id}/zip_media_citation/#{size}/media_citation.zip"
     end
 
-    def primary_media_partial
+    def primary_media_partial(uv_override=nil)
       if all_av_files.any?
         return "campus_lockout" if all_av_files.any?{|av_file| campus_lockout?(av_file)}
         return 'primary_audio_player'
       elsif image? && (image = representative_presenter).present?
         return "campus_lockout" if campus_lockout?(representative_presenter.solr_document)
-        return "uv_image_primary" if params['universal_viewer']
-        if defined?(viewer)
-          return "uv_image_primary" if viewer.to_s == "true"
-          return "uv_image_clickthrough" if viewer.to_s == "click"
+        case universal_viewer?(uv_override)
+        when "true"
+          return "uv_image_primary"
+        when "click"
+          return "uv_image_clickthrough"
+        else
+          return "basic_image_primary"
         end
       end
-        
     end
 
     def campus_lockout? fs
@@ -66,6 +69,16 @@ module Ucsc
     def parent_presenter
       return nil unless parent.present?
       @parent_presenter ||= Ucsc::WorkShowPresenter.new(parent, current_ability,request)
+    end
+
+    def collections
+      return nil unless solr_document.member_of_collection_ids.present?
+      @collection ||= solr_document.member_of_collection_ids.map{|id| SolrDocument.find(id)}
+    end
+
+    def collection
+      return nil unless solr_document.member_of_collection_ids.present?
+      @collection ||= SolrDocument.find(solr_document.member_of_collection_ids.first)
     end
 
     def page_title
