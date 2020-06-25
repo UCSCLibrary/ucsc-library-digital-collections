@@ -6,6 +6,8 @@ class FileSet < ActiveFedora::Base
 
   Hydra::Derivatives.output_file_service = ::PersistDerivatives
 
+  self.indexer = ::FileSetIndexer
+
   def self.audio_mime_types
     SamveraHls::FileSetBehavior.audio_mime_types
   end
