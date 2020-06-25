@@ -17,8 +17,8 @@
 
 	<div>
 		<ul class="list-unstyled">
-			<% unless presenter.collection.relatedResource.empty? %>
-				<li><%= link_to presenter.collection.relatedResource do %>
+			<% Array(presenter.collection.relatedResource).each do |resource| %>
+				<li><%= link_to resource do %>
 					Collection Guide <span class='glyphicon glyphicon-new-window' aria-hidden='true'></span>
 				<% end %></li>
 			<% end %>
