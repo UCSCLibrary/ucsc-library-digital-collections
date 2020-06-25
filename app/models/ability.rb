@@ -18,14 +18,13 @@ class Ability
     return true if current_user.admin?
     # perform special checks on filesets
     if (fs = SolrDocument.find(id)).hydra_model == FileSet
-      case fs.visiblity
+      case fs.visibility
       when "request"
         # retrieve special access grants for the current user
         return (fs.ancestor_ids & current_user.current_access_grants).present?
       when "campus"
         return on_campus?
       end
-      # otherwise, allow access to the fileset if the work it belongs to is public
     end
     super
   end
