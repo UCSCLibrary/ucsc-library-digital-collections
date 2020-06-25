@@ -45,6 +45,7 @@ class FileSet < ActiveFedora::Base
   end
 
   def image_server_derivative_sizes
+    
     hh = height.first.to_i
     ww = width.first.to_i
     square_region = (hh > ww) ? "0,#{(hh-ww)/2},#{ww},#{ww}" : "#{(ww-hh)/2},0,#{hh},#{hh}"
@@ -53,16 +54,13 @@ class FileSet < ActiveFedora::Base
      '250,',
      '!300,300',
      '800,',
-     {region: square_region, size: "150,"}]
+     ApplicationController.helpers.square_thumbnail_region(self,150)]
   end
 
   def image_server_cache_derivatives
     image_server_derivative_sizes.each do |size|
-      image_config = size.is_a?(String) ? {size: size} : size
-      region = image_config[:region] || "full"
-      rotation = image_config[:rotation] || "0"
-      size = image_config[:size]
-      uri = URI.parse(Hyrax.config.iiif_image_url_builder.call(id,"nil",size,region,rotation))
+      url = ApplicationController.helpers.thumbnail_url(id,size))
+      uri = URI.parse(url)
       http = Net::HTTP.new(uri.host,uri.port)
       http.use_ssl = true
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
