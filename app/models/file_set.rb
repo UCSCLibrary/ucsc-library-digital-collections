@@ -43,28 +43,30 @@ class FileSet < ActiveFedora::Base
       output_path: derivative_path_factory.derivative_path_for_reference(self,"j2c"),
       url: derivative_url('j2c')}]
   end
-  
+
   def image_server_derivative_sizes
-    short_side = [height_is,width_is].min
-    start_x = (width_is - short_side)/2
-    start_y = (height_is - short_side)/2
-    square_region = "#{start_x},#{end_x},#{short_side},#{short_side}"
+    hh = height.first.to_i
+    ww = width.first.to_i
+    square_region = (hh > ww) ? "0,#{(hh-ww)/2},#{ww},#{ww}" : "#{(ww-hh)/2},0,#{hh},#{hh}"
     ['90,',
      '!200,150',
      '250,',
      '!300,300',
      '800,',
-     {region: square_region, size: "150"}]
+     {region: square_region, size: "150,"}]
   end
 
   def image_server_cache_derivatives
     image_server_derivative_sizes.each do |size|
-      image_config = {size: size} if size.is_a?(String)
+      image_config = size.is_a?(String) ? {size: size} : size
       region = image_config[:region] || "full"
       rotation = image_config[:rotation] || "0"
       size = image_config[:size]
-      url = Hyrax.config.iiif_image_url_builder.call(id,"nil",size,region,rotation)
-      Net::HTTP.get_response(URI(url))
+      uri = URI.parse(Hyrax.config.iiif_image_url_builder.call(id,"nil",size,region,rotation))
+      http = Net::HTTP.new(uri.host,uri.port)
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      http.get(uri.request_uri)
     end
   end
   
