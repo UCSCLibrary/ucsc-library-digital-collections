@@ -10,7 +10,7 @@ class Ability
     super user
   end
   
-  WHITELIST_IP_RANGES = ["128.114.0.0/16"]
+  CAMPUS_IP_RANGES = ["128.114.0.0/16"]
   
   self.ability_logic += [:everyone_can_create_curation_concerns]
 
