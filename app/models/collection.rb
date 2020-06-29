@@ -30,7 +30,7 @@ class Collection < ActiveFedora::Base
 
   def visibility
     return "request" if read_groups.include? "request"
-    return "request" if read_groups.include? "campus"
+    return "campus" if read_groups.include? "campus"
     super
   end
 
