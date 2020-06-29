@@ -11,6 +11,7 @@ module Ucsc
       embargo: "label-warning",
       lease: "label-warning",
       request: "label-warning",
+      campus: "label-warning",
       open: "label-success",
       restricted: "label-danger"
     }.freeze

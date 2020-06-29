@@ -6,6 +6,8 @@ class FileSet < ActiveFedora::Base
 
   Hydra::Derivatives.output_file_service = ::PersistDerivatives
 
+  self.indexer = ::FileSetIndexer
+
   def self.audio_mime_types
     SamveraHls::FileSetBehavior.audio_mime_types
   end
@@ -43,19 +45,28 @@ class FileSet < ActiveFedora::Base
       output_path: derivative_path_factory.derivative_path_for_reference(self,"j2c"),
       url: derivative_url('j2c')}]
   end
-  
+
   def image_server_derivative_sizes
+    
+    hh = height.first.to_i
+    ww = width.first.to_i
+    square_region = (hh > ww) ? "0,#{(hh-ww)/2},#{ww},#{ww}" : "#{(ww-hh)/2},0,#{hh},#{hh}"
     ['90,',
      '!200,150',
      '250,',
      '!300,300',
-     '800,']
+     '800,',
+     ApplicationController.helpers.square_thumbnail_region(self,150)]
   end
 
   def image_server_cache_derivatives
-    image_server_derivative_sizes.each do |derivative_size|
-      url = Hyrax.config.iiif_image_url_builder.call(id,"nil",derivative_size)
-      Net::HTTP.get_response(URI(url))
+    image_server_derivative_sizes.each do |size|
+      url = ApplicationController.helpers.thumbnail_url(id,size)
+      uri = URI.parse(url)
+      http = Net::HTTP.new(uri.host,uri.port)
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      http.get(uri.request_uri)
     end
   end
   

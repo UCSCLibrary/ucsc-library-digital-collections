@@ -432,6 +432,11 @@ footer {
     }
 }
 
+/* Buttons & UI elements*/
+.btn.btn-primary:hover {
+    background-color: $ucsc-lightblue;
+}
+
 div.uv.viewer iframe {
     // This fixes display problem that occurs when
     // downsizing maximized viewer after clicking 'full screen' then 'esc'
@@ -504,9 +509,6 @@ table.work.attributes {
     button {
         float: left;
         margin-right: 30px;
-        &:hover {
-            background-color: $ucsc-lightblue;
-        }
     }
 }
 .btn-citation span.h1 {
@@ -625,3 +627,13 @@ table.work.attributes {
         }
     }
 }
+
+/* Messages, Alerts, etc */
+#off-campus-access-notice {
+    background-color: #f9f2ca;
+    text-align: center;
+    padding: 20px;
+    margin: 20px;
+    font-weight: bold;
+}
+

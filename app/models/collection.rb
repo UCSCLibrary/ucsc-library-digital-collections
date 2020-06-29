@@ -21,22 +21,33 @@ class Collection < ActiveFedora::Base
       request_visibility! 
       return true
     end
+    if (value == "campus")
+      campus_visibility! 
+      return true
+    end
     super
   end
 
   def visibility
-      return "request" if read_groups.include? "request"
-      super
+    return "request" if read_groups.include? "request"
+    return "campus" if read_groups.include? "campus"
+    super
   end
 
   def represented_visibility
-    super.push("request")
+    super.push("request").push("campus")
   end
 
   def request_visibility!
     visibility_will_change! unless visibility == "request"
     remove_groups = represented_visibility - [ "request", Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC]
     set_read_groups([ "request", Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC], remove_groups)
+  end
+
+  def campus_visibility!
+    visibility_will_change! unless visibility == "campus"
+    remove_groups = represented_visibility - [ "campus", Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC]
+    set_read_groups([ "campus", Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC], remove_groups)
   end
 
   property :metadataInheritance, predicate: "https://digitalcollections.library.ucsc.edu/ontology/metadataInheritance", multiple: false
