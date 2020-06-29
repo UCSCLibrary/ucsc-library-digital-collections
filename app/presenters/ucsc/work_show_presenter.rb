@@ -61,6 +61,11 @@ module Ucsc
       "/concern/works/#{id}/email"
     end
 
+    def collection
+      return nil unless solr_document.member_of_collection_ids.present?
+      @collection ||= SolrDocument.find(solr_document.member_of_collection_ids.first)
+    end
+
     def parent
       return nil unless solr_document.parent_id.present?
       @parent ||= SolrDocument.find(solr_document.parent_id)
