@@ -13,7 +13,7 @@ module Ucsc
     end
 
     def universal_viewer?(override=nil)
-      return override if override.present?
+      return override if override.present?S
       return true if (image? && (file_set_ids.count > 1))
       "click"
     end
@@ -84,11 +84,6 @@ module Ucsc
     def collections
       return nil unless solr_document.member_of_collection_ids.present?
       @collection ||= solr_document.member_of_collection_ids.map{|id| SolrDocument.find(id)}
-    end
-
-    def collection
-      return nil unless solr_document.member_of_collection_ids.present?
-      @collection ||= SolrDocument.find(solr_document.member_of_collection_ids.first)
     end
 
     def page_title
