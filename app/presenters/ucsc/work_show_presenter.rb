@@ -5,8 +5,6 @@ module Ucsc
     delegate :file_set_ids, :image?, :audio?, to: :solr_document
     delegate :titleAlternative, :subseries, :series, to: :solr_document
 
-    self.collection_presenter_class = Ucsc::CollectionPresenter
-
     def representative_presenter
       return nil unless representative_id
       file_set = SolrDocument.find(representative_id)
