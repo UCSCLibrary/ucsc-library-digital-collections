@@ -6,8 +6,11 @@ class Ability
   include Hyrax::Ability
 
   def initialize user, client_ip=nil
+    Rails.logger.warn("(1) Initializing ability with Client IP: #{client_ip}")
     @client_ip = client_ip
+    Rails.logger.warn("(2) Set Client IP: #{@client_ip}")
     super user
+    Rails.logger.warn("(3) Client IP after super: #{@client_ip}")
   end
   
   CAMPUS_IP_RANGES = ["128.114.0.0/16"]
@@ -15,6 +18,7 @@ class Ability
   self.ability_logic += [:everyone_can_create_curation_concerns]
 
   def test_read(id)
+    Rails.logger.warn("(4) Checking Client IP in test_read: #{@client_ip}")
     return true if current_user.admin?
     # perform special checks on filesets
     if (fs = SolrDocument.find(id)).hydra_model == FileSet
@@ -30,6 +34,7 @@ class Ability
   end
 
   def on_campus?
+    Rails.logger.warn("(5) Testing Client IP in on_campus: #{@client_ip}")
     CAMPUS_IP_RANGES.any?{|range| IPAddr.new(range).include?(@client_ip || "")}
   end
   
