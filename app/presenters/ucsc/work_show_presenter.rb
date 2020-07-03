@@ -60,8 +60,15 @@ module Ucsc
     end
 
     def collection
-      return nil unless solr_document.member_of_collection_ids.present?
-      @collection ||= SolrDocument.find(solr_document.member_of_collection_ids.first)
+      if solr_document.member_of_collection_ids.present?
+        @collection ||= SolrDocument.find(solr_document.member_of_collection_ids.first)
+      elsif parent.present? && parent.member_of_collection_ids.present?
+        @collection ||= SolrDocument.find(parent.member_of_collection_ids.first)
+      else
+        # If we can't find any collection, return a blank document so we get blank values
+        # instead of errors when trying to display collection fields
+        @collection ||= SolrDocument.new
+      end
     end
 
     def parent
