@@ -102,6 +102,9 @@ en:
       request:
         note_html: "You will have to submit an online request before viewing media in this collection"
         text: "Media Available by Request"
+      campus:
+        note_html: "Media in this collection may only be viewed from within the Santa Cruz campus"
+        text: "Campus Access Only"
     directory:
       suffix:           "@ucsc.edu"
     footer:

@@ -25,7 +25,13 @@ pipeline {
 /*
     stage('AcceptanceTest') {
       when {
-          branch 'docker-test'
+        not {
+          anyOf {
+            branch 'sandbox'
+            branch 'staging'
+            branch 'master'
+          }
+        }
       }
       environment {
         ADMIN_USERNAME = credentials('app-admin-username')
