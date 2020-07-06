@@ -13,7 +13,7 @@ module Ucsc
     end
 
     def universal_viewer?(override=nil)
-      return override if override.present?S
+      return override if override.present?
       return true if (image? && (file_set_ids.count > 1))
       "click"
     end
@@ -36,7 +36,7 @@ module Ucsc
 
     def primary_media_partial(uv_override=nil)
       if all_av_files.any?
-        return "campus_lockout" if all_av_files.any?{|av_file| campus_lockout?(av_file)}
+        return "campus_lockout" if all_av_files.any?{|av_file| campus_lockout?(av_file[:fileset])}
         return 'primary_audio_player'
       elsif image? && (image = representative_presenter).present?
         return "campus_lockout" if campus_lockout?(representative_presenter.solr_document)
