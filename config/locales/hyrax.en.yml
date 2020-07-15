@@ -43,13 +43,18 @@ en:
           subject_tesim: Subject
           title_tesim: Title
           admin_set: In Administrative Set
+      sort:
+          label_html: 'Sort<span class="d-none d-sm-inline"> by %{field}</span>'
   hyrax:
     product_name: "Digital Assets"
     institution_name:  &INSTITUTION_NAME "UC Santa Cruz"
     collections:
       search_form:
-        button_label: Search
+        button_label: ""
         label: ""
+        placeholder: "Search within this collection..."
+      show:
+        works_in_collection: results
     division:
       name: "Digital Library Initiatives"
       homepage_url: "http://library.ucsc.edu/exhibits/"
@@ -112,3 +117,6 @@ en:
         header:  "Export citation as:"
       metadata:
         header: Description
+    pagination:
+      previous: "<span class='glyphicon glyphicon-chevron-left' aria-hidden='true'></span> Previous"
+      next: "Next <span class='glyphicon glyphicon-chevron-right' aria-hidden='true'></span>"

@@ -1,0 +1,32 @@
+<%# Adapted from blacklight 6.23.0 version of _sort_widget.html.erb and _per_page_widget.html.erb %>
+<% if show_sort_and_per_page? && active_sort_fields.many? %>
+  <%= form_tag collection_path(collection), method: :get, class: 'per_page form-horizontal' do %>
+    <%= render 'view_type_group' %>
+    <fieldset class="pull-right">
+      <legend class="sr-only"><%= t('hyrax.sort_label') %></legend>
+      <div id="sort-dropdown" class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            <%= t('blacklight.search.sort.label', :field =>sort_field_label(current_sort_field.key)) %> <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+        </button>
+
+        <ul class="dropdown-menu" role="menu">
+            <%- active_sort_fields.each do |sort_key, field_config| %>
+              <li role="menuitem"><%= link_to(sort_field_label(sort_key), url_for(search_state.params_for_search(sort: sort_key))) %></li>
+            <%- end -%>
+        </ul>
+      </div>
+      <span class="sr-only"><%= t('blacklight.search.per_page.title') %></span>
+      <div id="per_page-dropdown" class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+          <%= t(:'blacklight.search.per_page.button_label', :count => current_per_page) %> <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <%- per_page_options_for_select.each do |(label, count)| %>
+            <li role="menuitem"><%= link_to(label, url_for(search_state.params_for_search(per_page: count))) %></li>
+          <%- end -%>
+        </ul>
+      </div>
+      <%= render_hash_as_hidden_fields(search_state.params_for_search.except(:per_page, :sort)) %>
+    </fieldset>
+  <% end %>
+<% end %>
