@@ -56,8 +56,7 @@ class Work < ActiveFedora::Base
     end
 
     if representative_id.blank? && members.present?
-      member = members.select{|member| member.representative_id.present?}.first
-      representative_id = member.representative_id if member.representative_id
+      representative_id =  members.reduce([]){|ids, member| ids + Array(member.representative_id) }.first
     end
 
     thumbnail_id = representative_id if (thumbnail_id.blank? && representative_id.present?)
