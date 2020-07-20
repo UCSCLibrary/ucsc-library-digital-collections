@@ -5,45 +5,45 @@ class WorkIndexer < Hyrax::WorkIndexer
   THUMBNAIL_WIDTH = 300
   include ControlledIndexerBehavior
 
+  def ancestor_ids(doc)
+    return [] if doc.nil? 
+    ids = [doc.id]
+    ids += doc.member_of_collection_ids
+    ids += ancestor_ids(doc.parent_work)
+    return (ids.uniq - [doc.id])
+  end
+  
   def generate_solr_document
     super.tap do |solr_doc|
-      case solr_doc['has_model_ssim'].first
-      when "FileSet"
-        solr_doc["file_id_ss"] = object.original_file_id
-      when "Work"
-        solr_doc['file_set_ids_ssim'] = object.file_set_ids
-        solr_doc['member_ids_ssim'] = object.ordered_member_ids
-        object.ordered_member_ids.each do |member_id|
-          next unless (member = SolrDocument.find(member_id)).image?
-          solr_doc["hasRelatedImage_ssim"] ||= []
-          case member['has_model_ssim'].first
-          when "FileSet"
-            solr_doc["hasRelatedImage_ssim"] << member_id
-            (solr_doc["file_set_ids_ssim"] ||= []) << member_id 
-          when "Work"
-            solr_doc["hasRelatedImage_ssim"]  += member["hasRelatedImage_ssim"]
-          end
+      solr_doc['file_set_ids_ssim'] = object.file_set_ids
+      solr_doc['member_ids_ssim'] = object.ordered_member_ids
+      object.ordered_member_ids.each do |member_id|
+        next unless (member = SolrDocument.find(member_id)).image?
+        solr_doc["hasRelatedImage_ssim"] ||= []
+        case member['has_model_ssim'].first
+        when "FileSet"
+          solr_doc["hasRelatedImage_ssim"] << member_id
+          (solr_doc["file_set_ids_ssim"] ||= []) << member_id 
+        when "Work"
+          solr_doc["hasRelatedImage_ssim"]  += member["hasRelatedImage_ssim"]
         end
-        solr_doc["hasRelatedImage_ssim"] = (solr_doc["hasRelatedImage_ssim"] || []).uniq
-        solr_doc["file_set_ids_ssim"] = (solr_doc["file_set_ids_ssim"] || []).uniq
+      end
+      solr_doc["hasRelatedImage_ssim"] = (solr_doc["hasRelatedImage_ssim"] || []).uniq
+      solr_doc["file_set_ids_ssim"] = (solr_doc["file_set_ids_ssim"] || []).uniq
 
-        solr_doc = index_controlled_fields(solr_doc)
-        solr_doc = inherit_fields(solr_doc)
+      solr_doc = index_controlled_fields(solr_doc)
+      solr_doc = inherit_fields(solr_doc)
 
-        # I think that merging fields is now supported by blacklight on the display end. Look in to that?
-        solr_doc = merge_fields(:subject, [:subjectTopic,:subjectName,:subjectTemporal,:subjectPlace], solr_doc, :stored_searchable)
-        solr_doc = merge_fields(:subject, [:subjectTopic,:subjectName,:subjectTemporal,:subjectPlace], solr_doc, :facetable)
-        solr_doc = merge_fields(:callNumber, [:itemCallNumber,:collectionCallNumber,:boxFolder], solr_doc)
-        
-        # If this work has a related images but the thumbnail has not been set correctly, set the thumbnail
-        if (image_ids = solr_doc['hasRelatedImage_ssim']).present?
-          if solr_doc['thumbnail_path_ss'].blank? or solr_doc['thumbnail_path_ss'].to_s.downcase.include?("work")
-            solr_doc['thumbnail_path_ss'] = "/downloads/#{image_ids.last}?file=thumbnail"
-          end
+      # I think that merging fields is now supported by blacklight on the display end. Look in to that?
+      solr_doc = merge_fields(:subject, [:subjectTopic,:subjectName,:subjectTemporal,:subjectPlace], solr_doc, :stored_searchable)
+      solr_doc = merge_fields(:subject, [:subjectTopic,:subjectName,:subjectTemporal,:subjectPlace], solr_doc, :facetable)
+      solr_doc = merge_fields(:callNumber, [:itemCallNumber,:collectionCallNumber,:boxFolder], solr_doc)
+      
+      # If this work has a related images but the thumbnail has not been set correctly, set the thumbnail
+      if (image_ids = solr_doc['hasRelatedImage_ssim']).present?
+        if solr_doc['thumbnail_path_ss'].blank? or solr_doc['thumbnail_path_ss'].to_s.downcase.include?("work")
+          solr_doc['thumbnail_path_ss'] = "/downloads/#{image_ids.last}?file=thumbnail"
         end
-      when "Collection"
-        solr_doc = index_controlled_fields(solr_doc)
-
       end
     end
   end

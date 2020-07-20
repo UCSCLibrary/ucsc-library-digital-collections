@@ -74,6 +74,7 @@ class SolrDocument
 
   def visibility
     return "request" if self["visibility_ssi"] == "request"
+    return "campus" if self["visibility_ssi"] == "campus"
     super
   end
 
@@ -143,6 +144,10 @@ class SolrDocument
     "https://"+Socket.gethostname
   end
 
+  def ancestor_ids
+    fetch('ancestor_ids_ssim',[])
+  end
+    
   def member_ids
     fetch('member_ids_ssim', [])
   end
@@ -157,6 +162,10 @@ class SolrDocument
 
   def file_set_ids
     fetch('file_set_ids_ssim', [])
+  end
+
+  def file_sets
+    @file_sets ||= file_set_ids.map{|id| SolrDocument.find(id)}
   end
 
   def date_digitized

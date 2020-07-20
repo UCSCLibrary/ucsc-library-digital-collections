@@ -9,40 +9,30 @@ class Ability
     @client_ip = client_ip
     super user
   end
-
-  WHITELIST_IP_RANGES = ["128.114.0.0/16"]
+  
+  CAMPUS_IP_RANGES = ["128.114.0.0/16"]
   
   self.ability_logic += [:everyone_can_create_curation_concerns]
 
   def test_read(id)
-    # retrieve special access grants for the current user
-    grants = current_user.current_access_grants
-    # grant access if this user is authorized for this record specifically
-    return true if grants.include?(id)
-
+    return true if current_user.admin?
     # perform special checks on filesets
-    if (fs = SolrDocument.find(id))["has_model_ssim"].include? "FileSet"
-      # retrieve the parent work and grant access if it the user has specific permission
-      return false unless (work = fs.parent_work).present?
-      return true if grants.include? work.id
-      collection_ids = work.member_of_collection_ids
-      if (parent = work.parent_work).present?
-        collection_ids << parent.member_of_collection_ids
+    if (fs = SolrDocument.find(id)).hydra_model == FileSet
+      case fs.visibility
+      when "request"
+        # retrieve special access grants for the current user
+        return (fs.ancestor_ids & current_user.current_access_grants).present?
+      when "campus"
+        return on_campus?
       end
-      # check whether any of the fileset, work, or any collection the work belongs to has the visibility "request"
-      if collection_ids.map{|col_id| SolrDocument.find(col_id).visibility}.push(work.visibility).push(fs.visibility).include?("request")
-        # if so, grant access only if the user has specific privileges for that collection
-        return true if collection_ids.any?{|id| grants.include?(id)}
-        return true if on_campus?
-        return false
-      end
-      # otherwise, allow access to the fileset if the work it belongs to is public
-      return true if work.visibility == Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
     end
- 
     super
   end
 
+  def on_campus?
+    CAMPUS_IP_RANGES.any?{|range| IPAddr.new(range).include?(@client_ip || "")}
+  end
+  
   # Define any customized permissions here.
   def custom_permissions
 
@@ -63,10 +53,6 @@ class Ability
       can :view_admin_show_any, ::SolrDocument
 
       can [:show, :index, :edit, :update, :delete], BulkOps::Operation
-    end
-
-    def on_campus?
-      CAMPUS_IP_RANGES.any?{|range| IPAddr.new(range).include?(@client_ip || "")}
     end
 
     # Limits deleting objects to admin users

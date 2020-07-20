@@ -31,7 +31,7 @@ class Work < ActiveFedora::Base
       date_changed = false
       dateUpdate = self.send(field_name.to_sym).map do |date|
         next date unless date.to_s.match?(/[12][0-9]{3}-[0-9]{1,2}/)
-        year, month = date.split('-')
+        year, month = date.to_s.split('-')
         date_changed = true
         "#{month}/#{year}"
       end
@@ -105,7 +105,7 @@ class Work < ActiveFedora::Base
     # Inheriting here is the default, so skip it only if another valid option is explicitly specified
     return if ["index","display","none","false","no","off"].any?{|valid_option| Array(metadataInheritance).first.to_s.downcase.include?(valid_option)}
     schema = ScoobySnacks::METADATA_SCHEMA
-    member_of.each do |parent_doc|
+    (member_of + member_of_collections).each do |parent_doc|
       parent = ActiveFedora::Base.find(parent_doc.id)
       schema.inheritable_fields.each do |field| 
         next unless parent.respond_to?(field.name)

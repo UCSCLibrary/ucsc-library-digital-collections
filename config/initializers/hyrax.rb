@@ -135,7 +135,7 @@ Hyrax.config do |config|
    config.iiif_image_server = true
 
    # If we have an external IIIF server, use it for image requests; else, use riiif
-   config.iiif_image_url_builder = lambda do |fileset_id, base_url, size|
+   config.iiif_image_url_builder = lambda do |fileset_id, base_url, size, region="full", rotation="0"|
 
      if fileset_id.split("files").count > 1
        # When we were taking images directly from Fedora, we would pass 
@@ -157,9 +157,9 @@ Hyrax.config do |config|
 
      iiif_url = File.join(image_server_root_url,
                           encoded_id,
-                          "full",
+                          region,
                           size,
-                          "0",
+                          rotation,
                           "default.jpg")
      Rails.logger.debug "event: iiif_image_request: #{iiif_url}"
      iiif_url

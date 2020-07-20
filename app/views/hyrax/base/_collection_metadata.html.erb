@@ -1,0 +1,27 @@
+<% if presenter.collection %>
+<div id="collection-metadata">
+  <h3>About the collection</h3>
+
+  <div class="flex">
+    <%= link_to presenter.collection, url_for_document(presenter.collection) %>
+
+    <% if presenter.parent %>
+    <%= link_to presenter.parent, url_for_document(presenter.parent) %>
+    <% else %>
+    <%= presenter.attribute_to_html(:series, {label: "", render_as: :linked_attribute}) %>
+    <% end %>
+
+    <%= link_to presenter, "" %>
+  </div>
+
+  <diva>
+    <ul class="list-unstyled">
+      <% Array(presenter.collection.relatedResource).each do |resource| %>
+      <li><%= link_to resource do %>
+	Collection Guide <span class='glyphicon glyphicon-new-window' aria-hidden='true'></span>
+	<% end %></li>
+      <% end %>
+  </div>
+</div>
+<% end %>
+
