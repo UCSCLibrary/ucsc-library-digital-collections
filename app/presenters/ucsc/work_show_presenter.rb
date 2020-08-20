@@ -39,6 +39,7 @@ module Ucsc
         return "campus_lockout" if all_av_files.any?{|av_file| campus_lockout?(av_file[:fileset])}
         return 'primary_audio_player'
       elsif image? && (image = representative_presenter).present?
+        return "basic_image_primary" if parent_image?
         return "campus_lockout" if campus_lockout?(representative_presenter.solr_document)
         case universal_viewer?(uv_override)
         when "true"
@@ -49,6 +50,10 @@ module Ucsc
           return "basic_image_primary"
         end
       end
+    end
+
+    def parent_image?
+      solr_document.member_work_ids.present? && (file_set_ids - solr_document.member_work_ids).blank?
     end
 
     def campus_lockout? fs
