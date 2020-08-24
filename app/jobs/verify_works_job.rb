@@ -180,7 +180,7 @@ class VerifyWorksJob < Hyrax::ApplicationJob
   
   def simple_metadata_indexing
     simple_metadata = schema.all_field_names - schema.controlled_field_names - schema.inheritable_field_names
-    simple_metadata.all?{|field_name| @doc.send(field_name).to_a == @object.send(field_name).to_a}
+    simple_metadata.all?{|field_name| @doc.send(field_name).to_a.sort == @object.send(field_name).to_a.sort}
   end
   
   def controlled_metadata_display
@@ -200,7 +200,7 @@ class VerifyWorksJob < Hyrax::ApplicationJob
   end
 
   def collection_indexing
-    @doc.member_of_collection_ids == @object.member_of_collection_ids
+    @doc.member_of_collection_ids.sort == @object.member_of_collection_ids.sort
   end
 
   def collection_display
@@ -254,11 +254,10 @@ class VerifyWorksJob < Hyrax::ApplicationJob
     parent_ids.each do |parent_id|
       parent_doc = SolrDocument.find(parent_id)
       schema.inheritable_field_names.each do |field_name|
-        return false if (parent_doc.send(field_name) - @doc.send(field_name)).present?
+        return false if parent_doc.send(field_name).present? && @doc.send(field_name).blank?
       end
     end
     return true
   end
 
-  
 end
