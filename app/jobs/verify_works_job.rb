@@ -13,7 +13,7 @@ class VerifyWorksJob < Hyrax::ApplicationJob
 
     if collection_ids.blank?
       query = ActiveFedora::SolrQueryBuilder.construct_query_for_rel("has_model" => "Collection")
-      collection_ids = ActiveFedora::SolrService.instance.conn.get(ActiveFedora::SolrService.select_path, params: { fq: query, rows: 0})["response"]["docs"].map{|doc| doc["id"]}
+      collection_ids = ActiveFedora::SolrService.instance.conn.get(ActiveFedora::SolrService.select_path, params: { fq: query, rows: 999})["response"]["docs"].map{|doc| doc["id"]}
     end
 
     log("starting verification scan for #{collection_ids.count} collections")
@@ -22,9 +22,9 @@ class VerifyWorksJob < Hyrax::ApplicationJob
       start = 0
       collection = SolrDocument.find(collection_id)
 
-      verify_collection(collection, logfile, reportfile)
+      verify_collection(collection)
       
-      query = ActiveFedora::SolrQueryBuilder.construct_query_for_rel("has_model" => "Work","member_of_collections_ids" => collection_id.to_s)
+      query = ActiveFedora::SolrQueryBuilder.construct_query_for_rel("has_model" => "Work","member_of_collection_ids" => collection_id.to_s)
       num_works = ActiveFedora::SolrService.instance.conn.get(ActiveFedora::SolrService.select_path, params: { fq: query, rows: 0})["response"]["numFound"]
       log("verifying #{num_works} members of collection: #{collection.title.first} (#{collection.id})")
       until start > num_works
@@ -52,21 +52,23 @@ class VerifyWorksJob < Hyrax::ApplicationJob
     end
   end
 
-  def interpret_error_codes(code)
+  def interpret_error_code(code)
     bin_code = code.to_s(2).reverse
-    tests.reduce([]){ |errors, test| errors << test[:message] if bin_code[test[:id]].to_b}
+    tests.reduce([]){ |errors, test| bin_code[test[:id]].to_i.zero? ? errors : (errors << test[:message]) }
   end
 
   def generate_report
     #TODO
     @codes = @data.keys.group_by{|key| @data[key]}
     File.open(logname("final_report"),'w') do |data_file|
-      @codes.each_with_index do |code, ids|
+      @codes.each do |code, ids|
+        next if code.to_i == 0
         data_file.puts("We found #{ids.count} objects with the following combination of errors:")
         interpret_error_code(code).each{ |message| data_file.puts(message)}
+        data_file << "\n"
         data_file.puts("These are the ids of the works with this combination of errors:")
         data_file.puts(ids.join(','))
-        data_file << "\n\n"
+        data_file << "\n------------------------------------------\n"
       end
     end
   end
@@ -79,7 +81,7 @@ class VerifyWorksJob < Hyrax::ApplicationJob
   def verify_collection(doc)
     doc = SolrDocument.find(doc) if doc.is_a?(String)
     #skip if collection is included in existing data
-    return if data[doc.id].present?
+    return if @data[doc.id].present?
     log("verifying collection: #{doc.title.first} (#{doc.id})")
     run_tests(doc)
   end
@@ -91,20 +93,18 @@ class VerifyWorksJob < Hyrax::ApplicationJob
   def verify_work(doc)
     #skip if work is included in existing data
     doc = SolrDocument.find(doc) if doc.is_a?(String)
-    return if data[doc.id].present?
+    return if @data[doc.id].present?
     log("verifying work: #{doc.title.first} (#{doc.id})")
     run_tests(doc)
   end
 
   def log(line)
-    @log_file.write(Time.now.strftime("%m/%d/%Y %I:%M %p: ")+line)
+    @log_file.puts(Time.now.strftime("%m/%d/%Y %I:%M %p: ")+line)
   end
 
 
   def tests
-    [{id: 0, method: :object_exists, type: :display,
-      message: "The object can be found in both solr and fedora"},
-     {id: 1, method: :page_load, type: :display,
+    [{id: 1, method: :page_load, type: :display,
        message: "The work show page failed to load successfully"},
      {id: 2, method: :simple_metadata_display, type: :display,
        message: "Some simple metadata is not displaying properly"},
@@ -147,16 +147,16 @@ class VerifyWorksJob < Hyrax::ApplicationJob
     @doc = doc
     @object = ActiveFedora::Base.find(doc.id)
     # this code is a binary combination of the ids of all the failed tests
-    result_code = tests.reduce(0){ |code, test| code + (!run_test(test).to_i * 2**test[:id].to_i)}
+    result_code = tests.select{|test| !run_test(test) }.reduce(0){ |code, test| code + 2**test[:id].to_i}
     @data[doc.id]=result_code
   end
 
   def run_test test
-    test = get_test test if test.is_integer?
-    return true if test[:object_types].present? && !test[:object_types].include?(@Object.class)
+    test = get_test test if test.is_a?(Integer)
+    return true if (test[:object_types].present? && !test[:object_types].include?(@Object.class))
     return false unless (@doc.id == @object.id)
     begin
-      return call(test[:method])
+      return send(test[:method])
     rescue
       return false
     end
@@ -180,7 +180,7 @@ class VerifyWorksJob < Hyrax::ApplicationJob
   
   def simple_metadata_indexing
     simple_metadata = schema.all_field_names - schema.controlled_field_names - schema.inheritable_field_names
-    simple_metadata.all?{|field_name| @doc.call(field_name).to_a == @object.call(field_name).to_a}
+    simple_metadata.all?{|field_name| @doc.send(field_name).to_a == @object.send(field_name).to_a}
   end
   
   def controlled_metadata_display
@@ -250,7 +250,7 @@ class VerifyWorksJob < Hyrax::ApplicationJob
   end
   
   def inheritance
-    return true unless (parent_ids = (@doc.parent_id + @doc.member_of_collection_ids)).present?
+    return true unless (parent_ids = (Array(@doc.parent_id) + Array(@doc.member_of_collection_ids))).present?
     parent_ids.each do |parent_id|
       parent_doc = SolrDocument.find(parent_id)
       schema.inheritable_field_names.each do |field_name|
