@@ -1,6 +1,8 @@
 class VerifyWorksJob < Hyrax::ApplicationJob
+
+  NOTIFICATION_RECIPIENTS = ['ethenry@ucsc.edu']
   
-  def perform(job_name: nil, collection_ids: nil, log: nil, report: nil)
+  def perform(job_name: nil, collection_ids: nil, log: nil, report: nil, ignore_private_works: false)
     @job_name = job_name || Time.now.strftime("%m-%d-%Y_%I%M%p")
     
     recover_existing_data
@@ -22,7 +24,7 @@ class VerifyWorksJob < Hyrax::ApplicationJob
       start = 0
       collection = SolrDocument.find(collection_id)
 
-      verify_collection(collection)
+      verify_collection(collection) unless (collection.visibility == "restricted" && ignore_private_works)
       
       query = ActiveFedora::SolrQueryBuilder.construct_query_for_rel("has_model" => "Work","member_of_collection_ids" => collection_id.to_s)
       num_works = ActiveFedora::SolrService.instance.conn.get(ActiveFedora::SolrService.select_path, params: { fq: query, rows: 0})["response"]["numFound"]
@@ -30,7 +32,7 @@ class VerifyWorksJob < Hyrax::ApplicationJob
       until start > num_works
         works = ActiveFedora::SolrService.instance.conn.get(ActiveFedora::SolrService.select_path, params: { fq: query, rows: rows, start: start})["response"]["docs"]
         works.each do  |wrk|
-          verify_work(wrk["id"])
+          verify_work(wrk["id"]) unless (work.visibility == "restricted" && ignore_private_works)
         end
         start = start + rows
         write_data
@@ -58,9 +60,9 @@ class VerifyWorksJob < Hyrax::ApplicationJob
   end
 
   def generate_report
-    #TODO
     @codes = @data.keys.group_by{|key| @data[key]}
-    File.open(logname("final_report"),'w') do |data_file|
+    report_filename = logname("final_report")
+    File.open(report_filename,'w') do |data_file|
       @codes.each do |code, ids|
         next if code.to_i == 0
         data_file.puts("We found #{ids.count} objects with the following combination of errors:")
@@ -71,8 +73,22 @@ class VerifyWorksJob < Hyrax::ApplicationJob
         data_file << "\n------------------------------------------\n"
       end
     end
+    send_report_data report_filename
   end
 
+  def send_report_data report_filename
+    subject = "DAMS content scan results ready"
+    message = "We finished running checks on digital objects in the DAMS.\n"
+    report = File.read(report_filename || logname("final_report"))
+    message += "We found the following issues:\n\n#{report}" unless report.blank?
+    NOTIFICATION_RECIPIENTS.each do |email|
+      ActionMailer::Base.mail(from: "admin@digitalcollections.library.ucsc.edu",
+                              to: email,
+                              subject: subject,
+                              body: message).deliver
+    end
+  end
+  
   def recover_existing_data
     return unless File.exists?(logname("in_progress_data"))
     @data = JSON.parse(File.read(logname("in_progress_data"))) || {}
@@ -135,7 +151,9 @@ class VerifyWorksJob < Hyrax::ApplicationJob
      {id: 15, method: :fileset_indexing, object_types: [Work],
        message: "The object is not indexing its filesets properly"},
      {id: 16, method: :inheritance,
-      message: "The object has not inherited metadata properly from its parent work"}]
+      message: "The object has not inherited metadata properly from its parent work"},
+    {id: 17, method: :fileset_permissions,
+      message: "The visibility of this work's fileset(s) is more restrictive than that of the work itself"}]
   end
 
   def get_test id
@@ -258,6 +276,12 @@ class VerifyWorksJob < Hyrax::ApplicationJob
       end
     end
     return true
+  end
+
+  def fileset_permissions
+    return true unless (file_set_ids = doc.file_set_ids).present?
+    return true if @doc.visibility == "restricted"
+    !file_set_ids.any?{|id| SolrDocument.find(id).visibility == "restricted"}
   end
 
 end
