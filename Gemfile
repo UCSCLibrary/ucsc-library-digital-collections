@@ -66,9 +66,9 @@ group :development, :test do
   gem 'rspec-rails', :require => false
   gem 'factory_bot_rails', :require => false
   gem 'rails-controller-testing'
-  gem 'capybara'
-  gem 'selenium-webdriver'
-  gem 'webdrivers'
+#  gem 'capybara'
+#  gem 'selenium-webdriver'
+#  gem 'webdrivers'
   gem 'sauce_whisk'
   gem 'capistrano'
   gem 'capistrano-bundler'
@@ -76,6 +76,11 @@ group :development, :test do
   gem 'capistrano-rails'
   gem 'capistrano-rvm'
 end
+
+gem 'capybara'
+gem 'selenium-webdriver'
+gem 'webdrivers'
+ 
 
 gem 'hydra-role-management'
 gem 'browse-everything'
