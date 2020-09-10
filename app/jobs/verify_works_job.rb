@@ -4,7 +4,8 @@ class VerifyWorksJob < Hyrax::ApplicationJob
   
   def perform(job_name: nil, collection_ids: nil, log: nil, report: nil, ignore_private_works: false)
     @job_name = job_name || Time.now.strftime("%m-%d-%Y_%I%M%p")
-    
+
+    setup_selenium
     recover_existing_data
     @log_file ||= File.open(logname(),'w')
     @data = {}
@@ -32,7 +33,7 @@ class VerifyWorksJob < Hyrax::ApplicationJob
       until start > num_works
         works = ActiveFedora::SolrService.instance.conn.get(ActiveFedora::SolrService.select_path, params: { fq: query, rows: rows, start: start})["response"]["docs"]
         works.each do  |wrk|
-          verify_work(wrk["id"]) unless (work.visibility == "restricted" && ignore_private_works)
+          verify_work(wrk["id"]) unless (work['visibility_ssi'] == "restricted" && ignore_private_works)
         end
         start = start + rows
         write_data
@@ -99,6 +100,7 @@ class VerifyWorksJob < Hyrax::ApplicationJob
     #skip if collection is included in existing data
     return if @data[doc.id].present?
     log("verifying collection: #{doc.title.first} (#{doc.id})")
+    @browser.visit("/collections/#{@doc.id}")
     run_tests(doc)
   end
 
@@ -111,6 +113,8 @@ class VerifyWorksJob < Hyrax::ApplicationJob
     doc = SolrDocument.find(doc) if doc.is_a?(String)
     return if @data[doc.id].present?
     log("verifying work: #{doc.title.first} (#{doc.id})")
+    @browser.visit("/concern/works/#{@doc.id}")
+    @browser.find("#show-more-metadata>a").click
     run_tests(doc)
   end
 
@@ -118,16 +122,27 @@ class VerifyWorksJob < Hyrax::ApplicationJob
     @log_file.puts(Time.now.strftime("%m/%d/%Y %I:%M %p: ")+line)
   end
 
+  def setup_selenium
+    Capybara.app_host = "https://digitalcollections.library.ucsc.edu"
+    Capybara.register_driver :headless_firefox do |app|
+      browser_options = Selenium::WebDriver::Firefox::Options.new()
+      browser_options.args << '--headless'
+      Capybara::Selenium::Driver.new(
+        app,
+        browser: :firefox,
+        options: browser_options
+      )
+    end
+    @browser = Capybara::Session.new(:headless_firefox)
+  end
 
   def tests
     [{id: 1, method: :page_load, type: :display,
        message: "The work show page failed to load successfully"},
-     {id: 2, method: :simple_metadata_display, type: :display,
-       message: "Some simple metadata is not displaying properly"},
+     {id: 2, method: :metadata_display, type: :display,
+       message: "Some metadata is not displaying properly"},
      {id: 3, method: :simple_metadata_indexing,
        message: "Some simple metadata is not being indexed properly"},
-     {id: 4, method: :controlled_metadata_display, type: :display,
-       message: "Some controlled metadata is not displaying properly"},
      {id: 5, method: :controlled_metadata_indexing,
        message: "Some controlled metadata is not being indexed properly"},
      {id: 6, method: :character_encoding,
@@ -152,7 +167,7 @@ class VerifyWorksJob < Hyrax::ApplicationJob
        message: "The object is not indexing its filesets properly"},
      {id: 16, method: :inheritance,
       message: "The object has not inherited metadata properly from its parent work"},
-    {id: 17, method: :fileset_permissions,
+     {id: 17, method: :fileset_permissions,
       message: "The visibility of this work's fileset(s) is more restrictive than that of the work itself"}]
   end
 
@@ -185,10 +200,15 @@ class VerifyWorksJob < Hyrax::ApplicationJob
   end
 
   def page_load
-    return true
+    @browser.text.include? "UNIVERSITY_LIBRARY"
   end
 
-  def simple_metadata_display
+  def metadata_display
+    schema.display_field_names.each do |field|
+      @doc.send(field).each do |metadata_element|
+        return false unless @browser.text.include?(metadata_element)
+      end
+    end
     return true
   end
 
@@ -201,10 +221,6 @@ class VerifyWorksJob < Hyrax::ApplicationJob
     simple_metadata.all?{|field_name| @doc.send(field_name).to_a.sort == @object.send(field_name).to_a.sort}
   end
   
-  def controlled_metadata_display
-    return true
-  end
-
   def controlled_metadata_indexing
     controlled_metadata = schema.controlled_field_names
     controlled_metadata.all? do |field_name|
@@ -222,7 +238,7 @@ class VerifyWorksJob < Hyrax::ApplicationJob
   end
 
   def collection_display
-    return true
+    @doc.member_of_collections.all?{|colname| @browser.text.include?(colname)}
   end
 
   def parent_indexing
@@ -243,7 +259,8 @@ class VerifyWorksJob < Hyrax::ApplicationJob
   end
 
   def primary_image_display
-    return true
+    return true unless @doc.image?
+    @browser.find("img.primary-media")
   end
 
   def ordered_members_indexing
@@ -260,10 +277,11 @@ class VerifyWorksJob < Hyrax::ApplicationJob
   end
 
   def child_work_display
-    return true
+    @object.members.select{|member| member.class == Work}.all?{|member| @browser.text.include?(member.title.first.truncate(10))}
   end
 
   def multiple_filesets_indexing
+    # Need to think through how to test this
     return true
   end
   
@@ -279,9 +297,10 @@ class VerifyWorksJob < Hyrax::ApplicationJob
   end
 
   def fileset_permissions
-    return true unless (file_set_ids = doc.file_set_ids).present?
+    return true unless (file_set_ids = @doc.file_set_ids).present?
     return true if @doc.visibility == "restricted"
-    !file_set_ids.any?{|id| SolrDocument.find(id).visibility == "restricted"}
+    return true unless file_set_ids.any?{|id| SolrDocument.find(id).visibility == "restricted"}
+    return false
   end
 
 end
