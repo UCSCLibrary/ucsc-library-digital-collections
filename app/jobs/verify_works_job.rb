@@ -33,7 +33,7 @@ class VerifyWorksJob < Hyrax::ApplicationJob
       until start > num_works
         works = ActiveFedora::SolrService.instance.conn.get(ActiveFedora::SolrService.select_path, params: { fq: query, rows: rows, start: start})["response"]["docs"]
         works.each do  |wrk|
-          verify_work(wrk["id"]) unless (work['visibility_ssi'] == "restricted" && ignore_private_works)
+          verify_work(wrk["id"]) unless (wrk['visibility_ssi'] == "restricted" && ignore_private_works)
         end
         start = start + rows
         write_data
@@ -100,7 +100,7 @@ class VerifyWorksJob < Hyrax::ApplicationJob
     #skip if collection is included in existing data
     return if @data[doc.id].present?
     log("verifying collection: #{doc.title.first} (#{doc.id})")
-    @browser.visit("/collections/#{@doc.id}")
+    @browser.visit("/collections/#{doc.id}")
     run_tests(doc)
   end
 
@@ -113,7 +113,7 @@ class VerifyWorksJob < Hyrax::ApplicationJob
     doc = SolrDocument.find(doc) if doc.is_a?(String)
     return if @data[doc.id].present?
     log("verifying work: #{doc.title.first} (#{doc.id})")
-    @browser.visit("/concern/works/#{@doc.id}")
+    @browser.visit("/concern/works/#{doc.id}")
     @browser.find("#show-more-metadata>a").click
     run_tests(doc)
   end
@@ -134,6 +134,14 @@ class VerifyWorksJob < Hyrax::ApplicationJob
       )
     end
     @browser = Capybara::Session.new(:headless_firefox)
+    sign_in
+  end
+
+  def sign_in
+    @browser.visit('/users/sign_in')
+    @browser.find('#user_email').set(ENV['ADMIN_USERNAME'])
+    @browser.find('#user_pass').set(ENV['ADMIN_PASSWORD'])
+    @browser.click_button('Log in')
   end
 
   def tests
@@ -200,13 +208,14 @@ class VerifyWorksJob < Hyrax::ApplicationJob
   end
 
   def page_load
-    @browser.text.include? "UNIVERSITY_LIBRARY"
+    @browser.text.include? "UNIVERSITY LIBRARY"
   end
 
   def metadata_display
     schema.display_field_names.each do |field|
       @doc.send(field).each do |metadata_element|
-        return false unless @browser.text.include?(metadata_element)
+        metadata_element = metadata_element.strftime("%m/%d/%Y") if metadata_element.is_a?(Date)
+        return false unless @browser.text.include?(metadata_element.to_s.strip)
       end
     end
     return true
@@ -238,7 +247,7 @@ class VerifyWorksJob < Hyrax::ApplicationJob
   end
 
   def collection_display
-    @doc.member_of_collections.all?{|colname| @browser.text.include?(colname)}
+    @object.member_of_collections.all?{|col| @browser.text.include?(col.title.first)}
   end
 
   def parent_indexing
