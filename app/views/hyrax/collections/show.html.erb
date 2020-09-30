@@ -40,7 +40,7 @@
   </div>
 
   <div class="row">
-    <div class="col-sm-4">
+    <!-- <div class="col-sm-4"> --><div class="col-sm-4 hidden">
       <!-- Search results label -->
       <% if @members_count > 0 || @presenter.subcollection_count > 0 %>
         <div class="hyc-blacklight hyc-bl-title">
@@ -60,7 +60,7 @@
       </div>
     </div>
 
-    <div class="col-sm-8">
+    <!-- <div class="col-sm-8"> --><div>
       <!-- Subcollections -->
       <% if @presenter.collection_type_is_nestable? && @subcollection_count > 0 %>
           <div class="hyc-blacklight hyc-bl-title">
