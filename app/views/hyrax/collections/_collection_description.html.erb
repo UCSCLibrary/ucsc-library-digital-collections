@@ -1,7 +1,7 @@
 <% presenter.description.each do |description| %>
   <%= simple_format(auto_link(description)) %>
 <% end %>
-<% if presenter.related_resource %>
+<% if presenter.respond_to?(:related_resource) && presenter.related_resource %>
 	<%= link_to presenter.related_resource do %>
 		Visit the collection guide <span class='glyphicon glyphicon-arrow-right' aria-hidden='true'></span>
 	<% end %>
