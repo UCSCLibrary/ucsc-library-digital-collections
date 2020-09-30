@@ -456,17 +456,6 @@ div.uv.viewer iframe {
     padding:0;
 }
 
-/* Collection landing page */
-#collection-description {
-    background-color: #f7f7f7;
-    padding: 1em;
-    margin-bottom: 30px;
-    h1 {
-        margin: 0;
-    }
-}
-
-
 /* Single work page */
 #display-work-img {
     width: 100vw;
@@ -673,6 +662,25 @@ table.work.attributes {
 }
 
 /* Collection Landing page & Search Results page(?) */
+header#collection-description {
+    display: block;
+    overflow: hidden;
+    margin-bottom: 30px;
+    padding: 1em;
+    background-color: #f7f7f7;
+    h1 {
+        margin: 0;
+    }
+    .col-md-9 {
+        padding-top: 15px;
+        height: 250px;
+        a {
+            position: absolute;
+            bottom: 10px;
+            right: 15px;
+        }
+    }
+}
 .hyc-bl-results #documents { 
     clear: both !important; 
     .document {
