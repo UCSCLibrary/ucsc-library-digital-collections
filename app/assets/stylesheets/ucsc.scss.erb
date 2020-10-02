@@ -8,6 +8,7 @@ $ucsc-gold: #ffd700;
 $header-height: 40px;
 $screen-xs: 480px;
 $screen-sm: 768px;
+$screen-md: 992px;
 
 /* Helper classes */
 .flex {
@@ -656,6 +657,154 @@ table.work.attributes {
         margin-bottom: 20px;
         > span {
             flex: 2 1 auto;
+        }
+    }
+}
+
+/* Collection Landing page & Search Results page(?) */
+header#collection-description {
+    display: block;
+    overflow: hidden;
+    margin-bottom: 30px;
+    padding: 1em;
+    background-color: #f7f7f7;
+    h1 {
+        margin: 0;
+    }
+    .col-md-9 {
+        padding-top: 15px;
+        height: 250px;
+        a {
+            position: absolute;
+            bottom: 10px;
+            right: 15px;
+        }
+    }
+}
+.hyc-bl-results #documents { 
+    clear: both !important; 
+    .document {
+        border-bottom: none;
+    }
+    .thumbnail a > img {
+        background-color: #f7f7f7;
+        min-height: 225px;
+    }
+}
+
+.hyc-bl-title {
+    float: left;
+}
+
+/* Results Sort and Per Page */
+.hyc-bl-sort {
+    float: right;
+    margin-top: .5em;
+    .view-type,
+    #per_page-dropdown {
+        display: none;
+    }
+    .btn {
+        padding: 1px 12px;
+    }
+    .btn-default {
+        background-color: #f5f5f5;
+    }
+    button.btn {
+        border: none;
+        color: $ucsc-blue;
+        .glyphicon {
+            top: 3px;
+        }
+    }
+    #sort-dropdown {
+        margin-right: .7em;
+    }
+    @media (min-width: $screen-sm) {
+        #per_page-dropdown { display: inline-block; }
+    }
+    @media (min-width: $screen-md) {
+        .view-type { display: inline-block; }
+    }
+}
+
+/* Search within collection */
+.hyc-bl-search .edit_collection {
+    .input-group {
+        margin-bottom: 0;
+    }
+    #collection_search,
+    #collection_submit {
+        height: 35.4px;
+        border-radius: 0;
+    }
+    #collection_search {
+        padding: 10px 15px;
+    }
+    #collection_submit {
+        background-color: #757575;
+        border-color: #757575;
+        color: #fff;
+    }
+}
+
+/* Facets */
+#facets {
+    .top-panel-heading {
+        padding: 0;
+        border: none;
+    }
+    #facet-panel-collapse {
+        padding-right: 0;
+        .panel-default > .panel-heading {
+            background-color: #fff;
+            color: #757575;
+            h3 {
+                font-size: 1em;
+            }
+        }
+        .panel {
+            border-radius: 0;
+            margin-top: 20px;
+        }
+        /* Swap the glyphicons per style guide */
+        .panel-heading.collapse-toggle .panel-title::after {
+            content: "\e113";
+        }
+        .panel-heading.collapse-toggle.collapsed .panel-title::after {
+            content: "\e114";
+        }
+    }
+    #facet-panel-collapse.in,
+    #facet-panel-collapse.collapsing {
+        margin-top: 60px;
+    }
+    .facets-toggle {
+        position: absolute;
+        left: 0;
+        background-color: #20477d;
+        color: #fff;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+}
+
+/* Pagination */
+.hyc-bl-pager {
+    ul.pagination {
+        display: flex;
+        justify-content: center;
+
+        .disabled span, li a {
+            border: none;
+        }
+
+        li span, li a {
+            border-radius: 20px !important;
+        }
+        .active span {
+            border-color: #747474;
+            background-color: #747474;
         }
     }
 }

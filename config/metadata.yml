@@ -499,6 +499,14 @@ fields:
       - secondary
       - editor_primary
 
+  metadataSource:
+    definition: Notes about the source of metadata i.e. where the descriptive information originated, who contributed to it, what issues may exist within it.
+    label: Metadata Source
+    hidden: true
+    predicate: local:metadataSource
+    display_group: admin_only
+    inheritable: false
+
   metadataInheritance:
     definition: Determines whether and how a work inherits metadata from another work, usually its parent
     label: Inheritance

@@ -4,7 +4,7 @@ RSpec.feature 'An admin user navigating the Bulk Ops menus', js: false do
 
   before(:each) do
     visit '/users/sign_in'
-    fill_in "user_email", with: "ethenry@ucsc.edu"
+    fill_in "user_email", with: (ENV['ADMIN_USERNAME'] || 'ethenry@ucsc.edu')
     fill_in "user_password", with: ENV['ADMIN_PASSWORD']
     page.click_button('Log in')
   end

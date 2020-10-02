@@ -1,0 +1,94 @@
+<% provide :page_title, construct_page_title(@presenter.title) %>
+<div itemscope itemtype="http://schema.org/CollectionPage">
+  <div class="row">
+    <div class="col-md-12">
+
+      <% unless @presenter.banner_file.blank? %>
+          <header id="collection-description" class="hyc-banner row" style="background-image:url(<%= @presenter.banner_file %>)">
+      <% else %>
+          <header id="collection-description" class="row">
+      <% end %>
+
+      <div class="hyc-title col-md-12">
+        <h1><%= @presenter.title.first %></h1>
+      </div>
+
+      <% unless @presenter.logo_record.blank? %>
+          <div class="hyc-logos col-md-3">
+            <% @presenter.logo_record.each_with_index  do |lr, i| %>
+
+                <% if lr[:linkurl].blank? %>
+                    <img alt="<%= lr[:alttext] %>" src="<%= lr[:file_location] %>" />
+                <% else %>
+                    <a href="<%= lr[:linkurl] %>">
+                      <img alt="<%= lr[:alttext] %>" src="<%= lr[:file_location] %>" />
+                    </a>
+                <% end %>
+
+            <% end %>
+          </div>
+      <% end %>
+      <div class="col-md-3">
+        <%= render 'hyrax/collections/media_display', presenter: @presenter %>
+      </div>
+      <div class="col-md-9">
+        <%= render 'collection_description', presenter: @presenter %>
+      </div>
+      </header>
+
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- <div class="col-sm-4"> --><div class="col-sm-4 hidden">
+      <!-- Search results label -->
+      <% if @members_count > 0 || @presenter.subcollection_count > 0 %>
+        <div class="hyc-blacklight hyc-bl-title">
+          <h2>
+            <% if has_collection_search_parameters? %>
+                <%= t('hyrax.dashboard.collections.show.search_results') %>
+            <% end %>
+          </h2>
+        </div>
+      <% end %>
+
+      <!-- Search bar -->
+      <div class="hyc-blacklight hyc-bl-search hyc-body">
+        <div>
+          <%= render 'facets' %>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="col-sm-8"> --><div>
+      <!-- Subcollections -->
+      <% if @presenter.collection_type_is_nestable? && @subcollection_count > 0 %>
+          <div class="hyc-blacklight hyc-bl-title">
+            <h4><%= t('.subcollection_count') %> (<%= @subcollection_count %>)</h4>
+          </div>
+          <div class="hyc-blacklight hyc-bl-results">
+            <%= render 'subcollection_list', collection: @subcollection_docs %>
+          </div>
+      <% end %>
+
+      <!-- Works -->
+      <% if @members_count > 0 %>
+          <div class="hyc-blacklight hyc-bl-title">
+            <h4><%= @members_count %> <%= t('.works_in_collection') %></h4>
+          </div>
+
+          <div class="hyc-blacklight hyc-bl-sort clearfix">
+            <%= render 'sort_and_per_page', collection: @presenter %>
+          </div>
+
+          <div class="hyc-blacklight hyc-bl-results">
+            <%= render_document_index @member_docs %>
+          </div>
+
+          <div class="hyc-blacklight hyc-bl-pager">
+            <%= render 'paginate' %>
+          </div>
+      <% end # if @members_count > 0 %>
+    </div>
+  </div>
+</div>
