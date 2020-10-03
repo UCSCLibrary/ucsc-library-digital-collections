@@ -1,3 +1,4 @@
+<%#= Custom file %>
 <%= PulUvRails::UniversalViewer.script_tag %>
 <div class="viewer-wrapper">
   <div class="uv viewer" data-config="/uv_config.json" data-uri="<%= main_app.polymorphic_path [main_app, :manifest, @presenter] %>"></div>

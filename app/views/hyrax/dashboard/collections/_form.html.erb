@@ -1,3 +1,5 @@
+<%#= Customized from Hyrax 2.4.0 
+  #  Only edit is a method change in two places %>
 <div class="panel panel-default tabs" id="collection-edit-controls">
   <ul class="nav nav-tabs" role="tablist">
     <li class="active">
@@ -29,6 +31,7 @@
           <div class="panel-body">
 
             <div id="base-terms">
+              <%#= Customized method from render_edit_field_partial to render_edit_field_partial_ucsc %>
               <% f.object.primary_terms.each do |term| %>
                 <%= render_edit_field_partial_ucsc(term, f: f) %>
               <% end %>
@@ -48,6 +51,7 @@
                       'aria-expanded'=> "false",
                       'aria-controls'=> "extended-terms" %>
               <div id="extended-terms" class='collapse'>
+                <%#= Customized method from render_edit_field_partial to render_edit_field_partial_ucsc %>
                 <% f.object.secondary_terms.each do |term| %>
                   <%= render_edit_field_partial_ucsc(term, f: f) %>
                 <% end %>

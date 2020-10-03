@@ -1,9 +1,12 @@
+<%#= Customized from Hyrax 2.4.0 %>
 <% menu = Hyrax::MenuPresenter.new(self) %>
 <div class="sidebar-toggle"><span class="fa fa-chevron-circle-right"></span></div>
+<%#= Removed a nav element that wrapped the rest of this markup%>
 <ul class="nav nav-pills nav-stacked">
   <li>
     <div class="profile">
       <div class="profile-image">
+        <%#= Customized to add current_user check %>
         <%= image_tag current_user.avatar.url(:thumb), width: 100 if current_user && current_user.avatar.present? %>
       </div>
       <div class="profile-data">
@@ -14,6 +17,7 @@
 
   <%= render 'hyrax/dashboard/sidebar/activity', menu: menu %>
   <%= render 'hyrax/dashboard/sidebar/repository_content', menu: menu %>
+  <%#= Removed tasks and added ingests %>
   <%= render 'hyrax/dashboard/sidebar/ingests', menu: menu %>
   <%= render 'hyrax/dashboard/sidebar/configuration', menu: menu %>
 </ul>

@@ -1,3 +1,4 @@
+<%#= Custom file %> 
 <% if (av_files = @presenter.all_av_files).any? %>
     <% if av_files.count == 1 %>
         <%= render 'single_player', file_set_id: av_files.first[:id]  %>
