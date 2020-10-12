@@ -39,7 +39,7 @@
     <div class="col-sm-4">
         <%= render "show_actions", presenter: @presenter %>
         <%# Use the fully qualified path to avoid RSpec error: translation missing: en.hyrax.base.show.html.erb.last_modified %>
-        <%= render 'representative_media', presenter: @presenter unless av_files.any? or @presenter.image? %>
+        <%= render 'representative_media', presenter: @presenter unless av_files.present? or @presenter.image? %>
     </div>
 </div>
 
