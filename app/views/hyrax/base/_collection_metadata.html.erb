@@ -4,12 +4,13 @@
   <h3>About the collection</h3>
 
   <div class="flex">
-    <%= link_to presenter.collection, url_for_document(presenter.collection) %>
-
+    <% if presenter.collection.present? && presenter.collection.id.present? %>
+      <%= link_to presenter.collection, url_for_document(presenter.collection) %>
+    <% end %>
     <% if presenter.parent %>
-    <%= link_to presenter.parent, url_for_document(presenter.parent) %>
+      <%= link_to presenter.parent, url_for_document(presenter.parent) %>
     <% else %>
-    <%= presenter.attribute_to_html(:series, {label: "", render_as: :linked_attribute}) %>
+      <%= presenter.attribute_to_html(:series, {label: "", render_as: :linked_attribute}) %>
     <% end %>
 
     <%= link_to presenter, "" %>
