@@ -3,7 +3,9 @@ class FileSetIndexer < Hyrax::FileSetIndexer
 
   def generate_solr_document
     super.tap do |solr_doc|
-      solr_doc["file_id_ss"] = object.original_file.id
+      if object.original_file.present?
+        solr_doc["file_id_ss"] = object.original_file.id
+      end
       solr_doc["ancestor_ids_ssim"] = ancestor_ids(object)
       visibilities = solr_doc["ancestor_ids_ssim"].map{|id| SolrDocument.find(id).visibility}
       if (special_vis = (['request','campus'] & visibilities)).present?

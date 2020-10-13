@@ -1,9 +1,14 @@
+<%#= Customized from Hyrax 2.4.0 %>
 <% presenter = featured.presenter %>
 <li class="featured-item" data-id="<%= presenter.id %>">
+  <%#= Added main class %>
   <div class="main row">
+	<%#= Added this col for thumbnail %>
     <div class="col-sm-3">
       <%= render_thumbnail_tag presenter, { width: 200, style: "width:200px;" } %>
     </div>
+    <%#= end %>
+	<%#= Changed col-sm-10 to col-sm-9 %>
     <div class="col-sm-9">
       <%= render 'hyrax/homepage/featured_fields', featured: presenter %>
     </div>
