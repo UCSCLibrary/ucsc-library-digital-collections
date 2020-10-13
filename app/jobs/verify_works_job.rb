@@ -114,7 +114,11 @@ class VerifyWorksJob < Hyrax::ApplicationJob
     return if @data[doc.id].present?
     log("verifying work: #{doc.title.first} (#{doc.id})")
     @browser.visit("/concern/works/#{doc.id}")
-    @browser.find("#show-more-metadata>a").click
+    begin
+      @browser.find("#show-more-metadata>a").click
+    rescue Capybara::ElementNotFound
+      #ignore for now
+    end
     run_tests(doc)
   end
 
@@ -140,7 +144,7 @@ class VerifyWorksJob < Hyrax::ApplicationJob
   def sign_in
     @browser.visit('/users/sign_in')
     @browser.find('#user_email').set(ENV['ADMIN_USERNAME'])
-    @browser.find('#user_pass').set(ENV['ADMIN_PASSWORD'])
+    @browser.find('#user_password').set(ENV['ADMIN_PASSWORD'])
     @browser.click_button('Log in')
   end
 
@@ -213,9 +217,10 @@ class VerifyWorksJob < Hyrax::ApplicationJob
 
   def metadata_display
     schema.display_field_names.each do |field|
-      @doc.send(field).each do |metadata_element|
-        metadata_element = metadata_element.strftime("%m/%d/%Y") if metadata_element.is_a?(Date)
-        return false unless @browser.text.include?(metadata_element.to_s.strip)
+      next if field=="dateCreated" && @doc.dateCreatedDisplay.present?
+      @doc.send(field).each do |value|
+        vals = value.is_a?(Date) ? [value.strftime("%Y-%m-%d"), value.strftime("%m/%d/%Y")] : [value.to_s]
+       return false unless vals.any?{|val| @browser.text.include?(val.strip.squeeze(' '))}
       end
     end
     return true
