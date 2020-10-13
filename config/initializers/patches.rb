@@ -28,9 +28,3 @@ class Hydra::Derivatives::Processors::Jpeg2kImage
       image
     end
 end
-
-class Hyrax::CollectionPresenter
-  def permission_badge_class
-    Ucsc::PermissionBadge
-  end
-end
