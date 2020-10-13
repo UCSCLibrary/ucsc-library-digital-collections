@@ -59,8 +59,8 @@ class Work < ActiveFedora::Base
       representative_id = members.reduce([]){|ids, member| ids + Array(member.representative_id) }.first
     end
 
-    thumbnail_id = representative_id if (thumbnail_id.blank? && representative_id.present?)
-
+    set_thumbnail
+    
     # set metadataInheritance based on collection or admin set if applicable
     if metadataInheritance.blank?
       if (collection = member_of.find{|col| col.class == Collection && col.metadataInheritance.present?})
@@ -74,6 +74,20 @@ class Work < ActiveFedora::Base
     rv = super *args
     cache_manifest
     return rv
+  end
+
+  def set_thumbnail
+    # If the thumbnail id is not yet set, set it to something reasonable
+    # (if there is something reasonable to set it to)
+    if thumbnail_id.blank?
+      if representative_id.present?
+        self.thumbnail_id = representative_id
+      elsif file_sets.present?
+        self.thumbnail_id = file_sets.first.id
+      elsif members.present?
+        self.thumbnail_id = members.map(&:thumbnail_id).compact.first
+      end
+    end
   end
 
   def cache_manifest
