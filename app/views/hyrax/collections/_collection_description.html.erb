@@ -1,6 +1,9 @@
+<%#= Customized from Hyrax 2.4.0 
+  #  Renamed .html.erb %>
 <% presenter.description.each do |description| %>
   <%= simple_format(auto_link(description)) %>
 <% end %>
+<%#= Customized to add the link to collection guide %>
 <% if presenter.respond_to?(:related_resource) && (links = presenter.related_resource) %>
   <%= link_to links.first do %>
     Visit the collection guide <span class='glyphicon glyphicon-arrow-right' aria-hidden='true'></span>

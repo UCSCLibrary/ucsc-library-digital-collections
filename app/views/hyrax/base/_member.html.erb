@@ -1,9 +1,13 @@
+<%#= Customized from Hyrax 2.4.0 %>
 <tr class="<%= dom_class(member) %> attributes">
   <td class="thumbnail">
     <%= render_thumbnail_tag member %>
   </td>
+  <%#= classes altered on this TD element %>
   <td class="attribute filename"><%= link_to(member.link_name, contextual_path(member, @presenter)) %></td>
+  <%#= date_uploaded changed to date_created %>
   <td class="attribute date_created"><%= member.try(:date_created).first %></td>
+  <%#= permission badge TD removed %>
   <td>
     <%= render 'actions', member: member %>
   </td>

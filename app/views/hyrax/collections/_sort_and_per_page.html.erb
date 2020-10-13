@@ -1,9 +1,11 @@
-<%# Adapted from blacklight 6.23.0 version of _sort_widget.html.erb and _per_page_widget.html.erb %>
+<%#= Customized from Hyrax 2.4.0 %>
 <% if show_sort_and_per_page? && active_sort_fields.many? %>
   <%= form_tag collection_path(collection), method: :get, class: 'per_page form-horizontal' do %>
     <%= render 'view_type_group' %>
+    <%#= Customized to pull-right %>
     <fieldset class="pull-right">
       <legend class="sr-only"><%= t('hyrax.sort_label') %></legend>
+      <%#= Everything below is adapted from blacklight 6.23.0 version of _sort_widget.html.erb and _per_page_widget.html.erb %>
       <div id="sort-dropdown" class="btn-group">
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
             <%= t('blacklight.search.sort.label', :field =>sort_field_label(current_sort_field.key)) %> <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
