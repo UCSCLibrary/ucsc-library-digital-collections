@@ -140,7 +140,7 @@ class VerifyWorksJob < Hyrax::ApplicationJob
   def sign_in
     @browser.visit('/users/sign_in')
     @browser.find('#user_email').set(ENV['ADMIN_USERNAME'])
-    @browser.find('#user_pass').set(ENV['ADMIN_PASSWORD'])
+    @browser.find('#user_password').set(ENV['ADMIN_PASSWORD'])
     @browser.click_button('Log in')
   end
 
