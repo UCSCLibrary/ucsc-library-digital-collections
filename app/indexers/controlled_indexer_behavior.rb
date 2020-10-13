@@ -7,7 +7,7 @@ module ControlledIndexerBehavior
     def fetch_remote_label(url)
       if url.is_a? ActiveTriples::Resource
         resource = url
-        url = resource.id 
+        url = resource.id.dup
       end
 
       # if it's buffered, return the buffer
@@ -28,12 +28,12 @@ module ControlledIndexerBehavior
         # handle geonames specially
         elsif url.include? "geonames.org"
           # make sure we fetch the rdf record, not the normal html one
-          if (res_url = url) =~ /geonames.org\/[0-9]+.*\z/ && !res_url.include?("/about.rdf")
+          if (res_url = url.dup) =~ /geonames.org\/[0-9]+.*\z/ && !res_url.include?("/about.rdf")
             res_url = url.gsub(/(geonames.org\/[0-9]+).*\z/,"\\1/about.rdf")
           end
           # Interpret the xml result ourselves
           doc = Nokogiri::XML(open(res_url))
-          label = doc.xpath('//gn:name').first.children.first.text
+          label = doc.xpath('//gn:name').first.children.first.text.dup
         # fetch from other normal authorities
         else
           # Smoothly handle some common syntax issues
@@ -43,9 +43,9 @@ module ControlledIndexerBehavior
           resource ||= ActiveTriples::Resource.new(cleaned_url)
           labels = resource.fetch(headers: { 'Accept'.freeze => default_accept_header }).rdf_label
           if labels.count == 1
-            label = labels.first
+            label = labels.first.dup.to_s
           else
-            label = labels.find{|label| label.language.to_s =~ /en/ }.to_s
+            label = labels.find{|label| label.language.to_s =~ /en/ }.dup.to_s
           end
         end
         
@@ -63,7 +63,7 @@ module ControlledIndexerBehavior
           response = JSON.parse(Net::HTTP.get_response(URI(url)).body)
           response.each do |index, node|
             if node["@id"] == url
-              label = node["http://www.loc.gov/mads/rdf/v1#authoritativeLabel"].first["@value"]
+              label = node["http://www.loc.gov/mads/rdf/v1#authoritativeLabel"].first["@value"].dup
             end
           end
         end
