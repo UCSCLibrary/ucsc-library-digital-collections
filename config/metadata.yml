@@ -130,7 +130,7 @@ fields:
 #    multiple: false
   
   publisherHomepage:
-    label: "Publisher Homepage"
+    label: "Digital Publisher Homepage"
     definition: "The URL of the publisher's homepage."
     display_groups: 
       - secondary
@@ -405,7 +405,7 @@ fields:
   
   physicalFormat:
     definition: The form, and/or physical characteristics of the resource being described. The material or physical carrier of the resource. Does not capture aboutness.
-    label: Format
+    label: "Source Format"
     predicate: DC:medium
     vocabularies: 
       - authority: getty

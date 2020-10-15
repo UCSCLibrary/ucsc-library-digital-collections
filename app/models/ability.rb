@@ -19,6 +19,8 @@ class Ability
     # perform special checks on filesets
     if (fs = SolrDocument.find(id)).hydra_model == FileSet
       case fs.visibility
+      when "open"
+        return true
       when "request"
         # retrieve special access grants for the current user
         return (fs.ancestor_ids & current_user.current_access_grants).present?

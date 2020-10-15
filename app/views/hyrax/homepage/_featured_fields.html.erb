@@ -10,7 +10,7 @@
   </div>
 <% end %>
 <div>
-  <%= featured.description.first %>
+  <%= featured.description.sort_by(&:length).reverse.join(" ").truncate(1500) %>
 </div>
 <div>
     <span class="sr-only">Date Created</span>

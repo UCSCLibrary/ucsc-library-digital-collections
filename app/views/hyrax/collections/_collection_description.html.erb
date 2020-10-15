@@ -1,6 +1,6 @@
 <%#= Customized from Hyrax 2.4.0 
   #  Renamed .html.erb %>
-<% presenter.description.each do |description| %>
+<% presenter.description.sort_by(&:length).reverse.each do |description| %>
   <%= simple_format(auto_link(description)) %>
 <% end %>
 <%#= Customized to add the link to collection guide %>

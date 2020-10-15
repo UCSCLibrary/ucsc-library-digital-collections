@@ -22,8 +22,8 @@ _docker_test_job: &docker_test_job
   cache:
     apt: true
     directories:
-     - /srv/ucsc_docker/
-     - /usr/local/bin/docker-compose
+      - /srv/ucsc_docker/
+      - /usr/local/bin/docker-compose
   services:
     - docker
   git:
@@ -68,7 +68,7 @@ jobs:
       before_install:
         - openssl aes-256-cbc -K $encrypted_52af377e3440_key -iv $encrypted_52af377e3440_iv
         - in hycruz_deploy_rsa.enc -out hycruz_deploy_rsa -d
-    - name: "acceptance tests
+    - name: "acceptance tests"
       stage: acceptance_tests
       script: bundle exec rspec spec/acceptance/
       after_failure:
@@ -81,6 +81,3 @@ jobs:
           secure: ###TODO
         access_key:
           secure: ###TODO
-
-
-
