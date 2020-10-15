@@ -21,11 +21,11 @@ class PublishCollectionJob < Hyrax::ApplicationJob
         end
       end
       start = start + rows
-      Rails.logger.info "\n\n!!!!!!!!!!!!!!!!!!!!!!!!!\n\nfinished batch #{start/rows} of #{num_rows/rows}\n\n!!!!!!!!!!!!!!!!!!!!!!!!!\n\n"
+      Rails.logger.info "publish collection job finished batch #{start/rows} of #{num_rows/rows}"
     end
     col.visibility = "open"
     col.save
+    Rails.logger.warn "Found #{errors.count} errors during publication:"
+    Rails.logger.warn errors.map(&:to_s).join(',')
   end
-  Rails.logger.warn "Found #{errors.count} errors during publication:"
-  Rails.logger.warn errors.map(&:to_s).join(',')
 end
