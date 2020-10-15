@@ -32,7 +32,7 @@ class Hyrax::HomepageController < ApplicationController
                                               .rows(rows)
       response = repository.search(builder)
 
-      response.documents.select{ |col| col.visibility == "open" && !blacklisted_collections.include?(col.id) }
+      response.documents.select{ |col| ["open","campus"].include?(col.visibility) && !blacklisted_collections.include?(col.id) }
 
     rescue Blacklight::Exceptions::ECONNREFUSED, Blacklight::Exceptions::InvalidRequest
       []
