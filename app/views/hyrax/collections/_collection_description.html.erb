@@ -1,4 +1,4 @@
-<% presenter.description.each do |description| %>
+<% presenter.description.sort_by(&:length).reverse.each do |description| %>
   <%= simple_format(auto_link(description)) %>
 <% end %>
 <% if presenter.respond_to?(:related_resource) && (links = presenter.related_resource) %>
