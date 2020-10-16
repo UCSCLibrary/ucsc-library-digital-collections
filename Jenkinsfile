@@ -11,6 +11,9 @@ pipeline {
       }
     }
     stage('Test') {
+      environment {
+        COVERALLS_REPO_TOKEN = credentials('coveralls-repo-token')
+      }
       steps {
         dir("docker_test_env") {
           sh 'BRANCH=${GIT_BRANCH/origin\\//} docker exec hycruz /srv/run-unit-tests-when-ready.sh'
