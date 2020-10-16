@@ -1,3 +1,6 @@
+<%#= Customized from Hyrax 2.4.0, line 6 and 20
+  #  render_edit_field_partial() is now
+  #  render_edit_field_partial_ucsc() %>
 <div class="base-terms">
     <% f.object.primary_terms.each do |term| %>
         <%= render_edit_field_partial_ucsc(term, f: f) %>
