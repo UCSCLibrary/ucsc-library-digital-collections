@@ -1,5 +1,5 @@
 # This migration comes from sufia (originally 20160328222160)
-class CreateLocalAuthorities < ActiveRecord::Migration
+class CreateLocalAuthorities < ActiveRecord::Migration[4.2]
   def self.up
     create_table :local_authority_entries, force: true do |t|
       t.integer :local_authority_id
