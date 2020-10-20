@@ -34,3 +34,5 @@ set :deploy_to, '/srv/ucsc_sufia'
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
+
+ set :rvm_ruby_string, '2.7.2'
