@@ -28,4 +28,3 @@ class Hydra::Derivatives::Processors::Jpeg2kImage
       image
     end
 end
-
