@@ -719,12 +719,20 @@ header#collection-description {
     #sort-dropdown {
         margin-right: .7em;
     }
+    .view-type {
+        display: none;
+    }
     @media (min-width: $screen-sm) {
         #per_page-dropdown { display: inline-block; }
     }
     @media (min-width: $screen-md) {
-        .view-type { display: inline-block; }
+        .view-type { 
+            /* display: inline-block; */
+        }
     }
+}
+#sortAndPerPage .view-type {
+    display: none;
 }
 
 /* Search within collection */
