@@ -55,13 +55,6 @@ body {
             }
         }
     }
-    
-    p#splash-message {
-        font-size: 1.2em;
-        max-width: 600px;
-        margin: auto auto 40px auto;
-        text-align-last: center;
-    }
 
     div.autosuggest ul {
         padding-left:0px;
@@ -81,9 +74,6 @@ body {
         div.select2-container.autosuggest{
             width:75%
         }
-        //        input.string.controlled_vocabulary.form-control {
-        //            
-        //        }
         input.ui-autocomplete-input.form-control { 
             width: 100%;
         }
@@ -353,6 +343,9 @@ body {
             color: #ccc;
         }
     }
+    .subtitle {
+        display: none;
+    }
     #search-form-header {
         border-top: none;
         position: relative;
@@ -394,16 +387,72 @@ body {
 }
 
 /* Site title and search - homepage */
-.front #digital-collections {
-    height: 500px;
+.front {
+    #digital-collections {
+        border: none;
+        text-align: center;
+        .title {
+            width: 100%;
+            padding: 20px;
+        }
+        .subtitle {
+            display: block;
+            margin: 0 auto;
+            float: none;
+            p {
+                color: #fff;
+                font-size: 16px;
+                font-weight: bold;
+            }
+        }
+        .searchbar-right {
+            width: 83.333333%;
+            max-width: 500px;
+            margin: 20px auto;
+            right: 0;
+            float: none;
+            top: 0;
+            .navbar-toggle { display: none; }
+        }
+        #search-form-header {
+            display: block;
+            position: static;
+            width: auto;
+            margin-top: 0;
+        }
+    }
+    @media (min-width: $screen-xs) {
+        #digital-collections {
+            background: linear-gradient(rgba(2,90,158,0.6) 50%, rgba(255,255,255,1) 100%), url(<%= asset_path('the-wave.jpg') %>);
+            background-size: cover, cover;
+            height: 250px;
+            .subtitle { width: 70%; }
+        }
+    }
+    @media (min-width: $screen-sm) {
+        #digital-collections {
+            height: 325px;
+            .subtitle { width: 50%; }
+            .searchbar-right { margin: 30px auto; }
+        }
+    }
+    @media (min-width: $screen-md) {
+        #digital-collections {
+            background: linear-gradient(rgba(2,90,158,0.6) 70%, rgba(255,255,255,1) 100%), url(<%= asset_path('the-wave.jpg') %>);
+            background-size: cover, cover;
+            height: 400px;
+            .title { padding: 30px; }
+            .subtitle { width: 40%; }
+            .searchbar-right { margin: 50px auto; }
+        }
+    }
 }
 
 /* Footer */
 footer {
-    font-family: $font-2;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding: 20px;
     background-color: $ucsc-blue;
+    font-family: $font-2;
     color: #fff;
     a {
         color: #fff;
