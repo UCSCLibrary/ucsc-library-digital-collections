@@ -1,18 +1,42 @@
 <%#= Customized from Hyrax 2.4.0 %>
 <%#= Complete overhaul from table-based list of collections
-  #  to ordered list of featured only %>
-<ol id="featured_collections">
-    <% collections.each do |collection| %>
+  #  to ordered list of featured only, with toggle for all %>
+<h1>Featured Collections</h1>
+<ul id="featured_collections" class="collections">
+    <li>
+        <a href="#">
+            <img src="<%= asset_path('thumb_sc-county.jpeg') %>" alt="...">
+            <span>Santa Cruz County historic photograph collection</span>
+        </a>
+    </li>
+    <li>
+        <a href="#">
+            <img src="<%= asset_path('thumb_ucsc-photography.jpeg') %>" alt="...">
+            <span>UCSC Photography Services photographs</span>
+        </a>
+    </li>
+    <li>
+        <a href="#">
+            <img src="<%= asset_path('thumb_rmb-pj.jpeg') %>" alt="...">
+            <span>Ruth-Marion Baruch and Pirkle Jones photographs</span>
+        </a>
+    </li>
+    <li>
+        <a href="#">
+            <img src="<%= asset_path('thumb_mayo.jpeg') %>" alt="...">
+            <span>Harry Mayo surfing photography collection</span>
+        </a>
+    </li>
+</ul>
 
-        <li class="featured-item" data-id="<%= collection.id %>">
-            <div class="main row">
-                <div class="col-sm-3">
-                    <%= render_thumbnail_tag collection, { width: 200, style: "width:200px;" } %>
-                </div>
-                <div class="col-sm-9">
-                    <%= render 'featured_fields', featured: collection %>
-    </div>
-  </div>
-</li>
-    <% end %>
-</ol>
+<button id="view-all-collections" class="btn btn-primary" type="button">View all collections</button>
+
+<ul id="all-collections" class="collections" style="display: none;">
+<% collections.each do |collection| %>
+    <li data-id="<%= collection.id %>">
+        <a href="/collections/<%= collection.id %>?locale=en">
+            <img src="<%= collection.thumbnail_path %>">
+            <span><%= truncate(collection.title.first, length: 128, separator: ' ') %></span>
+        </a>
+    </li>
+<% end %>

@@ -14,6 +14,9 @@ $screen-md: 992px;
 .flex {
     display: flex;
 }
+.hidden {
+    display: none;
+}
 
 body.dashboard div#bulk-review-buttons {
     min-height: 50px;
@@ -92,22 +95,8 @@ body {
         border: 1px solid #7A7A7A;
     }
 
-    li.featured-item img {
-        width: 250px;
-    }
-
     li.featured-collection img {
         width: 250px;
-    }
-
-    ol#featured_collections {
-        margin-left: 0px;
-        padding-left: 0px;
-        list-style: none;
-    }
-
-    .home-content ol .featured-item div.col-sm-3 a {
-        float: right;
     }
 
     img.primary-media {
@@ -289,12 +278,8 @@ body {
         float: right;
         margin-top: 0;
         margin-bottom: 0;
-        > li {
-            float: left !important;
-        }
-        a {
-            padding: 10px;
-        }
+        > li { float: left !important; }
+        a { padding: 10px; }
         .dropdown-menu {
             position: absolute;
             background-color: #fff;
@@ -305,13 +290,9 @@ body {
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
             a {
                 color: #333333;
-                &:hover {
-                    background-color: #f5f5f5;
-                }
+                &:hover { background-color: #f5f5f5; }
             }
-            .divider {
-                color: #e5e5e5;
-            }
+            .divider { color: #e5e5e5; }
         }
     }
 }
@@ -353,9 +334,7 @@ body {
         width: 94vw;
     }
     @media (min-width: $screen-sm) {
-        span a {
-            font-size: 42px;
-        }
+        span a { font-size: 42px; }
         .searchbar-right {
             position: relative;
             top: 35px;
@@ -367,22 +346,14 @@ body {
         }
     }
     @media (min-width: 1155px) {
-        .searchbar-right {
-            top: 5px;
-        }
+        .searchbar-right { top: 5px; }
     }
     @media (max-width: 533px) {
-        .navbar-toggle {
-            font-size: 12px;
-        }
+        .navbar-toggle { font-size: 12px; }
     }
     @media (max-width: 483px) {
-        .navbar-toggle {
-            font-size: 10px;
-        }
-        #search-form-header {
-            margin-top: 95px;
-        }
+        .navbar-toggle { font-size: 10px; }
+        #search-form-header { margin-top: 95px; }
     }
 }
 
@@ -391,6 +362,7 @@ body {
     #digital-collections {
         border: none;
         text-align: center;
+        margin-bottom: 0;
         .title {
             width: 100%;
             padding: 20px;
@@ -438,12 +410,65 @@ body {
     }
     @media (min-width: $screen-md) {
         #digital-collections {
-            background: linear-gradient(rgba(2,90,158,0.6) 70%, rgba(255,255,255,1) 100%), url(<%= asset_path('the-wave.jpg') %>);
+            background: linear-gradient(rgba(2,90,158,0.6) 70%, rgba(255,255,255,1) 100%), url(<%= asset_path('the-wave-hi-res.jpg') %>);
             background-size: cover, cover;
             height: 400px;
             .title { padding: 30px; }
             .subtitle { width: 40%; }
             .searchbar-right { margin: 50px auto; }
+        }
+    }
+}
+
+/* Homepage content */
+.front #content-wrapper {
+    h1 { margin-top: 0; }
+    ul.collections {
+        list-style: none;
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-evenly;
+        padding-left: 0;
+        a {
+            display: inline-block;
+            position: relative;
+            margin: 10px;
+            &:hover span {
+                background-color: rgba(0,0,0,1);
+                //font-size: 13px;
+            }
+        }
+        img {
+            max-width: 200px;
+        }
+        span {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            padding: 2px 5px;
+            background-color: rgba(0,0,0,0.4);
+            color: #fff;
+            text-align: center;
+            text-transform: uppercase;
+            font-weight: bold;
+            font-size: 12px;
+        }
+    }
+
+    button.btn-primary {
+        clear: both;
+        display: block;
+        margin: 0 auto;
+        text-transform: uppercase;
+    }
+
+    /* This rule is important for the jquery toggle interaction */
+    #all-collections { display: flex; }
+
+    @media (min-width: $screen-sm) {
+        button.btn-primary {
+            float: right;
         }
     }
 }
@@ -877,4 +902,3 @@ header#collection-description {
     margin: 20px;
     font-weight: bold;
 }
-
