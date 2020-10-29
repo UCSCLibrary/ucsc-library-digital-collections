@@ -229,20 +229,19 @@ body {
         display: inline-block;
         padding: 10px 0 0 20px;
         font-family: $font-2;
-        font-size: 20px;
+        font-size: 16px;
         font-weight: bold;
         text-transform: uppercase;
         color: #fff;
         &:hover {
             text-decoration: none;
         }
+        @media (min-width: 420px) { font-size: 20px; }
         @media (min-width: $screen-xs) {
             font-size: 26px;
             padding-top: 6px;
         }
-        @media (min-width: $screen-sm) {
-            font-size: 30px;
-        }
+        @media (min-width: $screen-sm) { font-size: 30px; }
     }
 
     /* Main menu */
