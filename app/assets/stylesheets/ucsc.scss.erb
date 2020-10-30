@@ -9,6 +9,7 @@ $header-height: 40px;
 $screen-xs: 480px;
 $screen-sm: 768px;
 $screen-md: 992px;
+$screen-lg: 1200px;
 
 /* Helper classes */
 .flex {
@@ -426,19 +427,20 @@ body {
         list-style: none;
         display: flex;
         flex-flow: row wrap;
-        justify-content: space-evenly;
         padding-left: 0;
+        li { 
+            width: 100%;
+            margin: 10px; 
+        }
         a {
             display: inline-block;
             position: relative;
-            margin: 10px;
-            &:hover span {
-                background-color: rgba(0,0,0,1);
-                //font-size: 13px;
-            }
+            width: 100%;
+            &:hover span { background-color: rgba(0,0,0,1); }
         }
         img {
-            max-width: 200px;
+            width: 100%;
+            object-fit: cover;
         }
         span {
             position: absolute;
@@ -451,23 +453,52 @@ body {
             text-align: center;
             text-transform: uppercase;
             font-weight: bold;
-            font-size: 12px;
+            font-size: 14px;
         }
     }
-
     button.btn-primary {
         clear: both;
         display: block;
         margin: 0 auto;
         text-transform: uppercase;
     }
-
     /* This rule is important for the jquery toggle interaction */
     #all-collections { display: flex; }
 
+    @media (min-width: $screen-xs) {
+        ul.collections {
+            li { width: auto; }
+            a, img { 
+                width: 40vw;
+                height: 150px; 
+            }
+            span { font-size: 12px; }
+        }
+    }
     @media (min-width: $screen-sm) {
-        button.btn-primary {
-            float: right;
+        ul.collections {
+            flex-flow: row no-wrap;
+            a, img {
+                width: 160px;
+                height: 160px;
+            }
+        }
+        button.btn-primary { float: right; }
+    }
+    @media (min-width: $screen-md) {
+        ul.collections {
+            a, img {
+                width: 210px;
+                height: 210px;
+            }
+        }
+    }
+    @media (min-width: $screen-lg) {
+        ul.collections {
+            a, img {
+                width: 265px;
+                height: 265px;
+            }
         }
     }
 }
