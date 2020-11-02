@@ -1,18 +1,54 @@
 <%#= Customized from Hyrax 2.4.0 %>
 <%#= Complete overhaul from table-based list of collections
-  #  to ordered list of featured only %>
-<ol id="featured_collections">
-    <% collections.each do |collection| %>
+  #  to ordered list of featured only, with toggle for all %>
+<h1>Featured Collections</h1>
+<ul id="featured_collections" class="collections">
+    <li>
+        <a href="/collections/db78td465?locale=en">
+            <picture>
+                <source media="(min-width:768px)" srcset="<%= asset_path('thumb_sc-county.jpeg') %>">
+                <img src="<%= asset_path('thumb_sc-county-430.jpeg') %>" alt="Photograph of church group">
+            </picture>
+            <span>Santa Cruz County historic photograph collection</span>
+        </a>
+    </li>
+    <li>
+        <a href="/collections/jd472x03h?locale=en">
+            <picture>
+                <source media="(min-width:768px)" srcset="<%= asset_path('thumb_ucsc-photography.jpeg') %>">
+                <img src="<%= asset_path('thumb_ucsc-photography-430.jpeg') %>" alt="Photograph of a construction site at UC Santa Cruz">
+            </picture>
+            <span>UCSC Photography Services photographs</span>
+        </a>
+    </li>
+    <li>
+        <a href="/collections/fx719m62f?locale=en">
+            <picture>
+                <source media="(min-width:768px)" srcset="<%= asset_path('thumb_rmb-pj.jpeg') %>">
+                <img src="<%= asset_path('thumb_rmb-pj-430.jpeg') %>" alt="Photograph of Black Panther women with fists raised">
+            </picture>
+            <span>Ruth-Marion Baruch and Pirkle Jones photographs</span>
+        </a>
+    </li>
+    <li>
+        <a href="/collections/2n49t173w?locale=en">
+            <picture>
+                <source media="(min-width:768px)" srcset="<%= asset_path('thumb_mayo.jpeg') %>">
+                <img src="<%= asset_path('thumb_mayo-430.jpeg') %>" alt="Photograph of surfers on the beach with surfboards">
+            </picture>
+            <span>Harry Mayo surfing photography collection</span>
+        </a>
+    </li>
+</ul>
 
-        <li class="featured-item" data-id="<%= collection.id %>">
-            <div class="main row">
-                <div class="col-sm-3">
-                    <%= render_thumbnail_tag collection, { width: 200, style: "width:200px;" } %>
-                </div>
-                <div class="col-sm-9">
-                    <%= render 'featured_fields', featured: collection %>
-    </div>
-  </div>
-</li>
-    <% end %>
-</ol>
+<button id="view-all-collections" class="btn btn-primary" type="button">View all collections</button>
+
+<ul id="all-collections" class="collections" style="display: none;">
+<% collections.each do |collection| %>
+    <li data-id="<%= collection.id %>">
+        <a href="/collections/<%= collection.id %>?locale=en">
+            <img src="<%= collection.thumbnail_path %>">
+            <span><%= truncate(collection.title.first, length: 128, separator: ' ') %></span>
+        </a>
+    </li>
+<% end %>
