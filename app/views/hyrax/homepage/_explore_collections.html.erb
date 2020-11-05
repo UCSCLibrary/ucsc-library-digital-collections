@@ -3,43 +3,18 @@
   #  to ordered list of featured only, with toggle for all %>
 <h1>Featured Collections</h1>
 <ul id="featured_collections" class="collections">
+  <% ['db78td465','jd472x03h','fx719m62f','2n49t173w'].map{|id| SolrDocument.find(id)}.each do |collection| %>
     <li>
-        <a href="/collections/db78td465?locale=en">
+        <a href="/collections/<%= collection.id %>">
             <picture>
-                <source media="(min-width:768px)" srcset="<%= asset_path('thumb_sc-county.jpeg') %>">
-                <img src="<%= asset_path('thumb_sc-county-430.jpeg') %>" alt="Photograph of church group">
+                <source media="(min-width:768px)" srcset="<%= collection.display_url(size: '430,') %>">
+                <img src="<%= collection.display_url(size: '430,') %>" alt="<%= SolrDocument.find(SolrDocument.find(collection.representative_id).parent_id).title.first %>">
             </picture>
-            <span>Santa Cruz County historic photograph collection</span>
+            <span><%= collection.title.first %></span>
         </a>
     </li>
-    <li>
-        <a href="/collections/jd472x03h?locale=en">
-            <picture>
-                <source media="(min-width:768px)" srcset="<%= asset_path('thumb_ucsc-photography.jpeg') %>">
-                <img src="<%= asset_path('thumb_ucsc-photography-430.jpeg') %>" alt="Photograph of a construction site at UC Santa Cruz">
-            </picture>
-            <span>UCSC Photography Services photographs</span>
-        </a>
-    </li>
-    <li>
-        <a href="/collections/fx719m62f?locale=en">
-            <picture>
-                <source media="(min-width:768px)" srcset="<%= asset_path('thumb_rmb-pj.jpeg') %>">
-                <img src="<%= asset_path('thumb_rmb-pj-430.jpeg') %>" alt="Photograph of Black Panther women with fists raised">
-            </picture>
-            <span>Ruth-Marion Baruch and Pirkle Jones photographs</span>
-        </a>
-    </li>
-    <li>
-        <a href="/collections/2n49t173w?locale=en">
-            <picture>
-                <source media="(min-width:768px)" srcset="<%= asset_path('thumb_mayo.jpeg') %>">
-                <img src="<%= asset_path('thumb_mayo-430.jpeg') %>" alt="Photograph of surfers on the beach with surfboards">
-            </picture>
-            <span>Harry Mayo surfing photography collection</span>
-        </a>
-    </li>
-</ul>
+  <% end>
+  </ul> 
 
 <button id="view-all-collections" class="btn btn-primary" type="button">View all collections</button>
 
