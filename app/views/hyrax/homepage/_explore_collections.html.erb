@@ -7,14 +7,15 @@
     <li>
         <a href="/collections/<%= collection.id %>">
             <picture>
-                <source media="(min-width:768px)" srcset="<%= collection.display_url(size: '430,') %>">
-                <img src="<%= collection.display_url(size: '430,') %>" alt="<%= SolrDocument.find(SolrDocument.find(collection.representative_id).parent_id).title.first %>">
+                <source media="(min-width:768px)" srcset="<%= collection.display_image_url(size: '430,') %>">
+                <img src="<%= collection.display_image_url(size: '430,') %>" alt="<%= SolrDocument.find(SolrDocument.find(collection.thumbnail_id).parent_id |
+| 'zw12z8289').title.first %>">
             </picture>
             <span><%= collection.title.first %></span>
         </a>
     </li>
   <% end %>
-  </ul> 
+  </ul>
 
 <button id="view-all-collections" class="btn btn-primary" type="button">View all collections</button>
 
