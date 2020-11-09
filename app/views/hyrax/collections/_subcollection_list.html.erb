@@ -9,14 +9,16 @@
 <div class="row">
   <% row_of_docs.each do |document| %>
   <div class="subcollection col-md-6">
-    <%= image_tag document.thumbnail_path,
-        alt: "",
-        role: "presentation" %>
+    <a href="/collections/<%= document.id%>">
+      <%= image_tag document.thumbnail_path,
+          alt: "",
+          role: "presentation" %>
+    </a>
     <div class="subcollection-info">
       <div class="subcollection-title"><%= document.title_or_label %></div>
-      <div class="subcollection-description-short hidden-sm hidden-lg hidden-xl hidden-xs"><%= document.description.join(" ").truncate(80) %></div>
-      <div class="subcollection-description-long hidden-md hidden-xs"><%= document.description.join(" ").truncate(200) %></div>
-      <div><a href="/collections/<%= document.id%>">View this collection</a></div>
+      <div class="subcollection-description-short hidden-sm hidden-lg hidden-xl hidden-xs"><%= document.description.join(" ").truncate(60) %></div>
+      <div class="subcollection-description-long hidden-md hidden-xs"><%= document.description.join(" ").truncate(160) %></div>
+      <div><a href="/collections/<%= document.id%>"><button class="btn btn-primary" type="button">View this collection</button></a></div>
       <div><a href="<%= document.relatedResource.first %>">Collection Guide <span class="glyphicon  glyphicon-new-window"></span></a></div>
     </div>
   </div>
