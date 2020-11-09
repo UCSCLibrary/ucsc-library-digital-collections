@@ -1,18 +1,29 @@
 <%#= Customized from Hyrax 2.4.0 %>
 <%#= Complete overhaul from table-based list of collections
-  #  to ordered list of featured only %>
-<ol id="featured_collections">
-    <% collections.each do |collection| %>
+  #  to ordered list of featured only, with toggle for all %>
+<h1>Featured Collections</h1>
+<ul id="featured_collections" class="collections">
+  <% ['db78td465','jd472x03h','fx719m62f','2n49t173w'].map{|id| SolrDocument.find(id)}.each do |collection| %>
+    <li>
+        <a href="/collections/<%= collection.id %>">
+            <picture>
+                <source media="(min-width:768px)" srcset="<%= collection.display_image_url(size: '430,') %>">
+                <img src="<%= collection.display_image_url(size: '430,') %>" alt="<%= SolrDocument.find(SolrDocument.find(collection.thumbnail_id).parent_id).title.first %>">
+            </picture>
+            <span><%= collection.title.first %></span>
+        </a>
+    </li>
+  <% end %>
+  </ul>
 
-        <li class="featured-item" data-id="<%= collection.id %>">
-            <div class="main row">
-                <div class="col-sm-3">
-                    <%= render_thumbnail_tag collection, { width: 200, style: "width:200px;" } %>
-                </div>
-                <div class="col-sm-9">
-                    <%= render 'featured_fields', featured: collection %>
-    </div>
-  </div>
-</li>
-    <% end %>
-</ol>
+<button id="view-all-collections" class="btn btn-primary" type="button">View all collections</button>
+
+<ul id="all-collections" class="collections" style="display: none;">
+<% collections.each do |collection| %>
+    <li data-id="<%= collection.id %>">
+        <a href="/collections/<%= collection.id %>?locale=en">
+            <img src="<%= collection.thumbnail_path %>">
+            <span><%= truncate(collection.title.first, length: 128, separator: ' ') %></span>
+        </a>
+    </li>
+<% end %>

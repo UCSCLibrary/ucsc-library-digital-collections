@@ -9,10 +9,14 @@ $header-height: 40px;
 $screen-xs: 480px;
 $screen-sm: 768px;
 $screen-md: 992px;
+$screen-lg: 1200px;
 
 /* Helper classes */
 .flex {
     display: flex;
+}
+.hidden {
+    display: none;
 }
 
 body.dashboard div#bulk-review-buttons {
@@ -55,13 +59,6 @@ body {
             }
         }
     }
-    
-    p#splash-message {
-        font-size: 1.2em;
-        max-width: 600px;
-        margin: auto auto 40px auto;
-        text-align-last: center;
-    }
 
     div.autosuggest ul {
         padding-left:0px;
@@ -81,9 +78,6 @@ body {
         div.select2-container.autosuggest{
             width:75%
         }
-        //        input.string.controlled_vocabulary.form-control {
-        //            
-        //        }
         input.ui-autocomplete-input.form-control { 
             width: 100%;
         }
@@ -102,22 +96,8 @@ body {
         border: 1px solid #7A7A7A;
     }
 
-    li.featured-item img {
-        width: 250px;
-    }
-
     li.featured-collection img {
         width: 250px;
-    }
-
-    ol#featured_collections {
-        margin-left: 0px;
-        padding-left: 0px;
-        list-style: none;
-    }
-
-    .home-content ol .featured-item div.col-sm-3 a {
-        float: right;
     }
 
     img.primary-media {
@@ -250,20 +230,19 @@ body {
         display: inline-block;
         padding: 10px 0 0 20px;
         font-family: $font-2;
-        font-size: 20px;
+        font-size: 16px;
         font-weight: bold;
         text-transform: uppercase;
         color: #fff;
         &:hover {
             text-decoration: none;
         }
+        @media (min-width: 420px) { font-size: 20px; }
         @media (min-width: $screen-xs) {
             font-size: 26px;
             padding-top: 6px;
         }
-        @media (min-width: $screen-sm) {
-            font-size: 30px;
-        }
+        @media (min-width: $screen-sm) { font-size: 30px; }
     }
 
     /* Main menu */
@@ -299,12 +278,8 @@ body {
         float: right;
         margin-top: 0;
         margin-bottom: 0;
-        > li {
-            float: left !important;
-        }
-        a {
-            padding: 10px;
-        }
+        > li { float: left !important; }
+        a { padding: 10px; }
         .dropdown-menu {
             position: absolute;
             background-color: #fff;
@@ -315,13 +290,9 @@ body {
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
             a {
                 color: #333333;
-                &:hover {
-                    background-color: #f5f5f5;
-                }
+                &:hover { background-color: #f5f5f5; }
             }
-            .divider {
-                color: #e5e5e5;
-            }
+            .divider { color: #e5e5e5; }
         }
     }
 }
@@ -353,6 +324,9 @@ body {
             color: #ccc;
         }
     }
+    .subtitle {
+        display: none;
+    }
     #search-form-header {
         border-top: none;
         position: relative;
@@ -360,9 +334,7 @@ body {
         width: 94vw;
     }
     @media (min-width: $screen-sm) {
-        span a {
-            font-size: 42px;
-        }
+        span a { font-size: 42px; }
         .searchbar-right {
             position: relative;
             top: 35px;
@@ -374,32 +346,168 @@ body {
         }
     }
     @media (min-width: 1155px) {
-        .searchbar-right {
-            top: 5px;
-        }
+        .searchbar-right { top: 5px; }
     }
     @media (max-width: 533px) {
-        .navbar-toggle {
-            font-size: 12px;
-        }
+        .navbar-toggle { font-size: 12px; }
     }
     @media (max-width: 483px) {
-        .navbar-toggle {
-            font-size: 10px;
+        .navbar-toggle { font-size: 10px; }
+        #search-form-header { margin-top: 95px; }
+    }
+}
+
+/* Site title and search - homepage */
+.front {
+    #digital-collections {
+        border: none;
+        text-align: center;
+        margin-bottom: 0;
+        .title {
+            width: 100%;
+            padding: 20px;
+        }
+        .subtitle {
+            display: block;
+            margin: 0 auto;
+            float: none;
+            p {
+                color: #fff;
+                font-size: 16px;
+                font-weight: bold;
+            }
+        }
+        .searchbar-right {
+            width: 83.333333%;
+            max-width: 500px;
+            margin: 20px auto;
+            right: 0;
+            float: none;
+            top: 0;
+            .navbar-toggle { display: none; }
         }
         #search-form-header {
-            margin-top: 95px;
+            display: block;
+            position: static;
+            width: auto;
+            margin-top: 0;
+        }
+    }
+    @media (min-width: $screen-xs) {
+        #digital-collections {
+            background: linear-gradient(rgba(2,90,158,0.6) 50%, rgba(255,255,255,1) 100%), url(<%= asset_path('the-wave.jpg') %>);
+            background-size: cover, cover;
+            height: 250px;
+            .subtitle { width: 70%; }
+        }
+    }
+    @media (min-width: $screen-sm) {
+        #digital-collections {
+            height: 325px;
+            .subtitle { width: 50%; }
+            .searchbar-right { margin: 30px auto; }
+        }
+    }
+    @media (min-width: $screen-md) {
+        #digital-collections {
+            background: linear-gradient(rgba(2,90,158,0.6) 70%, rgba(255,255,255,1) 100%), url(<%= asset_path('the-wave-hi-res.jpg') %>);
+            background-size: cover, cover;
+            height: 400px;
+            .title { padding: 30px; }
+            .subtitle { width: 40%; }
+            .searchbar-right { margin: 50px auto; }
         }
     }
 }
 
+/* Homepage content */
+.front #content-wrapper {
+    h1 { margin-top: 0; }
+    ul.collections {
+        list-style: none;
+        display: flex;
+        flex-flow: row wrap;
+        padding-left: 0;
+        li { 
+            width: 100%;
+            margin: 10px; 
+        }
+        a {
+            display: inline-block;
+            position: relative;
+            width: 100%;
+            &:hover span { background-color: rgba(0,0,0,1); }
+        }
+        img {
+            width: 100%;
+            object-fit: cover;
+        }
+        span {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            padding: 2px 5px;
+            background-color: rgba(0,0,0,0.4);
+            color: #fff;
+            text-align: center;
+            text-transform: uppercase;
+            font-weight: bold;
+            font-size: 14px;
+        }
+    }
+    button.btn-primary {
+        clear: both;
+        display: block;
+        margin: 0 auto;
+        text-transform: uppercase;
+    }
+    /* This rule is important for the jquery toggle interaction */
+    #all-collections { display: flex; }
+
+    @media (min-width: $screen-xs) {
+        ul.collections {
+            li { width: auto; }
+            a, img { 
+                width: 40vw;
+                height: 150px; 
+            }
+            span { font-size: 12px; }
+        }
+    }
+    @media (min-width: $screen-sm) {
+        ul.collections {
+            flex-flow: row no-wrap;
+            a, img {
+                width: 160px;
+                height: 160px;
+            }
+        }
+        button.btn-primary { float: right; }
+    }
+    @media (min-width: $screen-md) {
+        ul.collections {
+            a, img {
+                width: 210px;
+                height: 210px;
+            }
+        }
+    }
+    @media (min-width: $screen-lg) {
+        ul.collections {
+            a, img {
+                width: 265px;
+                height: 265px;
+            }
+        }
+    }
+}
 
 /* Footer */
 footer {
-    font-family: $font-2;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding: 20px;
     background-color: $ucsc-blue;
+    font-family: $font-2;
     color: #fff;
     a {
         color: #fff;
@@ -719,12 +827,20 @@ header#collection-description {
     #sort-dropdown {
         margin-right: .7em;
     }
+    .view-type {
+        display: none;
+    }
     @media (min-width: $screen-sm) {
         #per_page-dropdown { display: inline-block; }
     }
     @media (min-width: $screen-md) {
-        .view-type { display: inline-block; }
+        .view-type { 
+            /* display: inline-block; */
+        }
     }
+}
+#sortAndPerPage .view-type {
+    display: none;
 }
 
 /* Search within collection */
@@ -816,4 +932,3 @@ header#collection-description {
     margin: 20px;
     font-weight: bold;
 }
-
