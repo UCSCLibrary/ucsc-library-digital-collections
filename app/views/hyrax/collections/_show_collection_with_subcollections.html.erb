@@ -1,0 +1,52 @@
+
+
+<!-- parent collection header  -->
+<div id="metacollection-banner" class="row">
+  <%= image_tag @presenter.banner_url, class: "primary-media hidden-xs",role: "presentation"%>
+  <div class="caption collection-title">
+    <%= @presenter.title.first %>
+  </div>
+</div>
+
+<div class="metacollection-description long row hidden-xs">
+  <p>
+    <%= @presenter.description.join(" ") %>
+  </p>
+</div>
+
+<div class="metacollection-description short row hidden-sm hidden-md hidden-lg hidden-xl">
+  <div>
+    <%= @presenter.description.join(" ").truncate(200) %>
+    <% if @presenter.description.join(" ").length > 200 %>
+      <div id="show-description" class="description-toggle">Read more</div>
+      <script>$('#show-description').click(function(){ $('.metacollection-description.long').removeClass("hidden-xs").show(); $('.metacollection-description.short').hide(); });  </script>
+    <% end %>
+  </div>
+</div>
+
+<!-- Search within subcollection -->
+<form action="/catalog" method="get">
+  <input type="hidden" name="f[nesting_collection__ancestors_ssim][]" value="<%= @presenter.id%>"/>
+    <input type="hidden" name="search_field" value="all_fields"/>
+  <div class="input-group row" id="search-within-collection">
+    <input type="text" name="q" class="q form-control" placeholder="Search within this collection">
+    <div class="input-group-btn">
+      <button type="submit" class="btn btn-primary">
+        <span class="sr-only">Search</span> <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+      </button>
+    </div><!-- /.input-group-btn -->
+  </div>
+</form>
+
+<div class="row"><a href="/catalog?f[nesting_collection__ancestors_ssim][]=<%= @presenter.id%>"> Browse all items in this collection</a></div>
+
+<!-- Subcollections -->
+<div id="subcollections">
+  <h4 class="row">COLLECTIONS INCLUDED (<%= @subcollection_count %>):</h4>
+  <div class="hyc-blacklight hyc-bl-results">
+    <%= render 'subcollection_list', collection: @subcollection_docs %>
+  </div>
+</div>
+
+
+

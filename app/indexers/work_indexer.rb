@@ -7,8 +7,11 @@ class WorkIndexer < Hyrax::WorkIndexer
 
   def ancestor_ids(doc)
     return [] if doc.nil? 
-    ids = [doc.id]
+    ids = []
+    # add all collection memberships
     ids += doc.member_of_collection_ids
+    # add collection of collection memberships
+    doc.member_of_collection_ids.each { |collection_id| ids += ancestor_ids(SolrDocument.find(collection_id)) }
     ids += ancestor_ids(doc.parent_work)
     return (ids.uniq - [doc.id])
   end
