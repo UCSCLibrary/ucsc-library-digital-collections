@@ -12,9 +12,22 @@ module UcscThumbnailHelper
     end
   end
 
+
   def square_thumbnail_url(doc,size="150,")
-    square_region = square_thumbnail_region(doc, size)
-    thumbnail_url(doc.id, {region: square_region, size: size})
+
+    # unless doc is a fileset, use the representative fileset id
+    unless doc["has_model_ssim"] == "FileSet"
+      fs_id = doc.representative_id || doc.thumbnail_id
+    end
+
+    # If the width and height for a non-fileset doc aren't indexed, retrieve the fileset doc
+    if doc.width.present? && doc.height.present?
+      square_region = square_thumbnail_region(doc, size)
+    else
+      square_region = square_thumbnail_region(SolrDocument.find(fs_id), size)
+    end
+
+    return Hyrax.config.iiif_image_url_builder.call(fs_id,"nil",size,square_region)
   end
 
   def self.thumbnail_url(id,size="150,")
