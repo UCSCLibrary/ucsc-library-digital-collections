@@ -4,6 +4,7 @@ require 'linkeddata'
 class WorkIndexer < Hyrax::WorkIndexer
   THUMBNAIL_WIDTH = 300
   include ControlledIndexerBehavior
+  include RepresentativeImageDimensionsIndexBehavior
 
   def ancestor_ids(doc)
     return [] if doc.nil? 
@@ -48,6 +49,9 @@ class WorkIndexer < Hyrax::WorkIndexer
           solr_doc['thumbnail_path_ss'] = "/downloads/#{image_ids.last}?file=thumbnail"
         end
       end
+
+      # index the dimensions of a work's representative image for display purposes
+      solr_doc = index_representative_image_dimensions(solr_doc)
     end
   end
 
