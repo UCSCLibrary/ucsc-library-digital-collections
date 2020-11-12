@@ -10,7 +10,7 @@
   <% row_of_docs.each do |document| %>
   <div class="subcollection col-md-6">
     <a href="/collections/<%= document.id%>">
-      <%= image_tag document.thumbnail_path,
+      <%= image_tag square_thumbnail_url(document,"300,"),
           alt: "",
           role: "presentation" %>
     </a>
