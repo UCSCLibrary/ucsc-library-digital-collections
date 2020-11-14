@@ -190,7 +190,7 @@ body {
         margin-bottom: 5px;
     }
 
-    div#new-targeted-search.row {
+    div#new-targeted-search {
         margin-bottom: 20px
     }
     
@@ -875,9 +875,11 @@ header#collection-description {
 }
 
 /* Results Sort and Per Page */
-.hyc-bl-sort {
+.hyc-bl-sort,
+#sortAndPerPage {
     float: right;
     margin-top: .5em;
+    border: none;
     .view-type,
     #per_page-dropdown {
         display: none;
@@ -890,7 +892,7 @@ header#collection-description {
     }
     button.btn {
         border: none;
-        color: $ucsc-blue;
+        color: #337ab7;
         .glyphicon {
             top: 3px;
         }
@@ -1002,4 +1004,23 @@ header#collection-description {
     padding: 20px;
     margin: 20px;
     font-weight: bold;
+}
+
+/* Turn a blacklight caret into a glyphicon chevron */
+span.caret {
+    position: relative;
+    display: inline-block;
+    height: auto;
+    width: auto;
+    font-family: "Glyphicons Halflings";
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1;
+    border: none;
+    color: #337ab7 !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+span.caret:before {
+    content: "\e114";
 }
