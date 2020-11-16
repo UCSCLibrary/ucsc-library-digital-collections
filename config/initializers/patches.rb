@@ -28,3 +28,16 @@ class Hydra::Derivatives::Processors::Jpeg2kImage
       image
     end
 end
+
+
+module CarrierWave
+  class SanitizedFile
+
+    def copy!(new_path)
+      temp_filename = File.join(Dir.tmpdir, "hycruz_ingest_tempfile-#{Time.now.strftime("%Y%m%d")}-#{$$}-#{rand(0x100000000).to_s(36)}")
+      FileUtils.cp(path, temp_filename)
+      FileUtils.mv(temp_filename, new_path)
+    end
+
+  end
+end
