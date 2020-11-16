@@ -3,7 +3,7 @@
   #  to ordered list of featured only, with toggle for all %>
 <h1>Featured Collections</h1>
 <ul id="featured_collections" class="collections">
-  <% ['db78td465','jd472x03h','fx719m62f','2n49t173w'].map{|id| SolrDocument.find(id)}.each do |collection| %>
+  <% ['db78td465','jd472x03h','fx719m62f','2n49t173w'].reduce([]){|docs,id| begin; docs << SolrDocument.find(id); rescue; end; docs}.each do |collection| %>
     <li>
         <a href="/collections/<%= collection.id %>">
             <picture>
