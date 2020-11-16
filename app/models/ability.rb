@@ -11,9 +11,11 @@ class Ability
   end
   
   CAMPUS_IP_RANGES = ["128.114.0.0/16"]
-  
+
+  #This adds to an array initialized in Hyrax::Ability and Hydra::Ability including all ability logic
   self.ability_logic += [:everyone_can_create_curation_concerns]
 
+  #This overrides Blacklight::AccessControls::Ability
   def test_read(id)
     return true if current_user.admin?
     # perform special checks on filesets
@@ -31,10 +33,16 @@ class Ability
     super
   end
 
+  #This overrides Blacklight::AccessControls::Ability
+  def test_download(id)
+    current_user.admin?
+  end
+    
+
   def on_campus?
     CAMPUS_IP_RANGES.any?{|range| IPAddr.new(range).include?(@client_ip || "")}
   end
-  
+
   # Define any customized permissions here.
   def custom_permissions
 
