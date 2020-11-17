@@ -142,7 +142,7 @@ class CatalogController < ApplicationController
       }
     end
 
-    config.add_facet_field('nesting_collection__ancestors_ssim', {label: "Collection", limit: 12})
+    config.add_facet_field('ancestor_collection_titles_ssim', {label: "Collection", limit: 12})
     
     config.add_search_field('all_fields', label: 'All Fields', include_in_advanced_search: true) do |field|
       all_names = config.show_fields.values.map(&:field).join(" ")
