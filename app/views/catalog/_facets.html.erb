@@ -1,0 +1,19 @@
+<%# Customized from Blacklight 6.23.0 %>
+<%# Changed toggle button for facets on mobile %>
+
+<% # main container for facets/limits menu -%>
+<% if has_facet_values?  %>
+<div id="facets" class="facets sidenav">
+  <div class="top-panel-heading panel-heading">
+    <button type="button" class="facets-toggle" data-toggle="collapse" data-target="#facet-panel-collapse">
+      <span class="text">Show Filters</span> <span class="glyphicon glyphicon-chevron-down"></span>
+    </button>
+    <h2 class='facets-heading'>
+      <%= t('blacklight.search.facets.title') %>
+    </h2>
+  </div>
+  <div id="facet-panel-collapse" class="collapse panel-group">
+    <%= render_facet_partials %>
+  </div>
+</div>
+<% end %>
