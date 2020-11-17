@@ -36,7 +36,7 @@ module Ucsc
 
     def primary_media_partial(uv_override=nil)
       if all_av_files.any?
-        return "campus_lockout" if all_av_files.any?{|av_file| campus_lockout?(av_file[:fileset])}
+        return "campus_av_lockout" if all_av_files.any?{|av_file| campus_lockout?(av_file[:fileset])}
         return 'primary_audio_player'
       elsif image? && (image = representative_presenter).present?
         return "uv_image_primary" if solr_document.file_set_ids.count > 1
