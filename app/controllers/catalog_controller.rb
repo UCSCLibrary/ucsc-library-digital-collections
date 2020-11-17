@@ -135,10 +135,10 @@ class CatalogController < ApplicationController
 
     ScoobySnacks::BlacklightConfiguration.add_search_fields(config)
 
-    config.add_search_field('nesting_collection__ancestors', label: "Collection",  include_in_advanced_search: true) do |field|
+    config.add_search_field('ancestor_collection_titles', label: "Collection",  include_in_advanced_search: true) do |field|
       field.solr_parameters = {
-        qf: 'nesting_collection__ancestors_ssim',
-        pf: 'nesting_collection__ancestors_ssim'
+        qf: 'ancestor_collection_titles_ssim',
+        pf: 'ancestor_collection_titles_ssim'
       }
     end
 
