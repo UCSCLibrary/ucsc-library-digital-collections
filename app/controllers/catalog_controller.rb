@@ -170,6 +170,10 @@ class CatalogController < ApplicationController
     # If there are more than this many search results, no spelling ("did you
     # mean") suggestion is offered.
     config.spell_max = 5
+
+    # Options for the user for number of results to show per page, make 24 default
+    config.per_page = [10, 20, 24, 50, 100]
+    config.default_per_page = 24
   end
 
   # disable the bookmark control from displaying in gallery view
