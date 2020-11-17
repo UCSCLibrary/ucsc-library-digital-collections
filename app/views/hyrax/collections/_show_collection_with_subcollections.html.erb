@@ -26,7 +26,7 @@
 
 <!-- Search within subcollection -->
 <form action="/catalog" method="get">
-  <input type="hidden" name="f[nesting_collection__ancestors_ssim][]" value="<%= @presenter.id%>"/>
+  <input type="hidden" name="f[ancestor_collection_titles_ssim][]" value="<%= @presenter.title.first %>"/>
     <input type="hidden" name="search_field" value="all_fields"/>
   <div class="input-group row" id="search-within-collection">
     <input type="text" name="q" class="q form-control" placeholder="Search within this collection">
@@ -38,7 +38,7 @@
   </div>
 </form>
 
-<div class="row"><a href="/catalog?f[nesting_collection__ancestors_ssim][]=<%= @presenter.id%>"> Browse all items in this collection</a></div>
+<div class="row"><a href="/catalog?f[ancestor_collection_titles_ssim][]=<%= @presenter.title.first%>"> Browse all items in this collection</a></div>
 
 <!-- Subcollections -->
 <div id="subcollections">
