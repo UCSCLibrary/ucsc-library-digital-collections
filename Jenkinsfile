@@ -5,7 +5,7 @@ pipeline {
       steps {
         dir("docker_test_env") {
           git changelog: false, credentialsId: 'github_user', poll: false,  branch: 'unit-test', url: "https://github.com/UCSCLibrary/digital_collections_dev_docker.git"
-          sh 'BRANCH=${GIT_BRANCH/origin\\//} docker-compose build; docker-compose up -d'
+          sh 'BRANCH=${GIT_BRANCH/origin\\//} docker-compose build; docker-compose up -d; echo branch-${GIT_BRANCH}'
         }
       }
     }
