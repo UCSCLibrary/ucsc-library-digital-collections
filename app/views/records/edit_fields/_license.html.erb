@@ -1,3 +1,5 @@
+<%#= Customized from Hyrax 2.9.0 
+   # File rewritten; Hyrax overrides default behavior for license field & this restores it %>
 <% if f.object.multiple? key %>
   <%= f.input key, as: :multi_value, input_html: { class: 'form-control' }, required: f.object.required?(key) %>
 <% else %>

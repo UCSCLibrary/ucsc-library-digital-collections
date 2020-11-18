@@ -4,15 +4,9 @@ require 'linkeddata'
 class WorkIndexer < Hyrax::WorkIndexer
   THUMBNAIL_WIDTH = 300
   include ControlledIndexerBehavior
+  include RepresentativeImageDimensionsIndexBehavior
+  include AncestorCollectionBehavior
 
-  def ancestor_ids(doc)
-    return [] if doc.nil? 
-    ids = [doc.id]
-    ids += doc.member_of_collection_ids
-    ids += ancestor_ids(doc.parent_work)
-    return (ids.uniq - [doc.id])
-  end
-  
   def generate_solr_document
     super.tap do |solr_doc|
       solr_doc['file_set_ids_ssim'] = object.file_set_ids
@@ -33,7 +27,7 @@ class WorkIndexer < Hyrax::WorkIndexer
 
       solr_doc = index_controlled_fields(solr_doc)
       solr_doc = inherit_fields(solr_doc)
-
+       
       # I think that merging fields is now supported by blacklight on the display end. Look in to that?
       solr_doc = merge_fields(:subject, [:subjectTopic,:subjectName,:subjectTemporal,:subjectPlace], solr_doc, :stored_searchable)
       solr_doc = merge_fields(:subject, [:subjectTopic,:subjectName,:subjectTemporal,:subjectPlace], solr_doc, :facetable)
@@ -45,6 +39,12 @@ class WorkIndexer < Hyrax::WorkIndexer
           solr_doc['thumbnail_path_ss'] = "/downloads/#{image_ids.last}?file=thumbnail"
         end
       end
+
+      # index the dimensions of a work's representative image for display purposes
+      solr_doc = index_representative_image_dimensions(solr_doc)
+
+      # index the titles a work's ancestor collections
+      solr_doc = index_ancestor_titles(solr_doc)
     end
   end
 

@@ -83,6 +83,77 @@ body {
         }
     }
 
+
+    div#metacollection-banner {
+        font-size: 2em;
+        @media (min-width: 768px) {
+            position: relative;
+            .caption {
+                position: absolute;
+                bottom: 20%;
+                left: 2%;
+                background: white;
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+        }
+    }
+    
+    .metacollection-description {
+        margin-top: 10px;
+        font-weight: bold;
+        font-size: 1.2em;
+        max-width: 1300px;
+        div.description-toggle {
+            cursor: pointer;
+            display: inline;
+            color: #2e74b2;
+        }
+    }
+
+    #search-within-collection {
+        margin-top: 20px;
+        max-width: 500px;
+        input {
+            border-radius: 0px;
+            border: 1px solid black;
+        }
+        button.btn-primary {
+            background-color: black;
+            border-radius: 0px;
+        }
+    }
+
+    #subcollections {
+        margin-top: 45px;
+        .subcollection {
+            padding-top: 20px;
+            margin-bottom: 20px;
+            img {
+                display: inline-block;
+                vertical-align:top;
+                max-width: 38%;
+            }
+            .subcollection-info {
+                max-width: 48%;
+                display: inline-block;
+                margin-left: 10px;
+                max-height: 150px;
+                .subcollection-title {
+                    font-size: 1.2em;
+                    @media (min-width: $screen-md) {
+                        line-height: 1em;
+                    }
+                }
+            }
+        }
+    }
+
+    #content-wrapper.container-fluid {
+        margin-right: 15px;
+        margin-left: 15px;
+    }
+    
     .mejs__playlist-selected, .mejs-playlist-selected {
         background-color: #FECB45;
     }

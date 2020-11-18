@@ -122,6 +122,8 @@ gem 'actionview', '>= 5.0.7.2'
 
 gem 'bundler', '>= 2'
 
+gem 'coveralls', require: false
+
 gem "mini_magick", ">= 4.9.4"
 
 gem 'rubyzip'

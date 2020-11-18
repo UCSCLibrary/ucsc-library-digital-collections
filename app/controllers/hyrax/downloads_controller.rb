@@ -37,11 +37,14 @@ module Hyrax
         { type: mime_type_for(file), disposition: 'inline' }
       end
 
-      # Customize the :read ability in your Ability class, or override this method.
-      # Hydra::Ability#download_permissions can't be used in this case because it assumes
-      # that files are in a LDP basic container, and thus, included in the asset's uri.
+      # This overrides the corresponding method from Hyrax::downloadsController in the Hyrax Gem
       def authorize_download!
-        authorize! :download, params[asset_param_key]
+        # use read permissions for file derivatives, download permissions for original files
+        if params['file'].is_a? String
+          authorize! :read, params[asset_param_key]
+        else
+          authorize! :download, params[asset_param_key]
+        end
       rescue CanCan::AccessDenied
         redirect_to default_image
       end

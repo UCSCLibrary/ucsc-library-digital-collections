@@ -1,3 +1,5 @@
+
+
 <%#= Customized from Hyrax 2.4.0 %>
 <% provide :page_title, construct_page_title(@presenter.title) %>
 <%#= Removed hyc-* classes here and throughout %>
@@ -5,101 +7,12 @@
   <div class="row">
     <div class="col-md-12">
 
-      <% unless @presenter.banner_file.blank? %>
-          <%#= Added ID, changed classes %>
-          <header id="collection-description" class="hyc-banner row" style="background-image:url(<%= @presenter.banner_file %>)">
+      <% if @subcollection_count > 0 %>
+        <%= render 'show_collection_with_subcollections.html.erb' %>
       <% else %>
-          <header id="collection-description" class="row">
+        <%= render 'show_collection_without_subcollections.html.erb' %>
       <% end %>
 
-      <%#= Added bootstrap class, removed badges %>
-      <div class="hyc-title col-md-12">
-        <h1><%= @presenter.title.first %></h1>
-      </div>
-
-      <% unless @presenter.logo_record.blank? %>
-          <%#= Added bootstrap class %>
-          <div class="hyc-logos col-md-3">
-            <% @presenter.logo_record.each_with_index  do |lr, i| %>
-
-                <% if lr[:linkurl].blank? %>
-                    <img alt="<%= lr[:alttext] %>" src="<%= lr[:file_location] %>" />
-                <% else %>
-                    <a href="<%= lr[:linkurl] %>">
-                      <img alt="<%= lr[:alttext] %>" src="<%= lr[:file_location] %>" />
-                    </a>
-                <% end %>
-
-            <% end %>
-          </div>
-      <% end %>
-      <%#= Customized to add thumbnail, moved description %>
-      <div class="col-md-3">
-        <%= render 'hyrax/collections/media_display', presenter: @presenter %>
-      </div>
-      <div class="col-md-9">
-        <%= render 'collection_description', presenter: @presenter %>
-      </div>
-      <%#= end %>
-      </header>
-
-    </div>
-  </div>
-
-  <div class="row">
-    <%#= Moved facets and search to the left column %>
-    <!-- <div class="col-sm-4"> --><div class="col-sm-4 hidden">
-      <!-- Search results label -->
-      <% if @members_count > 0 || @presenter.subcollection_count > 0 %>
-        <div class="hyc-blacklight hyc-bl-title">
-          <h2>
-            <% if has_collection_search_parameters? %>
-                <%= t('hyrax.dashboard.collections.show.search_results') %>
-            <% end %>
-          </h2>
-        </div>
-      <% end %>
-
-      <!-- Search bar -->
-      <%#= Removed row class and moved search_form render to custom _facets partial %>
-      <div class="hyc-blacklight hyc-bl-search hyc-body">
-        <div>
-          <%= render 'facets' %>
-        </div>
-      </div>
-    </div>
-
-    <!-- <div class="col-sm-8"> --><div>
-      <!-- Subcollections -->
-      <% if @presenter.collection_type_is_nestable? && @subcollection_count > 0 %>
-          <div class="hyc-blacklight hyc-bl-title">
-            <h4><%= t('.subcollection_count') %> (<%= @subcollection_count %>)</h4>
-          </div>
-          <div class="hyc-blacklight hyc-bl-results">
-            <%= render 'subcollection_list', collection: @subcollection_docs %>
-          </div>
-      <% end %>
-
-      <!-- Works -->
-      <% if @members_count > 0 %>
-          <div class="hyc-blacklight hyc-bl-title">
-            <%#= Swapped count and label %>
-            <h4><%= @members_count %> <%= t('.works_in_collection') %></h4>
-          </div>
-
-          <%#= Added clearfix class %>
-          <div class="hyc-blacklight hyc-bl-sort clearfix">
-            <%= render 'sort_and_per_page', collection: @presenter %>
-          </div>
-
-          <div class="hyc-blacklight hyc-bl-results">
-            <%= render_document_index @member_docs %>
-          </div>
-
-          <div class="hyc-blacklight hyc-bl-pager">
-            <%= render 'paginate' %>
-          </div>
-      <% end # if @members_count > 0 %>
     </div>
   </div>
 </div>

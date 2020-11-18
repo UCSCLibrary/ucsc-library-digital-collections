@@ -1,3 +1,6 @@
+require 'coveralls'
+Coveralls.wear!('rails')
+
 require 'capybara'
 require 'capybara/rspec'
 require 'selenium/webdriver'

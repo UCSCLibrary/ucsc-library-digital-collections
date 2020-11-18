@@ -135,6 +135,15 @@ class CatalogController < ApplicationController
 
     ScoobySnacks::BlacklightConfiguration.add_search_fields(config)
 
+    config.add_search_field('ancestor_collection_titles', label: "Collection",  include_in_advanced_search: true) do |field|
+      field.solr_parameters = {
+        qf: 'ancestor_collection_titles_ssim',
+        pf: 'ancestor_collection_titles_ssim'
+      }
+    end
+
+    config.add_facet_field('ancestor_collection_titles_ssim', {label: "Collection", limit: 12})
+    
     config.add_search_field('all_fields', label: 'All Fields', include_in_advanced_search: true) do |field|
       all_names = config.show_fields.values.map(&:field).join(" ")
       title_name = solr_name("title", :stored_searchable)

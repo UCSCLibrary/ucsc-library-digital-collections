@@ -1,6 +1,10 @@
+<%#= Customized from Hyrax 2.9.0 
+   # %>
+<%# add container wrapper, not present in hyrax version %>
 <div class="container-fluid navbar-user">
   <ul id="user_utility_links" class="nav navbar-nav navbar-right">
     <%# render 'shared/locale_picker' if available_translations.size > 1 %>
+    <%# Here we removed hyrax's test for whether the user is logged in. This is only rendered for logged in users. %>
       <li>
         <%= render_notifications(user: current_user) %>
       </li>
@@ -13,6 +17,7 @@
           <span class="caret"></span>
         <% end %>
         <ul id="user-util-links" class="dropdown-menu dropdown-menu-right" role="menu">
+          <%# Add link to homepage, not present in hyrax version %>
           <li>
             <%= link_to t(:'hyrax.controls.home'), hyrax.root_path, :'data-no-turbolink'=>"true" %>
           </li>
@@ -20,6 +25,7 @@
 
           <li class="divider"></li>
           <li><%= link_to t("hyrax.toolbar.profile.logout"), main_app.destroy_user_session_path %></li>
+          <%# Here we removed hyrax's display of a login button for guest users %>
         </ul>
       </li><!-- /.btn-group -->
   </ul>
