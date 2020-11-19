@@ -32,6 +32,8 @@
     </div>
     <div class="col-md-9">
       <%= render 'collection_description', presenter: @presenter %>
+      <br>
+      <%= @presenter.metadataSource.join(" ").truncate(200) %>
     </div>
     <%#= end %>
   </header>

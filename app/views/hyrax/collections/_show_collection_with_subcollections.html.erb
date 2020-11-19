@@ -22,6 +22,7 @@
       <script>$('#show-description').click(function(){ $('.metacollection-description.long').removeClass("hidden-xs").show(); $('.metacollection-description.short').hide(); });  </script>
     <% end %>
   </div>
+  <div class="hidden-xs"><%= @presenter.metadataSource.join(" ").truncate(200) %> </div>
 </div>
 
 <!-- Search within subcollection -->
