@@ -4,6 +4,13 @@ module Ucsc
       Ucsc::PermissionBadge
     end
 
+    def metadataSource
+      if solr_document.metadataSource.present?
+        return solr_document.metadataSource
+      end
+      []
+    end      
+    
     def related_resource
       if solr_document.relatedResource.present?
         return solr_document.relatedResource

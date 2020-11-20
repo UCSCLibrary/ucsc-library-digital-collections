@@ -3,6 +3,7 @@
 <% presenter.description.sort_by(&:length).reverse.each do |description| %>
   <%= simple_format(auto_link(description)) %>
 <% end %>
+<%= @presenter.metadataSource.join(" ").truncate(200) %>
 <%#= Customized to add the link to collection guide %>
 <% if presenter.respond_to?(:related_resource) && (links = presenter.related_resource) %>
   <%= link_to links.first do %>
