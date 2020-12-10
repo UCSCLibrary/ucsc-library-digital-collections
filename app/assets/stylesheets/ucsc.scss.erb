@@ -854,6 +854,7 @@ div#documents.gallery {
     }
     .thumbnail {
         border: none;
+        position: relative;
         a > img,
         span.fa {
             background-color: #f7f7f7;
@@ -866,6 +867,22 @@ div#documents.gallery {
         .documentHeader .index-document-functions {
             display: none;
         }
+        .tooltip {
+            margin: 90% 0 0 0;
+            padding: 0 20px;
+            pointer-events: none;
+        }
+        h3 .tooltip {
+            margin: -10.2% 0 0 0;
+            padding: 0 30px;
+        }
+        .tooltip.in { opacity: 1; }
+        .tooltip-inner {
+            background-color: #f7f7f7;
+            color: #000;
+            opacity: 1;
+        }
+        .tooltip-arrow { display: none; }
     }
 }
 
