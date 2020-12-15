@@ -26,6 +26,7 @@ fields:
     full_text_searchable: false
     sortable: false
     inheritable: true
+    collection_inheritable: true
 
   title:
     definition: "The title of the resource."
@@ -39,6 +40,7 @@ fields:
       - search_result
     index_itemprop: name
     inheritable: false
+    collection_inheritable: false
     work_title: true
     searchable: true
     full_text_searchable: true
@@ -47,6 +49,7 @@ fields:
     definition: "An archival accession number for the resource."
     label: "Accession Number"
     inheritable: false
+    collection_inheritable: false
     searchable: true
     data_type: string
     display_groups: 
@@ -361,11 +364,11 @@ fields:
     definition: An account of the resource.
     label: Description
     predicate: DC:description
+    collection_inheritable: false
     display_groups: 
       - primary
       - search_result
     index_itemprop: description
-    searchable: true
     full_text_searachable: true
 
   descriptionAddress:
@@ -454,6 +457,7 @@ fields:
     predicate: EBUCore:filename
     searchable: true
     inheritable: false
+    collection_inheritable: false
     full_text_searchable: true
     label: Master File Name
     data_type: string
@@ -472,6 +476,7 @@ fields:
     label: Extent
     predicate: DC:extent
     inheritable: false
+    collection_inheritable: false
   
   accessRights:
     definition: Information about who can access the resource or an indication of its security status.
@@ -480,12 +485,14 @@ fields:
       - editor_primary
     label: Access Rights
     inheritable: false
+    collection_inheritable: false
     predicate: DC:accessRights
     
   itemCallNumber:
     definition: Classification number in any scheme.
     label: Item Call Number
     inheritable: false
+    collection_inheritable: false
     predicate: BF2:classification
     display_groups:
       - secondary
@@ -506,6 +513,7 @@ fields:
     predicate: local:metadataSource
     display_group: admin_only
     inheritable: false
+    collection_inheritable: false
 
   metadataInheritance:
     definition: Determines whether and how a work inherits metadata from another work, usually its parent
@@ -514,6 +522,7 @@ fields:
     predicate: local:inheritance
     display_group: admin_only
     inheritable: false
+    collection_inheritable: false
 
   independentlyDisplayed:
     definition: determines whether a work will show up in search results and/or have its own display page (rather than displaying through a parent work).
@@ -523,6 +532,7 @@ fields:
     predicate: local:independentlyDisplayed
     display_group: admin_only
     inheritable: false
+    collection_inheritable: false
      
   displayRole:
     definition: The role this work plays in the context of its sibling works
@@ -531,6 +541,7 @@ fields:
     predicate: local:displayRole
     display_group: admin_only
     inheritable: false    
+    collection_inheritable: false
 
   donorProvenance:
     definition: "A statement of any changes in ownership and custody of the resource since its creation that are significant for its authenticity, integrity, and interpretation."
