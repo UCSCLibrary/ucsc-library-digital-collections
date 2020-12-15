@@ -87,6 +87,9 @@ class CatalogController < ApplicationController
     # solr field configuration for index views
     config.index.title_field = solr_name("title", :stored_searchable)
     config.index.display_type_field = solr_name("has_model", :symbol)
+    # This view helper method is now the primary method of generating thumbnails
+    config.index.thumbnail_method = :ucsc_thumbnail_tag
+    # This index value is used as a thumbnail url only when the above method is inaccessible
     config.index.thumbnail_field = 'thumbnail_path_ss'
 
     # solr fields that will be treated as facets by the blacklight application
