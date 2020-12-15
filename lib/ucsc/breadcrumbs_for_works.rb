@@ -6,6 +6,8 @@ module Ucsc
 
       hide_breadcrumbs = true;
 
+      add_breadcrumb "Digital Collections", root_path
+
       begin
         if (col = presenter.member_of_collection_presenters.first).present?
           add_breadcrumb col.title.first, "/records/#{col.id}"
