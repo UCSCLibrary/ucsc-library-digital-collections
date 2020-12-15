@@ -6,5 +6,12 @@
     <div class="row">
       <%#= Customized to change pager theme %>
       <%= paginate solr_response, outer_window: 2, theme: 'ucsc', param_name: page_param_name %>
+      
     </div><!-- /pager -->
+    
+    <script>
+      $('ul.pagination li a span.glyphicon-chevron-right').addClass('glyphicon-menu-right').removeClass('glyphicon-chevron-right');
+      $('ul.pagination li a span.glyphicon-chevron-left').addClass('glyphicon-menu-left').removeClass('glyphicon-chevron-left');
+    </script>
+    
 <% end %>
