@@ -369,6 +369,7 @@ fields:
       - primary
       - search_result
     index_itemprop: description
+    searchable: true
     full_text_searachable: true
 
   descriptionAddress:
