@@ -298,6 +298,8 @@ Qa::Authorities::Geonames.username = 'UCSC_Library_DI'
 
 Rails.application.config.to_prepare do
 
+  Hyrax::Dashboard::CollectionsController.presenter_class = Ucsc::CollectionPresenter
+  
   Hyrax::ContactForm.class_eval do
     def self.issue_types_for_locale
       [
