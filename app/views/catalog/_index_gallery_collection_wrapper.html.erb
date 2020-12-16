@@ -1,7 +1,7 @@
 <div class="document col-xs-6 col-md-3">
   <div class="thumbnail">
     <%= link_to image_tag(square_thumbnail_url(document)), document %>
-    <%#= render_thumbnail_tag document, {}, suppress_link: true %>
+    <%#= render_thumbnail_tag document, {square: true}, suppress_link: true %>
     <%#= collection_thumbnail(document, {}, counter: document_counter_with_offset(document_counter)) %>
     <div class="caption">
       <%= render_document_partials document, blacklight_config.view_config(:gallery).partials, :document_counter => document_co$

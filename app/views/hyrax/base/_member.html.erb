@@ -1,7 +1,7 @@
 <%#= Customized from Hyrax 2.4.0 %>
 <tr class="<%= dom_class(member) %> attributes">
   <td class="thumbnail">
-    <%= render_thumbnail_tag member %>
+    <%= render_thumbnail_tag member, {square: true} %>
   </td>
   <%#= classes altered on this TD element %>
   <td class="attribute filename"><%= link_to(member.link_name, contextual_path(member, @presenter)) %></td>
