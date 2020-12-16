@@ -46,7 +46,6 @@ module UcscThumbnailHelper
           else
             thumbnail_url(doc,(image_options[:size] || ucsc_default_thumb_size))
           end
-  end
     view_context.image_tag url, image_options
   end
     
