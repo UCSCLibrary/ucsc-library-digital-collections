@@ -61,7 +61,7 @@ class FileSet < ActiveFedora::Base
 
   def image_server_cache_derivatives
     image_server_derivative_sizes.each do |size|
-      url = UcscThumbnailHelper.thumbnail_url(id,size)
+      url = UcscThumbnailHelper.iiif_thumbnail_url(self,size)
       uri = URI.parse(url)
       http = Net::HTTP.new(uri.host,uri.port)
       http.use_ssl = true
