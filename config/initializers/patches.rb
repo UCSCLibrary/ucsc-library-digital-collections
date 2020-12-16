@@ -41,3 +41,12 @@ module CarrierWave
 
   end
 end
+
+
+unless ["development","test"].include? ENV['RAILS_ENV']
+  class Hyrax::CollectionPresenter
+    def permission_badge_class
+      Ucsc::PermissionBadge
+    end
+  end
+end
