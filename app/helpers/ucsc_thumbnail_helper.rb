@@ -13,6 +13,13 @@ module UcscThumbnailHelper
   end
 
   def square_thumbnail_url(doc,size="150,")
+    unless doc.is_a? SolrDocument
+      if doc.respond_to?(:solr_document)
+        doc = doc.solr_document
+      else
+        return nil
+      end
+    end
     # unless doc is a fileset, use the representative fileset id
     unless doc["has_model_ssim"] == "FileSet"
       fs_id = doc.representative_id || doc.thumbnail_id
