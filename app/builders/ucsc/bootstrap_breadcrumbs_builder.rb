@@ -1,7 +1,6 @@
-# Customized from Hyrax 2.9
-# Removes a truncate() in the render_element function
-class Hyrax::BootstrapBreadcrumbsBuilder < BreadcrumbsOnRails::Breadcrumbs::Builder
-  include ActionView::Helpers::OutputSafetyHelper
+# This class extends its Hyrax equivalent to remove some truncation functions
+# This extension added while using Hyrax 2.9
+class Ucsc::BootstrapBreadcrumbsBuilder < Hyrax::BootstrapBreadcrumbsBuilder
 
   def render
     return "" if @elements.blank?
@@ -21,7 +20,4 @@ class Hyrax::BootstrapBreadcrumbsBuilder < BreadcrumbsOnRails::Breadcrumbs::Buil
     end
   end
 
-  def breadcrumbs_options
-    { class: 'breadcrumb', role: "region", "aria-label" => "Breadcrumb" }
-  end
 end
