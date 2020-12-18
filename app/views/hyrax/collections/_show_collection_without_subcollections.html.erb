@@ -5,8 +5,8 @@
   <header id="collection-description" class="row">
     <% end %>
 
-    <%#= Added bootstrap class, removed badges %>
-    <div class="hyc-title col-md-12">
+    <%#= removed badges %>
+    <div class="hyc-title">
       <h1><%= @presenter.title.first %></h1>
     </div>
 
@@ -27,10 +27,10 @@
     </div>
     <% end %>
     <%#= Customized to add thumbnail, moved description %>
-    <div class="col-md-3">
+    <div class="collection-image">
       <%= render 'hyrax/collections/media_display', presenter: @presenter %>
     </div>
-    <div class="col-md-9">
+    <div class="collection-text">
       <%= render 'collection_description', presenter: @presenter %>
     </div>
     <%#= end %>
