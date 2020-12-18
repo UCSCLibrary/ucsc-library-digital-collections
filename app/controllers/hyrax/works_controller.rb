@@ -31,27 +31,6 @@ module Hyrax
       send_data zip_io.read, :filename => "media_citation_#{presenter.id}.zip", :type => 'application/zip', :disposition => 'attachment'
     end
 
-
-    def manifest
-      headers['Access-Control-Allow-Origin'] = '*'
-      @cache_key = "manifest/#{presenter.id}"
-      respond_to do |wants|
-        wants.json { render json: cached_manifest }
-        wants.html { render json: cached_manifest }
-      end
-    end
-
-    def cached_manifest
-#      modified = presenter.solr_document.modified_date || DateTime.now
-#      @cache_key = "manifest/#{presenter.id}"
-#      if (entry = Rails.cache.send(:read_entry,@cache_key,{})).present?
-#        Rails.cache.delete(@cache_key) if (Time.at(entry.instance_variable_get(:@created_at)) < presenter.solr_document.modified)
-#      end
-#      Rails.cache.fetch(@cache_key){ manifest_builder.to_h.to_json}
-      Rails.cache.fetch("manifest/#{presenter.id}"){ manifest_builder.to_h.to_json}
-    end
-
-
     def deny_access_for_current_user(exception, json_message)
       if (request.format.to_s.include? 'zip')
         render 'hyrax/base/unauthorized', status: :unauthorized, :formats => [:html]
