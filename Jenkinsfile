@@ -11,7 +11,7 @@ pipeline {
     }
     stage('Test') {
       environment {
-        COVERALLS_REPO_TOKEN = credentials('coveralls-repo-token')
+        COVERALLS_REPO_TOKEN = credentials('coverall')
       }
       steps {
         dir("docker_test_env") {
