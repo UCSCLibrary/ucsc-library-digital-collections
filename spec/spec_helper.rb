@@ -12,6 +12,8 @@
 # the additional setup, and require it from the spec files that actually need
 # it.
 
+Rails.logger.log("Here is the CI environment variable: #{ENV['CI']}")
+
 require 'coveralls'
 Coveralls.wear!('rails')
 
