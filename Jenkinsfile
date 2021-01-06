@@ -1,5 +1,10 @@
 pipeline {
   agent any
+  
+  environment {
+    COVERALLS_REPO_TOKEN = credentials('coverall')
+    CI = "true"
+  }
   stages {
     stage('Build') {
       steps {
@@ -10,11 +15,9 @@ pipeline {
       }
     }
     stage('Test') {
-      environment {
-        COVERALLS_REPO_TOKEN = credentials('coverall')
-        CI = "true"
-      }
       steps {
+        echo "CI is ${CI}"
+        echo "coveralls repo token is ${COVERALLS_REPO_TOKEN}"
         dir("docker_test_env") {
           sh 'BRANCH=${GIT_BRANCH/origin\\//} docker exec hycruz /srv/run-unit-tests-when-ready.sh'
         }
