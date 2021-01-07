@@ -7,7 +7,7 @@ function updateEmbedCode(uri, w, h, script) {
   document.getElementById("embedCode").value = embedTemplate;
 }
 
-$(document).ready(function() {
+$(document).on('turbolinks:load', function() {
   // Set default size and initalize iframe dimensions
   $('#embedSize').val('small');
   var selected = $('#embedSize').find(':selected');

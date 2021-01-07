@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).on('turbolinks:load', function() {
 	$("#view-all-collections").click(function() {
 		$("#all-collections").toggle(1000);
 		$(this).text(function(i, text){
