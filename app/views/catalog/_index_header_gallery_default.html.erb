@@ -16,7 +16,7 @@
         <%= t('blacklight.search.documents.counter', counter: counter) %>
       </span>
     <% end %>
-    <%= link_to_document document, truncate(document.title.first, length: 40, separator: ' '), {counter: counter, "data-toggle" => 'tooltip', 'title' => document.title.first} %>
+    <%= link_to_document document, truncate(document.title.first, length: 35, separator: ' '), {counter: counter, "data-toggle" => 'tooltip', 'title' => document.title.first} %>
   </h3>
   <%= document_actions %>
 </header>
