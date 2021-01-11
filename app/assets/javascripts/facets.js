@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).on('turbolinks:load', function() {
 	$("button.facets-toggle").click(function() {
 		$(".facets-toggle span.text").text(function(i, text){
 			return text === "Show Filters" ? "Hide Filters" : "Show Filters";
