@@ -39,3 +39,4 @@ Capybara.configure do |config|
 end
 
 Capybara.app_host = host_url
+Selenium::Webdriver::Firefox::Binary.path="/usr/bin/firefox"
