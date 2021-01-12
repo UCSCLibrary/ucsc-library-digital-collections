@@ -1,20 +1,20 @@
 pipeline {
   agent any
   
-  environment {
-    COVERALLS_REPO_TOKEN = credentials('coveralls-repo-token')
-    CI = "true"
-  }
   stages {
     stage('Build') {
       steps {
         dir("docker_test_env") {
-          git changelog: false, credentialsId: 'github_user', poll: false,  branch: 'unit-test', url: "https://github.com/UCSCLibrary/digital_collections_dev_docker.git"
+          git changelog: false, credentialsId: 'github_user', poll: false,  branch: 'tests', url: "https://github.com/UCSCLibrary/digital_collections_dev_docker.git"
           sh 'BRANCH=${GIT_BRANCH/origin\\//} docker-compose build; BRANCH=${GIT_BRANCH/origin\\//} docker-compose up -d'
         }
       }
     }
     stage('Test') {
+      environment {
+        COVERALLS_REPO_TOKEN = credentials('coveralls-repo-token')
+        CI = "true"
+      }
       steps {
         echo "CI is ${CI}"
         echo "coveralls repo token is ${COVERALLS_REPO_TOKEN}"
