@@ -16,7 +16,7 @@ RSpec.feature 'A guest user visiting the site for the first time', js: false do
     expect(page).to have_content "Browse Collections"
     expect(page).to have_content "Contact Us"
     expect(page).to have_selector "input#search-field-header"
-    expect(page).to have_selector 'li.featured-item img'
+    expect(page).to have_selector 'ul#featured_collections'
     click_on("Contact Us")
     expect(page).to have_css("form")
     expect(page).to have_content("FAQ")
