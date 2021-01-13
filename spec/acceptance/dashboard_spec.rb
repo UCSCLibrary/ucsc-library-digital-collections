@@ -3,10 +3,12 @@ require 'rails_helper'
 RSpec.feature 'An admin user navigating the dashboard' do
 
   before(:each) do
-    @admin = create(:admin)
     admin_role = Role.find_by(name: "admin") || Role.create(name: "admin")
-    admin_role.users << @admin
-    admin_role.save
+    if (@admin = Role.find_by(name:"admin").users.first).nil?
+      @admin = create(:user)
+      admin_role.users << @admin
+      admin_role.save
+    end
     visit '/users/sign_in'
     fill_in "user_email", with: @admin.email
     fill_in "user_password", with: "password"

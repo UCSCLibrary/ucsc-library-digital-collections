@@ -5,7 +5,7 @@ RSpec.feature 'A guest user visiting the site for the first time', js: false do
   scenario 'loads the homepage' do
     visit '/'
     expect(page).to have_content "UC Santa Cruz"
-    expect(page).to have_content "/University Library/i"
+    expect(page).to have_content /University Library/i
     expect(page).to have_content "Accessibility Policy"
     expect(page).to have_content "Takedown Policy"
     expect(page).to have_content "Reproduction & Use"
