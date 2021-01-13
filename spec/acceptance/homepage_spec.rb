@@ -4,7 +4,8 @@ require 'spec_helper_derailed'
 RSpec.feature 'A guest user visiting the site for the first time', js: false do
   scenario 'loads the homepage' do
     visit '/'
-    expect(page).to have_content "UC Santa Cruz University Library Digital Media Collection"
+    expect(page).to have_content "UC Santa Cruz"
+    expect(page).to have_content "University Library"
     expect(page).to have_content "Accessibility Policy"
     expect(page).to have_content "Takedown Policy"
     expect(page).to have_content "Reproduction & Use"

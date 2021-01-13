@@ -8,7 +8,6 @@ require 'rspec/rails'
 require 'capybara/rspec'
 require 'capybara/rails'
 
-ENV['CI'] = 'true'
 require 'spec_helper'
 # Add additional requires below this line. Rails is not loaded until this point!
 
