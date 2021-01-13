@@ -3,9 +3,13 @@ require 'spec_helper_derailed'
 RSpec.feature 'An admin user navigating the Bulk Ops menus', js: false do
 
   before(:each) do
+    @admin = create(:admin)
+    admin_role = Role.find_by(name: "admin") || Role.create(name: "admin")
+    admin_role.users << @admin
+    admin_role.save
     visit '/users/sign_in'
-    fill_in "user_email", with: (ENV['ADMIN_USERNAME'] || 'ethenry@ucsc.edu')
-    fill_in "user_password", with: ENV['ADMIN_PASSWORD']
+    fill_in "user_email", with: @admin.email
+    fill_in "user_password", with: 'password'
     page.click_button('Log in')
   end
 

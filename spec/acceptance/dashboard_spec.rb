@@ -11,7 +11,6 @@ RSpec.feature 'An admin user navigating the dashboard' do
     fill_in "user_email", with: @admin.email
     fill_in "user_password", with: "password"
     page.click_button('Log in')
-    puts @admin.email
     visit '/dashboard'
   end
 
@@ -31,17 +30,16 @@ RSpec.feature 'An admin user navigating the dashboard' do
   end
 
   scenario 'views admin collections browse page' do
-    create_list(:collection_lw,2)
     click_on 'Collections'
     click_on "All Collections"
     expect(page).to have_css('td>div.thumbnail-title-wrapper')
   end
 
   scenario 'views admin works browse page' do
-    build_list(:work,11)
+    create(:work)
     click_on 'Works'
     click_on "All Works"
-    expect(page).to have_css('td>div.media img',count: 24)
+    expect(page).to have_css('td>div.media img')
   end
 
   scenario 'views Manage Users page' do
