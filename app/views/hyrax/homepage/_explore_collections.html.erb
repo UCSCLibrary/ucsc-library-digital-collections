@@ -22,7 +22,7 @@
 <% collections.each do |collection| %>
     <li data-id="<%= collection.id %>">
         <a href="/collections/<%= collection.id %>?locale=en">
-            <img src="<%= collection.thumbnail_path %>">
+            <img src="<%= collection.display_image_url(size: '265,') %>">
             <span><%= truncate(collection.title.first, length: 128, separator: ' ') %></span>
         </a>
     </li>
