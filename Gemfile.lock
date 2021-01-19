@@ -1,16 +1,16 @@
 GIT
   remote: git://github.com/UCSCLibrary/BulkOps.git
-  revision: f010f71113f4bca86fa50f37c2a6b6ddf345c812
+  revision: 719a5f55463e18d54cdb08246e0dcb1ce7b1b28c
   branch: master
   specs:
-    bulk_ops (0.2.4)
+    bulk_ops (0.2.5)
       rails (~> 5)
 
 GIT
   remote: git://github.com/UCSCLibrary/ScoobySnacks.git
-  revision: b078043473643d30c2e3c02e5ea722aad16a7ff4
+  revision: 765a1878bbf2c6c73291f467a1e2cdeee4103800
   specs:
-    scooby_snacks (0.3.9)
+    scooby_snacks (0.3.12)
 
 GIT
   remote: git://github.com/seuros/capistrano-sidekiq.git
@@ -475,7 +475,7 @@ GEM
       signet
       solrizer (>= 3.4, < 5)
       tinymce-rails (~> 4.1)
-    i18n (1.8.5)
+    i18n (1.8.7)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
     iiif_manifest (0.5.0)
@@ -571,7 +571,7 @@ GEM
     listen (3.0.8)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
-    loofah (2.8.0)
+    loofah (2.9.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
@@ -589,8 +589,8 @@ GEM
     mimemagic (0.3.5)
     mini_magick (4.10.1)
     mini_mime (1.0.2)
-    mini_portile2 (2.4.0)
-    minitest (5.14.2)
+    mini_portile2 (2.5.0)
+    minitest (5.14.3)
     mono_logger (1.1.0)
     multi_json (1.15.0)
     multi_xml (0.6.0)
@@ -611,8 +611,9 @@ GEM
     noid-rails (3.0.2)
       actionpack (>= 5.0.0, < 7)
       noid (~> 0.9)
-    nokogiri (1.10.10)
-      mini_portile2 (~> 2.4.0)
+    nokogiri (1.11.1)
+      mini_portile2 (~> 2.5.0)
+      racc (~> 1.4)
     nokogumbo (2.0.2)
       nokogiri (~> 1.8, >= 1.8.4)
     oai (0.4.0)
@@ -646,6 +647,7 @@ GEM
       nokogiri (~> 1.6)
       rails (~> 5.0)
       rdf
+    racc (1.5.2)
     rack (2.2.3)
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
@@ -679,7 +681,7 @@ GEM
       method_source
       rake (>= 0.8.7)
       thor (>= 0.19.0, < 2.0)
-    rake (13.0.1)
+    rake (13.0.3)
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
@@ -915,7 +917,7 @@ GEM
       railties (>= 3.1)
     typhoeus (1.4.0)
       ethon (>= 0.9.0)
-    tzinfo (1.2.8)
+    tzinfo (1.2.9)
       thread_safe (~> 0.1)
     uber (0.1.0)
     uglifier (4.2.0)
