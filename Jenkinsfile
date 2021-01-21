@@ -26,6 +26,12 @@ pipeline {
         sh 'PATH="/var/lib/jenkins/.rvm/rubies/default/bin/:$PATH"; BRANCH_NAME=${GIT_BRANCH/origin\\/}; cap ${BRANCH_NAME/master/production} deploy'
       }
     }
+    stage('SmokeTest') {
+      steps {
+        sh 'BRANCH=${GIT_BRANCH/origin\\//} docker exec hycruz /srv/run-smoke-tests-when-ready.sh'
+      }
+    }
+  }
   post {
     always {
       dir("docker_test_env") {
