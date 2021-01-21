@@ -1,9 +1,9 @@
 GIT
   remote: git://github.com/UCSCLibrary/BulkOps.git
-  revision: 719a5f55463e18d54cdb08246e0dcb1ce7b1b28c
+  revision: 1b15fede3ebb30a97267df080cdb94444ccb7ed6
   branch: master
   specs:
-    bulk_ops (0.2.5)
+    bulk_ops (0.2.6)
       rails (~> 5)
 
 GIT
@@ -223,7 +223,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.12.2)
-    concurrent-ruby (1.1.7)
+    concurrent-ruby (1.1.8)
     connection_pool (2.2.3)
     coveralls (0.8.23)
       json (>= 1.8, < 3)
