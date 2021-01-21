@@ -17,6 +17,8 @@ Coveralls.wear!('rails')
 
 require 'factory_bot_rails'
 
+puts "COVERALLS TOKEN: #{ENV['COVERALLS_REPO_TOKEN']}"
+
 class JsonStrategy
   def initialize
     @strategy = FactoryBot.strategy_by_name(:create).new
