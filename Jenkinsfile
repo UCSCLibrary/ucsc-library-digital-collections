@@ -17,7 +17,7 @@ pipeline {
       }
       steps {
         dir("docker_test_env") {
-          sh 'BRANCH=${GIT_BRANCH/origin\\//} CI=true COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN docker exec hycruz /srv/run-unit-tests-when-ready.sh'
+          sh 'BRANCH=${GIT_BRANCH/origin\\//} CI=true COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN docker exec hycruz /srv/run-tests-when-ready.sh'
         }
       }
     }
