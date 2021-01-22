@@ -32,5 +32,14 @@ RSpec.describe 'Collection', type: :model do
     collection.save
     expect(SolrDocument.find(collection.id).send(controlled_field.name.to_sym)).to include(label)
   end
+
+  it "can accept custom visibility settings" do
+    collection.visibility = "campus"
+    collection.save
+    expect(Collection.find(collection.id).visibility).to eq("campus")
+    collection.visibility = "request"
+    collection.save
+    expect(Collection.find(collection.id).visibility).to eq("request")
+  end
   
 end

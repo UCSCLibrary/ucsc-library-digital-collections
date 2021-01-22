@@ -21,10 +21,6 @@ class Work < ActiveFedora::Base
   
 #  self.human_readable_type = 'Work'
 
-  def first_title
-    SolrDocument.find(id).titleDisplay.first
-  end
-
   def save *args
 
     ::ScoobySnacks::METADATA_SCHEMA.fields.select{|name, field| field.input == "date"}.each do |field_name, field|

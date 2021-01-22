@@ -15,9 +15,10 @@ class User < ApplicationRecord
     @current_access_grants ||= UserAccessGrant.where(user_id: id).where("start < ?", DateTime.now).where("end > ?", DateTime.now).map(&:object_id)
   end
 
-  if Blacklight::Utils.needs_attr_accessible?
-    attr_accessible :email, :password, :password_confirmation
-  end
+ # if Blacklight::Utils.needs_attr_accessible?
+ #   attr_accessible :email, :password, :password_confirmation
+ # end
+
   # Connects this user object to Blacklights Bookmarks.
   include Blacklight::User
   # Include default devise modules. Others available are:

@@ -12,12 +12,7 @@
 # the additional setup, and require it from the spec files that actually need
 # it.
 
-require 'coveralls'
-Coveralls.wear!('rails')
-
 require 'factory_bot_rails'
-
-puts "COVERALLS TOKEN: #{ENV['COVERALLS_REPO_TOKEN']}"
 
 class JsonStrategy
   def initialize
@@ -133,7 +128,7 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 =end
 
-  # include factory girl methods
+  # include factory bot methods
   config.include FactoryBot::Syntax::Methods
 
 end
