@@ -21,6 +21,10 @@ class Work < ActiveFedora::Base
   
 #  self.human_readable_type = 'Work'
 
+  def solr_doc
+    @doc ||= SolrDocument.find(wrk.id)
+  end
+
   def save *args
 
     ::ScoobySnacks::METADATA_SCHEMA.fields.select{|name, field| field.input == "date"}.each do |field_name, field|

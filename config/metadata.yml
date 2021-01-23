@@ -45,6 +45,7 @@ fields:
     work_title: true
     searchable: true
     linked_to_search: false
+    sortable: true
     full_text_searchable: true
 
   accessionNumber:
@@ -330,6 +331,7 @@ fields:
     data_type: date
     index_itemprop: dateCreated
     input: date
+    sortable: true
     display_groups:
       - secondary
       - editor_primary
