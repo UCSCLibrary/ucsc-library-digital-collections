@@ -116,7 +116,7 @@ RSpec.describe Work do
   end
 
   it "can process hyphen-separated year month dates" do
-    work.dateCreated = ["1967-11"]
+    work.dateCreated = ["11-1967"]
     work.save
     expect(work.dateCreated).to include("11/1967")
   end
