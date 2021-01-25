@@ -140,4 +140,8 @@ RSpec.describe Work do
     expect(work.to_s).to include("second title")
   end
 
+  it "can link to its associated solr document" do
+    expect(work.solr_document).to be_a(SolrDocument)
+  end
+  
 end
