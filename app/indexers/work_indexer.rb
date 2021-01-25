@@ -6,6 +6,7 @@ class WorkIndexer < Hyrax::WorkIndexer
   include ControlledIndexerBehavior
   include RepresentativeImageDimensionsIndexBehavior
   include AncestorCollectionBehavior
+  include SortableFieldIndexerBehavior
 
   def generate_solr_document
     super.tap do |solr_doc|
@@ -29,8 +30,8 @@ class WorkIndexer < Hyrax::WorkIndexer
       solr_doc = inherit_fields(solr_doc)
 
       # index the sortable fields
-      schema.sortable_fields.each{ |field| solr_doc[field.solr_sort_name] = Array(solr_doc[field.solr_name]).first}
-
+      solr_doc = index_sortable_fields(solr_doc)
+      
       # I think that merging fields is now supported by blacklight on the display end. Look in to that?
       solr_doc = merge_fields(:subject, [:subjectTopic,:subjectName,:subjectTemporal,:subjectPlace], solr_doc, :stored_searchable)
       solr_doc = merge_fields(:subject, [:subjectTopic,:subjectName,:subjectTemporal,:subjectPlace], solr_doc, :facetable)
