@@ -15,6 +15,7 @@ module SortableFieldIndexerBehavior
       else
         solr_doc[field.solr_sort_name] = Array(solr_doc[field.solr_name]).first
       end
-    end    
+    end
+    solr_doc
   end
 end
