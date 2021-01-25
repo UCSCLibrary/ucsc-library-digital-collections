@@ -116,7 +116,7 @@ RSpec.describe Work do
   end
 
 #  it "can process hyphen-separated year month dates" do
-#    work.dateCreated = ["11-1967"]
+#    work.dateCreated = ["1967-11"]
 #    work.save
 #    expect(work.dateCreated).to include("11/1967")
 #  end
@@ -141,7 +141,7 @@ RSpec.describe Work do
   end
 
   it "can link to its associated solr document" do
-    expect(work.solr_document).to be_a(SolrDocument)
+    expect(work.solr_doc).to be_a(SolrDocument)
   end
   
 end
