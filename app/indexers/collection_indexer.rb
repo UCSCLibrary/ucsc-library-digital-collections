@@ -11,6 +11,9 @@ class CollectionIndexer < Hyrax::CollectionIndexer
     super.tap do |solr_doc|
       solr_doc = index_controlled_fields(solr_doc)
       solr_doc = index_representative_image_dimensions(solr_doc)
+
+      # index the sortable fields
+      schema.sortable_fields.each{|field| solr_doc[field.solr_sort_name] = Array(solr_doc[field.solr_name]).first}
       
       # index the titles a work's ancestor collections
       solr_doc = index_ancestor_titles(solr_doc)
