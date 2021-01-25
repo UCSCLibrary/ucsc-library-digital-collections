@@ -30,8 +30,8 @@ class Work < ActiveFedora::Base
     ::ScoobySnacks::METADATA_SCHEMA.fields.select{|name, field| field.input == "date"}.each do |field_name, field|
       date_changed = false
       dateUpdate = self.send(field_name.to_sym).map do |date|
-        next date unless date.to_s.match?(/[12][0-9]{3}-[0-9]{1,2}/)
-        year, month = date.to_s.split('-')
+        next date unless date.to_s.match?(/\A[12][0-9]{3}[-\/][0-9]{1,2}\z/)
+        year, month = date.to_s.split(/[-\/]/)
         date_changed = true
         "#{month}/#{year}"
       end
