@@ -22,7 +22,7 @@ class Work < ActiveFedora::Base
 #  self.human_readable_type = 'Work'
 
   def solr_doc
-    @doc ||= SolrDocument.find(wrk.id)
+    @doc ||= SolrDocument.find(id)
   end
 
   def save *args
