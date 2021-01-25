@@ -4,7 +4,7 @@ module SortableFieldIndexerBehavior
   def index_sortable_fields solr_doc
     schema.sortable_fields.each do |field|
       if field.input == "date"
-        date_string = Array(solr_doc[field.solr_name]).first
+        next unless (date_string = Array(solr_doc[field.solr_name]).first)
         if date_string.to_s.match?(/\A[12][0-9]{3}[-\/][0-9]{1,2}/)
           year, month = date_string.split(/[-\/]/).map(&:to_i)
           date = Date.new(year,month)
