@@ -10,7 +10,7 @@ class Admin::WorkflowsController < Hyrax::Admin::WorkflowsController
   def index
 
     states = []
-    @workflow_id = workflow.id
+    @workflow_id = workflow.present? ? workflow.id : nil
 
     workflow.workflow_states.each do |state|
       label = state.name.titleize
