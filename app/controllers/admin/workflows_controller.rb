@@ -34,6 +34,7 @@ class Admin::WorkflowsController < Hyrax::Admin::WorkflowsController
     @states = states.sort_by{|state| state[:order]}
   end
 
+  private
 
   def preferred_order state_name
     case state_name
