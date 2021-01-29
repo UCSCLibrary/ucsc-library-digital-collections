@@ -5,8 +5,7 @@ RSpec.describe 'Collection', type: :model do
     @usr = User.find_by_email('test-email') || User.create(email:"test-email")
   end
 
-  
-  let(:collection) { ::Collection.create(depositor: User.first.email, title: ["test collection"], collection_type: Hyrax::CollectionType.first) }
+  let(:collection) { ::Collection.create(depositor: User.first.email, title: ["test collection"], collection_type:  Hyrax::CollectionType.find_or_create_default_collection_type) }
   let(:work) { ::Work.create(depositor: User.first.email, title: ["test work"]) }
 
   it "initially does not include the work" do #PASS
