@@ -32,7 +32,7 @@ module Qa::Authorities
                  foaf:focus/gvp:biographyPreferred [schema:description ?bio] ;
                  skos:altLabel ?alt .
               FILTER #{ex} .
-            } ORDER BY ?name"
+            } ORDER BY ?name".gsub(/[\s\n]+/," ")
       sparql
     end
 
