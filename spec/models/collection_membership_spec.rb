@@ -1,5 +1,11 @@
 require 'rails_helper'
 RSpec.describe 'Collection', type: :model do
+
+  before(:all)  do 
+    @usr = User.find_by_email('test-email') || User.create(email:"test-email")
+  end
+
+  
   let(:collection) { ::Collection.create(depositor: User.first.email, title: ["test collection"], collection_type: Hyrax::CollectionType.first) }
   let(:work) { ::Work.create(depositor: User.first.email, title: ["test work"]) }
 

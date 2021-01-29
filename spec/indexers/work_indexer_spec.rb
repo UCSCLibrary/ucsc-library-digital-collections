@@ -57,7 +57,7 @@ RSpec.describe WorkIndexer do
   describe "An indexer for a work" do
 
     after(:all) do
-      Work.all.each{|wrk| wrk.destroy}
+#      Work.all.each{|wrk| wrk.destroy}
     end
 
     let(:work_properties){{title: ["untitled"],
