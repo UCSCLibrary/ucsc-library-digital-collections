@@ -8,9 +8,9 @@ GIT
 
 GIT
   remote: git://github.com/UCSCLibrary/ScoobySnacks.git
-  revision: c6911dc766e67b112648cb8eb05589e06d3408f7
+  revision: c8574d04837aeb2d298b4cd67b226418ead98866
   specs:
-    scooby_snacks (0.3.14)
+    scooby_snacks (0.3.15)
 
 GIT
   remote: git://github.com/seuros/capistrano-sidekiq.git
