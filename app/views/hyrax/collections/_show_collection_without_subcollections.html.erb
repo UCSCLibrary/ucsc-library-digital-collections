@@ -41,7 +41,7 @@
 
 <div class="row">
   <%#= Moved facets and search to the left column %>
-  <!-- <div class="col-sm-4"> --><div class="col-sm-4 hidden">
+  <div class="col-sm-4">
     <!-- Search results label -->
     <% if @members_count > 0 || @presenter.subcollection_count > 0 %>
     <div class="hyc-blacklight hyc-bl-title">
@@ -62,8 +62,7 @@
     </div>
   </div>
 
-  <!-- <div class="col-sm-8"> --><div>
-
+  <div class="col-sm-8">
     <!-- Works -->
     <% if @members_count > 0 %>
     <div class="hyc-blacklight hyc-bl-title">

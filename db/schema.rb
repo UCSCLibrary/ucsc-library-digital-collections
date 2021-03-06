@@ -88,46 +88,6 @@ ActiveRecord::Schema.define(version: 2020_02_20_225841) do
     t.index ["ingest_id"], name: "index_bulk_meta_rows_on_ingest_id"
   end
 
-  create_table "bulk_ops_github_credentials", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.integer "user_id"
-    t.string "username"
-    t.string "oauth_token"
-    t.string "state"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_bulk_ops_github_credentials_on_user_id"
-  end
-
-  create_table "bulk_ops_operations", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.integer "user_id"
-    t.string "name", null: false
-    t.string "stage", null: false
-    t.string "commit_sha"
-    t.integer "pull_id"
-    t.string "status"
-    t.text "message"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_bulk_ops_operations_on_user_id"
-  end
-
-  create_table "bulk_ops_work_proxies", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.integer "operation_id"
-    t.string "work_id"
-    t.integer "row_number"
-    t.datetime "last_event"
-    t.string "status"
-    t.text "message"
-    t.string "visibility"
-    t.string "work_type"
-    t.string "reference_identifier"
-    t.string "order"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "parent_id"
-    t.integer "previous_sibling_id"
-  end
-
   create_table "checksum_audit_logs", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.string "file_set_id"
     t.string "file_id"
@@ -643,7 +603,7 @@ ActiveRecord::Schema.define(version: 2020_02_20_225841) do
     t.index ["user_id"], name: "index_uploaded_files_on_user_id"
   end
 
-  create_table "user_access_grants", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "user_access_grants", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.integer "user_id"
     t.string "object_id"
     t.datetime "start"
@@ -732,7 +692,6 @@ ActiveRecord::Schema.define(version: 2020_02_20_225841) do
   add_foreign_key "bulk_meta_logs", "bulk_meta_rows", column: "row_id"
   add_foreign_key "bulk_meta_relationships", "bulk_meta_rows", column: "row_id"
   add_foreign_key "bulk_meta_rows", "bulk_meta_ingests", column: "ingest_id"
-  add_foreign_key "bulk_ops_operations", "users"
   add_foreign_key "collection_type_participants", "hyrax_collection_types"
   add_foreign_key "curation_concerns_operations", "users"
   add_foreign_key "mailboxer_conversation_opt_outs", "mailboxer_conversations", column: "conversation_id", name: "mb_opt_outs_on_conversations_id"

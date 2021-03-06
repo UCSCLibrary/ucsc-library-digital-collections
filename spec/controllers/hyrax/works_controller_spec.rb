@@ -9,11 +9,6 @@ RSpec.describe Hyrax::WorksController do
   let(:user) { create(:user) }
   let(:work) { create(:work) }
 
-  after(:all) do
-    Work.all.each{|wrk| wrk.destroy}
-    User.all.each{|usr| usr.destroy}
-  end
-
   before do 
     sign_in user 
   end

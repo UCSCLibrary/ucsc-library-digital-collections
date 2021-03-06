@@ -21,19 +21,19 @@ RSpec.describe Hyrax::WorkForm do
     subject { @frm.primary_terms }
     it { is_expected.to include(:title) }
     it { is_expected.to include(:accessRights) }
-    it { is_expected.not_to include(:physicalDescription) }
+    it { is_expected.not_to include(:rightsStatus) }
   end
 
   describe "#secondary_terms" do
     subject { @frm.secondary_terms }
-    it { is_expected.to include(:physicalDescription) }
+    it { is_expected.to include(:source) }
     it { is_expected.not_to include(:accessRights) }
   end
 
   describe "#terms" do
     subject { described_class.terms }
     it { is_expected.to include(:title) }
-    it { is_expected.to include(:physicalDescription) }
+    it { is_expected.to include(:source) }
     it { is_expected.to include(:accessRights) }
   end
 
