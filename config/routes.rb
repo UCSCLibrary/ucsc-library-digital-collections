@@ -18,6 +18,8 @@ Rails.application.routes.draw do
     end
   end
 
+  # Override Collection edit form to use our collections controller
+  get '/dashboard/collections/:id/edit(.:format)', to: 'ucsc/dashboard/collections#edit'
   mount Hyrax::Engine => '/'
 
   root 'hyrax/homepage#index'

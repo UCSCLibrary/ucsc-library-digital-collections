@@ -5,7 +5,7 @@ RSpec.describe BulkOps::Parser do
   describe "A parser" do
     let(:usr) {User.find_by_email('test-email') || User.create(email:"fakeaccount@fakedomain.net", password: "asfjkhfg8723r91jhk#")}
     let(:op_name) {BulkOps::Operation.unique_name("rspec test branch", usr)}
-    let!(:operation) {BulkOps::Operation.create(name: op_name, user_id: usr.id, operation_type: "ingest", status: "new", stage: "new")}
+    let!(:operation) {BulkOps::Operation.create(name: op_name, user_id: usr.id, status: "new", stage: "new")}
     let(:wrk) {Work.create(depositor: usr.email, title:["test title"])}
 #    let(:wrk2) {Work.create(depositor: usr.email, title:["Another test title"])}
     let(:template_data) {[{"Title" => "Parent Work", "description " => "This is a test description of a test parent item"},

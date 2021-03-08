@@ -5,7 +5,7 @@ RSpec.describe BulkOps::Operation do
   describe "A bulk update" do
     let(:usr) {User.create(email:"test user email")}
     let!(:op_name) {BulkOps::Operation.unique_name("rspec test branch", usr)}
-    let!(:draft) {described_class.create(name: op_name, user_id: usr.id, stage: "draft", operation_type: "update", status: "new")}
+    let!(:draft) {described_class.create(name: op_name, user_id: usr.id, stage: "draft", status: "new")}
     let!(:wrk1) {Work.create(depositor: usr.email, title:["test title"])}
     let!(:wrk2) {Work.create(depositor: usr.email, title:["test title"])}
     let!(:proxy1) {draft.work_proxies.create(work_id: wrk1.id,status:"new")}
