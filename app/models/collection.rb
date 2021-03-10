@@ -50,6 +50,6 @@ class Collection < ActiveFedora::Base
     set_read_groups([ "campus", Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC], remove_groups)
   end
 
-  property :metadataInheritance, predicate: "https://digitalcollections.library.ucsc.edu/ontology/metadataInheritance", multiple: false
+#  property :metadataInheritance, predicate: "https://digitalcollections.library.ucsc.edu/ontology/metadataInheritance", multiple: false
 
 end
