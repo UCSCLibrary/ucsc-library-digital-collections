@@ -1,3 +1,5 @@
+# This controls how our application indexes collection metadata into Solr
+# It is similar to work_indexer but simpler
 require 'nokogiri'
 require 'open-uri'
 require 'linkeddata'

@@ -1,3 +1,5 @@
+# This controller handles search results display
+# This is where we configure a lot of blacklight details
 require 'scooby_snacks/blacklight_configuration'
 require 'ucsc/oai/solr_document_provider'
 class CatalogController < ApplicationController
@@ -20,6 +22,9 @@ class CatalogController < ApplicationController
 #    solr_name('date_modified', :stored_sortable, type: :date)
   end
 
+  # This is a hacky way to make sure we link to the right root url
+  # in all environments without overthinking it (links were breaking
+  # in some of the staging/sandbox environments)
   def self.root_url(environment=nil)
     environment ||= Rails.env
     case environment.to_s
@@ -34,6 +39,7 @@ class CatalogController < ApplicationController
     end
   end
 
+  # This block contains most of the blacklight configuration
   configure_blacklight do |config|
     # default advanced config values
     config.advanced_search ||= Blacklight::OpenStructWithHashAccess.new

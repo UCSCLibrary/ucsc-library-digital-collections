@@ -1,3 +1,5 @@
+# This function collects the ancestors of a work
+# to index them all in one place
 module AncestorCollectionBehavior
   extend ActiveSupport::Concern
   

@@ -1,3 +1,5 @@
+# This adds functionality to index image dimensions in solr
+# which we use to generate square thumbnails and such
 module RepresentativeImageDimensionsIndexBehavior
   extend ActiveSupport::Concern
 

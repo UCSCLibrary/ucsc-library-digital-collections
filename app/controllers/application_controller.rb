@@ -1,3 +1,5 @@
+# All other controllers are subclasses of this class
+# so this code applies to every request to the DAMS
 class ApplicationController < ActionController::Base
   helper Openseadragon::OpenseadragonHelper
   # Adds a few additional behaviors into the application controller
@@ -11,6 +13,7 @@ class ApplicationController < ActionController::Base
 
   before_action :set_image_token
 
+  # This sets the default layout for the site
   with_themed_layout '1_column'
 
   protect_from_forgery with: :exception
@@ -23,6 +26,7 @@ class ApplicationController < ActionController::Base
   
   private
 
+  # This sets a special token for authentication with the image server
   def set_image_token
     return if cookies[:ucsc_imgsrv_token].present?
     domain = ["production", "staging","sandbox"].include?(Rails.env) ? '.library.ucsc.edu' : :all
