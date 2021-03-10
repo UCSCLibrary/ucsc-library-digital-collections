@@ -1,45 +1,46 @@
 class VerifyWorksJob < Hyrax::ApplicationJob
 
-  NOTIFICATION_RECIPIENTS = ['ethenry@ucsc.edu']
+  NOTIFICATION_RECIPIENTS = [User.first.email]
   
-  def perform(job_name: nil, collection_ids: nil, log: nil, report: nil, ignore_private_works: false)
+  def perform(job_name: nil, collection_ids: nil, log: nil, report: nil, ignore_private_works: false, run_display_tests: true, notification_emails: nil)
     @job_name = job_name || Time.now.strftime("%m-%d-%Y_%I%M%p")
-
+    @notification_emails = notification_emails || NOTIFICATION_RECIPIENTS
+    @run_display_tests = run_display_tests
     setup_selenium
     recover_existing_data
     @log_file ||= File.open(logname(),'w')
     @data = {}
     
     begin
-    
-    rows = 200
-
-    if collection_ids.blank?
-      query = ActiveFedora::SolrQueryBuilder.construct_query_for_rel("has_model" => "Collection")
-      collection_ids = ActiveFedora::SolrService.instance.conn.get(ActiveFedora::SolrService.select_path, params: { fq: query, rows: 999})["response"]["docs"].map{|doc| doc["id"]}
-    end
-
-    log("starting verification scan for #{collection_ids.count} collections")
-
-    collection_ids.each do |collection_id|
-      start = 0
-      collection = SolrDocument.find(collection_id)
-
-      verify_collection(collection) unless (collection.visibility == "restricted" && ignore_private_works)
       
-      query = ActiveFedora::SolrQueryBuilder.construct_query_for_rel("has_model" => "Work","member_of_collection_ids" => collection_id.to_s)
-      num_works = ActiveFedora::SolrService.instance.conn.get(ActiveFedora::SolrService.select_path, params: { fq: query, rows: 0})["response"]["numFound"]
-      log("verifying #{num_works} members of collection: #{collection.title.first} (#{collection.id})")
-      until start > num_works
-        works = ActiveFedora::SolrService.instance.conn.get(ActiveFedora::SolrService.select_path, params: { fq: query, rows: rows, start: start})["response"]["docs"]
-        works.each do  |wrk|
-          verify_work(wrk["id"]) unless (wrk['visibility_ssi'] == "restricted" && ignore_private_works)
+      rows = 200
+
+      if collection_ids.blank?
+        query = ActiveFedora::SolrQueryBuilder.construct_query_for_rel("has_model" => "Collection")
+        collection_ids = ActiveFedora::SolrService.instance.conn.get(ActiveFedora::SolrService.select_path, params: { fq: query, rows: 999})["response"]["docs"].map{|doc| doc["id"]}
+      end
+
+      log("starting verification scan for #{collection_ids.count} collections")
+
+      collection_ids.each do |collection_id|
+        start = 0
+        collection = SolrDocument.find(collection_id)
+
+        verify_collection(collection) unless (collection.visibility == "restricted" && ignore_private_works)
+        
+        query = ActiveFedora::SolrQueryBuilder.construct_query_for_rel("has_model" => "Work","member_of_collection_ids" => collection_id.to_s)
+        num_works = ActiveFedora::SolrService.instance.conn.get(ActiveFedora::SolrService.select_path, params: { fq: query, rows: 0})["response"]["numFound"]
+        log("verifying #{num_works} members of collection: #{collection.title.first} (#{collection.id})")
+        until start > num_works
+          works = ActiveFedora::SolrService.instance.conn.get(ActiveFedora::SolrService.select_path, params: { fq: query, rows: rows, start: start})["response"]["docs"]
+          works.each do  |wrk|
+            verify_work(wrk["id"]) unless (wrk['visibility_ssi'] == "restricted" && ignore_private_works)
+          end
+          start = start + rows
+          write_data
         end
-        start = start + rows
         write_data
       end
-      write_data
-    end
 
     ensure
       write_data
@@ -82,7 +83,7 @@ class VerifyWorksJob < Hyrax::ApplicationJob
     message = "We finished running checks on digital objects in the DAMS.\n"
     report = File.read(report_filename || logname("final_report"))
     message += "We found the following issues:\n\n#{report}" unless report.blank?
-    NOTIFICATION_RECIPIENTS.each do |email|
+    @notification_emails.each do |email|
       ActionMailer::Base.mail(from: "admin@digitalcollections.library.ucsc.edu",
                               to: email,
                               subject: subject,
@@ -113,12 +114,12 @@ class VerifyWorksJob < Hyrax::ApplicationJob
     doc = SolrDocument.find(doc) if doc.is_a?(String)
     return if @data[doc.id].present?
     log("verifying work: #{doc.title.first} (#{doc.id})")
-    @browser.visit("/concern/works/#{doc.id}")
-    begin
-      @browser.find("#show-more-metadata>a").click
-    rescue Capybara::ElementNotFound
+#    @browser.visit("/concern/works/#{doc.id}")
+#    begin
+#      @browser.find("#show-more-metadata>a").click
+#    rescue Capybara::ElementNotFound
       #ignore for now
-    end
+#    end
     run_tests(doc)
   end
 
@@ -188,12 +189,19 @@ class VerifyWorksJob < Hyrax::ApplicationJob
   end
 
   def run_tests doc
-    doc = SolrDocument.find(doc) if doc.is_a?(String)
-    @doc = doc
-    @object = ActiveFedora::Base.find(doc.id)
-    # this code is a binary combination of the ids of all the failed tests
-    result_code = tests.select{|test| !run_test(test) }.reduce(0){ |code, test| code + 2**test[:id].to_i}
-    @data[doc.id]=result_code
+    begin
+      doc = SolrDocument.find(doc) if doc.is_a?(String)
+      @doc = doc
+      @object = ActiveFedora::Base.find(doc.id)
+      tests_to_run = tests
+      tests_to_run.select!{|test| test[:type] != :display } unless @run_display_tests
+      # this code is a binary combination of the ids of all the failed tests
+      result_code = tests_to_run.select{|test| !run_test(test) }.reduce(0){ |code, test| code + 2**test[:id].to_i}
+    rescue => e
+      result_code = tests_to_run.reduce(0){ |code, test| code + 2**test[:id].to_i}
+    end
+    @data[doc.id] = result_code
+    return result_code
   end
 
   def run_test test
