@@ -9,6 +9,23 @@
   <div id="facet-panel-collapse" class="collapse panel-group">
     <%= render 'search_form', presenter: @presenter, url: hyrax.collection_path(@presenter.id) %>
     <%= render_facet_partials %>
+    
+    <script type="javascript">
+      // This somewhat hacky script fixes some links in the facet panel, which seems
+      // to only work properly on the search results page out-of-the-box.
+      // Fixing these links by overriding the relevant blacklight code would be
+      // neater, but has proven challenging.
+
+      // Link the "more" button for abbreviated facet lists to the catalog controller,
+      // not the collection controller
+      $('#facets a.more_facets_link').each(function() {
+        url = $(this).attr('href');
+        $(this).attr('href', url.replace(/\/collections\/[a-zA-Z_]+\//i,"/catalog/"))
+      });
+
+      // Set the keyword search attribute to 'q' instead of 'cq' so it displays properly
+      $('input#collection_search').attr('name','q')
+    </script>
   </div>
 </div>
 <% end %>
