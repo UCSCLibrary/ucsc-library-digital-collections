@@ -55,6 +55,8 @@ en:
         placeholder: "Search within this collection..."
       show:
         works_in_collection: results
+    collection_type:
+      default_title: "Collection"
     division:
       name: "Digital Library Initiatives"
       homepage_url: "http://library.ucsc.edu/exhibits/"
