@@ -62,54 +62,23 @@ class ReindexJob < Hyrax::ApplicationJob
       i=start
       id_list = id_list_file
       id_list.seek(i)
-      while(id = id_list.readline)
+      while(id = id_list.readline.strip)
         begin
-          ActiveFedora::Base.find(doc['id']).save
+          ActiveFedora::Base.find(id).save
         rescue StandardError => e
-          report_error(e,doc['id'])
+          report_error(e,id)
         end
-        log("completed work #{i} of #{num_works}")
-        puts("\n\ncompleted work #{i} of #{num_works}\n\n")
+        log("completed work #{i}")
+        puts("\n\ncompleted work #{i}\n\n")
         i += 1
       end
-    rescue StandardError => e
-      report_error(e,'NO ID')
+#    rescue StandardError => e
+#      report_error(e,'NO ID')
     ensure
       report_last(i)
       log_file.close unless log_file.nil?
       error_file.close unless error_file.nil?
     end
   end
-
-
-2.7.2 :318 >   def perform(job_name="default",start=nil)
-2.7.2 :319 >     begin
-2.7.2 :320 >       @start = last_complete
-2.7.2 :321 >       @start = start unless start.nil?
-2.7.2 :322 >       @start = 0 if @start.nil?
-2.7.2 :323 >       rows = 100
-2.7.2 :324 >       @job_name = job_name
-2.7.2 :325 >       i=@start; puts i
-2.7.2 :326 >       id_list = id_list_file
-2.7.2 :327 >       id_list.seek(i)
-2.7.2 :328 >       while(id = id_list.readline.strip)
-2.7.2 :329 >         puts id; begin
-2.7.2 :330 >           ActiveFedora::Base.find(id).save
-2.7.2 :331 >         rescue StandardError => e
-2.7.2 :332 >           report_error(e,id)
-2.7.2 :333 >         end
-2.7.2 :334 >         log("completed work #{i}")
-2.7.2 :335 >         puts("\n\ncompleted work #{i}\n\n")
-2.7.2 :336 >         i += 1
-2.7.2 :337 >       end
-2.7.2 :338 > #    rescue StandardError => e
-2.7.2 :339 > #      report_error(e,'NO ID')
-2.7.2 :340 >     ensure
-2.7.2 :341 >       report_last(i)
-2.7.2 :342 >       log_file.close unless log_file.nil?
-2.7.2 :343 >       error_file.close unless error_file.nil?
-2.7.2 :344 >     end
-2.7.2 :345 >   end
-
   
 end
