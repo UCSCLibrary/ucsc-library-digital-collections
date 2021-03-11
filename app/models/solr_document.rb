@@ -108,6 +108,8 @@ class SolrDocument
   def display_image_url(size: "800,")
     if representative_id.present? && (representative_id != id)
       SolrDocument.find(representative_id).display_image_url(size: size)
+    elsif !image?
+      thumbnail_path
     elsif self['hasRelatedImage_ssim'].present?
       Hyrax.config.iiif_image_url_builder.call(self['hasRelatedImage_ssim'].first,"nil",size)
     elsif self['relatedImageId_ss'].present?

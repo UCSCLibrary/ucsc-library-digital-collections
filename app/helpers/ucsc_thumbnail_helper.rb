@@ -34,6 +34,7 @@ module UcscThumbnailHelper
   end
 
   def self.iiif_thumbnail_url(doc,size="150,")
+    return doc.thumbnail_path unless doc.image?
     image_config = size.is_a?(String) ? {size: size} : size
     region = image_config[:region] || "full"
     rotation = image_config[:rotation] || "0"
