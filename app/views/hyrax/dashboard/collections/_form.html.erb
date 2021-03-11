@@ -24,7 +24,13 @@
     <% end %>
   </ul>
 
-  <%= simple_form_for @form, url: [hyrax, :dashboard, @form], html: { class: 'editor' } do |f| %>
+  <%# adding data parameters to this form to enable controlled vocabulary javascripts  %>
+  <%= simple_form_for [main_app, @form], url: [hyrax, :dashboard, @form],
+                    html: {
+                      data: { behavior: 'collection-form',
+                              'param-key' => @form.model_name.param_key },
+                      multipart: true
+                    } do |f| %>
     <div class="tab-content">
       <div id="description" class="tab-pane active">
         <div class="panel panel-default labels">
