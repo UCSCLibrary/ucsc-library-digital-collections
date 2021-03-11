@@ -27,6 +27,7 @@ class Work < ActiveFedora::Base
 
   def save *args
 
+    # This section handles alternate date formates and standardizes them
     ::ScoobySnacks::METADATA_SCHEMA.fields.select{|name, field| field.input == "date"}.each do |field_name, field|
       date_changed = false
       dateUpdate = self.send(field_name.to_sym).map do |date|
@@ -38,6 +39,7 @@ class Work < ActiveFedora::Base
       self.send("#{field_name.to_s}=".to_sym,dateUpdate) if date_changed
     end
 
+    # This section standardized ambiguous controlled vocab urls
     ::ScoobySnacks::METADATA_SCHEMA.controlled_field_names.each do |field_name|
       attributes = []
       props =  self.send(field_name)
@@ -55,6 +57,7 @@ class Work < ActiveFedora::Base
       self.send(field_name.to_s+"_attributes=",attributes) unless attributes.empty?
     end
 
+    # This section attempts to ensure that each work has a representative ID
     if representative_id.blank? && members.present?
       representative_id = members.reduce([]){|ids, member| ids + Array(member.representative_id) }.first
     end
@@ -62,6 +65,7 @@ class Work < ActiveFedora::Base
     set_thumbnail
     
     # set metadataInheritance based on collection or admin set if applicable
+    # (inherit the metadataInheritance property itself)
     if metadataInheritance.blank?
       if (collection = member_of.find{|col| col.class == Collection && col.metadataInheritance.present?})
         metadataInheritance = collection.metadataInheritance 
