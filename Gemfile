@@ -100,7 +100,7 @@ gem 'browse-everything'
 # Uncomment the following line when developing samvera_hls to load the gem from a local folder
 #gem 'samvera_hls', path: "/srv/samvera_hls/"
 # This loads the samvera_hls gem from RubyGems
-gem 'samvera_hls', '0.4.3'
+gem 'samvera_hls', '0.4.4'
 
 # ScoobySnacks configures our metadata schema for us
 # Uncomment the following line when developing scooby snacks to load the gem from a local folder
