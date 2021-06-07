@@ -13,11 +13,11 @@ You must update the minified version of MustacheJS that appears on or around lin
 
 Update the code from: 
 ```js
-define(["exports"],e)
+define(e)
 ```
 To:
 ```js
-define('Mustache',["exports"],e)
+define('Mustache',e)
 ```
 Don't change any other code in the line.
 
@@ -35,5 +35,5 @@ To:
 ```js
 document.addEventListener("turbolinks:load", function() { 
   springSpace.la.load_6282 = new springSpace.la.fbwidget_loader(6282);
- })();
+ });
 ```
