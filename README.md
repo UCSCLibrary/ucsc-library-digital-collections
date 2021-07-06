@@ -34,7 +34,7 @@ This project relies on a specific directory structure in order for it to reliabl
 # Clone the rest of the dependencies and place into respective folders
 > git clone git@github.com:UCSCLibrary/bulkops.git bulk_ops
 > git clone git@github.com:UCSCLibrary/scoobysnacks.git scooby_snacks
-? git clone git@github.com:UCSCLibrary/samvera_hls.git samvera_hls
+> git clone git@github.com:UCSCLibrary/samvera_hls.git samvera_hls
 
 # Install and unzip fits library (Samvera requirement)
 > wget https://github.com/harvard-lts/fits/releases/download/1.5.0/fits-1.5.0.zip # You may need to install wget (`brew update && brew install wget`)
