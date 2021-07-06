@@ -78,6 +78,7 @@ Once your project directories and remotes are set up, you are set to develop.
 - The `hyrax` directory contains project code that you will edit and commit
 
 **Workflows**
+
 Here is the general workflow you'll start with. (Please edit this when/if requirements change or a better workflow is determined)
 
 - Create a branch
