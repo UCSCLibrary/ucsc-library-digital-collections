@@ -84,8 +84,9 @@ Here is the general workflow you'll start with. (Please edit this when/if requir
 - Create a branch
 - Edit
 - Commit
-- `git push n8 <branch-name> ` to push to N8 for build and staging deploy
-- When approved in Notch8 QA, make an **MR** against `origin`
+- `git push n8 <branch-name> ` to push to N8 
+- Merge to default branch (`n8-staging`) to trigger staging deploy
+- When approved in Notch8 QA, make an **MR** against `origin` (using your original, pre n8-staging merge  **MR**)
 
 ## Log in to a repl on the dev site
 If you need a repl on the dev site, first log in to the webapp container: `docker exec -it hycruz bash`. Then you can just enter `repl` to activate a shortcut I created to set the bundle parameters correctly and start the repl.
