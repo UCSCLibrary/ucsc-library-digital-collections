@@ -38,8 +38,8 @@ This project relies on a specific directory structure in order for it to reliabl
 
 # Install and unzip fits library (Samvera requirement)
 > wget https://github.com/harvard-lts/fits/releases/download/1.5.0/fits-1.5.0.zip # You may need to install wget (`brew update && brew install wget`)
-> unzip fits-1.5.0.zip
-> fits-1.5.0 fits
+> mkdir fits
+> unzip fits-1.5.0.zip -d fits
 > rm fits-1.5.0.zip
 
 # Create additional asset folders
