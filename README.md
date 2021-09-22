@@ -27,7 +27,7 @@ This project relies on a specific directory structure in order for it to reliabl
 # Make a directory for UCSC project
 > mkdir ucsc-dc && cd ucsc-dc
 # Clone the digital collections repo and put it in a `hyrax` directory
-> git clone git@github.com:UCSCLibrary/digital_collections_dev_docker.git hyrax
+> git clone git@github.com:UCSCLibrary/ucsc-library-digital-collections.git hyrax
 # Clone the Docker setup and put it in `docker` directory`
 > git clone git@github.com:UCSCLibrary/digital_collections_dev_docker.git docker
 
@@ -46,8 +46,8 @@ This project relies on a specific directory structure in order for it to reliabl
 > mkdir dams_ingest
 > mkdir dams_derivatives
 
-# Create development env file
-> touch .env.development
+# Create development env file in `docker` directory
+> touch docker/.env.development
 
 # Start Docker from within `docker` directory
 > cd docker
