@@ -24,6 +24,7 @@
 
 //= require_directory .
 //= require hyrax
+//= require bulkrax/application
 //= require_tree ./hyrax
 
 //= require browse_everything

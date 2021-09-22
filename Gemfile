@@ -114,6 +114,10 @@ gem 'scooby_snacks', git: 'git://github.com/UCSCLibrary/ScoobySnacks.git'
 # The following line loads the most recent ScoobySnacks version from github
 gem 'bulk_ops', git: 'git://github.com/UCSCLibrary/BulkOps.git', branch: 'master'
 
+# Bulkrax
+gem 'bulkrax', git: 'git://github.com/samvera-labs/bulkrax.git', branch: 'main'
+gem 'willow_sword', github: 'notch8/willow_sword'
+
 gem 'sinatra', git: 'git://github.com/sinatra/sinatra.git'
 
 # The following three gems handle the interface for monitoring background tasks
