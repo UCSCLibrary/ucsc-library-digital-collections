@@ -335,4 +335,9 @@ Rails.application.config.to_prepare do
       end
     end      
   end
+
+  # set bulkrax default work type to first curation_concern if it isn't already set
+  if Bulkrax.default_work_type.blank?
+    Bulkrax.default_work_type = Hyrax.config.curation_concerns.first.to_s
+  end
 end
