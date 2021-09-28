@@ -1,0 +1,260 @@
+replicaCount: 2
+
+livenessProbe:
+  enabled: false
+readinessProbe:
+  enabled: false
+
+brandingVolume:
+  storageClass: nfs
+derivativesVolume:
+  storageClass: nfs
+uploadsVolume:
+  storageClass: nfs
+
+extraVolumeMounts:
+  - name: uploads
+    mountPath: /app/samvera/hyrax-webapp/tmp/imports
+    subPath: imports
+  - name: uploads
+    mountPath: /app/samvera/hyrax-webapp/tmp/exports
+    subPath: exports
+  - name: uploads
+    mountPath: /app/samvera/hyrax-webapp/public/system
+    subPath: public-system
+  - name: uploads
+    mountPath: /app/samvera/hyrax-webapp/public/uploads
+    subPath: public-uploads
+  - name: uploads
+    mountPath: /app/samvera/hyrax-webapp/tmp/network_files
+    subPath: network-files
+
+ingress:
+  enabled: true
+  hosts:
+    - host: hyrax-hyrax-staging.notch8.cloud
+      paths:
+        - path: /
+    - host: "*.hyrax-hyrax-staging.notch8.cloud"
+      paths:
+        - path: /
+
+extraEnvVars:
+  - name: CONFDIR
+    value: "/app/samvera/hyrax-webapp/solr/config"
+  - name: INITIAL_ADMIN_EMAIL
+    value: CHANGEME
+  - name: INITIAL_ADMIN_PASSWORD
+    value: testing123
+
+  - name: DATABASE_ADAPTER
+    value: mysql2
+  - name: MYSQL_HOST
+    value: hyrax-staging-mariadb
+  - name: MYSQL_DATABASE
+    value: hyrax-hyrax
+  - name: MYSQL_USER
+    value: hyrax-hyrax
+
+  - name: FCREPO_BASE_PATH
+    value: /hyrax
+  - name: FCREPO_HOST
+    # For use in staging, CHANGE for production deploys
+    value: fcrepo.staging-fcrepo.svc.cluster.local:8080
+  - name: FCREPO_PATH
+    value: /rest
+  - name: FCREPO_URL
+    # For use in staging, CHANGE for production deploys
+    value: http://fcrepo.staging-fcrepo.svc.cluster.local:8080/rest
+  - name: IN_DOCKER
+    value: "true"
+  - name: LD_LIBRARY_PATH
+    value: /app/fits/tools/mediainfo/linux
+  - name: PASSENGER_APP_ENV
+    value: production
+  - name: RAILS_CACHE_STORE_URL
+    value: redis://:staging@hyrax-staging-redis-master:6379/hyrax
+  - name: RAILS_ENV
+    value: production
+  - name: RAILS_LOG_TO_STDOUT
+    value: "true"
+  - name: RAILS_MAX_THREADS
+    value: "5"
+  - name: RAILS_SERVE_STATIC_FILES
+    value: "true"
+  - name: REDIS_HOST
+    value: hyrax-staging-redis-master
+  - name: REDIS_PREFIX
+    value: hyrax
+  - name: REDIS_SERVER
+    value: redis://:staging@hyrax-staging-redis-master:6379/hyrax
+  - name: SETTINGS__ACTIVE_JOB__QUEUE_ADAPTER
+    value: sidekiq
+  - name: SETTINGS__BULKRAX__ENABLED
+    value: "false"
+  - name: SETTINGS__CONTACT_EMAIL
+    value: CHANGEME
+  - name: SETTINGS__DEVISE__INVITATION_FROM_EMAIL
+    value: CHANGEME
+  - name: SETTINGS__FITS_PATH
+    value: /app/fits/fits.sh
+  - name: SETTINGS__SOLR__COLLECTION_OPTIONS__COLLECTION__CONFIG_NAME
+    value: hyrax-hyrax-staging
+  - name: SETTINGS__SOLR__CONFIGSET
+    value: hyrax-hyrax-staging
+  - name: SETTINGS__SOLR__URL
+    value: <CHANGEME>hyrax-hyrax-staging
+  - name: SETTINGS__ZOOKEEPER__CONNECTION_STR
+    value: solr-zookeeper-headless.default:2181/configs
+  - name: SOLR_ADMIN_USER
+    value: admin
+  - name: SOLR_COLLECTION_NAME
+    value: hyrax-hyrax-staging
+  - name: SOLR_CONFIGSET_NAME
+    value: hyrax-hyrax-staging
+  - name: SOLR_HOST
+    # For use in staging, CHANGE for production deploys
+    value: solr.staging-solr.svc.cluster.local
+  - name: SOLR_PORT
+    value: "8983"
+  - name: SOLR_URL
+    value: <CHANGEME>hyrax-hyrax-staging
+
+worker:
+  replicaCount: 1
+  podSecurityContext:
+    runAsUser: 1001
+    runAsGroup: 101
+    fsGroup: 101
+    fsGroupChangePolicy: "OnRootMismatch"
+  extraVolumeMounts:
+    - name: uploads
+      mountPath: /app/samvera/hyrax-webapp/tmp/imports
+      subPath: imports
+    - name: uploads
+      mountPath: /app/samvera/hyrax-webapp/tmp/exports
+      subPath: exports
+    - name: uploads
+      mountPath: /app/samvera/hyrax-webapp/public/system
+      subPath: public-system
+    - name: uploads
+      mountPath: /app/samvera/hyrax-webapp/public/uploads
+      subPath: public-uploads
+    - name: uploads
+      mountPath: /app/samvera/hyrax-webapp/tmp/network_files
+      subPath: network-files
+  extraEnvVars:
+  - name: CONFDIR
+    value: "/app/samvera/hyrax-webapp/solr/config"
+  - name: INITIAL_ADMIN_EMAIL
+    value: CHANGEME
+  - name: INITIAL_ADMIN_PASSWORD
+    value: testing123
+  - name: DATABASE_ADAPTER
+    value: mysql2
+  - name: MYSQL_HOST
+    value: hyrax-staging-mariadb
+  - name: MYSQL_DATABASE
+    value: hyrax-hyrax
+  - name: MYSQL_USER
+    value: hyrax-hyrax
+  - name: FCREPO_BASE_PATH
+    value: /hyrax
+  - name: FCREPO_HOST
+    # For use in staging, CHANGE for production deploys
+    value: fcrepo.staging-fcrepo.svc.cluster.local:8080
+  - name: FCREPO_PATH
+    value: /rest
+  - name: FCREPO_URL
+    # For use in staging, CHANGE for production deploys
+    value: http://fcrepo.staging-fcrepo.svc.cluster.local:8080/rest
+  - name: IN_DOCKER
+    value: "true"
+  - name: LD_LIBRARY_PATH
+    value: /app/fits/tools/mediainfo/linux
+  - name: PASSENGER_APP_ENV
+    value: production
+  - name: RAILS_CACHE_STORE_URL
+    value: redis://:staging@hyrax-staging-redis-master:6379/hyrax
+  - name: RAILS_ENV
+    value: production
+  - name: RAILS_LOG_TO_STDOUT
+    value: "true"
+  - name: RAILS_MAX_THREADS
+    value: "5"
+  - name: RAILS_SERVE_STATIC_FILES
+    value: "true"
+  - name: REDIS_HOST
+    value: hyrax-staging-redis-master
+  - name: REDIS_SERVER
+    value: redis://:staging@hyrax-staging-redis-master:6379/hyrax
+  - name: REDIS_PREFIX
+    value: hyrax
+  - name: SETTINGS__ACTIVE_JOB__QUEUE_ADAPTER
+    value: sidekiq
+  - name: SETTINGS__BULKRAX__ENABLED
+    value: "false"
+  - name: SETTINGS__CONTACT_EMAIL
+    value: CHANGEME
+  - name: SETTINGS__DEVISE__INVITATION_FROM_EMAIL
+    value: CHANGEME
+  - name: SETTINGS__FITS_PATH
+    value: /app/fits/fits.sh
+  - name: SETTINGS__SOLR__COLLECTION_OPTIONS__COLLECTION__CONFIG_NAME
+    value: hyrax-hyrax-staging
+  - name: SETTINGS__SOLR__CONFIGSET
+    value: hyrax-hyrax-staging
+  - name: SETTINGS__SOLR__URL
+    value: http://admin:ncGXC5Qjpk@solr.staging-solr.svc.cluster.local:8983/solr/hyrax-hyrax-staging
+  - name: SETTINGS__ZOOKEEPER__CONNECTION_STR
+    value: solr-zookeeper-headless.default:2181/configs
+  - name: SOLR_ADMIN_USER
+    value: admin
+  - name: SOLR_COLLECTION_NAME
+    value: hyrax-hyrax-staging
+  - name: SOLR_CONFIGSET_NAME
+    value: hyrax-hyrax-staging
+  - name: SOLR_HOST
+    value: solr.staging-solr
+  - name: SOLR_PORT
+    value: "8983"
+  - name: SOLR_URL
+    value: http://admin:ncGXC5Qjpk@solr.staging-solr.svc.cluster.local:8983/solr/hyrax-hyrax-staging
+  # - name: SENTRY_DSN
+  #   value: $SENTRY_DSN
+
+podSecurityContext:
+  runAsUser: 1001
+  runAsGroup: 101
+  fsGroup: 101
+  fsGroupChangePolicy: "OnRootMismatch"
+
+embargoRelease:
+  enabled: false
+leaseRelease:
+  enabled: false
+
+imagePullSecrets:
+  - name: gitlab
+
+fcrepo:
+  enabled: false
+
+      
+
+redis:
+  cluster:
+    enabled: false
+  password: staging
+solr:
+  enabled: false
+
+# For use in staging, CHANGE for production deploys
+externalFcrepoHost: fcrepo.staging-fcrepo.svc.cluster.local
+
+# This assumes the solr admin password is set up in your namespace
+solrExistingSecret: solr-admin-password
+# For use in staging, CHANGE for production deploys
+externalSolrHost: solr.staging-solr.svc.cluster.local
+externalSolrUser: admin
+externalSolrCollection: "hyrax-hyrax-staging"

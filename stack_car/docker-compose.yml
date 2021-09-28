@@ -1,0 +1,105 @@
+version: '2.1'
+services:
+  mysql:
+    image: mysql:5.7
+    environment:
+      - MYSQL_DATABASE=hyrax
+      - MYSQL_USER=hyrax
+      - MYSQL_PASSWORD=DatabaseFTW
+      - MYSQL_ROOT_PASSWORD=DatabaseFTW
+    ports:
+      - '3306'
+    volumes:
+      - 'mysql:/var/lib/mysql'
+
+  solr:
+    image: solr:latest
+    env_file:
+      - .env
+      - .env.development
+    ports:
+      - "8983"
+    volumes:
+      - 'solr:/opt/solr/server/solr/mycores'
+    entrypoint:
+      - docker-entrypoint.sh
+      - solr-precreate
+      - mycore
+    # docker-compose exec --user=solr solr bin/solr create_core -c CORENAME
+  redis:
+    image: 'redis:3.2-alpine'
+    env_file:
+      - .env
+      - .env.development
+    command: redis-server
+    ports:
+      - '6379'
+    volumes:
+      - 'redis:/var/lib/redis/data'
+  fcrepo:
+    image: botimer/fcrepo:4.5.1
+    env_file:
+      - .env
+      - .env.development
+    volumes:
+      - 'fcrepo:/opt/data'
+    ports:
+      - "8080"
+
+  app:
+    build:
+      context: ..
+      dockerfile: stack_car/Dockerfile
+      args:
+        DEPLOY_KEY: "${DEPLOY_KEY}"
+        REPO_URL: "${REPO_URL}"
+        BRANCH: "${BRANCH}"
+    image: "${REGISTRY_HOST}${REGISTRY_URI}:${TAG:-main}"
+    env_file:
+      - .env
+      - .env.development
+    volumes:
+      - .:/home/app/webapp:cached
+      - node_modules:/home/app/webapp/node_modules
+      - tmp_cache:/home/app/webapp/tmp/cache
+    # Keep the stdin open, so we can attach to our app container's process
+    # and do things such as byebug, etc:
+    stdin_open: true
+    # Enable sending signals (CTRL+C, CTRL+P + CTRL+Q) into the container:
+    tty: true
+
+  web:
+    extends: app
+    ports:
+      - "${WEB_PORT}"
+    environment:
+      - VIRTUAL_HOST=.hyrax.test
+      - VIRTUAL_PORT=3000
+    depends_on:
+      - fcrepo
+      - mysql
+      - sidekiq
+      - solr
+      - redis
+
+
+
+
+  worker:
+    extends: app
+    command: bundle exec sidekiq
+    depends_on:
+      - fcrepo
+      - mysql
+      - sidekiq
+      - solr
+      - redis
+
+
+volumes:
+  mysql:
+  solr:
+  redis:
+  fcrepo:
+  tmp_cache:
+  node_modules:
