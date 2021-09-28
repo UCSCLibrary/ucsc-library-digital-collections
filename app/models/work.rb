@@ -2,6 +2,7 @@
 #  `rails generate hyrax:work Work`
 class Work < ActiveFedora::Base
   include ::Hyrax::WorkBehavior
+  include ::Bulkrax::Metadata
 
   #overwrite date_modified property so as not to conflict with dateDigitized
   property :date_modified, predicate: ::RDF::URI.new("http://digitalcollections.library.ucsc.edu/ontology/modified"), multiple: false do |index|

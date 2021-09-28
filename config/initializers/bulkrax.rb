@@ -5,10 +5,11 @@ Bulkrax.setup do |config|
   # config.parsers += [
   #   { name: 'MODS - My Local MODS parser', class_name: 'Bulkrax::ModsXmlParser', partial: 'mods_fields' },
   # ]
+  config.parsers = [{ name: 'CSV - Comma Separated Values', class_name: 'Bulkrax::CsvParser', partial: 'csv_fields' }]
 
   # WorkType to use as the default if none is specified in the import
   # Default is the first returned by Hyrax.config.curation_concerns
-  # config.default_work_type = MyWork
+  config.default_work_type = 'Work'
 
   # Path to store pending imports
   # config.import_path = 'tmp/imports'
@@ -36,13 +37,92 @@ Bulkrax.setup do |config|
   # The mapping is supplied per Entry, provide the full class name as a string, eg. 'Bulkrax::CsvEntry'
   # The default value for CSV is collection
   # Add/replace parsers, for example:
-  # config.collection_field_mapping['Bulkrax::RdfEntry'] = 'http://opaquenamespace.org/ns/set'
+  config.collection_field_mapping['Bulkrax::CsvEntry'] = 'parent'
 
   # Field mappings
   # Create a completely new set of mappings by replacing the whole set as follows
   #   config.field_mappings = {
   #     "Bulkrax::OaiDcParser" => { **individual field mappings go here*** }
   #   }
+
+  config.field_mappings = {
+    'Bulkrax::CsvParser' => {
+      # Bulkrax mappings
+      'bulkrax_identifier' => { from: ['bulkrax_identifier'], source_identifier: true },
+      'file' => { from: ['filename'] },
+      'model' => { from: ['worktype', 'type'] },
+      # Metadata mappings
+      'accessRights' => { from: ['accessrights'] },
+      'accessionNumber' => { from: ['accessionnumber'] },
+      'based_near' => { from: ['based_near', 'basednear'] }, # only defined on Course
+      'bibliographic_citation' => { from: ['bibliographic_citation', 'bibliographiccitation'] }, # only defined on Course
+      'boxFolder' => { from: ['boxfolder'] },
+      'collectionCallNumber' => { from: ['collectioncallnumber'] },
+      'contributor' => { from: ['contributor'] },
+      'coordinates' => { from: ['coordinates'] },
+      'creator' => { from: ['creator'] },
+      # 'date_created' => { from: ['date_created'] }, # only defined on Course, use alt dateCreated
+      'dateCreated' => { from: ['datecreated'] },
+      'dateCreatedDisplay' => { from: ['datecreateddisplay'] },
+      # 'date_digitized' => { from: ['date_digitized'] }, # only defined on Course and Lecture, use alt dateDigitized
+      'dateDigitized' => { from: ['datedigitized'] },
+      'dateOfSituation' => { from: ['dateofsituation'] },
+      'datePublished' => { from: ['datepublished'] },
+      'description' => { from: ['description'] },
+      'descriptionAddress' => { from: ['descriptionaddress'] },
+      'descriptionFeature' => { from: ['descriptionfeature'] },
+      'descriptionNeighborhood' => { from: ['descriptionneighborhood'] },
+      'descriptionStreet' => { from: ['descriptionstreet'] },
+      'descriptionTownshipRange' => { from: ['descriptiontownshiprange'] },
+      'digital_extent' => { from: ['digital_extent', 'digitalextent'] }, # only defined on Course and Lecture
+      'digital_publisher_homepage' => { from: ['digital_publisher_homepage', 'digitalpublisherhomepage'] }, # only defined on Course and Lecture
+      'displayRole' => { from: ['displayrole'] },
+      'donorProvenance' => { from: ['donorprovenance'] },
+      'extent' => { from: ['extent'] },
+      'genre' => { from: ['genre'] },
+      'identifier' => { from: ['identifier'] }, # only defined on Course
+      'import_url' => { excluded: true },
+      'independentlyDisplayed' => { from: ['independentlydisplayed'] },
+      'itemCallNumber' => { from: ['itemcallnumber'] },
+      'keyword' => { from: ['keyword'] },
+      'label' => { from: ['label'] },
+      'language' => { from: ['language'] },
+      'license' => { from: ['license'] }, # only defined on Course
+      'masterFilename' => { from: ['masterfilename'] },
+      'metadataInheritance' => { from: ['metadatainheritance'] },
+      'metadataSource' => { from: ['metadatasource'] },
+      'originalPublisher' => { from: ['originalpublisher'] },
+      'owner' => { excluded: true },
+      'physicalDescription' => { from: ['physicaldescription'] },
+      # 'physical_format' => { from: ['physical_format'] }, # only defined on Course and Lecture, use alt physicalFormat
+      'physicalFormat' => { from: ['physicalformat'] },
+      'publisher' => { from: ['publisher'] },
+      'publisherHomepage' => { from: ['publisherhomepage'] },
+      'relatedResource' => { from: ['relatedresource'] },
+      'related_url' => { from: ['related_url', 'relatedurl'] }, # only defined on Course
+      'relative_path' => { excluded: true },
+      # 'resource_type' => { from: ['resource_type'] }, # only defined on Course and Lecture, use alt resourceType
+      'resourceType' => { from: ['resourcetype'] },
+      'rightsHolder' => { from: ['rightsholder'] },
+      # 'rights_statement' => { from: ['rights_statement'] }, # only defined on Course, use alt rightsStatement
+      'rightsStatement' => { from: ['rightsstatement'] },
+      'rightsStatus' => { from: ['rightsstatus'] },
+      'scale' => { from: ['scale'] },
+      'series' => { from: ['series'] },
+      'source' => { from: ['source'] },
+      'staffNote' => { from: ['staffnote'] },
+      'subject' => { from: ['subject'] }, # only defined on Course
+      'subjectName' => { from: ['subjectname'] },
+      'subjectPlace' => { from: ['subjectplace'] },
+      'subjectTemporal' => { from: ['subjecttemporal'] },
+      'subjectTitle' => { from: ['subjecttitle'] },
+      'subjectTopic' => { from: ['subjecttopic'] },
+      'subseries' => { from: ['subseries'] },
+      'theme' => { from: ['theme'] },
+      'title' => { from: ['title'] },
+      'titleAlternative' => { from: ['titlealternative'] }
+    }
+  }
 
   # Add to, or change existing mappings as follows
   #   e.g. to exclude date
@@ -63,6 +143,7 @@ Bulkrax.setup do |config|
   #    config.fill_in_blank_source_identifiers = ->(parser, index) { "b-#{parser.importer.id}-#{index}"}
   # or use a uuid
   #    config.fill_in_blank_source_identifiers = ->(parser, index) { SecureRandom.uuid }
+  config.fill_in_blank_source_identifiers = ->(parser, index) { "#{parser.importerexporter.id}-#{index}" }
 
   # Properties that should not be used in imports/exports. They are reserved for use by Hyrax.
   # config.reserved_properties += ['my_field']
