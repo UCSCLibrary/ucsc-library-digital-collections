@@ -144,7 +144,7 @@ GEM
       globalid
       jbuilder (~> 2.7)
       kaminari (>= 0.15)
-      nokogiri (>= 1.12.5)
+      nokogiri (~> 1.6)
       rails (>= 4.2, < 6)
       rsolr (>= 1.0.6, < 3)
       twitter-typeahead-rails (= 0.11.1.pre.corejavascript)
@@ -203,7 +203,7 @@ GEM
     capybara (3.33.0)
       addressable
       mini_mime (>= 0.1.3)
-      nokogiri (>= 1.12.5)
+      nokogiri (~> 1.8)
       rack (>= 1.6.0)
       rack-test (>= 0.6.3)
       regexp_parser (~> 1.5)
@@ -312,7 +312,7 @@ GEM
       sxp (~> 1.1)
       unicode-types (~> 1.6)
     equivalent-xml (0.6.0)
-      nokogiri (>= 1.12.5)
+      nokogiri (>= 1.4.3)
     erubi (1.10.0)
     ethon (0.14.0)
       ffi (>= 1.15.0)
@@ -367,7 +367,7 @@ GEM
       google-apis-drive_v3 (>= 0.5.0, < 1.0.0)
       google-apis-sheets_v4 (>= 0.4.0, < 1.0.0)
       googleauth (>= 0.5.0, < 1.0.0)
-      nokogiri (>= 1.12.5, < 2.0.0)
+      nokogiri (>= 1.5.3, < 2.0.0)
     googleauth (0.6.6)
       faraday (~> 0.12)
       jwt (>= 1.4, < 3.0)
@@ -558,7 +558,7 @@ GEM
       json-ld (~> 3.1, >= 3.1.1)
       json-ld-preloaded (~> 3.1, >= 3.1.1)
       ld-patch (~> 3.1)
-      nokogiri (>= 1.12.5)
+      nokogiri (~> 1.10)
       nokogumbo (~> 2.0)
       rdf (~> 3.1, >= 3.1.1)
       rdf-aggregate-repo (~> 3.1)
@@ -585,7 +585,7 @@ GEM
     logger (1.4.3)
     loofah (2.12.0)
       crass (~> 1.0.2)
-      nokogiri (>= 1.12.5)
+      nokogiri (>= 1.5.9)
     mail (2.7.1)
       mini_mime (>= 0.1.1)
     mailboxer (0.15.1)
@@ -599,7 +599,7 @@ GEM
       mime-types-data (~> 3.2015)
     mime-types-data (3.2021.0901)
     mimemagic (0.3.10)
-      nokogiri (>= 1.12.5)
+      nokogiri (~> 1)
       rake
     mini_magick (4.11.0)
     mini_mime (1.1.1)
@@ -628,7 +628,7 @@ GEM
       mini_portile2 (~> 2.5.0)
       racc (~> 1.4)
     nokogumbo (2.0.2)
-      nokogiri (>= 1.12.5)
+      nokogiri (~> 1.8, >= 1.8.4)
     oai (0.4.0)
       builder (>= 3.1.0)
       faraday
@@ -658,7 +658,7 @@ GEM
       activerecord-import
       deprecation
       faraday
-      nokogiri (>= 1.12.5)
+      nokogiri (~> 1.6)
       rails (~> 5.0)
       rdf
     racc (1.5.2)
@@ -684,7 +684,7 @@ GEM
       activesupport (>= 5.0.1.rc1)
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
-      nokogiri (>= 1.12.5)
+      nokogiri (>= 1.6)
     rails-html-sanitizer (1.3.0)
       loofah (~> 2.3)
     rails_autolink (1.1.6)
@@ -710,7 +710,7 @@ GEM
       rdf (~> 3.1)
     rdf-microdata (3.1.1)
       htmlentities (~> 4.3)
-      nokogiri (>= 1.12.5)
+      nokogiri (~> 1.10)
       rdf (~> 3.1)
       rdf-xsd (~> 3.1)
     rdf-n3 (3.1.2)
@@ -938,7 +938,7 @@ GEM
       bindex (>= 0.4.0)
       railties (>= 5.0)
     webdrivers (4.4.1)
-      nokogiri (>= 1.12.5)
+      nokogiri (~> 1.6)
       rubyzip (>= 1.3.0)
       selenium-webdriver (>= 3.0, < 4.0)
     webrick (1.7.0)
@@ -948,7 +948,7 @@ GEM
     xml-simple (1.1.9)
       rexml
     xpath (3.2.0)
-      nokogiri (>= 1.12.5)
+      nokogiri (~> 1.8)
 
 PLATFORMS
   ruby
