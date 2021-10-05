@@ -1,17 +1,39 @@
-FROM CHANGEME/base:latest
+ARG HYRAX_IMAGE_VERSION=3.0.1
+FROM ghcr.io/samvera/hyrax/hyrax-base:$HYRAX_IMAGE_VERSION as hyku-base
 
-ADD ops/webapp.conf /etc/nginx/sites-enabled/webapp.conf
-ADD ops/env.conf /etc/nginx/main.d/env.conf
+USER root
 
-RUN gem install bundler -v CHANGEME # Add the BUNDLED WITH version listed at the bottom of the Gemfile.lock
-COPY --chown=app . $APP_HOME
-RUN /sbin/setuser app bash -l -c "set -x && \
-  (bundle check || bundle install) && \
-  bundle exec rake assets:clobber assets:precompile DATABASE_ADAPTER=nulldb && \
-  mv /home/app/webapp/public/assets /home/app/webapp/public/assets-new && \
-  mv /home/app/webapp/public/packs /home/app/webapp/public/packs-new"
+ARG EXTRA_APK_PACKAGES="openjdk11-jre ffmpeg yarn"
+RUN apk --no-cache upgrade && \
+  apk --no-cache add \
+    curl \
+    curl-dev \
+    libcurl \
+    libxml2-dev \
+    mariadb-dev \
+    mediainfo \
+    perl \
+    cmake \
+    $EXTRA_APK_PACKAGES
 
-RUN bash -l -c "set -x && \
-  rm -f /etc/service/nginx/down"
+USER app
 
-CMD ["/sbin/my_init"]
+RUN mkdir -p /app/fits && \
+    cd /app/fits && \
+    wget https://github.com/harvard-lts/fits/releases/download/1.5.0/fits-1.5.0.zip -O fits.zip && \
+    unzip fits.zip && \
+    rm fits.zip && \
+    chmod a+x /app/fits/fits.sh
+ENV PATH="${PATH}:/app/fits"
+
+COPY --chown=1001:101 $APP_PATH/Gemfile* /app/samvera/hyrax-webapp/
+RUN bundle install --jobs "$(nproc)"
+
+COPY --chown=1001:101 $APP_PATH /app/samvera/hyrax-webapp
+
+ARG SETTINGS__BULKRAX__ENABLED="false"
+RUN RAILS_ENV=production SECRET_KEY_BASE=`bin/rake secret` DB_ADAPTER=nulldb bundle exec rake assets:precompile
+
+FROM hyku-base as hyku-worker
+ENV MALLOC_ARENA_MAX=2
+CMD bundle exec sidekiq

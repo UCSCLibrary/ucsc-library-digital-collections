@@ -1,0 +1,10 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "hyrax.cantaloupe-env.name" . }}
+data:
+  FEDORA_BASE: {{ .Values.fcrepoBasePathOverride | default (printf "/%s" (include "hyrax.fullname" .)) | quote }}
+{{- range $key, $value := .Values.cantaloupe.configmap }}
+  {{ $key }}: {{ $value | quote }}
+{{- end }}

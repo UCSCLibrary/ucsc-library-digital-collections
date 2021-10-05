@@ -1,105 +1,179 @@
-version: '2.1'
+version: "3"
+
 services:
-  mysql:
-    image: mysql:5.7
-    environment:
-      - MYSQL_DATABASE=hyrax
-      - MYSQL_USER=hyrax
-      - MYSQL_PASSWORD=DatabaseFTW
-      - MYSQL_ROOT_PASSWORD=DatabaseFTW
-    ports:
-      - '3306'
-    volumes:
-      - 'mysql:/var/lib/mysql'
-
-  solr:
-    image: solr:latest
-    env_file:
-      - .env
-      - .env.development
-    ports:
-      - "8983"
-    volumes:
-      - 'solr:/opt/solr/server/solr/mycores'
-    entrypoint:
-      - docker-entrypoint.sh
-      - solr-precreate
-      - mycore
-    # docker-compose exec --user=solr solr bin/solr create_core -c CORENAME
-  redis:
-    image: 'redis:3.2-alpine'
-    env_file:
-      - .env
-      - .env.development
-    command: redis-server
-    ports:
-      - '6379'
-    volumes:
-      - 'redis:/var/lib/redis/data'
-  fcrepo:
-    image: botimer/fcrepo:4.5.1
-    env_file:
-      - .env
-      - .env.development
-    volumes:
-      - 'fcrepo:/opt/data'
-    ports:
-      - "8080"
-
-  app:
-    build:
-      context: ..
-      dockerfile: stack_car/Dockerfile
-      args:
-        DEPLOY_KEY: "${DEPLOY_KEY}"
-        REPO_URL: "${REPO_URL}"
-        BRANCH: "${BRANCH}"
-    image: "${REGISTRY_HOST}${REGISTRY_URI}:${TAG:-main}"
-    env_file:
-      - .env
-      - .env.development
-    volumes:
-      - .:/home/app/webapp:cached
-      - node_modules:/home/app/webapp/node_modules
-      - tmp_cache:/home/app/webapp/tmp/cache
-    # Keep the stdin open, so we can attach to our app container's process
-    # and do things such as byebug, etc:
-    stdin_open: true
-    # Enable sending signals (CTRL+C, CTRL+P + CTRL+Q) into the container:
-    tty: true
-
   web:
-    extends: app
+    image: registry.gitlab.com/notch8/ucsc-library-digital-collections/webapp:${TAG}
+    build:  
+      context: ../
+      dockerfile: ./stack_car/Dockerfile
+    container_name: hycruz
+    volumes:
+     - "../dams_derivatives:/dams_derivatives:z"
+     - "../hyrax:/srv/hycruz:z"
+     - "gems:/srv/bundle:Z"
+     - "../dams_ingest:/dams_ingest"
+     - "../scooby_snacks:/srv/scooby_snacks"
+     - "../samvera_hls:/srv/samvera_hls"
+     - "../bulk_ops:/srv/bulk_ops"
+     - "./config/database.yml:/srv/hycruz/config/database.yml"
+     - "./config/secrets.yml:/srv/hycruz/config/secrets.yml"
+     - "./config/fedora.yml:/srv/hycruz/config/fedora.yml"
+     - "./config/github.yml:/srv/hycruz/config/github.yml"
+     - "./example_media:/srv/hycruz/public/example_media"
+    environment: 
+      - IIIF_SERVER_URL=http://localhost:8182/iiif/2/
+    depends_on:
+      - "db"
+      - "repo"
+      - "index"
+      - "redis"
     ports:
-      - "${WEB_PORT}"
-    environment:
-      - VIRTUAL_HOST=.hyrax.test
-      - VIRTUAL_PORT=3000
-    depends_on:
-      - fcrepo
-      - mysql
-      - sidekiq
-      - solr
-      - redis
-
-
-
-
+      - "3000:3000"
+    env_file:
+      - .env
+      - .env.development
+    networks:
+      front-tier:
+        aliases: 
+          - hycruz
+          - hyrax
+          - app
+          - application
+      back-tier:
+        aliases:
+          - hycruz
+          - hyrax
+          - app
+          - application
   worker:
-    extends: app
-    command: bundle exec sidekiq
+    image: registry.gitlab.com/notch8/ucsc-library-digital-collections/worker:${TAG}
+    build:  
+      context: ../
+      dockerfile: ../docker/worker-dockerfile
+    container_name: worker
+    volumes:
+     - "../dams_derivatives:/dams_derivatives:z"
+     - "../hyrax:/srv/hycruz:z"
+     - "gems2:/srv/bundle:Z"
+     - "../dams_ingest:/dams_ingest"
+     - "../scooby_snacks:/srv/scooby_snacks"
+     - "../samvera_hls:/srv/samvera_hls"
+     - "../bulk_ops:/srv/bulk_ops"
+     - "../fits:/srv/fits"
+     - "./config/database.yml:/srv/hycruz/config/database.yml"
+     - "./config/secrets.yml:/srv/hycruz/config/secrets.yml"
+     - "./config/fedora.yml:/srv/hycruz/config/fedora.yml"
+     - "./config/github.yml:/srv/hycruz/config/github.yml"
+     - "./example_media:/srv/hycruz/public/example_media"
+     - "./kakadu:/usr/share/kakadu"
+    env_file:
+      - .env
+      - .env.development
     depends_on:
-      - fcrepo
-      - mysql
-      - sidekiq
-      - solr
-      - redis
-
-
-volumes:
-  mysql:
-  solr:
+      - "db"
+      - "repo"
+      - "index"
+      - "redis"
+    networks:
+      back-tier:
+        aliases:
+          - sidekiq
+          - worker_1
+  repo:
+    image: registry.gitlab.com/notch8/ucsc-docker/repo:latest
+    build:  
+      context: .
+      dockerfile: repo-dockerfile
+    container_name: fcrepo
+    volumes:
+      - "repository-data:/opt/fcrepo/data:Z"
+    ports:
+      - "8080:8080"
+    networks:
+      back-tier:
+        aliases:
+          - repository
+          - fedora
+  db:
+    image: mysql:5.7
+    container_name: mysql
+    ports:
+      - "3306:3306"
+      - "33060:33060"
+    env_file:
+      - .env
+      - .env.development
+    restart: always
+    volumes:
+      - "database-data:/var/lib/mysql:Z"
+    networks:
+      back-tier:
+        aliases:
+          - database
+          - mysql
   redis:
-  fcrepo:
-  tmp_cache:
-  node_modules:
+    image: 'docker.io/bitnami/redis:6.0-debian-10'
+    container_name: redis
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis-data:/bitnami/redis/data
+    networks:
+      back-tier:
+        aliases:
+          - queue
+  index:
+    image: solr:7.7
+    container_name: solr
+    command: "bash -c 'precreate-core hycruz /opt/config && precreate-core hycruz-test /opt/config && solr-foreground'"
+    ports: 
+      - "8983:8983"
+    volumes:
+      - "./solr_conf:/opt/config:Z"
+      - "index-data:/opt/solr/server/solr:Z"
+    networks:
+      back-tier:
+        aliases:
+          - solr
+  images:
+    image: registry.gitlab.com/notch8/ucsc-docker/images:latest
+    build:  
+      context: .
+      dockerfile: cantaloupe-dockerfile
+    container_name: cantaloupe
+    depends_on:
+      - "repo"
+    ports:
+      - "8182:8182"
+      - "8183:8183"
+    volumes:
+      - "../dams_derivatives:/dams_derivatives:z"
+      - "cantaloupe-log:/srv/cantaloupe-log:Z"
+      - "cantaloupe-cache:/srv/cantaloupe-cache:Z"
+      - "./kakadu:/usr/share/kakadu"
+    networks:
+      front-tier:
+        aliases: 
+          - images
+          - cantaloupe
+          - hycruz-images
+      back-tier:
+        aliases:
+          - images
+          - cantaloupe
+          - hycruz-images
+volumes:
+  database-data:
+  gems:
+  gems2:
+  cantaloupe-log:
+  cantaloupe-cache:
+  index-data:
+  redis-data:
+    driver: local
+  repository-data:
+networks:
+  front-tier:
+  back-tier:

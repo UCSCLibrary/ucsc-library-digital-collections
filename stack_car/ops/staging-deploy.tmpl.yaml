@@ -32,39 +32,84 @@ extraVolumeMounts:
 ingress:
   enabled: true
   hosts:
-    - host: hyrax-hyrax-staging.notch8.cloud
+    - host: ucsc-hyrax-staging.notch8.cloud
       paths:
         - path: /
-    - host: "*.hyrax-hyrax-staging.notch8.cloud"
+    - host: "*.ucsc-hyrax-staging.notch8.cloud"
       paths:
         - path: /
+
+cantaloupe:
+  enabled: true
+  image: 
+    repository: iublibtech/cantaloupe
+    tag: latest
+  storage:
+    size: 1Gi
+  configmap:
+    - name: HTTP_HTTP2_ENABLED
+      value: "true"
+    - name: HTTPS_HTTP2_ENABLED
+      value: "true"
+    - name: ENDPOINT_IIIF_CONTENT_DISPOSITION
+      value: none
+    - name: SOURCE_STATIC
+      value: HttpSource
+    - name: SOURCE_DELEGATE
+      value: "false"
+    - name: HTTPSOURCE_LOOKUP_STRATEGY
+      value: ScriptLookupStrategy
+    - name: DELEGATE_SCRIPT_ENABLED
+      value: "true"
+    - name: DELEGATE_SCRIPT_CACHE_ENABLED
+      value: "true"
+    - name: DELEGATE_SCRIPT_PATHNAME
+      value: /cantaloupe/delegate/delegates.rb
+    - name: FEDORA_PATH
+      value: /rest/dev
+    - name: PROCESSOR_SELECTION_STRATEGY
+      value: ManualSelectionStrategy
+    - name: PROCESSOR_MANUAL_SELECTIONSTRATEGY_JP2
+      value: OpenJpegProcessor
+    - name: CACHE_SERVER_DERIVATIVE_ENABLED
+      value: "true"
+    - name: CACHE_SERVER_INFO_ENABLED
+      value: "true"
+    - name: CACHE_SERVER_DERIVATIVE
+      value: HeapCache
+    - name: HEAPCACHE_TARGET_SIZE
+      value: 256M
+    - name: CACHE_SERVIER_DERIVATIVE_TTL_SECONDS
+      value: 0
+    - name: CACHE_SERVER_PURGE_MISSING
+      value: "true"
+    - name: LOG_APPLICATION_LEVEL
+      value: info
+    - name: LOG_ACCESS_CONSOLEAPPENDER_ENABLED
+      value: "true"
 
 extraEnvVars:
   - name: CONFDIR
-    value: "/app/samvera/hyrax-webapp/solr/config"
+    value: "/app/samvera/hyrax-webapp/solr/conf"
   - name: INITIAL_ADMIN_EMAIL
-    value: CHANGEME
+    value: support@notch8.com
   - name: INITIAL_ADMIN_PASSWORD
     value: testing123
-
   - name: DATABASE_ADAPTER
     value: mysql2
   - name: MYSQL_HOST
-    value: hyrax-staging-mariadb
+    value: ucsc-hyrax staging-mariadb
   - name: MYSQL_DATABASE
-    value: hyrax-hyrax
+    value: ucsc-hyrax
   - name: MYSQL_USER
-    value: hyrax-hyrax
-
+    value: ucsc-hyrax
   - name: FCREPO_BASE_PATH
     value: /hyrax
   - name: FCREPO_HOST
-    # For use in staging, CHANGE for production deploys
     value: fcrepo.staging-fcrepo.svc.cluster.local:8080
   - name: FCREPO_PATH
     value: /rest
   - name: FCREPO_URL
-    # For use in staging, CHANGE for production deploys
     value: http://fcrepo.staging-fcrepo.svc.cluster.local:8080/rest
   - name: IN_DOCKER
     value: "true"
@@ -73,7 +118,7 @@ extraEnvVars:
   - name: PASSENGER_APP_ENV
     value: production
   - name: RAILS_CACHE_STORE_URL
-    value: redis://:staging@hyrax-staging-redis-master:6379/hyrax
+    value: redis://:staging@ucsc-staging-redis-master:6379/hyrax
   - name: RAILS_ENV
     value: production
   - name: RAILS_LOG_TO_STDOUT
@@ -83,42 +128,41 @@ extraEnvVars:
   - name: RAILS_SERVE_STATIC_FILES
     value: "true"
   - name: REDIS_HOST
-    value: hyrax-staging-redis-master
+    value: ucsc-staging-redis-master
   - name: REDIS_PREFIX
     value: hyrax
   - name: REDIS_SERVER
-    value: redis://:staging@hyrax-staging-redis-master:6379/hyrax
+    value: redis://:staging@ucsc-staging-redis-master:6379/ucsc
   - name: SETTINGS__ACTIVE_JOB__QUEUE_ADAPTER
     value: sidekiq
   - name: SETTINGS__BULKRAX__ENABLED
     value: "false"
   - name: SETTINGS__CONTACT_EMAIL
-    value: CHANGEME
+    value: support@notch8.com
   - name: SETTINGS__DEVISE__INVITATION_FROM_EMAIL
-    value: CHANGEME
+    value: support@notch8.com
   - name: SETTINGS__FITS_PATH
     value: /app/fits/fits.sh
   - name: SETTINGS__SOLR__COLLECTION_OPTIONS__COLLECTION__CONFIG_NAME
-    value: hyrax-hyrax-staging
+    value: ucsc-staging
   - name: SETTINGS__SOLR__CONFIGSET
-    value: hyrax-hyrax-staging
+    value: ucsc-staging
   - name: SETTINGS__SOLR__URL
-    value: <CHANGEME>hyrax-hyrax-staging
+    value: http://admin:ncGXC5Qjpk@solr.staging-solr.svc.cluster.local:8983/solr/ucsc-staging
   - name: SETTINGS__ZOOKEEPER__CONNECTION_STR
     value: solr-zookeeper-headless.default:2181/configs
   - name: SOLR_ADMIN_USER
     value: admin
   - name: SOLR_COLLECTION_NAME
-    value: hyrax-hyrax-staging
+    value: ucsc-staging
   - name: SOLR_CONFIGSET_NAME
-    value: hyrax-hyrax-staging
+    value: ucsc-staging
   - name: SOLR_HOST
-    # For use in staging, CHANGE for production deploys
     value: solr.staging-solr.svc.cluster.local
   - name: SOLR_PORT
     value: "8983"
   - name: SOLR_URL
-    value: <CHANGEME>hyrax-hyrax-staging
+    value: http://admin:ncGXC5Qjpk@solr.staging-solr.svc.cluster.local:8983/solr/ucsc-staging
 
 worker:
   replicaCount: 1
@@ -145,15 +189,15 @@ worker:
       subPath: network-files
   extraEnvVars:
   - name: CONFDIR
-    value: "/app/samvera/hyrax-webapp/solr/config"
+    value: "/app/samvera/hyrax-webapp/solr/conf"
   - name: INITIAL_ADMIN_EMAIL
-    value: CHANGEME
+    value: support@notch8.com
   - name: INITIAL_ADMIN_PASSWORD
     value: testing123
   - name: DATABASE_ADAPTER
     value: mysql2
   - name: MYSQL_HOST
-    value: hyrax-staging-mariadb
+    value: ucsc-hyrax-staging-mariadb
   - name: MYSQL_DATABASE
     value: hyrax-hyrax
   - name: MYSQL_USER
@@ -161,12 +205,10 @@ worker:
   - name: FCREPO_BASE_PATH
     value: /hyrax
   - name: FCREPO_HOST
-    # For use in staging, CHANGE for production deploys
     value: fcrepo.staging-fcrepo.svc.cluster.local:8080
   - name: FCREPO_PATH
     value: /rest
   - name: FCREPO_URL
-    # For use in staging, CHANGE for production deploys
     value: http://fcrepo.staging-fcrepo.svc.cluster.local:8080/rest
   - name: IN_DOCKER
     value: "true"
@@ -187,39 +229,39 @@ worker:
   - name: REDIS_HOST
     value: hyrax-staging-redis-master
   - name: REDIS_SERVER
-    value: redis://:staging@hyrax-staging-redis-master:6379/hyrax
+    value: redis://:staging@hyrax-staging-redis-master:6379/ucsc
   - name: REDIS_PREFIX
-    value: hyrax
+    value: ucsc
   - name: SETTINGS__ACTIVE_JOB__QUEUE_ADAPTER
     value: sidekiq
   - name: SETTINGS__BULKRAX__ENABLED
     value: "false"
   - name: SETTINGS__CONTACT_EMAIL
-    value: CHANGEME
+    value: support@notch8.com
   - name: SETTINGS__DEVISE__INVITATION_FROM_EMAIL
-    value: CHANGEME
+    value: support@notch8.com
   - name: SETTINGS__FITS_PATH
     value: /app/fits/fits.sh
   - name: SETTINGS__SOLR__COLLECTION_OPTIONS__COLLECTION__CONFIG_NAME
-    value: hyrax-hyrax-staging
+    value: ucsc-staging
   - name: SETTINGS__SOLR__CONFIGSET
-    value: hyrax-hyrax-staging
+    value: ucsc-staging
   - name: SETTINGS__SOLR__URL
-    value: http://admin:ncGXC5Qjpk@solr.staging-solr.svc.cluster.local:8983/solr/hyrax-hyrax-staging
+    value: http://admin:ncGXC5Qjpk@solr.staging-solr.svc.cluster.local:8983/solr/ucsc-staging
   - name: SETTINGS__ZOOKEEPER__CONNECTION_STR
     value: solr-zookeeper-headless.default:2181/configs
   - name: SOLR_ADMIN_USER
     value: admin
   - name: SOLR_COLLECTION_NAME
-    value: hyrax-hyrax-staging
+    value: ucsc-staging
   - name: SOLR_CONFIGSET_NAME
-    value: hyrax-hyrax-staging
+    value: ucsc-staging
   - name: SOLR_HOST
     value: solr.staging-solr
   - name: SOLR_PORT
     value: "8983"
   - name: SOLR_URL
-    value: http://admin:ncGXC5Qjpk@solr.staging-solr.svc.cluster.local:8983/solr/hyrax-hyrax-staging
+    value: http://admin:ncGXC5Qjpk@solr.staging-solr.svc.cluster.local:8983/solr/ucsc-staging
   # - name: SENTRY_DSN
   #   value: $SENTRY_DSN
 
@@ -240,7 +282,21 @@ imagePullSecrets:
 fcrepo:
   enabled: false
 
-      
+mariadb:
+  enabled: true
+  replication:
+    enabled: false
+  auth:
+    name: ucsc-hyrax
+    username: ucsc-hyrax
+    password: ykyQITKSVGADwku
+    rootPassword: YyuFfiQXXJmrrbH
+  master:
+    persistence:
+      enabled: true
+      # storageClass: "-"
+      accessMode: ReadWriteOnce
+      size: 8Gi
 
 redis:
   cluster:
@@ -249,12 +305,9 @@ redis:
 solr:
   enabled: false
 
-# For use in staging, CHANGE for production deploys
 externalFcrepoHost: fcrepo.staging-fcrepo.svc.cluster.local
 
-# This assumes the solr admin password is set up in your namespace
 solrExistingSecret: solr-admin-password
-# For use in staging, CHANGE for production deploys
 externalSolrHost: solr.staging-solr.svc.cluster.local
 externalSolrUser: admin
-externalSolrCollection: "hyrax-hyrax-staging"
+externalSolrCollection: "ucsc-staging"
