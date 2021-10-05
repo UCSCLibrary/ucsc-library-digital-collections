@@ -98,7 +98,7 @@ extraEnvVars:
   - name: DATABASE_ADAPTER
     value: mysql2
   - name: MYSQL_HOST
-    value: ucsc-hyrax staging-mariadb
+    value: ucsc-hyrax-staging-mariadb
   - name: MYSQL_DATABASE
     value: ucsc-hyrax
   - name: MYSQL_USER
