@@ -26,13 +26,24 @@ RUN mkdir -p /app/fits && \
     chmod a+x /app/fits/fits.sh
 ENV PATH="${PATH}:/app/fits"
 
+RUN git clone https://github.com/UCSCLibrary/ScoobySnacks.git /app/samvera/hyrax-webapp/scooby_snacks
+RUN git clone https://github.com/UCSCLibrary/samvera_hls.git /app/samvera/hyrax-webapp/samvera_hls
+
+#Set the locale to UTF-8 to prevent Bundler to fail when gemspecs contain non ASCII characters
+ENV LANG C.UTF-8
+ENV LC_ALL C.UTF-8
+
 COPY --chown=1001:101 $APP_PATH/Gemfile* /app/samvera/hyrax-webapp/
 RUN bundle install --jobs "$(nproc)"
 
 COPY --chown=1001:101 $APP_PATH /app/samvera/hyrax-webapp
+COPY --chown=1001:101 $APP_PATH/config/environments/production.rb /app/samvera/hyrax-webapp/config/environments/production.rb
+COPY --chown=1001:101 $APP_PATH/stack_car/ops/* /app/samvera/hyrax-webapp/ops/
 
 ARG SETTINGS__BULKRAX__ENABLED="false"
 RUN RAILS_ENV=production SECRET_KEY_BASE=`bin/rake secret` DB_ADAPTER=nulldb bundle exec rake assets:precompile
+
+ENTRYPOINT ["/app/samvera/hyrax-webapp/ops/entrypoint.sh"]
 
 FROM hyku-base as hyku-worker
 ENV MALLOC_ARENA_MAX=2

@@ -7,6 +7,7 @@ test:
   port: 6379
 production:
   host: <%= ENV['REDIS_HOST'] || "digitalcollections-ingests.library.ucsc.edu" %>
+  password: <%= ENV['REDIS_PASSWORD'] %>
   port: 6379
 staging:
   host: <%= ENV['REDIS_HOST'] || "digitalcollections-ingests.library.ucsc.edu" %>

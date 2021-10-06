@@ -128,11 +128,11 @@ extraEnvVars:
   - name: RAILS_SERVE_STATIC_FILES
     value: "true"
   - name: REDIS_HOST
-    value: ucsc-staging-redis-master
+    value: ucsc-hyrax-staging-redis-master
   - name: REDIS_PREFIX
     value: hyrax
   - name: REDIS_SERVER
-    value: redis://:staging@ucsc-staging-redis-master:6379/ucsc
+    value: redis://:staging@ucsc-hyrax-staging-redis-master:6379/ucsc
   - name: SETTINGS__ACTIVE_JOB__QUEUE_ADAPTER
     value: sidekiq
   - name: SETTINGS__BULKRAX__ENABLED
@@ -199,9 +199,9 @@ worker:
   - name: MYSQL_HOST
     value: ucsc-hyrax-staging-mariadb
   - name: MYSQL_DATABASE
-    value: hyrax-hyrax
+    value: ucsc-hyrax
   - name: MYSQL_USER
-    value: hyrax-hyrax
+    value: ucsc-hyrax
   - name: FCREPO_BASE_PATH
     value: /hyrax
   - name: FCREPO_HOST
@@ -227,9 +227,9 @@ worker:
   - name: RAILS_SERVE_STATIC_FILES
     value: "true"
   - name: REDIS_HOST
-    value: hyrax-staging-redis-master
+    value: ucsc-hyrax-staging-redis-master
   - name: REDIS_SERVER
-    value: redis://:staging@hyrax-staging-redis-master:6379/ucsc
+    value: redis://:staging@ucsc-hyrax-staging-redis-master:6379/ucsc
   - name: REDIS_PREFIX
     value: ucsc
   - name: SETTINGS__ACTIVE_JOB__QUEUE_ADAPTER

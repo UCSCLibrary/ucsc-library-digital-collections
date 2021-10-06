@@ -1,11 +1,29 @@
 version: "3"
 
+x-app: &app
+  image: registry.gitlab.com/notch8/ucsc-library-digital-collections/web:${TAG:-latest}
+  build:
+    context: ..
+    dockerfile: ./stack_car/Dockerfile
+    target: hyku-base
+    args:
+      - EXTRA_APK_PACKAGES=less vim bash openjdk11-jre ffmpeg rsync
+  # command: sh -l -c "bundle && bundle exec puma -v -b tcp://0.0.0.0:3000"
+  # image: registry.gitlab.com/notch8/britishlibrary:${TAG:-latest}
+  env_file:
+    - .env
+  # NOTE: all common env variables moved to .env
+  volumes:
+    - uploads:/app/samvera/hyrax-webapp/public/uploads
+    - assets:/app/samvera/hyrax-webapp/public/assets
+    - cache:/app/samvera/hyrax-webapp/tmp/cache
+    - .:/app/samvera/hyrax-webapp
+  networks:
+    internal:
+
 services:
   web:
-    image: registry.gitlab.com/notch8/ucsc-library-digital-collections/webapp:${TAG}
-    build:  
-      context: ../
-      dockerfile: ./stack_car/Dockerfile
+    <<: *app
     container_name: hycruz
     volumes:
      - "../dams_derivatives:/dams_derivatives:z"
@@ -46,10 +64,8 @@ services:
           - app
           - application
   worker:
-    image: registry.gitlab.com/notch8/ucsc-library-digital-collections/worker:${TAG}
-    build:  
-      context: ../
-      dockerfile: ../docker/worker-dockerfile
+    <<: *app
+    image: registry.gitlab.com/notch8/ucsc-library-digital-collections/worker:${TAG:-latest}
     container_name: worker
     volumes:
      - "../dams_derivatives:/dams_derivatives:z"
