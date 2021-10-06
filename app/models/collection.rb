@@ -10,6 +10,10 @@ class Collection < ActiveFedora::Base
   include GlobalID::Identification
   include Hyrax::WithEvents
 
+  # Scoobisnacks brings these properties in to the collection, but they are not used
+  # need an empty writer so that adding a work to the collection does not throw an exception
+  attr_writer :label, :relative_path, :import_url
+
   self.indexer = ::CollectionIndexer
 
   def reindex_extent
@@ -18,11 +22,11 @@ class Collection < ActiveFedora::Base
 
   def visibility=(value)
     if (value == "request")
-      request_visibility! 
+      request_visibility!
       return true
     end
     if (value == "campus")
-      campus_visibility! 
+      campus_visibility!
       return true
     end
     super
