@@ -51,7 +51,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # This is the main application engine
 # We are keeping up with Hyrax 2.x, and waiting to upgrade to Hyrax 3
-gem 'hyrax', '2.9'
+gem 'hyrax', '~> 2.9.0'
 
 # This gem creates a quick solr instance for testing purposes
 # We use docker instead nowadays, so this is now disabled.
@@ -89,7 +89,7 @@ group :development, :test do
 end
 
 # hydra-role-management allows devise users to be assigned to roles in Hyrax
-#  and granted permissions based on these roles 
+#  and granted permissions based on these roles
 gem 'hydra-role-management'
 # browse-everything allows file imports from cloud platforms. We haven't used
 # it in ages, but it might be useful in some cases.
