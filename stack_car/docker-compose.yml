@@ -18,98 +18,72 @@ x-app: &app
     - assets:/app/samvera/hyrax-webapp/public/assets
     - cache:/app/samvera/hyrax-webapp/tmp/cache
     - .:/app/samvera/hyrax-webapp
-  networks:
-    internal:
 
 services:
   web:
     <<: *app
     container_name: hycruz
     volumes:
-     - "../dams_derivatives:/dams_derivatives:z"
-     - "../hyrax:/srv/hycruz:z"
-     - "gems:/srv/bundle:Z"
-     - "../dams_ingest:/dams_ingest"
-     - "../scooby_snacks:/srv/scooby_snacks"
-     - "../samvera_hls:/srv/samvera_hls"
-     - "../bulk_ops:/srv/bulk_ops"
-     - "./config/database.yml:/srv/hycruz/config/database.yml"
-     - "./config/secrets.yml:/srv/hycruz/config/secrets.yml"
-     - "./config/fedora.yml:/srv/hycruz/config/fedora.yml"
-     - "./config/github.yml:/srv/hycruz/config/github.yml"
-     - "./example_media:/srv/hycruz/public/example_media"
-    environment: 
-      - IIIF_SERVER_URL=http://localhost:8182/iiif/2/
+      - uploads:/app/samvera/hyrax-webapp/public/uploads
+      - assets:/app/samvera/hyrax-webapp/public/assets
+      - cache:/app/samvera/hyrax-webapp/tmp/cache
+      - gems:/srv/bundle:Z
+      - ../dams_derivatives:/dams_derivatives
+      - ../example_media:/srv/hycruz/public/example_media
+      - ..:/app/samvera/hyrax-webapp
+      - ./ops/entrypoint.sh:/app/samvera/hyrax-webapp/ops/entrypoint.sh
     depends_on:
       - "db"
-      - "repo"
+      - "fcrepo"
       - "index"
       - "redis"
+      - "worker"
     ports:
       - "3000:3000"
     env_file:
       - .env
       - .env.development
-    networks:
-      front-tier:
-        aliases: 
-          - hycruz
-          - hyrax
-          - app
-          - application
-      back-tier:
-        aliases:
-          - hycruz
-          - hyrax
-          - app
-          - application
+    environment:
+      - IIIF_SERVER_URL=http://localhost:8182/iiif/2/
+      - VIRTUAL_PORT=3000
+      - VIRTUAL_HOST=ucsc-dams.test
+
   worker:
     <<: *app
-    image: registry.gitlab.com/notch8/ucsc-library-digital-collections/worker:${TAG:-latest}
+    entrypoint: bundle exec sidekiq -c 1
     container_name: worker
     volumes:
-     - "../dams_derivatives:/dams_derivatives:z"
-     - "../hyrax:/srv/hycruz:z"
-     - "gems2:/srv/bundle:Z"
-     - "../dams_ingest:/dams_ingest"
-     - "../scooby_snacks:/srv/scooby_snacks"
-     - "../samvera_hls:/srv/samvera_hls"
-     - "../bulk_ops:/srv/bulk_ops"
-     - "../fits:/srv/fits"
-     - "./config/database.yml:/srv/hycruz/config/database.yml"
-     - "./config/secrets.yml:/srv/hycruz/config/secrets.yml"
-     - "./config/fedora.yml:/srv/hycruz/config/fedora.yml"
-     - "./config/github.yml:/srv/hycruz/config/github.yml"
-     - "./example_media:/srv/hycruz/public/example_media"
-     - "./kakadu:/usr/share/kakadu"
+      - uploads:/app/samvera/hyrax-webapp/public/uploads
+      - assets:/app/samvera/hyrax-webapp/public/assets
+      - cache:/app/samvera/hyrax-webapp/tmp/cache
+      - gems2:/srv/bundle:Z
+      - ../dams_derivatives:/dams_derivatives
+      - ../example_media:/srv/hycruz/public/example_media
+      - ..:/app/samvera/hyrax-webapp
+      - ./ops/entrypoint.sh:/app/samvera/hyrax-webapp/ops/entrypoint.sh
     env_file:
       - .env
       - .env.development
     depends_on:
       - "db"
-      - "repo"
+      - "fcrepo"
       - "index"
       - "redis"
-    networks:
-      back-tier:
-        aliases:
-          - sidekiq
-          - worker_1
-  repo:
-    image: registry.gitlab.com/notch8/ucsc-docker/repo:latest
-    build:  
-      context: .
-      dockerfile: repo-dockerfile
-    container_name: fcrepo
+
+  fcrepo:
+    image: ghcr.io/samvera/fcrepo4:4.7.5
     volumes:
-      - "repository-data:/opt/fcrepo/data:Z"
-    ports:
-      - "8080:8080"
-    networks:
-      back-tier:
-        aliases:
-          - repository
-          - fedora
+      - fcrepo:/data:cached
+    env_file:
+      - .env
+    environment:
+      - VIRTUAL_PORT=8080
+      - VIRTUAL_HOST=fcrepo.ucsc-dams.test
+    expose:
+      - 8080
+    environment:
+      - JAVA_OPTS=${JAVA_OPTS} -Dfcrepo.modeshape.configuration="classpath:/config/file-simple/repository.json" -Dfcrepo.object.directory="/data/objects" -Dfcrepo.binary.directory="/data/binaries"
+
   db:
     image: mysql:5.7
     container_name: mysql
@@ -122,11 +96,7 @@ services:
     restart: always
     volumes:
       - "database-data:/var/lib/mysql:Z"
-    networks:
-      back-tier:
-        aliases:
-          - database
-          - mysql
+
   redis:
     image: 'docker.io/bitnami/redis:6.0-debian-10'
     container_name: redis
@@ -136,31 +106,28 @@ services:
       - '6379:6379'
     volumes:
       - redis-data:/bitnami/redis/data
-    networks:
-      back-tier:
-        aliases:
-          - queue
+
   index:
     image: solr:7.7
     container_name: solr
-    command: "bash -c 'precreate-core hycruz /opt/config && precreate-core hycruz-test /opt/config && solr-foreground'"
-    ports: 
+    command: "bash -c 'precreate-core hyrax /opt/config && precreate-core hyrax-test /opt/config && solr-foreground'"
+    ports:
       - "8983:8983"
     volumes:
-      - "./solr_conf:/opt/config:Z"
-      - "index-data:/opt/solr/server/solr:Z"
-    networks:
-      back-tier:
-        aliases:
-          - solr
+      - ./solr_conf:/opt/config:Z
+      - index-data:/opt/solr/server/solr:Z
+    environment:
+      - VIRTUAL_PORT=8983
+      - VIRTUAL_HOST=solr.ucsc-dams.test
+
   images:
     image: registry.gitlab.com/notch8/ucsc-docker/images:latest
-    build:  
+    build:
       context: .
       dockerfile: cantaloupe-dockerfile
     container_name: cantaloupe
     depends_on:
-      - "repo"
+      - "fcrepo"
     ports:
       - "8182:8182"
       - "8183:8183"
@@ -169,17 +136,7 @@ services:
       - "cantaloupe-log:/srv/cantaloupe-log:Z"
       - "cantaloupe-cache:/srv/cantaloupe-cache:Z"
       - "./kakadu:/usr/share/kakadu"
-    networks:
-      front-tier:
-        aliases: 
-          - images
-          - cantaloupe
-          - hycruz-images
-      back-tier:
-        aliases:
-          - images
-          - cantaloupe
-          - hycruz-images
+
 volumes:
   database-data:
   gems:
@@ -189,7 +146,8 @@ volumes:
   index-data:
   redis-data:
     driver: local
-  repository-data:
-networks:
-  front-tier:
-  back-tier:
+  fcrepo:
+  uploads:
+  cache:
+  assets:
+  dams_derivatives:
