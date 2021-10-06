@@ -42,10 +42,11 @@ ingress:
 cantaloupe:
   enabled: true
   image: 
-    repository: iublibtech/cantaloupe
-    tag: latest
+    repository: registry.gitlab.com/notch8/ucsc-library-digital-collections/images
   storage:
     size: 1Gi
+  imagePullSecrets:
+    - name: gitlab
   configmap:
     - name: HTTP_HTTP2_ENABLED
       value: "true"
@@ -64,7 +65,7 @@ cantaloupe:
     - name: DELEGATE_SCRIPT_CACHE_ENABLED
       value: "true"
     - name: DELEGATE_SCRIPT_PATHNAME
-      value: /cantaloupe/delegate/delegates.rb
+      value: /etc/cantaloupe-delegates.rb
     - name: FEDORA_PATH
       value: /rest/dev
     - name: PROCESSOR_SELECTION_STRATEGY

@@ -1,0 +1,48 @@
+FROM openjdk:8-jdk-stretch
+
+# Cantaloupe docker script
+
+# Build and run: 
+# $ sudo docker build -t cantaloupe .
+# $ sudo docker run -d --rm -p 8183:8182 -v ./images:/var/lib/cantaloupe/images --name cantaloupe cantaloupe
+
+ENV CANTALOUPE_VERSION 4.0.3
+ENV PATH /usr/share/kakadu:$PATH
+ENV LD_LIBRARY_PATH /usr/share/kakadu:$LD_LIBRARY_PATH
+
+EXPOSE 8182
+
+RUN apt-get update \
+ && apt-get -y install imagemagick \
+ && apt-get -y install graphicsmagick \
+ && apt-get -y install ffmpeg
+
+# run non priviledged
+RUN useradd -ms /bin/bash cantaloupe
+
+#
+# Cantaloupe
+#
+WORKDIR /tmp
+RUN curl -OL https://github.com/medusa-project/cantaloupe/releases/download/v$CANTALOUPE_VERSION/Cantaloupe-$CANTALOUPE_VERSION.zip \
+ && mkdir -p /usr/local \
+ && cd /usr/local \
+ && unzip /tmp/Cantaloupe-$CANTALOUPE_VERSION.zip \
+ && ln -s cantaloupe-$CANTALOUPE_VERSION cantaloupe \
+ && rm -rf /tmp/Cantaloupe-$CANTALOUPE_VERSION \
+ && rm /tmp/Cantaloupe-$CANTALOUPE_VERSION.zip
+
+# upcoming docker releases: use --chown=cantaloupe
+COPY /stack_car/cantaloupe/cantaloupe.properties /etc/cantaloupe.properties
+COPY /stack_car/cantaloupe/cantaloupe_delegates.rb /etc/cantaloupe_delegates.rb
+RUN chown cantaloupe /etc/cantaloupe.properties \
+ && chown cantaloupe /etc/cantaloupe_delegates.rb \
+ && chown -R cantaloupe /usr/local/cantaloupe \
+ && mkdir /srv/cantaloupe-log \
+ && mkdir /srv/cantaloupe-cache \
+ && chown -R cantaloupe /srv 
+
+USER cantaloupe 
+
+CMD ["/bin/bash", "-c", "java -Dcantaloupe.config=/etc/cantaloupe.properties -Xmx2g -jar /usr/local/cantaloupe/cantaloupe-$CANTALOUPE_VERSION.war"]
+

@@ -154,10 +154,10 @@ services:
         aliases:
           - solr
   images:
-    image: registry.gitlab.com/notch8/ucsc-docker/images:latest
+    image: registry.gitlab.com/notch8/ucsc-library-digital-collections/images:${TAG:-latest}
     build:  
-      context: .
-      dockerfile: cantaloupe-dockerfile
+      context: ..
+      dockerfile: ./stack_car/cantaloupe/cantaloupe-dockerfile
     container_name: cantaloupe
     depends_on:
       - "repo"

@@ -6,5 +6,5 @@ metadata:
 data:
   FEDORA_BASE: {{ .Values.fcrepoBasePathOverride | default (printf "/%s" (include "hyrax.fullname" .)) | quote }}
 {{- range $key, $value := .Values.cantaloupe.configmap }}
-  {{ $key }}: {{ $value | quote }}
+  {{ $value.name }}: {{ $value.value | quote }}
 {{- end }}
