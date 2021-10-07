@@ -38,12 +38,11 @@ RUN bundle install --jobs "$(nproc)"
 
 COPY --chown=1001:101 $APP_PATH /app/samvera/hyrax-webapp
 COPY --chown=1001:101 $APP_PATH/config/environments/production.rb /app/samvera/hyrax-webapp/config/environments/production.rb
-COPY --chown=1001:101 $APP_PATH/stack_car/ops/* /app/samvera/hyrax-webapp/ops/
 
 ARG SETTINGS__BULKRAX__ENABLED="false"
 RUN RAILS_ENV=production SECRET_KEY_BASE=`bin/rake secret` DB_ADAPTER=nulldb bundle exec rake assets:precompile
 
-ENTRYPOINT ["/app/samvera/hyrax-webapp/ops/entrypoint.sh"]
+ENTRYPOINT ["/app/samvera/hyrax-webapp/stack_car/ops/entrypoint.sh"]
 
 FROM hyku-base as hyku-worker
 ENV MALLOC_ARENA_MAX=2
