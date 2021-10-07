@@ -89,7 +89,7 @@ Hyrax.config do |config|
 
   # Path to the file characterization tool
   if Rails.env.development?
-    config.fits_path = "/srv/fits/fits.sh"
+    config.fits_path = ENV['FITS_PATH'] || "/srv/fits/fits.sh"
   else
     config.fits_path = "/usr/share/fits/fits.sh"
   end
@@ -138,8 +138,8 @@ Hyrax.config do |config|
    config.iiif_image_url_builder = lambda do |fileset_id, base_url, size, region="full", rotation="0"|
 
      if fileset_id.split("files").count > 1
-       # When we were taking images directly from Fedora, we would pass 
-       # "#{file_set.id}/files/#{file_set.original_file.id}" 
+       # When we were taking images directly from Fedora, we would pass
+       # "#{file_set.id}/files/#{file_set.original_file.id}"
        # as a fileset_id to locate the original file binary in Fedora
        # Here we include a hack to take the fileset.id from the old syntax
        fid = fileset_id[0..8]
@@ -299,7 +299,7 @@ Qa::Authorities::Geonames.username = 'UCSC_Library_DI'
 Rails.application.config.to_prepare do
 
   Hyrax::Dashboard::CollectionsController.presenter_class = Ucsc::CollectionPresenter
-  
+
   Hyrax::ContactForm.class_eval do
     def self.issue_types_for_locale
       [
@@ -316,7 +316,7 @@ Rails.application.config.to_prepare do
     end
   end
 
-  OAI::Provider::Response::RecordResponse.class_eval do    
+  OAI::Provider::Response::RecordResponse.class_eval do
     def header_for(record)
       param = Hash.new
       param[:status] = 'deleted' if deleted?(record)
@@ -333,7 +333,7 @@ Rails.application.config.to_prepare do
           @builder.setSpec set.spec
          end
       end
-    end      
+    end
   end
 
   # set bulkrax default work type to first curation_concern if it isn't already set

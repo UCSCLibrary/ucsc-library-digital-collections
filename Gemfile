@@ -148,3 +148,6 @@ gem 'coveralls', require: false
 gem "mini_magick", ">= 4.9.4"
 
 gem 'rubyzip'
+gem 'activerecord-nulldb-adapter'
+# gem 'pronto', groups: [:development, :test]
+# gem 'pronto-rubocop', groups: [:development, :test]
