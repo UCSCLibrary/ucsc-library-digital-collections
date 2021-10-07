@@ -31,7 +31,6 @@ services:
       - ../dams_derivatives:/dams_derivatives
       - ../example_media:/srv/hycruz/public/example_media
       - ..:/app/samvera/hyrax-webapp
-      - ./ops/entrypoint.sh:/app/samvera/hyrax-webapp/ops/entrypoint.sh
     depends_on:
       - "db"
       - "fcrepo"
@@ -60,7 +59,6 @@ services:
       - ../dams_derivatives:/dams_derivatives
       - ../example_media:/srv/hycruz/public/example_media
       - ..:/app/samvera/hyrax-webapp
-      - ./ops/entrypoint.sh:/app/samvera/hyrax-webapp/ops/entrypoint.sh
     env_file:
       - .env
       - .env.development
