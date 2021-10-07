@@ -119,10 +119,10 @@ services:
       - VIRTUAL_HOST=solr.ucsc-dams.test
 
   images:
-    image: registry.gitlab.com/notch8/ucsc-docker/images:latest
-    build:
-      context: .
-      dockerfile: cantaloupe-dockerfile
+    image: registry.gitlab.com/notch8/ucsc-library-digital-collections/images:${TAG:-latest}
+    build:  
+      context: ..
+      dockerfile: ./stack_car/cantaloupe/cantaloupe-dockerfile
     container_name: cantaloupe
     depends_on:
       - "fcrepo"

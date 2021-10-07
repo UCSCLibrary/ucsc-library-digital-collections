@@ -34,6 +34,7 @@ helm upgrade \
     --install \
     --atomic \
     --timeout 15m0s \
+    --set cantaloupe.image.tag="$DEPLOY_TAG" \
     --set image.repository="$DEPLOY_IMAGE" \
     --set image.tag="$DEPLOY_TAG" \
     --set worker.image.repository="$WORKER_IMAGE" \
