@@ -18,7 +18,6 @@ x-app: &app
     - assets:/app/samvera/hyrax-webapp/public/assets
     - cache:/app/samvera/hyrax-webapp/tmp/cache
     - .:/app/samvera/hyrax-webapp
-
 services:
   web:
     <<: *app
