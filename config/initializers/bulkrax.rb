@@ -47,11 +47,14 @@ Bulkrax.setup do |config|
 
   config.field_mappings = {
     'Bulkrax::CsvParser' => {
-      # Bulkrax mappings
       'bulkrax_identifier' => { from: ['bulkrax_identifier'], source_identifier: true },
       'file' => { from: ['filename', 'file'], split: /\s*[|]\s*/ },
       'model' => { from: ['worktype', 'type', 'model'] },
-      # Metadata mappings
+      'title' => { from: ['title'], split: /\s*[|]\s*/ },
+      'visibility' => { from: ['visibility'] },
+      # 'parent' => { from: ['parent'], split: /\s*[|]\s*/ },
+      'parent' => { excluded: true },
+      'titleAlternative' => { from: ['titlealternative'], split: /\s*[|]\s*/ },
       'accessRights' => { from: ['accessrights'], split: /\s*[|]\s*/ },
       'accessionNumber' => { from: ['accessionnumber'], split: /\s*[|]\s*/ },
       'based_near' => { from: ['based_near', 'basednear'], split: /\s*[|]\s*/ }, # only defined on Course
@@ -118,9 +121,7 @@ Bulkrax.setup do |config|
       'subjectTitle' => { from: ['subjecttitle'], split: /\s*[|]\s*/ },
       'subjectTopic' => { from: ['subjecttopic'], split: /\s*[|]\s*/ },
       'subseries' => { from: ['subseries'], split: /\s*[|]\s*/ },
-      'theme' => { from: ['theme'], split: /\s*[|]\s*/ },
-      'title' => { from: ['title'], split: /\s*[|]\s*/ },
-      'titleAlternative' => { from: ['titlealternative'], split: /\s*[|]\s*/ }
+      'theme' => { from: ['theme'], split: /\s*[|]\s*/ }
     }
   }
 
