@@ -116,6 +116,7 @@ gem 'bulk_ops', git: 'git://github.com/UCSCLibrary/BulkOps.git', branch: 'master
 
 # Bulkrax
 gem 'bulkrax', git: 'git://github.com/samvera-labs/bulkrax.git', branch: 'main'
+# gem 'bulkrax', path: 'vendor/engines/bulkrax'
 gem 'willow_sword', github: 'notch8/willow_sword'
 
 gem 'sinatra', git: 'git://github.com/sinatra/sinatra.git'
