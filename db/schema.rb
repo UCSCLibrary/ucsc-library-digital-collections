@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_06_065737) do
+ActiveRecord::Schema.define(version: 2021_10_04_170708) do
 
   create_table "bookmarks", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.integer "user_id", null: false
@@ -172,7 +172,7 @@ ActiveRecord::Schema.define(version: 2021_08_06_065737) do
   create_table "bulkrax_statuses", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.string "status_message"
     t.string "error_class"
-    t.string "error_message"
+    t.text "error_message"
     t.text "error_backtrace", limit: 16777215
     t.integer "statusable_id"
     t.string "statusable_type"

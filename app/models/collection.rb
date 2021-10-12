@@ -3,6 +3,7 @@ class Collection < ActiveFedora::Base
   include ::Hyrax::CollectionBehavior
   # You can replace these metadata if they're not suitable
 #  include Hyrax::BasicMetadata
+  include ::Bulkrax::Metadata
 
   include ::ScoobySnacks::WorkModelBehavior
 

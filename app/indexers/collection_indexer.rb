@@ -20,6 +20,9 @@ class CollectionIndexer < Hyrax::CollectionIndexer
       
       # index the titles a work's ancestor collections
       solr_doc = index_ancestor_titles(solr_doc)
+
+      # index the field that bulkrax uses to keep track of imported/exported records
+      solr_doc[Solrizer.solr_name('bulkrax_identifier', :facetable)] = object.bulkrax_identifier
     end
   end
 
