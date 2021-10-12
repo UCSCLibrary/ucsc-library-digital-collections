@@ -85,6 +85,9 @@ en:
         Video: "http://schema.org/VideoObject"
     dashboard:
       create_work: "Create Work"
+      my:
+        heading:
+          visibility: "Visibility"
     controls:
       home:             "Home"
       about:            "About"
