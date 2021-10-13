@@ -19,10 +19,10 @@ build:
     - docker-compose build web
     - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" $CI_REGISTRY
     - docker-compose push web
-  # only:
-  #   refs:
-  #     - merge_requests
-  #     - main
+  only:
+    refs:
+      - merge_requests
+      - main
   tags:
     - local
 
@@ -81,9 +81,9 @@ ucsc.staging:
     name: ucsc.staging
     url: http://ucsc-hyrax-staging.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: ucsc.staging.stop
-  # only:
-  #   refs:
-  #     - n8-staging
+  only:
+    refs:
+      - n8-staging
   variables:
     DEPLOY_IMAGE: $CI_REGISTRY_IMAGE/web
     DEPLOY_TAG: $CI_COMMIT_SHORT_SHA
