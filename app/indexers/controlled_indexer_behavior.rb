@@ -145,9 +145,9 @@ module ControlledIndexerBehavior
   def mintLocalAuthUrl(auth_name, value) 
     id = value.parameterize
     auth = Qa::LocalAuthority.find_or_create_by(name: auth_name)
-    entry = Qa::LocalAuthorityEntry.create(local_authority: auth,
-                                           label: value,
-                                           uri: id)
+    entry = Qa::LocalAuthorityEntry.find_or_create_by(local_authority: auth,
+                                                      label: value,
+                                                      uri: id)
     return localIdToUrl(id,auth_name)
   end
 
