@@ -69,6 +69,7 @@ test:
     TEST_DB: ucsc-hyrax
   script:
     - cd /app/samvera/hyrax-webapp && bundle exec rake db:create db:schema:load spec
+  allow_failure: true
   tags:
     - docker
 
