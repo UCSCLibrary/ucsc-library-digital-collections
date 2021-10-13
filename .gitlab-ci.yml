@@ -85,9 +85,8 @@ ucsc.staging:
   #   refs:
   #     - n8-staging
   variables:
-    DEPLOY_IMAGE: $CI_REGISTRY_IMAGE
+    DEPLOY_IMAGE: $CI_REGISTRY_IMAGE/web
     DEPLOY_TAG: $CI_COMMIT_SHORT_SHA
-    WORKER_IMAGE: $CI_REGISTRY_IMAGE
     HELM_EXPERIMENTAL_OCI: 1
     HELM_RELEASE_NAME: ucsc-hyrax-staging
     KUBE_NAMESPACE: ucsc-hyrax-staging

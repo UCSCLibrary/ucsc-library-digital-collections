@@ -20,8 +20,8 @@ namespace="${2}"
 
 CHART_VERSION="${CHART_VERSION:-0.22.0}"
 
-DEPLOY_IMAGE="${DEPLOY_IMAGE:-ghcr.io/samvera/hyku}"
-WORKER_IMAGE="${WORKER_IMAGE:-ghcr.io/samvera/hyku/worker}"
+DEPLOY_IMAGE="${DEPLOY_IMAGE:-registry.gitlab.com/notch8/ucsc-library-digital-collections/web}"
+WORKER_IMAGE="${WORKER_IMAGE:-$DEPLOY_IMAGE}"
 DEPLOY_TAG="${DEPLOY_TAG:-latest}"
 IMAGES_TAG="${IMAGES_TAG:-latest}"
 WORKER_TAG="${WORKER_TAG:-$DEPLOY_TAG}"
@@ -35,7 +35,7 @@ helm upgrade \
     --install \
     --atomic \
     --timeout 15m0s \
-    --set cantaloupe.image.tag="$DEPLOY_TAG" \
+    --set cantaloupe.image.tag="$IMAGES_TAG" \
     --set image.repository="$DEPLOY_IMAGE" \
     --set image.tag="$DEPLOY_TAG" \
     --set worker.image.repository="$WORKER_IMAGE" \
