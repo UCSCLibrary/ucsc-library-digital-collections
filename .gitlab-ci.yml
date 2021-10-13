@@ -99,7 +99,6 @@ ucsc.staging:
     - ./bin/helm_deploy ucsc-hyrax-staging ucsc-hyrax-staging
   tags:
     - kubernetes
-  when: manual
 
 ucsc.staging.stop:
   stage: staging
