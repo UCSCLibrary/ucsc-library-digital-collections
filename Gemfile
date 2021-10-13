@@ -119,6 +119,8 @@ gem 'bulkrax', git: 'git://github.com/samvera-labs/bulkrax.git', branch: 'main'
 # gem 'bulkrax', path: 'vendor/engines/bulkrax'
 gem 'willow_sword', github: 'notch8/willow_sword'
 
+gem 'httparty'
+
 gem 'sinatra', git: 'git://github.com/sinatra/sinatra.git'
 
 # The following three gems handle the interface for monitoring background tasks

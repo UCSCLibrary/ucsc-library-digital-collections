@@ -39,7 +39,7 @@ RUN bundle install --jobs "$(nproc)"
 COPY --chown=1001:101 $APP_PATH /app/samvera/hyrax-webapp
 COPY --chown=1001:101 $APP_PATH/config/environments/production.rb /app/samvera/hyrax-webapp/config/environments/production.rb
 
-ARG SETTINGS__BULKRAX__ENABLED="false"
+ARG SETTINGS__BULKRAX__ENABLED="true"
 RUN RAILS_ENV=production SECRET_KEY_BASE=`bin/rake secret` DB_ADAPTER=nulldb bundle exec rake assets:precompile
 
 ENTRYPOINT ["/app/samvera/hyrax-webapp/stack_car/ops/entrypoint.sh"]
