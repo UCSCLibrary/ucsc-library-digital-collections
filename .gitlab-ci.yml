@@ -98,7 +98,7 @@ ucsc.staging:
     - envsubst < ops/staging-deploy.tmpl.yaml > ops/staging-deploy.yaml
     - ./bin/helm_deploy ucsc-hyrax-staging ucsc-hyrax-staging
   tags:
-    - local
+    - kubernetes
   when: manual
 
 ucsc.staging.stop:
