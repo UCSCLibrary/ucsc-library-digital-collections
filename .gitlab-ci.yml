@@ -94,6 +94,7 @@ ucsc.staging:
     HELM_EXTRA_ARGS: >
       --values ops/staging-deploy.yaml
   script:
+    - cd stack_car
     - export KUBECONFIG=$KUBECONFIG_R2
     - envsubst < ops/staging-deploy.tmpl.yaml > ops/staging-deploy.yaml
     - ./bin/helm_deploy ucsc-hyrax-staging ucsc-hyrax-staging
