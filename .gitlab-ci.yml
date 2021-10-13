@@ -9,7 +9,7 @@ before_script:
 - export BRANCH=${CI_COMMIT_REF_NAME}
 - export REGISTRY_HOST=${CI_REGISTRY}
 - export REGISTRY_URI="/${CI_PROJECT_PATH}"
-
+- touch stack_car/.env
 
 build:
   stage: build
