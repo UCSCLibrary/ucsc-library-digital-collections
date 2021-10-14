@@ -16,7 +16,7 @@ class Collection < ActiveFedora::Base
   # need an empty writer so that adding a work to the collection does not throw an exception
   attr_writer :label, :relative_path, :import_url
 
-  self.indexer = Hyrax::CollectionWithBasicMetadataIndexer
+  self.indexer = ::CollectionIndexer
 
   def reindex_extent
     @reindex_extent ||= Hyrax::Adapters::NestingIndexAdapter::LIMITED_REINDEX

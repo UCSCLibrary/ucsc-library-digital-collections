@@ -23,6 +23,8 @@ class CollectionIndexer < Hyrax::CollectionIndexer
 
       # index the field that bulkrax uses to keep track of imported/exported records
       solr_doc[Solrizer.solr_name('bulkrax_identifier', :facetable)] = object.bulkrax_identifier
+      solr_doc[Solrizer.solr_name('harmful_language_statement')] = object.harmful_language_statement
+      solr_doc[Solrizer.solr_name('subject_terms')] = object.subject_terms
     end
   end
 

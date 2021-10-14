@@ -1,5 +1,8 @@
 <%#= Customized from Hyrax 2.4.0 
   #  Renamed .html.erb %>
+<% if presenter.description.present? %>
+  <h4><b><%=t('hyrax.collections.show.description_heading')%></b></h4>
+<% end %>
 <% presenter.description.sort_by(&:length).reverse.each do |description| %>
   <%= simple_format(auto_link(description)) %>
 <% end %>
