@@ -1,2 +1,12 @@
-<%#= Custom file %>
-<%= f.input key, input_options %>
+<%# OVERRIDE Hyrax 2.9.0 %>
+<%# This override allows fields to display differently when scoobysnacks is being used, vs. when it is not. It is not currently being used for collections %>
+<% if controller_name == 'collections'%>
+  <% if f.object.multiple? key %>
+    <%= f.input key, as: :multi_value, required: f.object.required?(key) %>
+  <% else %>
+    <%= f.input key, required: f.object.required?(key) %>
+  <% end %>
+<% else %>
+<%#= This is the field that will apply where ScoobySnacks is being used %>
+  <%= f.input key, input_options %>
+<% end %>
