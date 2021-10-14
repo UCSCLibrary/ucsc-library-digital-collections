@@ -1,5 +1,14 @@
-<%#= Customized from Hyrax 2.9.0 
-   # File rewritten; Hyrax overrides default behavior for this field & this file restores it %>
-
+<%# OVERRIDE Hyrax 2.9.0 %>
+<%# This override allows fields to display differently when scoobysnacks is being used, vs. when it is not. It is not currently being used for collections %>
+<% if controller_name == 'collections'%>
+<%= f.input key,
+            as: :multi_value,
+            input_html: {
+            class: 'form-control',
+            data: { 'autocomplete-url' => "/authorities/search/local/languages", 'autocomplete' => key }
+            },
+            required: f.object.required?(key) %>
+<% else %>
 <%= f.input key, input_options %>
+<% end %>
 

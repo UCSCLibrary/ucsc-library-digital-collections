@@ -10,7 +10,7 @@ module Hyrax
       delegate term, to: :model
     end
 
-     # OVERRIDE FILE from ScoobySnacks to fix unpermitted_params error when saving a new work / Sara G. & Summer
+# OVERRIDE FILE from ScoobySnacks to fix unpermitted_params error when saving a new work / Sara G. & Summer
     def self.build_permitted_params
         permitted = super
         ScoobySnacks::METADATA_SCHEMA.controlled_field_names.each do |field_name|

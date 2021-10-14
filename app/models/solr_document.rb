@@ -12,6 +12,11 @@ class SolrDocument
   # Adds ScoobySnacks metadata attribute definitions
   include ScoobySnacks::SolrBehavior
 
+  # Adds custom attributes for collections
+  attribute :harmful_language_statement, Solr::String, solr_name('harmful_language_statement')
+  attribute :subject_terms, Solr::Array, solr_name('subject_terms')
+
+
  def self.add_field_semantics(label,solr_name,schema=nil)
     label = "#{schema}:#{label}" if schema
     field_semantics.merge!(label => Array.wrap(solr_name)) {|key, old_val, new_val| Array.wrap(old_val) + Array.wrap(new_val)}
