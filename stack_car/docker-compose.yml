@@ -5,7 +5,7 @@ x-app: &app
   build:
     context: ..
     dockerfile: ./stack_car/Dockerfile
-    target: hyku-base
+    target: hycruz-base
     args:
       - EXTRA_APK_PACKAGES=less vim bash openjdk11-jre ffmpeg rsync
   # command: sh -l -c "bundle && bundle exec puma -v -b tcp://0.0.0.0:3000"
@@ -17,19 +17,15 @@ x-app: &app
     - uploads:/app/samvera/hyrax-webapp/public/uploads
     - assets:/app/samvera/hyrax-webapp/public/assets
     - cache:/app/samvera/hyrax-webapp/tmp/cache
-    - .:/app/samvera/hyrax-webapp
+    - gems:/srv/bundle:Z
+    - ../dams_derivatives:/dams_derivatives
+    - ../example_media:/srv/hycruz/public/example_media
+    - ..:/app/samvera/hyrax-webapp
+
 services:
   web:
     <<: *app
     container_name: hycruz
-    volumes:
-      - uploads:/app/samvera/hyrax-webapp/public/uploads
-      - assets:/app/samvera/hyrax-webapp/public/assets
-      - cache:/app/samvera/hyrax-webapp/tmp/cache
-      - gems:/srv/bundle:Z
-      - ../dams_derivatives:/dams_derivatives
-      - ../example_media:/srv/hycruz/public/example_media
-      - ..:/app/samvera/hyrax-webapp
     depends_on:
       - "db"
       - "fcrepo"
@@ -50,14 +46,6 @@ services:
     <<: *app
     entrypoint: bundle exec sidekiq -c 1
     container_name: worker
-    volumes:
-      - uploads:/app/samvera/hyrax-webapp/public/uploads
-      - assets:/app/samvera/hyrax-webapp/public/assets
-      - cache:/app/samvera/hyrax-webapp/tmp/cache
-      - gems2:/srv/bundle:Z
-      - ../dams_derivatives:/dams_derivatives
-      - ../example_media:/srv/hycruz/public/example_media
-      - ..:/app/samvera/hyrax-webapp
     env_file:
       - .env
       - .env.development
@@ -119,7 +107,7 @@ services:
 
   images:
     image: registry.gitlab.com/notch8/ucsc-library-digital-collections/images:${TAG:-latest}
-    build:  
+    build:
       context: ..
       dockerfile: ./stack_car/cantaloupe/cantaloupe-dockerfile
     container_name: cantaloupe
@@ -133,6 +121,17 @@ services:
       - "cantaloupe-log:/srv/cantaloupe-log:Z"
       - "cantaloupe-cache:/srv/cantaloupe-cache:Z"
       - "./kakadu:/usr/share/kakadu"
+
+      - uploads:/app/samvera/hyrax-webapp/public/uploads
+      - assets:/app/samvera/hyrax-webapp/public/assets
+      - cache:/app/samvera/hyrax-webapp/tmp/cache
+      - gems:/srv/bundle:Z
+      - ../example_media:/srv/hycruz/public/example_media
+      - ..:/app/samvera/hyrax-webapp
+
+    environment:
+      - VIRTUAL_PORT=8182
+      - VIRTUAL_HOST=images.ucsc-dams.test
 
 volumes:
   database-data:
