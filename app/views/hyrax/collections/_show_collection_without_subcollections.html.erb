@@ -32,6 +32,10 @@
     </div>
     <div class="collection-text">
       <%= render 'collection_description', presenter: @presenter %>
+      <% if @presenter.harmful_language_statement.present?%>
+        <h5 class='harmful-language-statement'><b><%=t('hyrax.collections.show.harmful_language_statement_heading')%></b></h5>
+        <%= @presenter.harmful_language_statement %>
+      <% end %>
     </div>
     <%#= end %>
   </header>

@@ -55,6 +55,8 @@ en:
         placeholder: "Search within this collection..."
       show:
         works_in_collection: results
+        description_heading: "Collection Contents"
+        harmful_language_statement_heading: "Harmful Language Statement"
     collection_type:
       default_title: "Collection"
     division:
