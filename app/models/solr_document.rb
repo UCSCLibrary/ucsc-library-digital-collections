@@ -13,6 +13,17 @@ class SolrDocument
   include ScoobySnacks::SolrBehavior
 
   # Adds custom attributes for collections
+  attribute :collection_call_number, Solr::Array, solr_name('collection_call_number')
+  attribute :extent, Solr::Array, solr_name('extent')
+  attribute :donor_provenance, Solr::Array, solr_name('donor_provenance')
+  attribute :publisher_homepage, Solr::Array, solr_name('publisher')
+  attribute :rights_holder, Solr::Array, solr_name('rights_holder')
+  attribute :rights_status, Solr::Array, solr_name('rights_status')
+  attribute :subject_name, Solr::Array, solr_name('subject_name')
+  attribute :subject_place, Solr::Array, solr_name('subject_place')
+  attribute :subject_topic, Solr::Array, solr_name('subject_topic')
+  attribute :subject_title, Solr::Array, solr_name('subject_title')
+  attribute :date_created_display, Solr::Array, solr_name('date_created_display')
   attribute :harmful_language_statement, Solr::String, solr_name('harmful_language_statement')
   attribute :subject_terms, Solr::Array, solr_name('subject_terms')
 
