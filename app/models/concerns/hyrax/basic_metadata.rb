@@ -58,8 +58,6 @@ module Hyrax
       #These are custom properties added for collections
       property :harmful_language_statement, predicate: ::RDF::URI('http://digitalcollections.library.ucsc.edu/ontology/harmful_language_statement')
 
-      property :subject_terms, predicate: ::RDF::URI('http://digitalcollections.library.ucsc.edu/ontology/subject_terms')
-
       property :collection_call_number, predicate: ::RDF::URI('http://digitalcollections.library.ucsc.edu/ontology/collection_call_number')
 
       property :extent, predicate: ::RDF::Vocab::DC.extent

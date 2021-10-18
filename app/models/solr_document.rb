@@ -25,8 +25,8 @@ class SolrDocument
   attribute :subject_title, Solr::Array, solr_name('subject_title')
   attribute :date_created_display, Solr::Array, solr_name('date_created_display')
   attribute :harmful_language_statement, Solr::String, solr_name('harmful_language_statement')
-  attribute :subject_terms, Solr::Array, solr_name('subject_terms')
 
+# End custom attributes for collections
 
  def self.add_field_semantics(label,solr_name,schema=nil)
     label = "#{schema}:#{label}" if schema
