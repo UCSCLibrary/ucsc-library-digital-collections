@@ -100,6 +100,10 @@ class CatalogController < ApplicationController
     # solr fields that will be treated as facets by the blacklight application
     #   The ordering of the field names is the order of the display
     ScoobySnacks::BlacklightConfiguration.add_facet_fields(config)
+    config.add_facet_field solr_name("subject_topic", :facetable), label: 'Subject', limit: 5
+    config.add_facet_field solr_name("subject_place", :facetable), label: 'Subject (Place)', limit: 5
+    config.add_facet_field solr_name("subject_name", :facetable), label: 'Subject (People)', limit: 5
+    config.add_facet_field solr_name("subject_title", :facetable), label: 'Subject (Title)', limit: 5
 
     # Have BL send all facet field names to Solr, which has been the default
     # previously. Simply remove these lines if you'd rather use Solr request

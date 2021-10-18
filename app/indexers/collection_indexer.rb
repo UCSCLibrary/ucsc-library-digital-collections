@@ -26,29 +26,29 @@ class CollectionIndexer < Hyrax::CollectionIndexer
 
 
       # index custom fields
-      solr_doc[Solrizer.solr_name('collection_call_number', :facetable)] = object.collection_call_number
+      solr_doc[Solrizer.solr_name('collection_call_number', :stored_searchable)] = object.collection_call_number
 
-      solr_doc[Solrizer.solr_name('extent', :facetable)] = object.extent
+      solr_doc[Solrizer.solr_name('extent'), :stored_searchable] = object.extent
 
-      solr_doc[Solrizer.solr_name('donor_provenance', :facetable)] = object.donor_provenance
+      solr_doc[Solrizer.solr_name('donor_provenance'), :stored_searchable] = object.donor_provenance
 
       solr_doc[Solrizer.solr_name('harmful_language_statement')] = object.harmful_language_statement
 
-      solr_doc[Solrizer.solr_name('publisher_homepage', :facetable)] = object.publisher_homepage
+      solr_doc[Solrizer.solr_name('publisher_homepage'), :stored_searchable] = object.publisher_homepage
 
-      solr_doc[Solrizer.solr_name('rights_holder', :facetable)] = object.rights_holder
+      solr_doc[Solrizer.solr_name('rights_holder'), :stored_searchable] = object.rights_holder
 
-      solr_doc[Solrizer.solr_name('rights_status', :facetable)] = object.rights_status
+      solr_doc[Solrizer.solr_name('rights_status'), :stored_searchable] = object.rights_status
 
-      solr_doc[Solrizer.solr_name('subject_name', :facetable)] = object.subject_name
+      solr_doc[Solrizer.solr_name('subject_name', :stored_searchable)] = object.subject_name
 
-      solr_doc[Solrizer.solr_name('subject_place', :facetable)] = object.subject_place
+      solr_doc[Solrizer.solr_name('subject_place', :stored_searchable)] = object.subject_place
 
-      solr_doc[Solrizer.solr_name('subject_topic', :facetable)] = object.subject_topic
+      solr_doc[Solrizer.solr_name('subject_topic', :stored_searchable)] = object.subject_topic
 
-      solr_doc[Solrizer.solr_name('subject_title', :facetable)] = object.subject_title
+      solr_doc[Solrizer.solr_name('subject_title', :stored_searchable)] = object.subject_title
 
-      solr_doc[Solrizer.solr_name('date_created_display', :facetable)] = object.date_created_display
+      solr_doc[Solrizer.solr_name('date_created_display'), :stored_searchable] = object.date_created_display
 
       # end custom fields indexing
 
