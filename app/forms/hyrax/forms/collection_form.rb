@@ -23,7 +23,7 @@ module Hyrax
       delegate :blacklight_config, to: Hyrax::CollectionsController
 
       self.terms = [:title, :description, :representative_id, :thumbnail_id, :identifier, 
-      :related_url, :visibility, :collection_type_gid, :collection_call_number, :extent, :donor_provenance, :publisher, :publisher_homepage, :rights_statement, :rights_holder, :rights_status, :access_right,:subjectName, :subjectPlace, :subjectTopic, :subjectTitle, :date_created, :date_created_display, :resource_type, :harmful_language_statement]
+      :related_url, :visibility, :collection_type_gid, :collectionCallNumber, :extent, :donorProvenance, :publisher, :publisherHomepage, :rightsStatement, :rightsHolder, :rightsStatus, :accessRights,:subjectName, :subjectPlace, :subjectTopic, :subjectTitle, :dateCreated, :dateCreatedDisplay, :resource_type, :harmfulLanguageStatement]
 
       self.required_fields = [:title]
 
@@ -60,7 +60,7 @@ module Hyrax
 
       # Terms that appear within the accordion
       def secondary_terms
-        [:related_url, :collection_type_gid, :collection_call_number, :extent, :donor_provenance, :publisher, :publisher_homepage, :rights_statement, :rights_holder, :rights_status, :access_right, :subjectName, :subjectPlace, :subjectTopic, :subjectTitle, :date_created, :date_created_display, :resource_type, :harmful_language_statement]
+        [:related_url, :collection_type_gid, :collectionCallNumber, :extent, :donorProvenance, :publisher, :publisherHomepage, :rightsStatement, :rightsHolder, :rightsStatus, :accessRights, :subjectName, :subjectPlace, :subjectTopic, :subjectTitle, :dateCreated, :dateCreatedDisplay, :resource_type, :harmfulLanguageStatement]
       end
 
       def banner_info

@@ -31,15 +31,15 @@ module Hyrax
       property :license, predicate: ::RDF::Vocab::DC.license, multiple: true
 
       # This is for the rights statement
-      property :rights_statement, predicate: ::RDF::Vocab::EDM.rights
+      property :rightsStatement, predicate: ::RDF::Vocab::EDM.rights
 
       property :rights_notes, predicate: ::RDF::URI.new('http://purl.org/dc/elements/1.1/rights'), multiple: true
 
-      property :access_right, predicate: ::RDF::Vocab::DC.accessRights
+      property :accessRights, predicate: ::RDF::Vocab::DC.accessRights
 
       property :publisher, predicate: ::RDF::Vocab::DC11.publisher
 
-      property :date_created, predicate: ::RDF::Vocab::DC.created
+      property :dateCreated, predicate: ::RDF::Vocab::DC.created
 
       property :subject, predicate: ::RDF::Vocab::DC11.subject
 
@@ -56,19 +56,19 @@ module Hyrax
       property :source, predicate: ::RDF::Vocab::DC.source
 
       #These are custom properties added for collections
-      property :harmful_language_statement, predicate: ::RDF::URI('http://digitalcollections.library.ucsc.edu/ontology/harmful_language_statement')
+      property :harmfulLanguageStatement, predicate: ::RDF::URI('http://digitalcollections.library.ucsc.edu/ontology/harmfulLanguageStatement')
 
-      property :collection_call_number, predicate: ::RDF::URI('http://digitalcollections.library.ucsc.edu/ontology/collection_call_number')
+      property :collectionCallNumber, predicate: ::RDF::URI('http://digitalcollections.library.ucsc.edu/ontology/collectionCallNumber')
 
       property :extent, predicate: ::RDF::Vocab::DC.extent
 
-      property :donor_provenance, predicate: ::RDF::Vocab::DC.provenance
+      property :donorProvenance, predicate: ::RDF::Vocab::DC.provenance
 
-      property :publisher_homepage, predicate: ::RDF::Vocab::FOAF.homepage
+      property :publisherHomepage, predicate: ::RDF::Vocab::FOAF.homepage
 
-      property :rights_holder, predicate: ::RDF::Vocab::DC.rightsHolder
+      property :rightsHolder, predicate: ::RDF::Vocab::DC.rightsHolder
 
-      property :rights_status, predicate: ::RDF::Vocab::DC.license
+      property :rightsStatus, predicate: ::RDF::Vocab::DC.license
 
       property :subjectName, predicate: ::RDF::Vocab::FOAF.name
 
@@ -78,7 +78,7 @@ module Hyrax
 
       property :subjectTitle, predicate: ::RDF::Vocab::MODS.subjectTitle
 
-      property :date_created_display, predicate: ::RDF::Vocab::MODS.dateCreated  
+      property :dateCreatedDisplay, predicate: ::RDF::Vocab::MODS.dateCreated  
 
       id_blank = proc { |attributes| attributes[:id].blank? }
 

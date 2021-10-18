@@ -26,19 +26,23 @@ class CollectionIndexer < Hyrax::CollectionIndexer
 
 
       # index custom fields
-      solr_doc[Solrizer.solr_name('collection_call_number', :stored_searchable)] = object.collection_call_number
+      solr_doc[Solrizer.solr_name('collectionCallNumber', :stored_searchable)] = object.collectionCallNumber
 
       solr_doc[Solrizer.solr_name('extent', :stored_searchable)] = object.extent
 
-      solr_doc[Solrizer.solr_name('donor_provenance', :stored_searchable)] = object.donor_provenance
+      solr_doc[Solrizer.solr_name('donorProvenance', :stored_searchable)] = object.donorProvenance
 
-      solr_doc[Solrizer.solr_name('harmful_language_statement')] = object.harmful_language_statement
+      solr_doc[Solrizer.solr_name('harmfulLanguageStatement')] = object.harmfulLanguageStatement
 
-      solr_doc[Solrizer.solr_name('publisher_homepage', :stored_searchable)] = object.publisher_homepage
+      solr_doc[Solrizer.solr_name('publisherHomepage', :stored_searchable)] = object.publisherHomepage
 
-      solr_doc[Solrizer.solr_name('rights_holder', :stored_searchable)] = object.rights_holder
+      solr_doc[Solrizer.solr_name('rightsStatement', :stored_searchable)] = object.rightsStatement
 
-      solr_doc[Solrizer.solr_name('rights_status', :stored_searchable)] = object.rights_status
+      solr_doc[Solrizer.solr_name('rightsHolder', :stored_searchable)] = object.rightsHolder
+
+      solr_doc[Solrizer.solr_name('rightsStatus', :stored_searchable)] = object.rightsStatus
+
+      solr_doc[Solrizer.solr_name('accessRights', :stored_searchable)] = object.accessRights
 
       solr_doc[Solrizer.solr_name('subjectName', :stored_searchable)] = object.subjectName
 
@@ -48,7 +52,7 @@ class CollectionIndexer < Hyrax::CollectionIndexer
 
       solr_doc[Solrizer.solr_name('subjectTitle', :stored_searchable)] = object.subjectTitle
 
-      solr_doc[Solrizer.solr_name('date_created_display')] = object.date_created_display
+      solr_doc[Solrizer.solr_name('dateCreatedDisplay')] = object.dateCreatedDisplay
 
       # end custom fields indexing
 
