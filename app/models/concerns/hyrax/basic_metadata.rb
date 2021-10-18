@@ -70,13 +70,13 @@ module Hyrax
 
       property :rights_status, predicate: ::RDF::Vocab::DC.license
 
-      property :subject_name, predicate: ::RDF::Vocab::FOAF.name
+      property :subjectName, predicate: ::RDF::Vocab::FOAF.name
 
-      property :subject_place, predicate: ::RDF::Vocab::DC.spatial
+      property :subjectPlace, predicate: ::RDF::Vocab::DC.spatial
 
-      property :subject_topic, predicate: ::RDF::Vocab::DC.subject
+      property :subjectTopic, predicate: ::RDF::Vocab::DC.subject
 
-      property :subject_title, predicate: ::RDF::Vocab::MODS.subjectTitle
+      property :subjectTitle, predicate: ::RDF::Vocab::MODS.subjectTitle
 
       property :date_created_display, predicate: ::RDF::Vocab::MODS.dateCreated  
 
