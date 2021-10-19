@@ -1,5 +1,73 @@
+
+
 <%#= Customized from Blacklight 6.23 %>
 <%#= Adds Result count h4 element %>
+<div class="matching-collections-wrapper">
+  <h4 class="matching-collections-count"><%= t('hyrax.collections.index.matching_collections.header') %></h4>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="carousel matching-collections-carousel slide" id="carousel-tilenav" data-interval="false">
+          <div class="carousel-inner">
+            <div class="item active">
+              <div class="col-xs-12 col-sm-3 col-md-2">
+                <div class="text-center">
+                  <h5>Example Collection</h5>
+                </div>
+              </div>
+            </div>
+            <div class="item">
+              <div class="col-xs-12 col-sm-3 col-md-2">
+                <div class="text-center">
+                  <h5>Example Collection</h5>
+                </div>
+              </div>
+            </div>
+            <div class="item">
+              <div class="col-xs-12 col-sm-3 col-md-2">
+                <div class="text-center">
+                  <h5>Example Collection</h5>
+                </div>
+              </div>
+            </div>
+            <div class="item">
+              <div class="col-xs-12 col-sm-3 col-md-2">
+                <div class="text-center">
+                  <h5>Example Collection</h5>
+                </div>
+              </div>
+            </div>
+            <div class="item">
+              <div class="col-xs-12 col-sm-3 col-md-2">
+                <div class="text-center">
+                  <h5>Example Collection</h5>
+                </div>
+              </div>
+            </div>
+            <div class="item">
+              <div class="col-xs-12 col-sm-3 col-md-2">
+                <div class="text-center">
+                  <h5>Example Collection</h5>
+                </div>
+              </div>
+            </div>
+            <div class="item">
+              <div class="col-xs-12 col-sm-3 col-md-2">
+                <div class="text-center">
+                  <h5>Example Collection</h5>
+                </div>
+              </div>
+            </div>
+          </div>
+          <a class="left carousel-control" href="#carousel-tilenav" data-slide="prev"><i class="glyphicon glyphicon-menu-left"></i></a>
+          <a class="right carousel-control" href="#carousel-tilenav" data-slide="next"><i class="glyphicon glyphicon-menu-right"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <h2 class="sr-only top-content-title"><%= t('blacklight.search.search_results_header') %></h2>
 
 <% @page_title = t('blacklight.search.page_title.title', :constraints => render_search_to_page_title(params), :application_name => application_name) %>
@@ -25,3 +93,25 @@
 <%- end %>
 
 <%= render 'results_pagination' %>
+
+<script>
+(function(){
+  $('.matching-collections-carousel .item').each(function(){
+    var itemToClone = $(this);
+
+    for (var i=1;i<6;i++) {
+      itemToClone = itemToClone.next();
+
+      // wrap around if at end of item collection
+      if (!itemToClone.length) {
+        itemToClone = $(this).siblings(':first');
+      }
+
+      // grab item, clone, add marker class, add to collection
+      itemToClone.children(':first-child').clone()
+        .addClass("cloneditem-"+(i))
+        .appendTo($(this));
+    }
+  });
+}());
+</script>
