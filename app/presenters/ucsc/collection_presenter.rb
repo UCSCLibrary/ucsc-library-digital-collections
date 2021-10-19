@@ -1,7 +1,7 @@
 module Ucsc
   class CollectionPresenter < Hyrax::CollectionPresenter
 
-    delegate :harmful_language_statement, :subject_terms, to: :solr_document
+    delegate :collectionCallNumber, :extent, :donorProvenance, :publisher, :publisherHomepage, :rightsStatement, :rightsHolder, :rightsStatus, :accessRights,:subjectName, :subjectPlace, :subjectTopic, :subjectTitle, :dateCreated, :dateCreatedDisplay, :harmfulLanguageStatement, to: :solr_document
 
     def permission_badge_class
       Ucsc::PermissionBadge

@@ -22,9 +22,8 @@ module Hyrax
 
       delegate :blacklight_config, to: Hyrax::CollectionsController
 
-      self.terms = [:title, :description, 
-                    :representative_id, :thumbnail_id, :identifier, 
-                    :related_url, :visibility, :collection_type_gid, :harmful_language_statement, :subject_terms]
+      self.terms = [:title, :description, :representative_id, :thumbnail_id, :identifier, 
+      :related_url, :visibility, :collection_type_gid, :collectionCallNumber, :extent, :donorProvenance, :publisher, :publisherHomepage, :rightsStatement, :rightsHolder, :rightsStatus, :accessRights,:subjectName, :subjectPlace, :subjectTopic, :subjectTitle, :dateCreated, :dateCreatedDisplay, :resource_type, :harmfulLanguageStatement]
 
       self.required_fields = [:title]
 
@@ -61,10 +60,7 @@ module Hyrax
 
       # Terms that appear within the accordion
       def secondary_terms
-        [:identifier,
-         :related_url,
-         :harmful_language_statement, 
-         :subject_terms]
+        [:related_url, :collection_type_gid, :collectionCallNumber, :extent, :donorProvenance, :publisher, :publisherHomepage, :rightsStatement, :rightsHolder, :rightsStatus, :accessRights, :subjectName, :subjectPlace, :subjectTopic, :subjectTitle, :dateCreated, :dateCreatedDisplay, :resource_type, :harmfulLanguageStatement]
       end
 
       def banner_info

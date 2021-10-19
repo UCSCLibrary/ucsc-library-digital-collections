@@ -13,9 +13,20 @@ class SolrDocument
   include ScoobySnacks::SolrBehavior
 
   # Adds custom attributes for collections
-  attribute :harmful_language_statement, Solr::String, solr_name('harmful_language_statement')
-  attribute :subject_terms, Solr::Array, solr_name('subject_terms')
+  attribute :collectionCallNumber, Solr::Array, solr_name('collectionCallNumber')
+  attribute :extent, Solr::Array, solr_name('extent')
+  attribute :donorProvenance, Solr::Array, solr_name('donorProvenance')
+  attribute :publisherHomepage, Solr::Array, solr_name('publisher')
+  attribute :rightsHolder, Solr::Array, solr_name('rightsHolder')
+  attribute :rightsStatus, Solr::Array, solr_name('rightsStatus')
+  attribute :subjectName, Solr::Array, solr_name('subjectName')
+  attribute :subjectPlace, Solr::Array, solr_name('subjectPlace')
+  attribute :subjectTopic, Solr::Array, solr_name('subjectTopic')
+  attribute :subjectTitle, Solr::Array, solr_name('subjectTitle')
+  attribute :dateCreatedDisplay, Solr::Array, solr_name('dateCreatedDisplay')
+  attribute :harmfulLanguageStatement, Solr::String, solr_name('harmfulLanguageStatement')
 
+# End custom attributes for collections
 
  def self.add_field_semantics(label,solr_name,schema=nil)
     label = "#{schema}:#{label}" if schema
