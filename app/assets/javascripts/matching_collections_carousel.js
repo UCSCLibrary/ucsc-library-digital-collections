@@ -1,4 +1,5 @@
-$(document).on('turbolinks:load', (function(){
+$(document).on('turbolinks:load', function() {
+(function(){
   $('.matching-collections-carousel .item').each(function(){
     var itemToClone = $(this);
 
@@ -16,4 +17,5 @@ $(document).on('turbolinks:load', (function(){
         .appendTo($(this));
     }
   });
-}()));
+}());
+});

@@ -21,6 +21,7 @@
 //= require turbolinks
 // Required by Blacklight
 //= require blacklight/blacklight
+//= require matching_collections_carousel
 
 //= require_directory .
 //= require hyrax
@@ -28,4 +29,4 @@
 //= require_tree ./hyrax
 
 //= require browse_everything
-//= require libanswers
+// = require libanswers
