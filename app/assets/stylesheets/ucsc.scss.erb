@@ -952,9 +952,6 @@ h4.results-count span {
     margin-bottom: 40px;
     margin-top: 20px;
     border-radius: 4px;
-    .matching-collections-count, .carousel.matching-collections-carousel {
-        padding-bottom: 20px;
-    }
     .matching-collections-count {
         font-weight: bold
     }
@@ -962,141 +959,135 @@ h4.results-count span {
         background-color: #f1f1f1;
         border-radius: 4px;
     }
-    /* Matching Collections Carousel */
+/* Matching Collections Carousel */
     .matching-collections-carousel {
         .carousel-control {
             background-image: none;
             width: auto;
+            top: 30%;
             .glyphicon {
                 color: #777777;
             }
         }
+        .carousel-column {
+            padding: 20px;
+        }
     }
 }
 
- ////// Stats Carousel //////
-
-  /* home page stats not in carousel */
-
-
-  .matching-collections-carousel .carousel-control {
-    width: 4%;
-    background-image: none;
-  }
-
-  .matching-collections-carousel .carousel-control.left {
+.matching-collections-carousel .carousel-control.left {
     margin-left: 0;
-  }
+}
 
-  .matching-collections-carousel .carousel-control.right {
+.matching-collections-carousel .carousel-control.right {
     margin-right: 0;
-  }
+}
 
-  .carousel .item .col-xs-12 {
+.carousel .item .col-xs-12 {
     padding: 0;
-  }
-  
+}
 
-  ////// Stats Carousel Media Queries //////
 
-  @media (max-width: 767px) {
+////// Carousel Media Queries //////
+
+@media (max-width: 767px) {
     .matching-collections-carousel .cloneditem-1,
     .matching-collections-carousel .cloneditem-2,
     .matching-collections-carousel .cloneditem-3 {
-      display: none;
+    display: none;
     }
-  }
-  
-  @media only screen and (max-width: 992px) {
-    .carousel .item .col-xs-12:nth-last-child(-n+2) {
-      display: none;
-    }
-  }
+}
 
-  @media all and (min-width: 768px) {
+@media only screen and (max-width: 992px) {
+    .carousel .item .col-xs-12:nth-last-child(-n+2) {
+    display: none;
+    }
+}
+
+@media all and (min-width: 768px) {
     .matching-collections-carousel .carousel-inner > .active.left,
     .matching-collections-carousel .carousel-inner > .prev {
-      left: -50%;
+    left: -50%;
     }
     .matching-collections-carousel .carousel-inner > .active.right,
     .matching-collections-carousel .carousel-inner > .next {
-      left: 50%;
+    left: 50%;
     }
     .matching-collections-carousel .carousel-inner > .left,
     .matching-collections-carousel .carousel-inner > .prev.right,
     .matching-collections-carousel .carousel-inner > .active {
-      left: 0;
+    left: 0;
     }
     .matching-collections-carousel .carousel-inner .cloneditem-1 {
-      display: block;
+    display: block;
     }
-  }
+}
 
-  @media all and (min-width: 768px) and (transform-3d),
-  all and (min-width: 768px) and (-webkit-transform-3d) {
+@media all and (min-width: 768px) and (transform-3d),
+all and (min-width: 768px) and (-webkit-transform-3d) {
     .matching-collections-carousel .carousel-inner > .item.active.right,
     .matching-collections-carousel .carousel-inner > .item.next {
-      -webkit-transform: translate3d(50%, 0, 0);
-      transform: translate3d(50%, 0, 0);
-      left: 0;
+    -webkit-transform: translate3d(50%, 0, 0);
+    transform: translate3d(50%, 0, 0);
+    left: 0;
     }
     .matching-collections-carousel .carousel-inner > .item.active.left,
     .matching-collections-carousel .carousel-inner > .item.prev {
-      -webkit-transform: translate3d(-50%, 0, 0);
-      transform: translate3d(-50%, 0, 0);
-      left: 0;
+    -webkit-transform: translate3d(-50%, 0, 0);
+    transform: translate3d(-50%, 0, 0);
+    left: 0;
     }
     .matching-collections-carousel .carousel-inner > .item.left,
     .matching-collections-carousel .carousel-inner > .item.prev.right,
     .matching-collections-carousel .carousel-inner > .item.active {
-      -webkit-transform: translate3d(0, 0, 0);
-      transform: translate3d(0, 0, 0);
-      left: 0;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    left: 0;
     }
-  }
+}
 
-  @media all and (min-width: 992px) {
+@media all and (min-width: 992px) {
     .matching-collections-carousel .carousel-inner > .active.left,
     .matching-collections-carousel .carousel-inner > .prev {
-      left: -16.6%;
+    left: -16.6%;
     }
     .matching-collections-carousel .carousel-inner > .active.right,
     .matching-collections-carousel .carousel-inner > .next {
-      left: 16.6%;
+    left: 16.6%;
     }
     .matching-collections-carousel .carousel-inner > .left,
     .matching-collections-carousel .carousel-inner > .prev.right,
     .matching-collections-carousel .carousel-inner > .active {
-      left: 0;
+    left: 0;
     }
     .matching-collections-carousel .carousel-inner .cloneditem-2,
     .matching-collections-carousel .carousel-inner .cloneditem-3 {
-      display: block;
+    display: block;
     }
-  }
+}
 
-  @media all and (min-width: 992px) and (transform-3d),
-  all and (min-width: 992px) and (-webkit-transform-3d) {
+@media all and (min-width: 992px) and (transform-3d),
+all and (min-width: 992px) and (-webkit-transform-3d) {
     .matching-collections-carousel .carousel-inner > .item.active.right,
     .matching-collections-carousel .carousel-inner > .item.next {
-      -webkit-transform: translate3d(16.6%, 0, 0);
-      transform: translate3d(16.6%, 0, 0);
-      left: 0;
+    -webkit-transform: translate3d(16.6%, 0, 0);
+    transform: translate3d(16.6%, 0, 0);
+    left: 0;
     }
     .matching-collections-carousel .carousel-inner > .item.active.left,
     .matching-collections-carousel .carousel-inner > .item.prev {
-      -webkit-transform: translate3d(-16.6%, 0, 0);
-      transform: translate3d(-16.6%, 0, 0);
-      left: 0;
+    -webkit-transform: translate3d(-16.6%, 0, 0);
+    transform: translate3d(-16.6%, 0, 0);
+    left: 0;
     }
     .matching-collections-carousel .carousel-inner > .item.left,
     .matching-collections-carousel .carousel-inner > .item.prev.right,
     .matching-collections-carousel .carousel-inner > .item.active {
-      -webkit-transform: translate3d(0, 0, 0);
-      transform: translate3d(0, 0, 0);
-      left: 0;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    left: 0;
     }
-  }
+}
 
 
 
