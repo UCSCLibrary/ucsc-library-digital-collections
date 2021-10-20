@@ -658,10 +658,8 @@ GEM
       activerecord-import
       deprecation
       faraday
-      geocoder
-      ldpath
       nokogiri (~> 1.6)
-      rails (>= 5.0, < 6.2)
+      rails (~> 5.0)
       rdf
     racc (1.5.2)
     rack (2.2.3)
