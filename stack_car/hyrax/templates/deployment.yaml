@@ -40,8 +40,9 @@ spec:
             - sh
             - -c
             - >
-              solrcloud-upload-configset.sh /app/samvera/hyrax-webapp/solr/conf &&
-              solrcloud-assign-configset.sh
+              ls -la &&
+              bin/solrcloud-upload-configset.sh /app/samvera/hyrax-webapp/solr/conf &&
+              bin/solrcloud-assign-configset.sh
         {{- end }}
         {{- if not .Values.skipDbMigrateSeed }}
         - name: db-setup
