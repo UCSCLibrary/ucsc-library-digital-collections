@@ -47,6 +47,7 @@ ENV LC_ALL C.UTF-8
 ENV PATH $GEM_HOME/bin:$GEM_HOME/gems/bin:/usr/share/kakadu:$PATH
 ENV LD_LIBRARY_PATH /usr/share/kakadu:/app/fits/tools/mediainfo/linux
 
+ARG APP_PATH=.
 COPY --chown=1001:1001 $APP_PATH/Gemfile* /app/samvera/hyrax-webapp/
 RUN bundle install --jobs "$(nproc)"
 
