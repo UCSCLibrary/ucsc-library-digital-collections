@@ -3,9 +3,9 @@ FROM ruby:2.7.2 as hycruz-base
 RUN apt-get -qq update \
     && apt-get install -y --no-install-recommends  \
                                               build-essential \
-                                              curl \
-                                              netcat \
                                               clamav \
+                                              cmake \
+                                              curl \
                                               default-libmysqlclient-dev \
                                               ffmpeg \
                                               ghostscript \
@@ -13,17 +13,19 @@ RUN apt-get -qq update \
                                               libclamav-dev \
                                               libmagickcore-dev \
                                               libpq-dev \
+                                              libxml2-dev \
                                               libreoffice \
                                               mediainfo \
-                                              perl \
+                                              netcat \
                                               nodejs \
                                               openjdk-11-jre \
+                                              perl \
                                               rsync \
-                                              zip \
-                                              unzip \
                                               tzdata \
+                                              unzip \
                                               wget \
-                                              yarn
+                                              yarn \
+                                              zip 
 
 RUN mkdir -p /app/fits && \
     cd /app/fits && \
