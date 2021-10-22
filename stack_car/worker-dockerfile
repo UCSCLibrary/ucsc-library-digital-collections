@@ -1,30 +1,24 @@
-ARG HYRAX_IMAGE_VERSION=3.0.1
-FROM ghcr.io/samvera/hyrax/hyrax-base:$HYRAX_IMAGE_VERSION as hyku-base
+FROM ruby:2.7.2 as hycruz-base
 
 USER root
 
-ARG EXTRA_APK_PACKAGES="openjdk11-jre ffmpeg yarn"
-RUN apk --no-cache upgrade && \
-  apk --no-cache add \
-    curl \
-    curl-dev \
-    libcurl \
-    libxml2-dev \
-    mariadb-dev \
-    mediainfo \
-    perl \
-    cmake \
-    $EXTRA_APK_PACKAGES
-
-USER app
-
+RUN apt-get -qq update \
+    && apt-get install -y --no-install-recommends  \
+      unzip \
+      ghostscript \
+      libmagickcore-dev \
+      mediainfo \
+      clamav \
+      libclamav-dev \
+      ffmpeg \
+      libreoffice
+                                               
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 
 ENV APP_DIR=/app/samvera/hyrax-webapp 
 ENV TEMP=${APP_DIR}/tmp 
 
-# ENV GEM_HOME="/srv/bundle"
 ENV PATH $GEM_HOME/bin:$GEM_HOME/gems/bin:/usr/share/kakadu:$PATH
 ENV LD_LIBRARY_PATH /usr/share/kakadu:$LD_LIBRARY_PATH
 RUN gem install bundler
@@ -42,4 +36,9 @@ COPY --chown=1001:101 $APP_PATH/stack_car/ops/* /app/samvera/hyrax-webapp/ops/
 COPY ./stack_car/sidekiq-entrypoint.sh /app/samvera/hyrax-webapp/sidekiq-entrypoint.sh
 
 ENTRYPOINT ["/app/samvera/hyrax-webapp/sidekiq-entrypoint.sh"]
+
+
+
+
+
 
