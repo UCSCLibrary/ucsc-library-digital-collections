@@ -3,6 +3,8 @@ FROM ruby:2.7.2 as hycruz-base
 RUN apt-get -qq update \
     && apt-get install -y --no-install-recommends  \
                                               build-essential \
+                                              curl \
+                                              netcat \
                                               clamav \
                                               default-libmysqlclient-dev \
                                               ffmpeg \
@@ -13,10 +15,13 @@ RUN apt-get -qq update \
                                               libpq-dev \
                                               libreoffice \
                                               mediainfo \
+                                              perl \
                                               nodejs \
                                               openjdk-11-jre \
                                               rsync \
+                                              zip \
                                               unzip \
+                                              tzdata \
                                               wget \
                                               yarn
 
