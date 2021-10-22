@@ -64,7 +64,7 @@ spec:
           command:
             - sh
             - -c
-            - db-migrate-seed.sh
+            - stack_car/bin/db-migrate-seed.sh
         {{- end }}
         {{- if .Values.extraInitContainers }}
         {{- toYaml .Values.extraInitContainers | nindent 8 }}
