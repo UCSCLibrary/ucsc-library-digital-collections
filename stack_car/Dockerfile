@@ -15,6 +15,7 @@ RUN apt-get -qq update \
                                               libpq-dev \
                                               libxml2-dev \
                                               libreoffice \
+                                              mariadb-server \
                                               mediainfo \
                                               netcat \
                                               nodejs \
