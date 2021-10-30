@@ -19,7 +19,6 @@ module Hyrax
         permitted << :visibility
         permitted << :admin_set_id 
         permitted << :member_of_collection_ids
-        permitted << :find_child_work
         permitted << :permissions_attributes
         permitted << :visibility_during_embargo
         permitted << :embargo_release_date
