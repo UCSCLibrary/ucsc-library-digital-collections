@@ -3,7 +3,6 @@
 <% provide :page_title, @presenter.page_title %>
 
 <%= render 'shared/citations' %>
-
 <div itemscope itemtype="http://schema.org/CreativeWork" class="row">
     <div class="col-sm-12">
         <header>
@@ -53,6 +52,7 @@
         <%#= render 'sharing_with', presenter: @presenter %>
         <%#= render 'user_activity', presenter: @presenter %>
     </div>
+</div>
 </div>
 
 <%= render('downloads_modal', presenter: @presenter) if (@presenter.image? && !@presenter.audio?) %>
