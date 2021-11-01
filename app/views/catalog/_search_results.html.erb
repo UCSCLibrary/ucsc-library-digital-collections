@@ -2,8 +2,7 @@
 
 <%#= Customized from Blacklight 6.23 %>
 <%#= Adds Result count h4 element %>
-
-<% @response.response['docs'].each_with_index do |doc, index| %>
+<% @response.response['docs'].each do |doc| %>
   <% if doc['has_model_ssim'] == ['Collection'] %>
     <%= render 'matching_collections' %>
   <% break if doc['has_model_ssim'] == ['Collection'] %>
@@ -20,6 +19,7 @@
   <%= rss_feed_link_tag %>
   <%= atom_feed_link_tag %>
   <%= json_api_link_tag %>
+  <meta name="turbolinks-cache-control" content="no-cache">
 <% end %>
 
 <%= render 'search_header' %>
