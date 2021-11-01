@@ -53,6 +53,8 @@
         <%#= render 'user_activity', presenter: @presenter %>
     </div>
 </div>
+
+<%# TODO: I added an extra closing div here because one is missing somewhere inside one of the partials used, causing the footer to be rendered inside the content wrapper. I was not able to find the correct partial to add it to, but bringing it to the bottom of .  This fixes the issue for now %>
 </div>
 
 <%= render('downloads_modal', presenter: @presenter) if (@presenter.image? && !@presenter.audio?) %>
