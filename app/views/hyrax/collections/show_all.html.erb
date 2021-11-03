@@ -1,0 +1,37 @@
+<%#= Custom file for A-Z collections page %>
+<div itemscope itemtype="http://schema.org/CollectionPage">
+
+  <div class="row">
+    <div class="col-md-12">
+
+		<header id="collection-description" class="row">
+			<div class="hyc-title"><h1><%= t("hyrax.collections.az.title") %></h1></div>
+			<p><%= t("hyrax.collections.az.description") %></p>
+		</header>
+
+		<div id="all-collections" class="collections row">
+			<div class="hyc-blacklight hyc-bl-title col-xs-12">
+				<h4><%= t("hyrax.collections.az.heading") %></h4>
+			</div>
+            
+			<% @collections.sort_by(&:title).each do |collection| %>
+			<div class="media col-sm-6" data-id="<%= collection.id %>">
+				<div class="media-left">
+					<img alt role="presentation" src="<%= collection.display_image_url(size: '265,') %>" class="media-object" style="width:100px"> </a>
+				</div>
+				<div class="media-body">
+					<h4 class="media-heading">
+						<a href="/collections/<%= collection.id %>?locale=en"><%= collection.title.first %></a>
+					</h4>
+					<p><%= collection.description.first.truncate(160) %>
+                    
+                    </p>
+                </div>
+			</div>
+			<% end %>
+
+		</div>
+		<div class="hyc-blacklight hyc-bl-pager"><%= render 'paginate' %></div>
+    </div>
+  </div>
+</div>
