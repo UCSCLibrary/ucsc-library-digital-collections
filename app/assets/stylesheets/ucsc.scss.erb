@@ -874,7 +874,7 @@ header#collection-description {
 }
 div#documents.gallery {
     clear: both !important;
-    justify-content: space-around;
+    justify-content: left;
     &:before {
         display: none;
     }
@@ -959,39 +959,43 @@ h4.results-count span {
         background-color: #f1f1f1;
         border-radius: 4px;
     }
+    .matching-collections-container {
+        min-height: 200px;
+    }
+    .collection-row {
+        margin-top: 22px;
+    }
 /* Matching Collections Carousel */
-    .matching-collections-carousel {
-        .carousel-control {
-            background-image: none;
-            width: auto;
-            top: 30%;
-            .glyphicon {
-                color: #777777;
-            }
+    .carousel-control {
+        background-image: none;
+        width: auto;
+        top: 30%;
+        .glyphicon {
+            color: #777777;
         }
-        .carousel-column {
-            padding: 20px;
-            .carousel-collection img {
-                width: 80px;
-                height: 80px;
-                object-fit: cover;
-                border: 1px solid #d6d6d6;
-                border-radius: 2px;
-                margin-bottom: 10px;
-            }
-            .collection-title {
-                font-size: 11px;
-            }
+    }
+    .carousel-column {
+        padding: 10px;
+        .carousel-collection img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border: 1px solid #d6d6d6;
+            border-radius: 2px;
+            margin-bottom: 10px;
+        }
+        .collection-title {
+            font-size: 11px;
         }
     }
 }
 
 .matching-collections-carousel .carousel-control.left {
-    margin-left: 0;
+    margin-left: -20px;
 }
 
 .matching-collections-carousel .carousel-control.right {
-    margin-right: 0;
+    margin-right: -20px;
 }
 
 ////// Carousel Media Queries //////
