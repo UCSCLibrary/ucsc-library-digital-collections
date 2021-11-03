@@ -1,26 +1,7 @@
 <%#= Custom file for A-Z collections page %>
-
 <div itemscope itemtype="http://schema.org/CollectionPage">
 
   <div class="row">
-	<nav id="digital-collections" class="navbar navbar-default navbar-static-top" role="navigation">
-		<div class="container-fluid">
-			<div class="row">
-			<div class="col-sm-5 col-xs-10 title">
-				<span><%= link_to t("Digital Collections"), hyrax.root_path, :'data-no-turbolink'=>"true" %></span>
-			</div>
-			<div class="col-xs-10 subtitle">
-				<p>Photographs, audio recordings, publications, and more from our Special Collections &amp; Archives</p>
-			</div>
-			<div class="searchbar-right col-sm-6 col-sm-offset-1 col-xs-2">
-				<div class="navbar-toggle collapsed" data-toggle="collapse" data-target="#search-form-header" aria-expanded="false">
-				<span class="search-label">Search</span> <span class="glyphicon glyphicon-search" aria-hidden=true></span>
-				</div>
-				<%= render partial: 'catalog/search_form' %>
-			</div>
-			</div>
-		</div>
-	</nav>
     <div class="col-md-12">
 
 		<header id="collection-description" class="row">
