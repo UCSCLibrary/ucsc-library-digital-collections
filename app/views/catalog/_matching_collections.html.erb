@@ -37,21 +37,17 @@
   <div class="matching-collections-wrapper">
     <h4 class="matching-collections-count"><%= t('hyrax.collections.index.matching_collections.header') %></h4>
     <div class="container-fluid matching-collections-container">
-      <div class="row collection-row">
-        <div class="col-md-12">
-            <% collection_array.each_with_index do |doc, index| %>
-              <div class="item">
-                <div class="col-xs-6 col-sm-4 col-md-2 carousel-column center-block">
-                  <%= link_to main_app.collection_path(:id => doc['id'] ) do %>
-                    <div class="text-center carousel-collection">
-                      <%= image_tag(doc['thumbnail_path_ss'])%>
-                      <p class="collection-title"><%= doc['title_tesim'][0] %></p>
-                    </div>
-                  <% end %>
+      <div class="row collection-row matching-collections-flex-row">
+        <% collection_array.each_with_index do |doc, index| %>
+            <div class="col-xs-6 col-sm-4 col-md-2 carousel-column center-block">
+              <%= link_to main_app.collection_path(:id => doc['id'] ) do %>
+                <div class="text-center carousel-collection">
+                  <%= image_tag(doc['thumbnail_path_ss'])%>
+                  <p class="collection-title"><%= doc['title_tesim'][0] %></p>
                 </div>
-              </div>
-            <% end %>
-        </div>
+              <% end %>
+            </div>
+        <% end %>
       </div>
     </div>
   </div>

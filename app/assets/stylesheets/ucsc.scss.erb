@@ -965,6 +965,7 @@ h4.results-count span {
     .collection-row {
         margin-top: 22px;
     }
+
 /* Matching Collections Carousel */
     .carousel-control {
         background-image: none;
@@ -987,6 +988,12 @@ h4.results-count span {
         .collection-title {
             font-size: 11px;
         }
+    }
+}
+
+@media (max-width: $screen-sm) {
+    .collection-row.matching-collections-flex-row .carousel-column:only-child {
+        width: 100%;
     }
 }
 
