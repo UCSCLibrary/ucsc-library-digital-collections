@@ -29,4 +29,4 @@
 //= require_tree ./hyrax
 
 //= require browse_everything
-// = require libanswers
+//= require libanswers
