@@ -1,12 +1,12 @@
 class DatepickerInput < SimpleForm::Inputs::StringInput 
-  def input(value)
-    input_html_options[:value] = value
-    # sets the input type to date to use the native rails datepicker
-    input_html_options[:type] = "date"
-    # allows a blank value to be included
-    input_html_options[:include_blank] = true
-    # sets the input type to multiple
-    input_html_options[:multiple] = true
-    super
+  def input_html_options
+    value = object.send(attribute_name)
+    options = {
+      value: value.blank?? nil : I18n.localize(value[0].to_date),
+      data: { behaviour: 'datepicker' },
+      type: 'date',
+      multiple: true
+    }
+    super.merge options
   end
 end

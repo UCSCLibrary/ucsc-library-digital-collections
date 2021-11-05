@@ -26,11 +26,6 @@ module Hyrax
         permitted << :visibility_during_lease
         permitted << :lease_expiration_date
         permitted << :visibility_after_lease
-        permitted << :dateCreated
-        permitted << :dateDigitized
-        permitted << :datePublished
-        # Commenting this method out for now because it is causing an error when saving works
-        # permitted << :find_child_work
         return permitted
     end
     
