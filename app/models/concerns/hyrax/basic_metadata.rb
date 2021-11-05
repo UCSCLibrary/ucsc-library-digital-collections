@@ -39,7 +39,7 @@ module Hyrax
 
       property :publisher, predicate: ::RDF::Vocab::DC11.publisher
 
-      property :dateCreated, predicate: ::RDF::Vocab::DC.created
+      property :dateCreated, predicate: ::RDF::Vocab::DC.date
 
       property :subject, predicate: ::RDF::Vocab::DC11.subject
 

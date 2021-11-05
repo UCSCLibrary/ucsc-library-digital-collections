@@ -30,9 +30,3 @@
 
 //= require browse_everything
 // = require libanswers
-
-$(function() {
-  $('input.datepicker').datepicker({
-    dateFormat: 'yy-mm-dd'
- });
-});
