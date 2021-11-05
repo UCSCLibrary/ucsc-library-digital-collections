@@ -28,6 +28,8 @@ extraVolumeMounts:
   - name: uploads
     mountPath: /app/samvera/hyrax-webapp/tmp/network_files
     subPath: network-files
+  - name: derivatives
+    mountPath: /dams_derivatives
 
 ingress:
   enabled: true
