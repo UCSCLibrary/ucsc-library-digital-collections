@@ -12,6 +12,11 @@ module UcscRecordsHelper
     options[:hint] = field.definition if field.definition
 
     case (input_style = field.input.underscore)
+
+    when "date"
+      # use the custom input for dates
+      options[:as] = :datepicker
+
     when "dropdown"
       # fields using dropdowns only pull from a single authority for now
 

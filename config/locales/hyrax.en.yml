@@ -97,7 +97,7 @@ en:
         subjectTopic: "The title of a work that is the subject of this collection."
         subjectTitle: "The topic of the collection."
         dateCreated: "The date on which the collection was generated. This needs to be formatted with YYYY/MM/DD"
-        dateCreatedDisplay: "The date on which the collection was generated- this field is a temporary fix that does not need any specific formatting. This is what will show on the collection's public view."
+        dateCreatedDisplay: "Textual representation of the creation date. Fill in this field if the creation date needs to show to to public view in a format other than MM-DD-YYYY. This field will be used for the public view, and the field above will be used in sorting and indexing this collection. (temporary fix)"
         resourceType: 'General nature or type of the resource (e.g., image, text, etc.). Does not capture aboutness.'
         harmfulLanguageStatement: "A disclaimer notifying the reader about potentially harmful or offensive language in this collection."
       index:
