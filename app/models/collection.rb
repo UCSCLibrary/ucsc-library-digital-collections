@@ -3,7 +3,6 @@
 class Collection < ActiveFedora::Base
   include ::Hyrax::CollectionBehavior
   # You can replace these metadata if they're not suitable
-  include Hyrax::BasicMetadata
   include ::Bulkrax::Metadata
 
   include ::ScoobySnacks::WorkModelBehavior
@@ -58,4 +57,7 @@ class Collection < ActiveFedora::Base
 
 #  property :metadataInheritance, predicate: "https://digitalcollections.library.ucsc.edu/ontology/metadataInheritance", multiple: false
 
+  # This must come after the properties because it finalizes the metadata
+  # schema (by adding accepts_nested_attributes)
+  include ::Hyrax::BasicMetadata
 end
