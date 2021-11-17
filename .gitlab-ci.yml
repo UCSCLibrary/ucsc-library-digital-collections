@@ -4,10 +4,6 @@ stages:
 - test
 - staging
 
-variables:
-  REGISTRY_HOST: registry.gitlab.com
-  REGISTRY_URI: /notch8/ucsc-library-digital-collections
-
 before_script:
 - export TAG=${CI_COMMIT_SHORT_SHA}
 - export BRANCH=${CI_COMMIT_REF_NAME}
