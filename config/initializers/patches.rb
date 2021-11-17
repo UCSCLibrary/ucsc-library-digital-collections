@@ -50,3 +50,16 @@ unless ["development","test"].include? ENV['RAILS_ENV']
     end
   end
 end
+
+module FileUtilsPatch
+  def copy_file(dest)
+    FileUtils.touch(path())
+    super
+  end
+end
+
+module FileUtils
+  class Entry_
+    prepend FileUtilsPatch
+  end
+end

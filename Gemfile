@@ -114,6 +114,13 @@ gem 'scooby_snacks', git: 'git://github.com/UCSCLibrary/ScoobySnacks.git'
 # The following line loads the most recent ScoobySnacks version from github
 gem 'bulk_ops', git: 'git://github.com/UCSCLibrary/BulkOps.git', branch: 'master'
 
+# Bulkrax
+gem 'bulkrax', git: 'git://github.com/samvera-labs/bulkrax.git', branch: 'main'
+# gem 'bulkrax', path: 'vendor/engines/bulkrax'
+gem 'willow_sword', github: 'notch8/willow_sword'
+
+gem 'httparty'
+
 gem 'sinatra', git: 'git://github.com/sinatra/sinatra.git'
 
 # The following three gems handle the interface for monitoring background tasks
@@ -144,3 +151,6 @@ gem 'coveralls', require: false
 gem "mini_magick", ">= 4.9.4"
 
 gem 'rubyzip'
+gem 'activerecord-nulldb-adapter'
+# gem 'pronto', groups: [:development, :test]
+# gem 'pronto-rubocop', groups: [:development, :test]

@@ -3,6 +3,7 @@
 class Course < ActiveFedora::Base
   include ::Hyrax::WorkBehavior
   include ::ScoobySnacks::WorkModelBehavior
+  include ::Bulkrax::Metadata
   
 #  self.human_readable_type = 'Course'
 
