@@ -89,7 +89,7 @@ Hyrax.config do |config|
 
   # Path to the file characterization tool
   if Rails.env.development?
-    config.fits_path = "/srv/fits/fits.sh"
+    config.fits_path = ENV['FITS_PATH'] || "/srv/fits/fits.sh"
   else
     config.fits_path = "/usr/share/fits/fits.sh"
   end
@@ -136,48 +136,55 @@ Hyrax.config do |config|
 
    # If we have an external IIIF server, use it for image requests; else, use riiif
    config.iiif_image_url_builder = lambda do |fileset_id, base_url, size, region="full", rotation="0"|
+     if fileset_id.present?
+       if fileset_id.split("files").count > 1
+         # When we were taking images directly from Fedora, we would pass
+         # "#{file_set.id}/files/#{file_set.original_file.id}"
+         # as a fileset_id to locate the original file binary in Fedora
+         # Here we include a hack to take the fileset.id from the old syntax
+         fid = fileset_id[0..8]
+       else
+         fid = fileset_id
+       end
 
-     if fileset_id.split("files").count > 1
-       # When we were taking images directly from Fedora, we would pass 
-       # "#{file_set.id}/files/#{file_set.original_file.id}" 
-       # as a fileset_id to locate the original file binary in Fedora
-       # Here we include a hack to take the fileset.id from the old syntax
-       fid = fileset_id[0..8]
+       # Divide the file id with underscores for the image server to handle more easily
+       encoded_id = "#{fid[0..1]}_#{fid[2..3]}_#{fid[4..5]}_#{fid[6..7]}_#{fid[8]}"
+
+       unless (image_server_root_url = ENV['IIIF_SERVER_URL'])
+         suffix = ["production","staging"].include?(Rails.env.to_s) ? "" : "staging/"
+         image_server_root_url = "https://digitalcollections-image.library.ucsc.edu/#{suffix}iiif/2/"
+       end
+
+       iiif_url = File.join(image_server_root_url,
+         encoded_id,
+         region,
+         size,
+         rotation,
+         "default.jpg")
+       Rails.logger.debug "event: iiif_image_request: #{iiif_url}"
+       iiif_url
      else
-       fid = fileset_id
+       ""
      end
-
-     # Divide the file id with underscores for the image server to handle more easily
-     encoded_id = "#{fid[0..1]}_#{fid[2..3]}_#{fid[4..5]}_#{fid[6..7]}_#{fid[8]}"
-
-     unless (image_server_root_url = ENV['IIIF_SERVER_URL'])
-       suffix = ["production","staging"].include?(Rails.env.to_s) ? "" : "staging/"
-       image_server_root_url = "https://digitalcollections-image.library.ucsc.edu/#{suffix}iiif/2/"
-     end
-
-     iiif_url = File.join(image_server_root_url,
-                          encoded_id,
-                          region,
-                          size,
-                          rotation,
-                          "default.jpg")
-     Rails.logger.debug "event: iiif_image_request: #{iiif_url}"
-     iiif_url
    end
 
    # If we have an external IIIF server, use it for info.json; else, use riiif
    config.iiif_info_url_builder = lambda do |fileset_id, base_url|
-     if fileset_id.split("files").count > 1
-       fileset_id = fileset_id[0..8]
+     if fileset_id.present?
+       if fileset_id.split("files").count > 1
+         fileset_id = fileset_id[0..8]
+       end
+       fid=fileset_id
+       unless (image_server_root_url = ENV['IIIF_SERVER_URL'])
+         suffix = ["production","staging"].include?(Rails.env.to_s) ? "" : "staging/"
+         image_server_root_url = "https://digitalcollections-image.library.ucsc.edu/#{suffix}iiif/2/"
+       end
+       # Divide the file id with underscores for the image server to handle more easily
+       encoded_id = "#{fid[0..1]}_#{fid[2..3]}_#{fid[4..5]}_#{fid[6..7]}_#{fid[8]}"
+       File.join(image_server_root_url,encoded_id)
+     else
+       ""
      end
-     fid=fileset_id
-     unless (image_server_root_url = ENV['IIIF_SERVER_URL'])
-       suffix = ["production","staging"].include?(Rails.env.to_s) ? "" : "staging/"
-       image_server_root_url = "https://digitalcollections-image.library.ucsc.edu/#{suffix}iiif/2/"
-     end
-     # Divide the file id with underscores for the image server to handle more easily
-     encoded_id = "#{fid[0..1]}_#{fid[2..3]}_#{fid[4..5]}_#{fid[6..7]}_#{fid[8]}"
-     File.join(image_server_root_url,encoded_id)
    end
 
   # Returns a URL that indicates your IIIF image server compliance level
@@ -299,7 +306,7 @@ Qa::Authorities::Geonames.username = 'UCSC_Library_DI'
 Rails.application.config.to_prepare do
 
   Hyrax::Dashboard::CollectionsController.presenter_class = Ucsc::CollectionPresenter
-  
+
   Hyrax::ContactForm.class_eval do
     def self.issue_types_for_locale
       [
@@ -316,7 +323,7 @@ Rails.application.config.to_prepare do
     end
   end
 
-  OAI::Provider::Response::RecordResponse.class_eval do    
+  OAI::Provider::Response::RecordResponse.class_eval do
     def header_for(record)
       param = Hash.new
       param[:status] = 'deleted' if deleted?(record)
@@ -333,6 +340,11 @@ Rails.application.config.to_prepare do
           @builder.setSpec set.spec
          end
       end
-    end      
+    end
+  end
+
+  # set bulkrax default work type to first curation_concern if it isn't already set
+  if Bulkrax.default_work_type.blank?
+    Bulkrax.default_work_type = Hyrax.config.curation_concerns.first.to_s
   end
 end
