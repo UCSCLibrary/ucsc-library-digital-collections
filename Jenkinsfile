@@ -54,6 +54,7 @@ pipeline {    // Every declarative pipeline starts with this line
         //   */
         //   sh 'BRANCH=${GIT_BRANCH/origin\\//} docker exec -e COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN hycruz /srv/run-tests-when-ready.sh'
         // }
+        sh 'BRANCH=${GIT_BRANCH/origin\\//} docker exec -e COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN hycruz /srv/run-tests-when-ready.sh'
       }
     }
     
