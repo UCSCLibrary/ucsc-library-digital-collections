@@ -121,14 +121,11 @@ module ControlledIndexerBehavior
         when String
           # This is just a normal string (from a legacy model, etc)
           # Go ahead and create a new entry in the appropriate local vocab, if there is one
-          if (local_vocab = field.vocabularies.find{|vocab| vocab['authority'].to_s.downcase == 'local'}).is_a?(Hash)
-            auth_name = local_vocab['subauthority']
-            mintLocalAuthUrl(auth_name, val) if auth_name.present?
-            label = val
-          else
-            #If have a random string and no local vocab, just move on for now
-            next
-          end
+          subauth_name = get_subauthority_for(field: field, authority_name: 'local')
+          next unless subauth_name.present? # If have a random string and no local vocab, just move on for now
+
+          mint_local_auth_url(subauth_name, val) if subauth_name.present?
+          label = val
         else
           raise ArgumentError, "Can't handle #{val.class} as a metadata term"
         end
@@ -140,19 +137,23 @@ module ControlledIndexerBehavior
     solr_doc
   end
 
-  private 
+  def get_subauthority_for(field:, authority_name:)
+    field_vocab = field.vocabularies.find { |vocab| vocab['authority'].to_s.downcase == authority_name }
+    return unless field_vocab.present?
 
-  def mintLocalAuthUrl(auth_name, value) 
+    field_vocab['subauthority']
+  end
+
+  def mint_local_auth_url(subauth_name, value)
     id = value.parameterize
-    auth = Qa::LocalAuthority.find_or_create_by(name: auth_name)
-    entry = Qa::LocalAuthorityEntry.find_or_create_by(local_authority: auth,
-                                                      label: value,
-                                                      uri: id)
-    return localIdToUrl(id,auth_name)
+    auth = Qa::LocalAuthority.find_or_create_by(name: subauth_name)
+    Qa::LocalAuthorityEntry.find_or_create_by(local_authority: auth,
+                                              label: value,
+                                              uri: id)
+    local_id_to_url(id, subauth_name)
   end
 
-  def localIdToUrl(id,auth_name) 
-    return "#{CatalogController.root_url}/authorities/show/local/#{auth_name}/#{id}"
+  def local_id_to_url(id, subauth_name)
+    "#{CatalogController.root_url}/authorities/show/local/#{subauth_name}/#{id}"
   end
-
 end
