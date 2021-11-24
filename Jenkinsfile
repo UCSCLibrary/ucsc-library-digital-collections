@@ -36,11 +36,9 @@ pipeline {    // Every declarative pipeline starts with this line
         //        and we define BRANCH to be the same without the "origin/" par. BRANCH is
         //        expected in our docker-compose file.
         //   */
-        //   //sh 'BRANCH=${GIT_BRANCH/origin\\//} docker-compose build; BRANCH=${GIT_BRANCH/origin\\//} docker-compose up -d'
-        // }
-        docker-compose build
-        docker-compose up
+          sh 'BRANCH=${GIT_BRANCH/origin\\//} docker-compose build; BRANCH=${GIT_BRANCH/origin\\//} docker-compose up -d'
         }
+        
       }
     }
 
