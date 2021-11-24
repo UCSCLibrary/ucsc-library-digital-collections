@@ -83,9 +83,9 @@ pipeline {    // Every declarative pipeline starts with this line
   
   post {                             // This block contains code to run after the pipeline finishes.
     always {                         // Code in this block runs whether it succeeds or fails.
-      dir("docker_test_env") {       // All commands in this block are executed in the directory 'docker_test_env'.
-        sh 'docker-compose down'     // close down the test environment,
-      }
+      // dir("docker_test_env") {       // All commands in this block are executed in the directory 'docker_test_env'.
+      //   sh 'docker-compose down'     // close down the test environment,
+      // }
       cleanWs()
       dir("${env.WORKSPACE}@tmp") {
       deleteDir()
