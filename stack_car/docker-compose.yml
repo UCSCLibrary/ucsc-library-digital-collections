@@ -1,4 +1,4 @@
-version: "3.5"
+version: "3"
 
 x-app: &app
   image: registry.gitlab.com/notch8/ucsc-library-digital-collections/web:${TAG:-latest}
