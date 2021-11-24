@@ -38,7 +38,8 @@ pipeline {    // Every declarative pipeline starts with this line
         //   */
         //   //sh 'BRANCH=${GIT_BRANCH/origin\\//} docker-compose build; BRANCH=${GIT_BRANCH/origin\\//} docker-compose up -d'
         // }
-        sh 'docker-compose build; docker-compose up'
+        docker-compose build
+        docker-compose up
         }
       }
     }
