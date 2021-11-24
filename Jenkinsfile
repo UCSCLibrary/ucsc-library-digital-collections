@@ -86,6 +86,10 @@ pipeline {    // Every declarative pipeline starts with this line
       dir("docker_test_env") {       // All commands in this block are executed in the directory 'docker_test_env'.
         sh 'docker-compose down'     // close down the test environment,
       }
+      cleanWs()
+      dir("${env.WORKSPACE}@tmp") {
+      deleteDir()
+    }
     }
   }
   
