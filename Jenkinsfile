@@ -19,7 +19,7 @@ pipeline {    // Every declarative pipeline starts with this line
   stages {       // These stages each run consequtively  
     stage('Build') { // The build stage builds and loads the dockerized test stack
       steps {
-        // dir("docker_test_env") {        // All commands in this block are executed in the directory 'docker_test_env'
+        dir("stack_car") {        // All commands in this block are executed in the directory 'docker_test_env'
 
         //   /*
         //      The git command in Jenkins clones an external git repo.
@@ -38,7 +38,8 @@ pipeline {    // Every declarative pipeline starts with this line
         //   */
         //   //sh 'BRANCH=${GIT_BRANCH/origin\\//} docker-compose build; BRANCH=${GIT_BRANCH/origin\\//} docker-compose up -d'
         // }
-        sh 'cd stack_car; docker-compose build; docker-compose up'
+        sh 'docker-compose build; docker-compose up'
+        }
       }
     }
 
