@@ -19,26 +19,26 @@ pipeline {    // Every declarative pipeline starts with this line
   stages {       // These stages each run consequtively  
     stage('Build') { // The build stage builds and loads the dockerized test stack
       steps {
-        dir("docker_test_env") {        // All commands in this block are executed in the directory 'docker_test_env'
+        // dir("docker_test_env") {        // All commands in this block are executed in the directory 'docker_test_env'
 
-        //   /*
-        //      The git command in Jenkins clones an external git repo.
-        //      Credentials for github are stored in Jenkins  and managed through the browser interface.
-        //      This clones the repository for the dockerized development environment.
-        //   */
-        //   //git changelog: false, credentialsId: 'github_user', poll: false,  branch: 'tests', url: "https://github.com/UCSCLibrary/digital_collections_dev_docker.git"
+        // //   /*
+        // //      The git command in Jenkins clones an external git repo.
+        // //      Credentials for github are stored in Jenkins  and managed through the browser interface.
+        // //      This clones the repository for the dockerized development environment.
+        // //   */
+        // //   //git changelog: false, credentialsId: 'github_user', poll: false,  branch: 'tests', url: "https://github.com/UCSCLibrary/digital_collections_dev_docker.git"
           
-        //   /*
-        //      The 'sh' Jenkins command runs a command in a bash shell.
-        //      Here we build and load the dockerized test environment. It will load from a cache
-        //      if most of the build steps are identical to before, so this usually does not take too long.
-        //      Jenkins sets the GIT_BRANCH environment variable to something like origin/master,
-        //        and we define BRANCH to be the same without the "origin/" par. BRANCH is
-        //        expected in our docker-compose file.
-        //   */
-          sh 'PATH="/var/lib/jenkins/workspace/DAMS_pipeline_staging/docker_test_env/:$PATH"; BRANCH=${GIT_BRANCH/origin\\//} docker-compose build; BRANCH=${GIT_BRANCH/origin\\//} docker-compose up -d'
-        }
-        
+        // //   /*
+        // //      The 'sh' Jenkins command runs a command in a bash shell.
+        // //      Here we build and load the dockerized test environment. It will load from a cache
+        // //      if most of the build steps are identical to before, so this usually does not take too long.
+        // //      Jenkins sets the GIT_BRANCH environment variable to something like origin/master,
+        // //        and we define BRANCH to be the same without the "origin/" par. BRANCH is
+        // //        expected in our docker-compose file.
+        // //   */
+        //   sh 'PATH="/var/lib/jenkins/workspace/DAMS_pipeline_staging/docker_test_env/:$PATH"; BRANCH=${GIT_BRANCH/origin\\//} docker-compose build; BRANCH=${GIT_BRANCH/origin\\//} docker-compose up -d'
+        // }
+        sh 'cd stack_car; docker-compose build; docker-compose up -d'
       }
     }
 
