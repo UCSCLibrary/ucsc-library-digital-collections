@@ -36,7 +36,7 @@ pipeline {    // Every declarative pipeline starts with this line
         //        and we define BRANCH to be the same without the "origin/" par. BRANCH is
         //        expected in our docker-compose file.
         //   */
-          sh 'PATH="/var/lib/jenkins/workspace/DAMS_pipeline_staging/docker_test_env:$PATH"; BRANCH=${GIT_BRANCH/origin\\//} docker-compose build; BRANCH=${GIT_BRANCH/origin\\//} docker-compose up -d'
+          sh 'PATH="/var/lib/jenkins/workspace/DAMS_pipeline_staging/docker_test_env/:$PATH"; BRANCH=${GIT_BRANCH/origin\\//} docker-compose build; BRANCH=${GIT_BRANCH/origin\\//} docker-compose up -d'
         }
         
       }
