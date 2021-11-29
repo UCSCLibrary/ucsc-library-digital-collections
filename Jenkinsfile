@@ -39,7 +39,7 @@ pipeline {    // Every declarative pipeline starts with this line
         //   sh 'PATH="/var/lib/jenkins/workspace/DAMS_pipeline_staging/docker_test_env/:$PATH"; BRANCH=${GIT_BRANCH/origin\\//} docker-compose build; BRANCH=${GIT_BRANCH/origin\\//} docker-compose up -d'
         // }
         dir("stack_car"){
-          sh 'docker-compose build; docker-compose up -d'
+          sh "docker-compose build; docker-compose up -d"
         }
         
       }
