@@ -47,17 +47,17 @@ pipeline {    // Every declarative pipeline starts with this line
 
     stage('Test') { // The Test stage runs the main testing suite in the dockerized testing environment. 
       steps {
-        // dir("docker_test_env") {   // All commands in this block are executed in the directory 'docker_test_env'
-        //   /*
-        //   The 'sh' Jenkins command runs a command in a bash shell.
-        //   'docker exec' runs a command inside a running Docker container
-        //   The docker container for our webapp is named 'hycruz'.
-        //   The script 'run-tests-when-ready.sh' waits until the test environment is online
-        //     and then runs the rspec test suite
-        //   */
-        //   sh 'BRANCH=${GIT_BRANCH/origin\\//} docker exec -e COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN hycruz /srv/run-tests-when-ready.sh'
-        // }
-        sh 'BRANCH=${GIT_BRANCH/origin\\//} docker exec -e COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN hycruz /srv/run-tests-when-ready.sh'
+        dir("docker_test_env") {   // All commands in this block are executed in the directory 'docker_test_env'
+          /*
+          The 'sh' Jenkins command runs a command in a bash shell.
+          'docker exec' runs a command inside a running Docker container
+          The docker container for our webapp is named 'hycruz'.
+          The script 'run-tests-when-ready.sh' waits until the test environment is online
+            and then runs the rspec test suite
+          */
+          sh 'BRANCH=${GIT_BRANCH/origin\\//} docker exec -e COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN hycruz /app/run-tests-when-ready.sh'
+        }
+        
       }
     }
     
@@ -78,7 +78,7 @@ pipeline {    // Every declarative pipeline starts with this line
       steps {
         // This is almost exactly like the test stage,
         // except the script tells rspec only to run the smoke tests
-        sh 'BRANCH=${GIT_BRANCH/origin\\//} docker exec hycruz /srv/run-smoke-tests-when-ready.sh'
+        sh 'BRANCH=${GIT_BRANCH/origin\\//} docker exec hycruz /app/run-smoke-tests-when-ready.sh'
       }
     }
     
