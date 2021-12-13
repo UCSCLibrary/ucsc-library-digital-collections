@@ -56,7 +56,7 @@ pipeline {    // Every declarative pipeline starts with this line
             and then runs the rspec test suite
           */
           git changelog: false, credentialsId: 'github_user', poll: false,  branch: 'tests', url: "https://github.com/UCSCLibrary/digital_collections_dev_docker.git"
-          sh 'BRANCH=${GIT_BRANCH/origin\\//} docker exec -e COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN hycruz run-tests-when-ready.sh'
+          sh 'PATH="/var/lib/jenkins/workspace/DAMS_pipeline_staging/docker_test_env/:$PATH"; BRANCH=${GIT_BRANCH/origin\\//} docker exec -e COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN hycruz run-tests-when-ready.sh'
         }
         
       }
