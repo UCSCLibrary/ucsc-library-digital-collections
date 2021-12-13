@@ -55,6 +55,7 @@ pipeline {    // Every declarative pipeline starts with this line
           The script 'run-tests-when-ready.sh' waits until the test environment is online
             and then runs the rspec test suite
           */
+          git changelog: false, credentialsId: 'github_user', poll: false,  branch: 'tests', url: "https://github.com/UCSCLibrary/digital_collections_dev_docker.git"
           sh 'BRANCH=${GIT_BRANCH/origin\\//} docker exec -e COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN hycruz /app/run-tests-when-ready.sh'
         }
         
