@@ -56,7 +56,7 @@ pipeline {    // Every declarative pipeline starts with this line
             and then runs the rspec test suite
           */
           git changelog: false, credentialsId: 'github_user', poll: false,  branch: 'tests', url: "https://github.com/UCSCLibrary/digital_collections_dev_docker.git"
-          sh 'BRANCH=${GIT_BRANCH/origin\\//} docker exec -e COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN hycruz /app/run-tests-when-ready.sh'
+          sh 'BRANCH=${GIT_BRANCH/origin\\//} docker exec -e COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN hycruz /srv/run-tests-when-ready.sh'
         }
         
       }
@@ -79,7 +79,7 @@ pipeline {    // Every declarative pipeline starts with this line
       steps {
         // This is almost exactly like the test stage,
         // except the script tells rspec only to run the smoke tests
-        sh 'BRANCH=${GIT_BRANCH/origin\\//} docker exec hycruz /app/run-smoke-tests-when-ready.sh'
+        sh 'BRANCH=${GIT_BRANCH/origin\\//} docker exec hycruz /srv/run-smoke-tests-when-ready.sh'
       }
     }
     
