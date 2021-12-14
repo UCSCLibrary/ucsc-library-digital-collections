@@ -47,7 +47,7 @@ pipeline {    // Every declarative pipeline starts with this line
 
     stage('Test') { // The Test stage runs the main testing suite in the dockerized testing environment. 
       steps {
-        dir("docker_test_env") {   // All commands in this block are executed in the directory 'docker_test_env'
+        //dir("docker_test_env") {   // All commands in this block are executed in the directory 'docker_test_env'
           /*
           The 'sh' Jenkins command runs a command in a bash shell.
           'docker exec' runs a command inside a running Docker container
@@ -55,9 +55,8 @@ pipeline {    // Every declarative pipeline starts with this line
           The script 'run-tests-when-ready.sh' waits until the test environment is online
             and then runs the rspec test suite
           */
-          git changelog: false, credentialsId: 'github_user', poll: false,  branch: 'tests', url: "https://github.com/UCSCLibrary/digital_collections_dev_docker.git"
           sh 'BRANCH=${GIT_BRANCH/origin\\//} docker exec -e COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN hycruz run-tests-when-ready.sh'
-        }
+        //}
         
       }
     }
