@@ -55,7 +55,7 @@ pipeline {    // Every declarative pipeline starts with this line
           The script 'run-tests-when-ready.sh' waits until the test environment is online
             and then runs the rspec test suite
           */
-          sh 'cd stack_car; chmod +x run-tests-when-ready.sh; chmod +x wait-for-services.sh; BRANCH=${GIT_BRANCH/origin\\//} docker exec -e COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN hycruz run-tests-when-ready.sh'
+          sh 'cd stack_car; chmod +x run-tests-when-ready.sh; chmod +x wait-for-services.sh; BRANCH=${GIT_BRANCH/origin\\//} docker exec -e COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN hycruz stack_car/run-tests-when-ready.sh'
         //}
         
       }
@@ -78,7 +78,7 @@ pipeline {    // Every declarative pipeline starts with this line
       steps {
         // This is almost exactly like the test stage,
         // except the script tells rspec only to run the smoke tests
-        sh 'chmod +x run-smoke-tests-when-ready.sh; BRANCH=${GIT_BRANCH/origin\\//} docker exec hycruz run-smoke-tests-when-ready.sh'
+        sh 'chmod +x run-smoke-tests-when-ready.sh; BRANCH=${GIT_BRANCH/origin\\//} docker exec hycruz stack_car/run-smoke-tests-when-ready.sh'
       }
     }
     
