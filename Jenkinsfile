@@ -55,7 +55,7 @@ pipeline {    // Every declarative pipeline starts with this line
           The script 'run-tests-when-ready.sh' waits until the test environment is online
             and then runs the rspec test suite
           */
-          sh 'cd stack_car; chmod +x run-tests-when-ready.sh; chmod +x wait-for-services.sh; BRANCH=${GIT_BRANCH/origin\\//} docker exec -e COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN hycruz stack_car/run-tests-when-ready.sh'
+          sh 'cd stack_car; mkdir -p coverage; chmod -R 777 coverage; chmod +x run-tests-when-ready.sh; chmod +x wait-for-services.sh; BRANCH=${GIT_BRANCH/origin\\//} docker exec -e COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN hycruz stack_car/run-tests-when-ready.sh'
         //}
         
       }
@@ -70,7 +70,7 @@ pipeline {    // Every declarative pipeline starts with this line
           And set the ruby environment for cap based on the git branch
             (replacing 'master' with 'production').
         */
-        sh 'PATH="/var/lib/jenkins/.rvm/rubies/default/bin/:$PATH"; mkdir -p coverage; chmod -R 777 coverage; BRANCH_NAME=${GIT_BRANCH/origin\\/}; cap ${BRANCH_NAME/master/production} deploy'
+        sh 'PATH="/var/lib/jenkins/.rvm/rubies/default/bin/:$PATH"; BRANCH_NAME=${GIT_BRANCH/origin\\/}; cap ${BRANCH_NAME/master/production} deploy'
       }
     }
     
