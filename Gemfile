@@ -77,7 +77,7 @@ group :development, :test do
   # Capybara lets tests emulate a browser to test the whole application
   gem 'capybara'
   # Selenium runs the browser part of Capybara
-  gem 'selenium-webdriver', '2.53.4'
+  gem 'selenium-webdriver'
   # Webdrivers allows rails to interface with browsers
   gem 'webdrivers'
   # Capistrano is used to deploy new code automatically
