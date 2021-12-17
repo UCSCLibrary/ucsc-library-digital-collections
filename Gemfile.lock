@@ -876,7 +876,7 @@ GEM
       faraday (> 0.8, < 2.0)
     scanf (1.0.0)
     select2-rails (3.5.11)
-    selenium-webdriver (3.142.7)
+    selenium-webdriver (2.53.4)
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
     shex (0.6.4)
