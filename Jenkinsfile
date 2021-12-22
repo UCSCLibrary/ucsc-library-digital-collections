@@ -55,7 +55,7 @@ pipeline {    // Every declarative pipeline starts with this line
           The script 'run-tests-when-ready.sh' waits until the test environment is online
             and then runs the rspec test suite
           */
-          sh 'mkdir -p coverage; chmod -R 777 coverage; cd stack_car; chmod +x run-tests-when-ready.sh; chmod +x wait-for-services.sh; BRANCH=${GIT_BRANCH/origin\\//} docker exec -e COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN hycruz stack_car/run-tests-when-ready.sh'
+          sh 'mkdir -p coverage; cd stack_car; chmod +x run-tests-when-ready.sh; chmod +x wait-for-services.sh; BRANCH=${GIT_BRANCH/origin\\//} docker exec -e COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN hycruz stack_car/run-tests-when-ready.sh'
         //}
         
       }
