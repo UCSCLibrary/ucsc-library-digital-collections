@@ -156,6 +156,8 @@ extraEnvVars:
     value: http://admin:ncGXC5Qjpk@solr.staging-solr.svc.cluster.local:8983/solr/ucsc-staging
   - name: SETTINGS__ZOOKEEPER__CONNECTION_STR
     value: solr-zookeeper-headless.default:2181/configs
+  - name: SITE_DOMAIN
+    value: ".notch8.cloud"
   - name: SOLR_ADMIN_USER
     value: admin
   - name: SOLR_COLLECTION_NAME
@@ -176,6 +178,10 @@ worker:
     runAsGroup: 101
     fsGroup: 101
     fsGroupChangePolicy: "OnRootMismatch"
+  image:
+    repository: registry.gitlab.com/notch8/ucsc-library-digital-collections/worker
+  imagePullSecrets:
+    - name: gitlab
   extraVolumeMounts:
     - name: uploads
       mountPath: /app/samvera/hyrax-webapp/tmp/imports
@@ -255,6 +261,8 @@ worker:
       value: http://admin:ncGXC5Qjpk@solr.staging-solr.svc.cluster.local:8983/solr/ucsc-staging
     - name: SETTINGS__ZOOKEEPER__CONNECTION_STR
       value: solr-zookeeper-headless.default:2181/configs
+    - name: SITE_DOMAIN
+      value: ".notch8.cloud"
     - name: SOLR_ADMIN_USER
       value: admin
     - name: SOLR_COLLECTION_NAME
