@@ -23,6 +23,8 @@ pickle-email-*.html
 !/log/.keep
 !/tmp/.keep
 
+/dams_derivatives/*
+/fits.log
 /public/uploads/batch_metadata_ingests/*
 /public/assets/*
 /public/stream

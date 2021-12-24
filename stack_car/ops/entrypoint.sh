@@ -37,11 +37,11 @@ echo "Running Test Database Setup"
 #echo "Initialize Default Admin Set"
 #bundle exec rake hyrax:default_admin_set:create
 
-echo 'alias repl="cd /srv/hycruz; unset BUNDLE_PATH; unset BUNDLE_BIN; GEM_HOME=/srv/bundle; bundle exec rails c"' >> /home/hycruz/.bashrc
-echo 'alias errors="tail -n 1000 /srv/hyrax/logs/development.log | grep FATAL -A 20 -B 20"' >> /home/hycruz/.bashrc
-echo 'unset BUNDLE_PATH' >> /home/hycruz/.bashrc
-echo 'unset BUNDLE_BIN' >> /home/hycruz/.bashrc
-
+# (S.Geezy - This is not working.  Do we need it?)
+# echo 'alias repl="cd /srv/hycruz; unset BUNDLE_PATH; unset BUNDLE_BIN; GEM_HOME=/srv/bundle; bundle exec rails c"' >> /home/hycruz/.bashrc
+# echo 'alias errors="tail -n 1000 /srv/hyrax/logs/development.log | grep FATAL -A 20 -B 20"' >> /home/hycruz/.bashrc
+# echo 'unset BUNDLE_PATH' >> /home/hycruz/.bashrc
+# echo 'unset BUNDLE_BIN' >> /home/hycruz/.bashrc
 
 echo "Starting the Rails Server"
 bundle exec rails s -b 0.0.0.0

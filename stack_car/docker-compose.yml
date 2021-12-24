@@ -30,6 +30,7 @@ services:
       - "index"
       - "redis"
       - "worker"
+      - "images"
     ports:
       - "3000:3000"
     env_file:
@@ -42,7 +43,13 @@ services:
 
   worker:
     <<: *app
-    entrypoint: bundle exec sidekiq -c 1
+    image: registry.gitlab.com/notch8/ucsc-library-digital-collections/worker:${TAG:-latest}
+    build:
+      context: ..
+      dockerfile: ./stack_car/Dockerfile
+      target: hycruz-worker
+      args:
+        - EXTRA_APK_PACKAGES=less vim bash openjdk11-jre ffmpeg rsync
     container_name: worker
     env_file:
       - .env
@@ -55,6 +62,7 @@ services:
 
   fcrepo:
     image: ghcr.io/samvera/fcrepo4:4.7.5
+    container_name: fcrepo
     volumes:
       - fcrepo:/data:cached
     env_file:
@@ -62,10 +70,9 @@ services:
     environment:
       - VIRTUAL_PORT=8080
       - VIRTUAL_HOST=fcrepo.ucsc-dams.test
+      - JAVA_OPTS=${JAVA_OPTS} -Dfcrepo.modeshape.configuration="classpath:/config/file-simple/repository.json" -Dfcrepo.object.directory="/data/objects" -Dfcrepo.binary.directory="/data/binaries"
     expose:
       - 8080
-    environment:
-      - JAVA_OPTS=${JAVA_OPTS} -Dfcrepo.modeshape.configuration="classpath:/config/file-simple/repository.json" -Dfcrepo.object.directory="/data/objects" -Dfcrepo.binary.directory="/data/binaries"
 
   db:
     image: mysql:5.7
@@ -76,7 +83,7 @@ services:
     env_file:
       - .env
       - .env.development
-    restart: always
+    restart: on-failure
     volumes:
       - "database-data:/var/lib/mysql:Z"
 
@@ -102,6 +109,7 @@ services:
     environment:
       - VIRTUAL_PORT=8983
       - VIRTUAL_HOST=solr.ucsc-dams.test
+      - LOG4J_FORMAT_MSG_NO_LOOKUPS=true
 
   images:
     image: registry.gitlab.com/notch8/ucsc-library-digital-collections/images:${TAG:-latest}
@@ -119,14 +127,12 @@ services:
       - "cantaloupe-log:/srv/cantaloupe-log:Z"
       - "cantaloupe-cache:/srv/cantaloupe-cache:Z"
       - "./kakadu:/usr/share/kakadu"
-
       - uploads:/app/samvera/hyrax-webapp/public/uploads
       - assets:/app/samvera/hyrax-webapp/public/assets
       - cache:/app/samvera/hyrax-webapp/tmp/cache
       - gems:/srv/bundle:Z
       - ../example_media:/srv/hycruz/public/example_media
       - ..:/app/samvera/hyrax-webapp
-
     environment:
       - VIRTUAL_PORT=8182
       - VIRTUAL_HOST=images.ucsc-dams.test
