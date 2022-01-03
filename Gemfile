@@ -154,4 +154,3 @@ gem 'rubyzip'
 gem 'activerecord-nulldb-adapter'
 # gem 'pronto', groups: [:development, :test]
 # gem 'pronto-rubocop', groups: [:development, :test]
-gem 'libxml-ruby', '3.1.0'
