@@ -70,7 +70,7 @@ pipeline {    // Every declarative pipeline starts with this line
           And set the ruby environment for cap based on the git branch
             (replacing 'master' with 'production').
         */
-        sh 'PATH="/var/lib/jenkins/.rvm/rubies/default/bin/:$PATH"; BRANCH_NAME=${GIT_BRANCH/origin\\/}; cap ${BRANCH_NAME/master/production} deploy'
+        sh 'BRANCH_NAME=${GIT_BRANCH/origin\\/}; cap ${BRANCH_NAME/master/production} deploy'
       }
     }
     
