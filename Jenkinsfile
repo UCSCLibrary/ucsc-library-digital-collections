@@ -55,7 +55,7 @@ pipeline {    // Every declarative pipeline starts with this line
           The script 'run-tests-when-ready.sh' waits until the test environment is online
             and then runs the rspec test suite
           */
-          sh 'mkdir -p coverage; cd stack_car; chmod +x run-tests-when-ready.sh; chmod +x wait-for-services.sh; BRANCH=${GIT_BRANCH/origin\\//} docker exec -e COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN hycruz stack_car/run-tests-when-ready.sh'
+          sh 'mkdir -p coverage; chmod 777 Gemfile.lock; cd stack_car; chmod +x run-tests-when-ready.sh; chmod +x wait-for-services.sh; BRANCH=${GIT_BRANCH/origin\\//} docker exec -e COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN hycruz stack_car/run-tests-when-ready.sh'
         //}
         
       }
@@ -86,9 +86,9 @@ pipeline {    // Every declarative pipeline starts with this line
   
   post {                             // This block contains code to run after the pipeline finishes.
     always {                         // Code in this block runs whether it succeeds or fails.
-      dir("docker_test_env") {       // All commands in this block are executed in the directory 'docker_test_env'.
-        sh 'docker-compose down'     // close down the test environment,
-      }
+      //dir("docker_test_env") {       // All commands in this block are executed in the directory 'docker_test_env'.
+        sh 'cd stack_car; docker-compose down'     // close down the test environment,
+      //}
     //   cleanWs()
     //   dir("${env.WORKSPACE}@tmp") {
     //   deleteDir()
