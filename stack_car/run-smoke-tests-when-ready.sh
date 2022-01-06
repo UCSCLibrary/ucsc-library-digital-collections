@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-bundle exec rspec /srv/hycruz/spec/smoke/homepage_spec.rb
+bundle exec rspec /app/samvera/hyrax-webapp/spec/smoke/homepage_spec.rb
