@@ -23,10 +23,8 @@
 					<h4 class="media-heading">
 						<a href="/collections/<%= collection.id %>?locale=en"><%= collection.title.first %></a>
 					</h4>
-					<p><%= collection.description.first.truncate(160) %>
-                    
-                    </p>
-                </div>
+					<p><%= collection.description.first.truncate(160) if collection.description.present? %></p>
+        </div>
 			</div>
 			<% end %>
 
