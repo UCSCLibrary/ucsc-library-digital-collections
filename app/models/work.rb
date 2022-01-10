@@ -10,15 +10,16 @@ class Work < ActiveFedora::Base
     index.as :stored_sortable
   end
 
-#  include ::Hyrax::BasicMetadata
-
+  # include ::Hyrax::BasicMetadata
   include ::ScoobySnacks::WorkModelBehavior
-
   include ::Ucsc::UntitledBehavior
+
   self.indexer = ::WorkIndexer
+
   # Change this to restrict which works can be added as a child.
-  # self.valid_child_concerns = []
-#  validates :title, presence: { message: 'Your work must have a title.' }
+  self.valid_child_concerns = [Work]
+
+  #  validates :title, presence: { message: 'Your work must have a title.' }
   
 #  self.human_readable_type = 'Work'
 
@@ -27,36 +28,36 @@ class Work < ActiveFedora::Base
   end
 
   def save *args
-
+    
     # This section handles alternate date formates and standardizes them
-    ::ScoobySnacks::METADATA_SCHEMA.fields.select{|name, field| field.input == "date"}.each do |field_name, field|
-      date_changed = false
-      dateUpdate = self.send(field_name.to_sym).map do |date|
-        next date unless date.to_s.match?(/\A[12][0-9]{3}[-\/][0-9]{1,2}\z/)
-        year, month = date.to_s.split(/[-\/]/)
-        date_changed = true
-        "#{month}/#{year}"
-      end
-      self.send("#{field_name.to_s}=".to_sym,dateUpdate) if date_changed
-    end
+    # ::ScoobySnacks::METADATA_SCHEMA.fields.select{|name, field| field.input == "date"}.each do |field_name, field|
+    #   date_changed = false
+    #   dateUpdate = self.send(field_name.to_sym).map do |date|
+    #     next date unless date.to_s.match?(/\A[12][0-9]{3}[-\/][0-9]{1,2}\z/)
+    #     year, month = date.to_s.split(/[-\/]/)
+    #     date_changed = true
+    #     "#{month}/#{year}"
+    #   end
+    #   self.send("#{field_name.to_s}=".to_sym,dateUpdate) if date_changed
+    # end
 
     # This section standardized ambiguous controlled vocab urls
-    ::ScoobySnacks::METADATA_SCHEMA.controlled_field_names.each do |field_name|
-      attributes = []
-      props =  self.send(field_name)
-      props = Array(props) if !props.kind_of?(Array)
-      props.each do |node|
-        next unless node.respond_to?('id')
-        if node.id.starts_with?('info:lc')
-          attributes << {id: fix_loc_id(node.id) }
-          attributes << {id: node.id, _destroy: true}
-        elsif node.id.include?("vocab.getty.edu") && node.id.include?("/page/")
-          attributes << {id: fix_getty_id(node.id) }
-          attributes << {id: node.id, _destroy: true}
-        end
-      end
-      self.send(field_name.to_s+"_attributes=",attributes) unless attributes.empty?
-    end
+    # ::ScoobySnacks::METADATA_SCHEMA.controlled_field_names.each do |field_name|
+    #   attributes = []
+    #   props =  self.send(field_name)
+    #   props = Array(props) if !props.kind_of?(Array)
+    #   props.each do |node|
+    #     next unless node.respond_to?('id')
+    #     if node.id.starts_with?('info:lc')
+    #       attributes << {id: fix_loc_id(node.id) }
+    #       attributes << {id: node.id, _destroy: true}
+    #     elsif node.id.include?("vocab.getty.edu") && node.id.include?("/page/")
+    #       attributes << {id: fix_getty_id(node.id) }
+    #       attributes << {id: node.id, _destroy: true}
+    #     end
+    #   end
+    #   self.send(field_name.to_s+"_attributes=",attributes) unless attributes.empty?
+    # end
 
     # This section attempts to ensure that each work has a representative ID
     if representative_id.blank? && members.present?

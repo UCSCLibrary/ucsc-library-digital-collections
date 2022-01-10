@@ -1,4 +1,5 @@
 sandbox: digitalcollections-staging-sandbox.library.ucsc.edu
 staging: digitalcollections-staging.library.ucsc.edu
 master: digitalcollections.library.ucsc.edu
-production: digitalcollections.libraru.ucsc.edu
+production: digitalcollections.library.ucsc.edu
+n8_staging: ucsc-hyrax-staging.notch8.cloud

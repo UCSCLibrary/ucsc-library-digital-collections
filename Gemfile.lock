@@ -14,7 +14,7 @@ GIT
 
 GIT
   remote: git://github.com/samvera-labs/bulkrax.git
-  revision: 687f2488abfd619d506873792f38f346056a6c77
+  revision: 86d013ff288887c2918b94dedc545139e8337bba
   branch: main
   specs:
     bulkrax (1.0.2)
@@ -1024,6 +1024,7 @@ DEPENDENCIES
   hyrax (~> 2.9.0)
   jbuilder (~> 2.5)
   jquery-rails
+  libxml-ruby (= 3.1.0)
   listen (~> 3.0.5)
   mini_magick (>= 4.9.4)
   mysql2

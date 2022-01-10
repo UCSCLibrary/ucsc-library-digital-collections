@@ -17,6 +17,7 @@ module Hyrax
           permitted << {"#{field_name}_attributes".to_sym => [:id, :_destroy]}
         end
         permitted << :visibility
+        permitted << {:in_works_ids => [:id, :_destroy]}
         permitted << :admin_set_id 
         permitted << :member_of_collection_ids
         permitted << :permissions_attributes
