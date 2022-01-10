@@ -39,9 +39,9 @@ module ControlledIndexerBehavior
         # Smoothly handle some common syntax issues
         cleaned_url = url.dup
         if url[0..6] == "info:lc"
-          cleaned_url = cleaned_url.gsub!("info:lc","http://id.loc.gov")
+          cleaned_url.gsub!("info:lc","http://id.loc.gov")
         elsif url.include?("vocab.getty.edu")
-          cleaned_url = cleaned_url.gsub!("/page/","/") 
+          cleaned_url.gsub!("/page/","/")
         end
         resource = ActiveTriples::Resource.new(cleaned_url)
         labels = resource.fetch(headers: { 'Accept'.freeze => default_accept_header }).rdf_label
