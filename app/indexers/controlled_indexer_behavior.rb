@@ -5,6 +5,7 @@ module ControlledIndexerBehavior
   class_methods do
 
     def fetch_remote_label(url)
+  
       if url.is_a? ActiveTriples::Resource
         resource = url
         url = resource.id.dup
@@ -19,64 +20,66 @@ module ControlledIndexerBehavior
         end
       end
 
-      begin
-
+    begin
         # handle local qa table based vocabs
-        if url.to_s.include?("ucsc.edu") or url.to_s.include?("http://localhost")
-          url.gsub!('http://','https://') if url.to_s.include? "library.ucsc.edu"
-          label = JSON.parse(Net::HTTP.get_response(URI(url)).body)["label"]
-        # handle geonames specially
-        elsif url.include? "geonames.org"
-          # make sure we fetch the rdf record, not the normal html one
-          if (res_url = url.dup) =~ /geonames.org\/[0-9]+.*\z/ && !res_url.include?("/about.rdf")
-            res_url = url.gsub(/(geonames.org\/[0-9]+).*\z/,"\\1/about.rdf")
-          end
-          # Interpret the xml result ourselves
-          doc = Nokogiri::XML(open(res_url))
-          label = doc.xpath('//gn:name').first.children.first.text.dup
-        # fetch from other normal authorities
+      if url.to_s.include?("ucsc.edu") or url.to_s.include?("http://localhost")
+        url.gsub!('http://','https://') if url.to_s.include? "library.ucsc.edu"
+        label = JSON.parse(Net::HTTP.get_response(URI(url)).body)["label"]
+      # handle geonames specially
+      elsif url.include? "geonames.org"
+        # make sure we fetch the rdf record, not the normal html one
+        if (res_url = url.dup) =~ /geonames.org\/[0-9]+.*\z/ && !res_url.include?("/about.rdf")
+          res_url = url.gsub(/(geonames.org\/[0-9]+).*\z/,"\\1/about.rdf")
+        end
+        # Interpret the xml result ourselves
+        doc = Nokogiri::XML(open(res_url))
+        label = doc.xpath('//gn:name').first.children.first.text.dup
+      # fetch from other normal authorities
+      else
+        # Smoothly handle some common syntax issues
+        cleaned_url = url.dup
+        if url[0..6] == "info:lc"
+          cleaned_url = cleaned_url.gsub!("info:lc","http://id.loc.gov")
+        elsif url.include?("vocab.getty.edu")
+          cleaned_url = cleaned_url.gsub!("/page/","/") 
+        end
+        resource = ActiveTriples::Resource.new(cleaned_url)
+        labels = resource.fetch(headers: { 'Accept'.freeze => default_accept_header }).rdf_label
+        if labels.count == 1
+          label = labels.first.dup.to_s
         else
-          # Smoothly handle some common syntax issues
-          cleaned_url = url.dup
-          cleaned_url.gsub!("info:lc","http://id.loc.gov") if (url[0..6] == "info:lc")
-          cleaned_url.gsub!("/page/","/") if url.include?("vocab.getty.edu")
-          resource ||= ActiveTriples::Resource.new(cleaned_url)
-          labels = resource.fetch(headers: { 'Accept'.freeze => default_accept_header }).rdf_label
-          if labels.count == 1
-            label = labels.first.dup.to_s
-          else
-            label = labels.find{|label| label.language.to_s =~ /en/ }.dup.to_s
+          label = labels.find{|label| label.language.to_s =~ /en/ }.dup.to_s
+        end
+      end
+        
+      Rails.logger.info "Adding buffer entry - label: #{label}, url:  #{url.to_s}"
+      LdBuffer.create(url: url, label: label)
+
+      # Delete oldest records if we have more than 5K in the buffer
+      if (cnt = LdBuffer.count - 5000) > 0
+        ids = LdBuffer.order('created_at ASC').limit(cnt).pluck(:id)
+        LdBuffer.where(id: ids).delete_all
+      end
+        
+      if label == url && url.include?("id.loc.gov")
+        #handle weird alternative syntax
+        response = JSON.parse(Net::HTTP.get_response(URI(url)).body)
+        response.each do |index, node|
+          if node["@id"] == url
+            label = node["http://www.loc.gov/mads/rdf/v1#authoritativeLabel"].first["@value"].dup
           end
         end
-        
-        Rails.logger.info "Adding buffer entry - label: #{label}, url:  #{url.to_s}"
-        LdBuffer.create(url: url, label: label)
+      end
 
-        # Delete oldest records if we have more than 5K in the buffer
-        if (cnt = LdBuffer.count - 5000) > 0
-          ids = LdBuffer.order('created_at ASC').limit(cnt).pluck(:id)
-          LdBuffer.where(id: ids).delete_all
-        end
-        
-        if label == url && url.include?("id.loc.gov")
-          #handle weird alternative syntax
-          response = JSON.parse(Net::HTTP.get_response(URI(url)).body)
-          response.each do |index, node|
-            if node["@id"] == url
-              label = node["http://www.loc.gov/mads/rdf/v1#authoritativeLabel"].first["@value"].dup
-            end
-          end
-        end
+      raise Exception if label.to_s == url.to_s
 
-        raise Exception if label.to_s == url.to_s
-
-        return label.to_s
+      return label.to_s
 
       rescue Exception => e
         # IOError could result from a 500 error on the remote server
         # SocketError results if there is no server to connect to
-        Rails.logger.error "Unable to fetch #{url} from the authorative source.\n#{e.message}"
-        return false
+         Rails.logger.error "Unable to fetch #{url} from the authorative source.\n#{e.message}"
+         return false
       end
     end
 
