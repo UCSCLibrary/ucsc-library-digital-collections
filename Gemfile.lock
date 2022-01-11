@@ -1,5 +1,5 @@
 GIT
-  remote: git://github.com/UCSCLibrary/BulkOps.git
+  remote: https://github.com/UCSCLibrary/BulkOps.git
   revision: 5460344239669b0e50dcd2adcb44a9b259d13244
   branch: master
   specs:
@@ -7,13 +7,13 @@ GIT
       rails (~> 5)
 
 GIT
-  remote: git://github.com/UCSCLibrary/ScoobySnacks.git
+  remote: https://github.com/UCSCLibrary/ScoobySnacks.git
   revision: c8574d04837aeb2d298b4cd67b226418ead98866
   specs:
     scooby_snacks (0.3.15)
 
 GIT
-  remote: git://github.com/samvera-labs/bulkrax.git
+  remote: https://github.com/samvera-labs/bulkrax.git
   revision: 86d013ff288887c2918b94dedc545139e8337bba
   branch: main
   specs:
@@ -32,7 +32,7 @@ GIT
       simple_form
 
 GIT
-  remote: git://github.com/seuros/capistrano-sidekiq.git
+  remote: https://github.com/seuros/capistrano-sidekiq.git
   revision: 493ade199ab357ef619f8c7bb4a2bdd8bf653598
   specs:
     capistrano-sidekiq (2.0.0.beta5)
@@ -41,7 +41,7 @@ GIT
       sidekiq (>= 6.0)
 
 GIT
-  remote: git://github.com/sinatra/sinatra.git
+  remote: https://github.com/sinatra/sinatra.git
   revision: 0aa8d507a4b9140c883e4110e6023e90077bd1d4
   specs:
     rack-protection (2.1.0)
