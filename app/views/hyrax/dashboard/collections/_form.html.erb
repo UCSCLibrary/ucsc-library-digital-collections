@@ -30,9 +30,8 @@
 
             <div id="base-terms">
               <% f.object.primary_terms.each do |term| %>
-                <%= render_edit_field_partial_ucsc(term, f: f) %>
+                <%= render_edit_field_partial(term, f: f) %>
               <% end %>
-
               <% if f.object.persisted? %>
                 <%# we're loading these values dynamically to speed page load %>
                 <%= f.input :thumbnail_id,
@@ -49,7 +48,7 @@
                       'aria-controls'=> "extended-terms" %>
               <div id="extended-terms" class='collapse'>
                 <% f.object.secondary_terms.each do |term| %>
-                  <%= render_edit_field_partial_ucsc(term, f: f) %>
+                  <%= render_edit_field_partial(term, f: f) %>
                 <% end %>
               </div>
             <% end %>

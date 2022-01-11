@@ -7,21 +7,25 @@ function updateEmbedCode(uri, w, h, script) {
   document.getElementById("embedCode").value = embedTemplate;
 }
 
-$(document).ready(function() {
+$(document).on('turbolinks:load', function() {
   // Set default size and initalize iframe dimensions
   $('#embedSize').val('small');
   var selected = $('#embedSize').find(':selected');
-  var iframeWidth = selected.attr('data-width');
-  var iframeHeight = selected.attr('data-height');
 
-  // Set defaults for the custom dimensions
-  $('#embedWidth').val(iframeWidth);
-  $('#embedHeight').val(iframeHeight);
+  // Initialize, but only if this is a Work page.
+  if (selected.length !== 0) {
+    var iframeWidth = selected.attr('data-width');
+    var iframeHeight = selected.attr('data-height');
 
-  // Create work URI, script URI, and initalize the embed code
-  var dataUri = window.location.pathname + '/manifest?locale=en';
-  var scriptSrc = 'https://' + window.location.hostname + '/universalviewer/dist/uv-2.0.1/lib/embed.js';
-  updateEmbedCode(dataUri, iframeWidth, iframeHeight, scriptSrc);
+    // Set defaults for the custom dimensions
+    $('#embedWidth').val(iframeWidth);
+    $('#embedHeight').val(iframeHeight);
+
+    // Create work URI, script URI, and initalize the embed code
+    var dataUri = window.location.pathname + '/manifest?locale=en';
+    var scriptSrc = 'https://' + window.location.hostname + '/universalviewer/dist/uv-2.0.1/lib/embed.js';
+    updateEmbedCode(dataUri, iframeWidth, iframeHeight, scriptSrc);
+  }
 
   // Act on changes to the size dropdown
   $('#embedSize').on('change', function() {

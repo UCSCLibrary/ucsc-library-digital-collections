@@ -2,11 +2,16 @@ desc "create test works for a development environment"
 
 task create_objects: :environment do 
 
-  user = User.first
+  unless (user = User.first)
+    user = User.create(email: "user@example.com", password: "password")
+    admin = Role.find_by(name: "admin") || Role.create(name: "admin")
+    admin.users << user
+    admin.save
+  end
   ability = user.ability
   puts "simulating upload of sample media files"
-  uploaded_images = Dir[Rails.root.join('public','example_media','images','*')].map{|path| Hyrax::UploadedFile.create(file:  File.open(path), user: user)}
-  uploaded_audio = Dir[Rails.root.join('public','example_media','audio','*')].map{|path| Hyrax::UploadedFile.create(file:  File.open(path), user: user)}
+  uploaded_images = Dir[Rails.root.join('public','example_media','images','*')].map{|path| Hyrax::UploadedFile.create(file:  File.open(path), user: user).id}
+  uploaded_audio = Dir[Rails.root.join('public','example_media','audio','*')].map{|path| Hyrax::UploadedFile.create(file:  File.open(path), user: user).id}
 
   puts "generating sample metadata"
   schema = ScoobySnacks::METADATA_SCHEMA
@@ -42,8 +47,8 @@ task create_objects: :environment do
     {title: ["A Simple Public Image"], visibility: "open", uploaded_files: [uploaded_images[1]], type: :image},
     {title: ["A Simple Private Image"], visibility: "restricted",uploaded_files: [uploaded_images[1]], type: :image},
     {title: ["Simple Audio Work"], uploaded_files: [uploaded_audio[4]], type: :audio},
-    {title: ["A Work with Multiple Filesets that are Images"], uploaded_files: [uploaded_images[2].id, uploaded_images[3].id], type: :image},
-    {title: ["Work with Multiple Filesets that are Audio"], uploaded_files: [uploaded_audio[2].id, uploaded_audio[3].id], type: :audio},
+    {title: ["A Work with Multiple Filesets that are Images"], uploaded_files: [uploaded_images[2], uploaded_images[3]], type: :image},
+    {title: ["Work with Multiple Filesets that are Audio"], uploaded_files: [uploaded_audio[2], uploaded_audio[3]], type: :audio},
     {title: ["A Work with Multiple Child Works that are Images"], type: :image, rel: :parent},
     {title: ["Work with Multiple Child Works that are Audio"], type: :audio, rel: :parent}
   ]
@@ -66,7 +71,7 @@ task create_objects: :environment do
       work.ordered_members = (atts[:type] == :image) ? child_image_works : child_audio_works
       work.save
     end
-    env = Hyrax::Actors::Environment.new(work, ability, metadata.merge(atts.except(:rel, :type))) 
+    env = Hyrax::Actors::Environment.new(work, ability, metadata.merge(atts.except(:rel, :type)))
     Hyrax::CurationConcern.actor.send(work_action,env)
   end
 

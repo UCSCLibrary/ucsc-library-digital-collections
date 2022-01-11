@@ -34,18 +34,19 @@ FactoryBot.definition_file_paths = [File.expand_path("../factories", __FILE__)]
 RSpec.configure do |config|
 
   config.after(:all) do
-    Work.all.each{|wrk| wrk.destroy}
-    Collection.all.each{|col| col.destroy}
-    begin
-      User.all.each{|usr| usr.destroy unless usr.id == 1}
-    rescue Mysql2::Error
-    end
+#    Work.all.each{|wrk| wrk.destroy}
+#    Collection.all.each{|col| col.destroy}
+#    begin
+#      User.all.each{|usr| usr.destroy unless usr.id == 1}
+#    rescue Mysql2::Error
+#    end
   end
 
   config.before :suite do
 #    DatabaseCleaner.clean_with(:truncation)
     # Noid minting causes extra LDP requests which slow the test suite.
     Hyrax.config.enable_noids = false
+    User.create(email: "test@example.com", password: "password") unless User.first.present?
   end
 
   # rspec-expectations config goes here. You can use an alternate
@@ -128,7 +129,7 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 =end
 
-  # include factory girl methods
+  # include factory bot methods
   config.include FactoryBot::Syntax::Methods
 
 end

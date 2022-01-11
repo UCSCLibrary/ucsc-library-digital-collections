@@ -7,10 +7,15 @@ module Hyrax
     include Ucsc::BreadcrumbsForWorks
 
     self.curation_concern_type = ::Work
+
+    # This tells the system to use our customized presenter instead of Hyrax's default one
     self.show_presenter = Ucsc::WorkShowPresenter
 
+    # This skips the default authorization step defined by devise
+    # because we display these to public users, but we still enforce permissions elsewhere
     skip_authorize_resource :only => [:show, :file_manager, :inspect_work, :manifest, :zip_media_citation, :send_email]
 
+    # This custom action delivers a zip file containing a representative image and citation information for a work
     def zip_media_citation
       #This feature is currently only implemented for Images
       size = params['size'] || "1000,"
@@ -31,27 +36,8 @@ module Hyrax
       send_data zip_io.read, :filename => "media_citation_#{presenter.id}.zip", :type => 'application/zip', :disposition => 'attachment'
     end
 
-
-    def manifest
-      headers['Access-Control-Allow-Origin'] = '*'
-      @cache_key = "manifest/#{presenter.id}"
-      respond_to do |wants|
-        wants.json { render json: cached_manifest }
-        wants.html { render json: cached_manifest }
-      end
-    end
-
-    def cached_manifest
-#      modified = presenter.solr_document.modified_date || DateTime.now
-#      @cache_key = "manifest/#{presenter.id}"
-#      if (entry = Rails.cache.send(:read_entry,@cache_key,{})).present?
-#        Rails.cache.delete(@cache_key) if (Time.at(entry.instance_variable_get(:@created_at)) < presenter.solr_document.modified)
-#      end
-#      Rails.cache.fetch(@cache_key){ manifest_builder.to_h.to_json}
-      Rails.cache.fetch("manifest/#{presenter.id}"){ manifest_builder.to_h.to_json}
-    end
-
-
+    # This overrides the parent function that handles denying access to unauthorized folks.
+    # We need to explicitly handle requests for zip format files, or we get an error.
     def deny_access_for_current_user(exception, json_message)
       if (request.format.to_s.include? 'zip')
         render 'hyrax/base/unauthorized', status: :unauthorized, :formats => [:html]
@@ -60,6 +46,8 @@ module Hyrax
       end
     end
 
+    # This overrides the parent function that handles denying access to unauthorized folks.
+    # We need to explicitly handle requests for zip format files, or we get an error.    
     def deny_access_for_anonymous_user(exception, json_message)
       if (request.format.to_s.include? 'zip')
         session['user_return_to'.freeze] = request.url
@@ -69,6 +57,7 @@ module Hyrax
       end
     end
 
+    # This action allows users to email themselves a citation for a work
     def send_email
       @message = Hash.new
       @message[:to] = params[:email]
@@ -91,5 +80,6 @@ module Hyrax
       @flash_message = 'Sorry, this message was not delivered.'
       redirect_back fallback_location: {action: show, id: params[:id] }
     end
+
   end
 end

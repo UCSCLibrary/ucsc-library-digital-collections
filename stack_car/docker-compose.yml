@@ -1,0 +1,153 @@
+version: "3"
+
+x-app: &app
+  image: registry.gitlab.com/notch8/ucsc-library-digital-collections/web:${TAG:-latest}
+  build:
+    context: ..
+    dockerfile: ./stack_car/Dockerfile
+    target: hycruz-base
+    args:
+      - EXTRA_APK_PACKAGES=less vim bash openjdk11-jre ffmpeg rsync
+  env_file:
+    - .env
+  # NOTE: all common env variables moved to .env
+  volumes:
+    - uploads:/app/samvera/hyrax-webapp/public/uploads
+    - assets:/app/samvera/hyrax-webapp/public/assets
+    - cache:/app/samvera/hyrax-webapp/tmp/cache
+    - gems:/srv/bundle:Z
+    - ../dams_derivatives:/dams_derivatives
+    - ../example_media:/srv/hycruz/public/example_media
+    - ..:/app/samvera/hyrax-webapp
+
+services:
+  web:
+    <<: *app
+    container_name: hycruz
+    depends_on:
+      - "db"
+      - "fcrepo"
+      - "index"
+      - "redis"
+      - "worker"
+      - "images"
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+      - .env.development
+    environment:
+      - IIIF_SERVER_URL=http://localhost:8182/iiif/2/
+      - VIRTUAL_PORT=3000
+      - VIRTUAL_HOST=ucsc-dams.test
+
+  worker:
+    <<: *app
+    image: registry.gitlab.com/notch8/ucsc-library-digital-collections/worker:${TAG:-latest}
+    build:
+      context: ..
+      dockerfile: ./stack_car/Dockerfile
+      target: hycruz-worker
+      args:
+        - EXTRA_APK_PACKAGES=less vim bash openjdk11-jre ffmpeg rsync
+    container_name: worker
+    env_file:
+      - .env
+      - .env.development
+    depends_on:
+      - "db"
+      - "fcrepo"
+      - "index"
+      - "redis"
+
+  fcrepo:
+    image: ghcr.io/samvera/fcrepo4:4.7.5
+    container_name: fcrepo
+    volumes:
+      - fcrepo:/data:cached
+    env_file:
+      - .env
+    environment:
+      - VIRTUAL_PORT=8080
+      - VIRTUAL_HOST=fcrepo.ucsc-dams.test
+      - JAVA_OPTS=${JAVA_OPTS} -Dfcrepo.modeshape.configuration="classpath:/config/file-simple/repository.json" -Dfcrepo.object.directory="/data/objects" -Dfcrepo.binary.directory="/data/binaries"
+    expose:
+      - 8080
+
+  db:
+    image: mysql:5.7
+    container_name: mysql
+    ports:
+      - "3306:3306"
+      - "33060:33060"
+    env_file:
+      - .env
+      - .env.development
+    restart: on-failure
+    volumes:
+      - "database-data:/var/lib/mysql:Z"
+
+  redis:
+    image: 'docker.io/bitnami/redis:6.0-debian-10'
+    container_name: redis
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis-data:/bitnami/redis/data
+
+  index:
+    image: solr:7.7
+    container_name: solr
+    command: "bash -c 'precreate-core hyrax /opt/config && precreate-core hyrax-test /opt/config && solr-foreground'"
+    ports:
+      - "8983:8983"
+    volumes:
+      - ./solr_conf:/opt/config:Z
+      - index-data:/opt/solr/server/solr:Z
+    environment:
+      - VIRTUAL_PORT=8983
+      - VIRTUAL_HOST=solr.ucsc-dams.test
+      - LOG4J_FORMAT_MSG_NO_LOOKUPS=true
+
+  images:
+    image: registry.gitlab.com/notch8/ucsc-library-digital-collections/images:${TAG:-latest}
+    build:
+      context: ..
+      dockerfile: ./stack_car/cantaloupe/cantaloupe-dockerfile
+    container_name: cantaloupe
+    depends_on:
+      - "fcrepo"
+    ports:
+      - "8182:8182"
+      - "8183:8183"
+    volumes:
+      - "../dams_derivatives:/dams_derivatives:z"
+      - "cantaloupe-log:/srv/cantaloupe-log:Z"
+      - "cantaloupe-cache:/srv/cantaloupe-cache:Z"
+      - "./kakadu:/usr/share/kakadu"
+      - uploads:/app/samvera/hyrax-webapp/public/uploads
+      - assets:/app/samvera/hyrax-webapp/public/assets
+      - cache:/app/samvera/hyrax-webapp/tmp/cache
+      - gems:/srv/bundle:Z
+      - ../example_media:/srv/hycruz/public/example_media
+      - ..:/app/samvera/hyrax-webapp
+    environment:
+      - VIRTUAL_PORT=8182
+      - VIRTUAL_HOST=images.ucsc-dams.test
+
+volumes:
+  database-data:
+  gems:
+  gems2:
+  cantaloupe-log:
+  cantaloupe-cache:
+  index-data:
+  redis-data:
+    driver: local
+  fcrepo:
+  uploads:
+  cache:
+  assets:
+  dams_derivatives:

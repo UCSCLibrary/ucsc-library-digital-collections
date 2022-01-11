@@ -19,7 +19,7 @@ function copyCitation(citation) {
   }
 }
 
-$( document ).ready(function() {
+$(document).on('turbolinks:load', function() {
 
   // Add tooltips to the buttons, and click event listeners
   $('#citeWork').find('.btn').each(function(){

@@ -1,3 +1,8 @@
+/**
+ * This overrides an equavalent file in Hyrax and extends/fixes
+ * controlled vocabulary editors. 
+ * It uses our MultiControlledVocabulary entry for controlled fields.
+ **/
 import RelationshipsControl from 'hyrax/relationships/control'
 import SaveWorkControl from 'hyrax/save_work/save_work_control'
 import AdminSetWidget from 'hyrax/editor/admin_set_widget'

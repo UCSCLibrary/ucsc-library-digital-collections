@@ -1,5 +1,8 @@
+<%#= Customized from Hyrax 2.9.0 
+   # restructured file to display user links differently%>
 <header>
   <nav id="masthead" class="navbar navbar-inverse navbar-static-top" role="navigation">
+    <%# render user links conditionally at the top instead of always at the end of the first row %>
     <% if user_signed_in? %>
       <%= render '/user_util_links' %>
     <% end %>
@@ -17,9 +20,10 @@
       </div>
 
       <div class="collapse navbar-collapse" id="top-navbar-collapse">
+        <%# Hyrax displays user links here. Instead we display navigation links %>
         <ul class="nav navbar-nav navbar-right">
           <li class="first"><a href="#" data-toggle="modal" data-target="#feedbackModal">Contact Us</a></li>
-          <li><a href="/">Browse Collections</a></li>
+          <li><a href="/collections">Browse Collections</a></li>
         </ul>
       </div>
     </div>

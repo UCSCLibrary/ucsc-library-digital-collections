@@ -17,36 +17,17 @@ class Hyrax::HomepageController < ApplicationController
 
   def index
     @presenter = presenter_class.new(current_ability, collections)
-    @featured_researcher = ContentBlock.for(:researcher)
-    @marketing_text = ContentBlock.for(:marketing)
-    @featured_work_list = FeaturedWorkList.new
-    @announcement_text = ContentBlock.for(:announcement)
-    recent
   end
 
   private
 
     # Return collections
     def collections(rows: 55)
-      builder = Hyrax::CollectionSearchBuilder.new(self)
-                                              .rows(rows)
+      builder = Hyrax::CollectionSearchBuilder.new(self).rows(rows)
       response = repository.search(builder)
-
-      response.documents.select{ |col| col.visibility == "open" && !blacklisted_collections.include?(col.id) }
-
+      response.documents.select{ |col| ["open","campus"].include?(col.visibility)}
     rescue Blacklight::Exceptions::ECONNREFUSED, Blacklight::Exceptions::InvalidRequest
       []
-    end
-
-    def blacklisted_collections
-      ['cj82k733h', '8k71nh08w']
-    end
-
-    def recent
-      # grab any recent documents
-      (_, @recent_documents) = search_results(q: '', sort: sort_field, rows: 4)
-    rescue Blacklight::Exceptions::ECONNREFUSED, Blacklight::Exceptions::InvalidRequest
-      @recent_documents = []
     end
 
     def sort_field

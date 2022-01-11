@@ -11,14 +11,18 @@ class Ability
   end
   
   CAMPUS_IP_RANGES = ["128.114.0.0/16"]
-  
+
+  #This adds to an array initialized in Hyrax::Ability and Hydra::Ability including all ability logic
   self.ability_logic += [:everyone_can_create_curation_concerns]
 
+  #This overrides Blacklight::AccessControls::Ability
   def test_read(id)
     return true if current_user.admin?
     # perform special checks on filesets
     if (fs = SolrDocument.find(id)).hydra_model == FileSet
       case fs.visibility
+      when "open"
+        return true
       when "request"
         # retrieve special access grants for the current user
         return (fs.ancestor_ids & current_user.current_access_grants).present?
@@ -29,10 +33,16 @@ class Ability
     super
   end
 
+  #This overrides Blacklight::AccessControls::Ability
+  def test_download(id)
+    current_user.admin?
+  end
+    
+
   def on_campus?
     CAMPUS_IP_RANGES.any?{|range| IPAddr.new(range).include?(@client_ip || "")}
   end
-  
+
   # Define any customized permissions here.
   def custom_permissions
 

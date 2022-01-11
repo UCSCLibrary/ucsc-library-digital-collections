@@ -1,3 +1,5 @@
+<%#= Customized from Hyrax 2.4.0 %>
+<%#= File is completely overhauled %>
 <h3>
   <span class="sr-only">Title</span>
   <%= truncate(featured.title.first, length: 128, separator: ' ') %>
@@ -8,7 +10,7 @@
   </div>
 <% end %>
 <div>
-  <%= featured.description.first %>
+  <%= featured.description.sort_by(&:length).reverse.join(" ").truncate(1500) %>
 </div>
 <div>
     <span class="sr-only">Date Created</span>

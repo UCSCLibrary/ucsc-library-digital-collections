@@ -1,3 +1,5 @@
+# This controller handles the permalink url syntax:
+#  "digitalcollections.library.ucsc.edu/records/WORKID"
 class RecordsController < ApplicationController
   include Hydra::Controller::ControllerBehavior
 

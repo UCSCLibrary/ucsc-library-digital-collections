@@ -1,7 +1,11 @@
+<%#= Customized from Hyrax 2.4.0 %>
 <% solr_response ||= @response %>
 <% page_param_name ||= :page %>
 <% if solr_response.total_pages > 1 %>
+    <%#= Customized to removed extra classes %>
     <div class="row">
+      <%#= Customized to change pager theme %>
       <%= paginate solr_response, outer_window: 2, theme: 'ucsc', param_name: page_param_name %>
+      
     </div><!-- /pager -->
 <% end %>

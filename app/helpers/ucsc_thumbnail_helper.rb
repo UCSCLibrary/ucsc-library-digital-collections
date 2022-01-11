@@ -13,20 +13,48 @@ module UcscThumbnailHelper
   end
 
   def square_thumbnail_url(doc,size="150,")
-    square_region = square_thumbnail_region(doc, size)
-    thumbnail_url(doc.id, {region: square_region, size: size})
+    unless doc.is_a? SolrDocument
+      if doc.respond_to?(:solr_document)
+        doc = doc.solr_document
+      else
+        return nil
+      end
+    end
+    # unless doc is a fileset, use the representative fileset id
+    unless doc["has_model_ssim"] == "FileSet"
+      fs_id = doc.representative_id || doc.thumbnail_id
+    end
+    # If the width and height for a non-fileset doc aren't indexed, retrieve the fileset doc
+    if doc.width.present? && doc.height.present?
+      square_region = square_thumbnail_region(doc, size)
+    elsif fs_id
+      square_region = square_thumbnail_region(SolrDocument.find(fs_id), size)
+    end
+    return Hyrax.config.iiif_image_url_builder.call(fs_id,"nil",size,square_region)
   end
 
-  def self.thumbnail_url(id,size="150,")
+  def self.iiif_thumbnail_url(doc,size="150,")
+    return doc.thumbnail_path unless doc.image?
     image_config = size.is_a?(String) ? {size: size} : size
     region = image_config[:region] || "full"
     rotation = image_config[:rotation] || "0"
     size = image_config[:size]
-    return Hyrax.config.iiif_image_url_builder.call(id,"nil",size,region,rotation)
+    return Hyrax.config.iiif_image_url_builder.call(doc.thumbnail_id,"nil",size,region,rotation)
   end
 
-  def thumbnail_url(id, size="150,")
-    self.thumbnail_url(id,size)
+  def ucsc_thumbnail_tag(doc,image_options)
+    url = if image_options[:legacy] || doc.thumbnail_id.nil? || doc.audio?
+            doc.thumbnail_path
+          elsif image_options[:square]
+            square_thumbnail_url(doc,(image_options[:size] || ucsc_default_thumb_size))
+          else
+            UcscThumbnailHelper.iiif_thumbnail_url(doc,(image_options[:size] || ucsc_default_thumb_size))
+          end
+    image_tag url, image_options
+  end
+
+  def ucsc_default_thumb_size
+    "150,"
   end
 
 end

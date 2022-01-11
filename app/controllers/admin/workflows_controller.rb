@@ -8,32 +8,33 @@ class Admin::WorkflowsController < Hyrax::Admin::WorkflowsController
   self.claimed_states = ["review_underway","changes_underway"]
 
   def index
+    if workflow.present?
+      states = []
+      @workflow_id = workflow.id 
+      workflow.workflow_states.each do |state|
+        label = state.name.titleize
+        if claimed_states.include? state.name
+          list = Workflow::Claim.where(user_id: current_user.id, sipity_workflow_states_id: state.id ).map{|claim| SolrDocument.find(claim.work_id)}
+          num = list.count
+        else
+          list = ::Workflow::StatusListService.new(self, "workflow_state_name_ssim:#{state.name}")
+        end
+        
+        actions = Sipity::WorkflowStateAction.where(originating_workflow_state_id: state.id).map{|sa| sa.workflow_action}
 
-    states = []
-    @workflow_id = workflow.id
-
-    workflow.workflow_states.each do |state|
-      label = state.name.titleize
-      if claimed_states.include? state.name
-        list = Workflow::Claim.where(user_id: current_user.id, sipity_workflow_states_id: state.id ).map{|claim| SolrDocument.find(claim.work_id)}
-        num = list.count
-      else
-        list = ::Workflow::StatusListService.new(self, "workflow_state_name_ssim:#{state.name}")
+        states << {label: label,
+                   name: state.name,
+                   id: state.id,
+                   list: list,
+                   num: list.count,
+                   actions: actions,
+                   order: preferred_order(state.name)}
       end
-      
-      actions = Sipity::WorkflowStateAction.where(originating_workflow_state_id: state.id).map{|sa| sa.workflow_action}
-
-      states << {label: label,
-                  name: state.name,
-                  id: state.id,
-                  list: list,
-                  num: list.count,
-                  actions: actions,
-                  order: preferred_order(state.name)}
+      @states = states.sort_by{|state| state[:order]}
     end
-    @states = states.sort_by{|state| state[:order]}
   end
 
+  private
 
   def preferred_order state_name
     case state_name

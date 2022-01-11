@@ -1,3 +1,5 @@
+# This controller handles search results display
+# This is where we configure a lot of blacklight details
 require 'scooby_snacks/blacklight_configuration'
 require 'ucsc/oai/solr_document_provider'
 class CatalogController < ApplicationController
@@ -20,6 +22,9 @@ class CatalogController < ApplicationController
 #    solr_name('date_modified', :stored_sortable, type: :date)
   end
 
+  # This is a hacky way to make sure we link to the right root url
+  # in all environments without overthinking it (links were breaking
+  # in some of the staging/sandbox environments)
   def self.root_url(environment=nil)
     environment ||= Rails.env
     case environment.to_s
@@ -34,6 +39,7 @@ class CatalogController < ApplicationController
     end
   end
 
+  # This block contains most of the blacklight configuration
   configure_blacklight do |config|
     # default advanced config values
     config.advanced_search ||= Blacklight::OpenStructWithHashAccess.new
@@ -41,7 +47,6 @@ class CatalogController < ApplicationController
     config.advanced_search[:url_key] ||= 'advanced'
     config.advanced_search[:query_parser] ||= 'dismax'
     config.advanced_search[:form_solr_parameters] ||= {}
-
 
     schema = ScoobySnacks::METADATA_SCHEMA
 
@@ -68,7 +73,6 @@ class CatalogController < ApplicationController
 
     config.view.list.default = false
     config.view.masonry.partials = [:index]
-    config.view.slideshow.partials = [:index]
 
 
     config.show.tile_source_field = :content_metadata_image_iiif_info_ssm
@@ -87,6 +91,9 @@ class CatalogController < ApplicationController
     # solr field configuration for index views
     config.index.title_field = solr_name("title", :stored_searchable)
     config.index.display_type_field = solr_name("has_model", :symbol)
+    # This view helper method is now the primary method of generating thumbnails
+    config.index.thumbnail_method = :ucsc_thumbnail_tag
+    # This index value is used as a thumbnail url only when the above method is inaccessible
     config.index.thumbnail_field = 'thumbnail_path_ss'
 
     # solr fields that will be treated as facets by the blacklight application
@@ -135,6 +142,15 @@ class CatalogController < ApplicationController
 
     ScoobySnacks::BlacklightConfiguration.add_search_fields(config)
 
+    config.add_search_field('ancestor_collection_titles', label: "Collection",  include_in_advanced_search: true) do |field|
+      field.solr_parameters = {
+        qf: 'ancestor_collection_titles_ssim',
+        pf: 'ancestor_collection_titles_ssim'
+      }
+    end
+
+    config.add_facet_field('ancestor_collection_titles_ssim', {label: "Collection", limit: 12})
+    
     config.add_search_field('all_fields', label: 'All Fields', include_in_advanced_search: true) do |field|
       all_names = config.show_fields.values.map(&:field).join(" ")
       title_name = solr_name("title", :stored_searchable)
@@ -150,17 +166,21 @@ class CatalogController < ApplicationController
     # except in the relevancy case).
     # label is key, solr field is value
 
-    ScoobySnacks::BlacklightConfiguration.add_sort_fields(config)
-
     config.add_sort_field "score desc, #{uploaded_field} desc", label: "relevance"
+    ScoobySnacks::BlacklightConfiguration.add_sort_fields(config)
     config.add_sort_field "#{uploaded_field} desc", label: "date uploaded \u25BC"
     config.add_sort_field "#{uploaded_field} asc", label: "date uploaded \u25B2"
     config.add_sort_field "#{modified_field} desc", label: "date modified \u25BC"
     config.add_sort_field "#{modified_field} asc", label: "date modified \u25B2"
 
+    
     # If there are more than this many search results, no spelling ("did you
     # mean") suggestion is offered.
     config.spell_max = 5
+
+    # Options for the user for number of results to show per page, make 24 default
+    config.per_page = [10, 20, 24, 50, 100]
+    config.default_per_page = 24
   end
 
   # disable the bookmark control from displaying in gallery view

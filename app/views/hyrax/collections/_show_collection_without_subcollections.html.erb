@@ -1,0 +1,117 @@
+<% if @presenter.banner_file.present? %>
+<%#= Added ID, changed classes %>
+<header id="collection-description" class="hyc-banner row" style="background-image:url(<%= @presenter.banner_file %>)">
+  <% else %>
+  <header id="collection-description" class="row">
+    <% end %>
+
+    <%#= removed badges %>
+    <div class="hyc-title">
+      <h1><%= @presenter.title.first %></h1>
+    </div>
+
+    <% unless @presenter.logo_record.blank? %>
+    <%#= Added bootstrap class %>
+    <div class="hyc-logos col-md-3">
+      <% @presenter.logo_record.each_with_index  do |lr, i| %>
+
+      <% if lr[:linkurl].blank? %>
+      <img alt="<%= lr[:alttext] %>" src="<%= lr[:file_location] %>" />
+      <% else %>
+      <a href="<%= lr[:linkurl] %>">
+        <img alt="<%= lr[:alttext] %>" src="<%= lr[:file_location] %>" />
+      </a>
+      <% end %>
+
+      <% end %>
+    </div>
+    <% end %>
+    <%#= Customized to add thumbnail, moved description %>
+    <div class="collection-image">
+      <%= render 'hyrax/collections/media_display', presenter: @presenter %>
+    </div>
+    <div class="collection-text">
+      <%= render 'collection_description', presenter: @presenter %>
+      <% if @presenter.harmfulLanguageStatement.present?%>
+        <h5 class='harmful-language-statement'><%=t('hyrax.collections.show.harmful_language_statement_heading')%></h5>
+        <%= @presenter.harmfulLanguageStatement %>
+      <% end %>
+    </div>
+    <%#= end %>
+  </header>
+
+</div>
+</div>
+
+<div class="row">
+  <%#= Moved facets and search to the left column %>
+  <div class="col-sm-4">
+    <!-- Search results label -->
+    <% if @members_count > 0 || @presenter.subcollection_count > 0 %>
+    <div class="hyc-blacklight hyc-bl-title">
+      <h2>
+        <% if has_collection_search_parameters? %>
+        <%= t('hyrax.dashboard.collections.show.search_results') %>
+        <% end %>
+      </h2>
+    </div>
+    <% end %>
+
+    <!-- Search bar -->
+    <%#= Removed row class and moved search_form render to custom _facets partial %>
+    <div class="hyc-blacklight hyc-bl-search hyc-body">
+      <div>
+        <%= render 'facets' %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-8">
+    <!-- Works -->
+
+    <%# This is a hacky replacement for the constraints box,
+      # which wasn't working on the collection page  %>
+    <% if params['q'].present? %>
+      <div id="appliedParams" class="clearfix constraints-container">
+        <span class="constraints-label">Filtering by:</span>
+        <span class="btn-group appliedFilter constraint filter filter-creator_sim">
+          <span class="constraint-value btn btn-sm btn-default btn-disabled">
+            <span class="filterValue" title="<%= params['q']%>"><%= params['q'] %></span>
+          </span>
+          <%# The following line opens a security hole, if users add parameters that have special meaning for url_for%>
+          <%# Instead, the parameters should be permitted properly in the controller before being used here %>
+          <a class="btn btn-default btn-sm remove dropdown-toggle" href="<%= url_for(params.except(:q).to_unsafe_h) %>">
+            <span class="glyphicon glyphicon-remove"></span>
+            <span class="sr-only">Remove constraint "<%= params['q'] %>"</span>
+          </a>
+        </span>
+      </div>
+    <% end %>
+    
+    <% if @members_count > 0 %>
+    <div class="hyc-blacklight hyc-bl-title">
+      <%#= Swapped count and label %>
+      <h4><%= @members_count %> <%= t('.works_in_collection') %></h4>
+    </div>
+
+    <%#= Added clearfix class %>
+    <div class="hyc-blacklight hyc-bl-sort clearfix">
+      <%= render 'sort_and_per_page', collection: @presenter %>
+    </div>
+
+    <div class="hyc-blacklight hyc-bl-results">
+      <%= render_document_index @member_docs %>
+    </div>
+
+    <div class="hyc-blacklight hyc-bl-pager">
+      <%= render 'paginate' %>
+    </div>
+    <% else # if @members_count > 0 %>
+
+    <div class="hyc-blacklight hyc-bl-title"><h4>
+      Your search returned no results
+    </h4></div>
+    
+    <% end # if @members_count > 0 %>
+  </div>
+</div>

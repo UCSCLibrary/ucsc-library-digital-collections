@@ -1,7 +1,8 @@
+<%#= Customized from Hyrax 2.4.0
+  #  Extensive customizations throughout file %>
 <% provide :page_title, @presenter.page_title %>
 
 <%= render 'shared/citations' %>
-
 <div itemscope itemtype="http://schema.org/CreativeWork" class="row">
     <div class="col-sm-12">
         <header>
@@ -11,10 +12,9 @@
 
     <div class="col-sm-12">
         <div class="row">
-            <%# = render 'work_description', presenter: @presenter %>
-            <%= render @presenter.primary_media_partial(params['universal_viewer']),
-                presenter: @presenter,
-                av_files: (av_files = @presenter.all_av_files) %>
+          <%# = render 'work_description', presenter: @presenter %>
+          <% partial = @presenter.primary_media_partial(params['universal_viewer']) %>
+            <%= render(partial, presenter: @presenter, av_files: (av_files = @presenter.all_av_files)) if partial %>
             <div class="col-sm-6">
                 <%= render 'metadata', presenter: @presenter %>
             </div>
@@ -40,7 +40,7 @@
     <div class="col-sm-4">
         <%= render "show_actions", presenter: @presenter %>
         <%# Use the fully qualified path to avoid RSpec error: translation missing: en.hyrax.base.show.html.erb.last_modified %>
-        <%= render 'representative_media', presenter: @presenter unless av_files.any? or @presenter.image? %>
+        <%= render 'representative_media', presenter: @presenter unless av_files.present? or @presenter.image? %>
     </div>
 </div>
 
@@ -52,6 +52,9 @@
         <%#= render 'sharing_with', presenter: @presenter %>
         <%#= render 'user_activity', presenter: @presenter %>
     </div>
+</div>
+
+<%# TODO: I added an extra closing div here because one is missing somewhere inside one of the partials used, causing the footer to be rendered inside the content wrapper. I was not able to find the correct partial to add it to, but bringing it to the bottom of .  This fixes the issue for now %>
 </div>
 
 <%= render('downloads_modal', presenter: @presenter) if (@presenter.image? && !@presenter.audio?) %>

@@ -1,3 +1,5 @@
+<%#= Customized from Hyrax 2.9.0 
+     # Completely rewritten. We structure our search results differently in this context. %>
 <h2>
     <%= link_to document.title_or_label, document %>
     <%= document.date_created.first if document.human_readable_type == "Course" and !document.date_created.empty?%>

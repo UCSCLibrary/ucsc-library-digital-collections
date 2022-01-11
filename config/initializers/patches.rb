@@ -29,8 +29,37 @@ class Hydra::Derivatives::Processors::Jpeg2kImage
     end
 end
 
-class Hyrax::CollectionPresenter
-  def permission_badge_class
-    Ucsc::PermissionBadge
+
+module CarrierWave
+  class SanitizedFile
+
+    def copy!(new_path)
+      temp_filename = File.join(Dir.tmpdir, "hycruz_ingest_tempfile-#{Time.now.strftime("%Y%m%d")}-#{$$}-#{rand(0x100000000).to_s(36)}")
+      FileUtils.cp(path, temp_filename)
+      FileUtils.mv(temp_filename, new_path)
+    end
+
+  end
+end
+
+
+unless ["development","test"].include? ENV['RAILS_ENV']
+  class Hyrax::CollectionPresenter
+    def permission_badge_class
+      Ucsc::PermissionBadge
+    end
+  end
+end
+
+module FileUtilsPatch
+  def copy_file(dest)
+    FileUtils.touch(path())
+    super
+  end
+end
+
+module FileUtils
+  class Entry_
+    prepend FileUtilsPatch
   end
 end

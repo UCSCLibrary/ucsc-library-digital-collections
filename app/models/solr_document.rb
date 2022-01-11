@@ -12,6 +12,22 @@ class SolrDocument
   # Adds ScoobySnacks metadata attribute definitions
   include ScoobySnacks::SolrBehavior
 
+  # Adds custom attributes for collections
+  attribute :collectionCallNumber, Solr::Array, solr_name('collectionCallNumber')
+  attribute :extent, Solr::Array, solr_name('extent')
+  attribute :donorProvenance, Solr::Array, solr_name('donorProvenance')
+  attribute :publisherHomepage, Solr::Array, solr_name('publisher')
+  attribute :rightsHolder, Solr::Array, solr_name('rightsHolder')
+  attribute :rightsStatus, Solr::Array, solr_name('rightsStatus')
+  attribute :subjectName, Solr::Array, solr_name('subjectName')
+  attribute :subjectPlace, Solr::Array, solr_name('subjectPlace')
+  attribute :subjectTopic, Solr::Array, solr_name('subjectTopic')
+  attribute :subjectTitle, Solr::Array, solr_name('subjectTitle')
+  attribute :dateCreatedDisplay, Solr::Array, solr_name('dateCreatedDisplay')
+  attribute :harmfulLanguageStatement, Solr::String, solr_name('harmfulLanguageStatement')
+
+# End custom attributes for collections
+
  def self.add_field_semantics(label,solr_name,schema=nil)
     label = "#{schema}:#{label}" if schema
     field_semantics.merge!(label => Array.wrap(solr_name)) {|key, old_val, new_val| Array.wrap(old_val) + Array.wrap(new_val)}
@@ -108,6 +124,8 @@ class SolrDocument
   def display_image_url(size: "800,")
     if representative_id.present? && (representative_id != id)
       SolrDocument.find(representative_id).display_image_url(size: size)
+    elsif !image?
+      thumbnail_path
     elsif self['hasRelatedImage_ssim'].present?
       Hyrax.config.iiif_image_url_builder.call(self['hasRelatedImage_ssim'].first,"nil",size)
     elsif self['relatedImageId_ss'].present?
