@@ -24,6 +24,7 @@ RUN apt-get -qq update \
                                               rsync \
                                               tzdata \
                                               unzip \
+                                              vim \
                                               wget \
                                               yarn \
                                               zip 
@@ -57,6 +58,8 @@ RUN ln -fs /usr/lib/x86_64-linux-gnu/libmediainfo.so.0.0.0 /app/fits/tools/media
 RUN addgroup --system --gid 1001 app && \
   adduser --system --ingroup app -u 1001 --shell /bin/sh --home /app app
 RUN chown -R app /app
+RUN mkdir -p /dams_derivatives && \
+      chown -R app:app /dams_derivatives
 USER app
 
 RUN mkdir -p /app/samvera/hyrax-webapp
@@ -73,6 +76,8 @@ ENV LD_LIBRARY_PATH /usr/share/kakadu:/app/fits/tools/mediainfo/linux
 
 ARG APP_PATH=.
 COPY --chown=1001:1001 $APP_PATH/Gemfile* /app/samvera/hyrax-webapp/
+# Uncomment if developing Bulkrax within this application
+# COPY --chown=1001:1001 $APP_PATH/vendor/engines/bulkrax /app/samvera/hyrax-webapp/vendor/engines/bulkrax
 RUN bundle install --jobs "$(nproc)"
 
 COPY stack_car/kakadu /usr/share/kakadu
@@ -86,4 +91,4 @@ ENTRYPOINT ["/app/samvera/hyrax-webapp/stack_car/ops/entrypoint.sh"]
 
 FROM hycruz-base as hycruz-worker
 ENV MALLOC_ARENA_MAX=2
-CMD bundle exec sidekiq
+ENTRYPOINT ["/bin/bash", "/app/samvera/hyrax-webapp/stack_car/ops/worker.sh"]
