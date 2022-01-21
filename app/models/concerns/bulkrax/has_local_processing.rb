@@ -15,7 +15,7 @@ module Bulkrax::HasLocalProcessing
   # add any special processing here, for example to reset a metadata property
   # to add a custom property from outside of the import data
   def add_local
-    parsed_metadata.delete('rights_statement')
+    parsed_metadata['rightsStatement'] = parsed_metadata.delete('rights_statement')
     if override_rights_statement || parsed_metadata['rightsStatement'].blank?
       parsed_metadata['rightsStatement'] = [parser.parser_fields['rights_statement']]
     end
@@ -38,7 +38,7 @@ module Bulkrax::HasLocalProcessing
       raw_metadata_keys_for_field.each_with_index do |k, i|
         next if raw_metadata[k].blank?
 
-        raw_metadata[k].split(/\s*[|]\s*/).uniq.each do |value|
+        raw_metadata[k].split(/\s*[;|]\s*/).uniq.each do |value|
           auth_id = value if value.match?(::URI::DEFAULT_PARSER.make_regexp) # assume raw, user-provided URI is a valid authority
           auth_id ||= search_authorities_for_id(field, value)
           auth_id ||= create_local_authority_id(field, value)
