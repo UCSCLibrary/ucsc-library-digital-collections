@@ -9,8 +9,9 @@ namespace :hycruz  do
     on roles(:ingest,:app), in: :sequence, wait: 5 do
       set :rails_env, fetch(:stage)
       env = (fetch(:stage).to_s == 'staging') ? "production" : fetch(:stage)
-      print "creating temp folder if necessary..."
+      print "creating temp folders if necessary..."
       execute "mkdir -p #{current_path}/tmp"
+      execute "mkdir -p /dams_derivatives/tmp/#{env}/imports"
       print "Linking temp imports folder..."
       execute "rm -f #{current_path}/tmp/imports || true"
       execute "ln -s /dams_derivatives/tmp/#{env}/imports #{current_path}/tmp/imports"
@@ -18,8 +19,9 @@ namespace :hycruz  do
     on roles(:ingest,:app), in: :sequence, wait: 5 do
       set :rails_env, fetch(:stage)
       env = (fetch(:stage).to_s == 'staging') ? "production" : fetch(:stage)
-      print "creating temp folder if necessary..."
+      print "creating temp folders if necessary..."
       execute "mkdir -p #{current_path}/tmp"
+      execute "mkdir -p /dams_derivatives/tmp/#{env}/exports"
       print "Linking temp exports folder..."
       execute "rm -f #{current_path}/tmp/exports || true"
       execute "ln -s /dams_derivatives/tmp/#{env}/exports #{current_path}/tmp/exports"
