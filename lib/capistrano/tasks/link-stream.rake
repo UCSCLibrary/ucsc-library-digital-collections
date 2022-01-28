@@ -12,9 +12,9 @@ namespace :hycruz  do
       print "creating temp folders if necessary..."
       execute "mkdir -p #{current_path}/tmp"
       execute "mkdir -p /dams_derivatives/tmp/#{env}/imports"
+      execute "chown -R hyrax:diginit #{current_path}/tmp/imports"
       print "Linking temp imports folder..."
       execute "rm -f #{current_path}/tmp/imports || true"
-      execute "chown -R hyrax:diginit #{current_path}/tmp/imports"
       execute "ln -s /dams_derivatives/tmp/#{env}/imports #{current_path}/tmp/imports"
     end
     on roles(:ingest,:app), in: :sequence, wait: 5 do
@@ -23,9 +23,9 @@ namespace :hycruz  do
       print "creating temp folders if necessary..."
       execute "mkdir -p #{current_path}/tmp"
       execute "mkdir -p /dams_derivatives/tmp/#{env}/exports"
+      execute "chown -R hyrax:diginit #{current_path}/tmp/exports"
       print "Linking temp exports folder..."
       execute "rm -f #{current_path}/tmp/exports || true"
-      execute "chown -R hyrax:diginit #{current_path}/tmp/exports"
       execute "ln -s /dams_derivatives/tmp/#{env}/exports #{current_path}/tmp/exports"
     end
     on roles(:ingest,:app), in: :sequence, wait: 5 do
