@@ -10,7 +10,7 @@ Bulkrax::ApplicationParser.class_eval do
       file.path,
       path
     )
-    FileUtils.chown('hyrax', 'diginit', path) # OVERRIDE: chown imported file to have correct permissions
+    FileUtils.chmod(633, path) # OVERRIDE: chmod imported file to have read permissions
     path
   end
 end
