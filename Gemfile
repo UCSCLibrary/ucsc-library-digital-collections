@@ -51,7 +51,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # This is the main application engine
 # We are keeping up with Hyrax 2.x, and waiting to upgrade to Hyrax 3
-gem 'hyrax', '2.9'
+gem 'hyrax', '~> 2.9.0'
 
 # This gem creates a quick solr instance for testing purposes
 # We use docker instead nowadays, so this is now disabled.
@@ -89,7 +89,7 @@ group :development, :test do
 end
 
 # hydra-role-management allows devise users to be assigned to roles in Hyrax
-#  and granted permissions based on these roles 
+#  and granted permissions based on these roles
 gem 'hydra-role-management'
 # browse-everything allows file imports from cloud platforms. We haven't used
 # it in ages, but it might be useful in some cases.
@@ -106,21 +106,28 @@ gem 'samvera_hls', '0.4.4'
 # Uncomment the following line when developing scooby snacks to load the gem from a local folder
 #gem 'scooby_snacks', path: '/srv/scooby_snacks/'
 # The following line loads the most recent ScoobySnacks version from github
-gem 'scooby_snacks', git: 'git://github.com/UCSCLibrary/ScoobySnacks.git'
+gem 'scooby_snacks', git: 'https://github.com/UCSCLibrary/ScoobySnacks.git'
 
 # BulkOps handles bulk ingests and updates
 # Uncomment the following line when developing Bulk Ops to load the gem from a local folder
 #gem 'bulk_ops', path: "/srv/bulk_ops/"
 # The following line loads the most recent ScoobySnacks version from github
-gem 'bulk_ops', git: 'git://github.com/UCSCLibrary/BulkOps.git', branch: 'master'
+gem 'bulk_ops', git: 'https://github.com/UCSCLibrary/BulkOps.git', branch: 'master'
 
-gem 'sinatra', git: 'git://github.com/sinatra/sinatra.git'
+# Bulkrax
+gem 'bulkrax', git: 'https://github.com/samvera-labs/bulkrax.git', branch: 'main'
+# gem 'bulkrax', path: 'vendor/engines/bulkrax'
+gem 'willow_sword', github: 'notch8/willow_sword'
+
+gem 'httparty'
+
+gem 'sinatra', git: 'https://github.com/sinatra/sinatra.git'
 
 # The following three gems handle the interface for monitoring background tasks
 gem 'resque-pool'
 gem 'sidekiq'
-gem 'capistrano-sidekiq', git: 'git://github.com/seuros/capistrano-sidekiq.git'
-'git://github.com/libgit2/rugged.git'
+gem 'capistrano-sidekiq', git: 'https://github.com/seuros/capistrano-sidekiq.git'
+'https://github.com/libgit2/rugged.git'
 
 
 gem 'blacklight_advanced_search', '~> 6.0'
@@ -144,3 +151,7 @@ gem 'coveralls', require: false
 gem "mini_magick", ">= 4.9.4"
 
 gem 'rubyzip'
+gem 'activerecord-nulldb-adapter'
+# gem 'pronto', groups: [:development, :test]
+# gem 'pronto-rubocop', groups: [:development, :test]
+gem 'libxml-ruby', '3.1.0'

@@ -27,7 +27,7 @@ module UcscThumbnailHelper
     # If the width and height for a non-fileset doc aren't indexed, retrieve the fileset doc
     if doc.width.present? && doc.height.present?
       square_region = square_thumbnail_region(doc, size)
-    else
+    elsif fs_id
       square_region = square_thumbnail_region(SolrDocument.find(fs_id), size)
     end
     return Hyrax.config.iiif_image_url_builder.call(fs_id,"nil",size,square_region)
@@ -52,9 +52,9 @@ module UcscThumbnailHelper
           end
     image_tag url, image_options
   end
-    
+
   def ucsc_default_thumb_size
     "150,"
   end
-    
+
 end

@@ -2,7 +2,7 @@ require 'spec_helper_derailed'
 
 RSpec.feature 'Search results', js: false do
   context 'a guest user' do
-    scenario do
+    xscenario do
       visit '/catalog?q='
       expect(page).to have_selector "h3.facet-field-heading", text: "Creator"
       expect(page).to have_selector ".document>.thumbnail img"
@@ -14,7 +14,7 @@ RSpec.feature 'Search results', js: false do
       expect(page).to have_css('div.thumbnail img', count: 20)
     end
 
-    scenario do
+    xscenario do
       visit '/catalog'
       title = page.first('div.document div.caption').text.split.first
       expect(page).to have_selector "h3.index_title", text: title

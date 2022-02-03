@@ -12,7 +12,8 @@
       <%= link_to "Skip to Content", "#skip-to-content" %>
     </div>
     <%= render '/masthead' %>
-    <%= content_for(:navbar) %>
+    <%= render '/controls' %>
+    
     <%= content_for(:precontainer_content) %>
     <div id="content-wrapper" class="container" role="main">
       <%= render '/flash_msg' %>

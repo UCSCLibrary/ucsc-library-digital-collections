@@ -1,0 +1,44 @@
+FROM ruby:2.7.2 as hycruz-base
+
+USER root
+
+RUN apt-get -qq update \
+    && apt-get install -y --no-install-recommends  \
+      unzip \
+      ghostscript \
+      libmagickcore-dev \
+      mediainfo \
+      clamav \
+      libclamav-dev \
+      ffmpeg \
+      libreoffice
+                                               
+ENV LANG C.UTF-8
+ENV LC_ALL C.UTF-8
+
+ENV APP_DIR=/app/samvera/hyrax-webapp 
+ENV TEMP=${APP_DIR}/tmp 
+
+ENV PATH $GEM_HOME/bin:$GEM_HOME/gems/bin:/usr/share/kakadu:$PATH
+ENV LD_LIBRARY_PATH /usr/share/kakadu:$LD_LIBRARY_PATH
+RUN gem install bundler
+
+RUN mkdir -p ${APP_DIR}
+WORKDIR ${APP_DIR}
+
+COPY --chown=1001:101 $APP_PATH/Gemfile* /app/samvera/hyrax-webapp/
+RUN bundle install --jobs "$(nproc)"
+
+COPY --chown=1001:101 $APP_PATH /app/samvera/hyrax-webapp
+COPY --chown=1001:101 $APP_PATH/config/environments/production.rb /app/samvera/hyrax-webapp/config/environments/production.rb
+COPY --chown=1001:101 $APP_PATH/stack_car/ops/* /app/samvera/hyrax-webapp/ops/
+
+COPY ./stack_car/sidekiq-entrypoint.sh /app/samvera/hyrax-webapp/sidekiq-entrypoint.sh
+
+ENTRYPOINT ["/app/samvera/hyrax-webapp/sidekiq-entrypoint.sh"]
+
+
+
+
+
+

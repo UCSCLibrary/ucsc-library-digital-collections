@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_20_225841) do
+ActiveRecord::Schema.define(version: 2021_12_03_195233) do
 
   create_table "bookmarks", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.integer "user_id", null: false
@@ -86,6 +86,100 @@ ActiveRecord::Schema.define(version: 2020_02_20_225841) do
     t.string "ingested_id"
     t.integer "line_number"
     t.index ["ingest_id"], name: "index_bulk_meta_rows_on_ingest_id"
+  end
+
+  create_table "bulkrax_entries", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+    t.string "importerexporter_type", default: "Bulkrax::Importer"
+    t.string "identifier"
+    t.string "collection_ids"
+    t.string "type"
+    t.bigint "importerexporter_id"
+    t.text "raw_metadata", limit: 16777215
+    t.text "parsed_metadata", limit: 16777215
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "last_error_at"
+    t.datetime "last_succeeded_at"
+    t.index ["importerexporter_id"], name: "index_bulkrax_entries_on_importerexporter_id"
+  end
+
+  create_table "bulkrax_exporter_runs", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+    t.bigint "exporter_id"
+    t.integer "total_work_entries", default: 0
+    t.integer "enqueued_records", default: 0
+    t.integer "processed_records", default: 0
+    t.integer "deleted_records", default: 0
+    t.integer "failed_records", default: 0
+    t.index ["exporter_id"], name: "index_bulkrax_exporter_runs_on_exporter_id"
+  end
+
+  create_table "bulkrax_exporters", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+    t.string "name"
+    t.bigint "user_id"
+    t.string "parser_klass"
+    t.integer "limit"
+    t.text "parser_fields", limit: 16777215
+    t.text "field_mapping", limit: 16777215
+    t.string "export_source"
+    t.string "export_from"
+    t.string "export_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "last_error_at"
+    t.datetime "last_succeeded_at"
+    t.date "start_date"
+    t.date "finish_date"
+    t.string "work_visibility"
+    t.string "workflow_status"
+    t.index ["user_id"], name: "index_bulkrax_exporters_on_user_id"
+  end
+
+  create_table "bulkrax_importer_runs", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+    t.bigint "importer_id"
+    t.integer "total_work_entries", default: 0
+    t.integer "enqueued_records", default: 0
+    t.integer "processed_records", default: 0
+    t.integer "deleted_records", default: 0
+    t.integer "failed_records", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "processed_collections", default: 0
+    t.integer "failed_collections", default: 0
+    t.integer "total_collection_entries", default: 0
+    t.integer "processed_relationships", default: 0
+    t.integer "failed_relationships", default: 0
+    t.text "invalid_records", limit: 16777215
+    t.index ["importer_id"], name: "index_bulkrax_importer_runs_on_importer_id"
+  end
+
+  create_table "bulkrax_importers", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+    t.string "name"
+    t.string "admin_set_id"
+    t.bigint "user_id"
+    t.string "frequency"
+    t.string "parser_klass"
+    t.integer "limit"
+    t.text "parser_fields", limit: 16777215
+    t.text "field_mapping", limit: 16777215
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "validate_only"
+    t.datetime "last_error_at"
+    t.datetime "last_succeeded_at"
+    t.index ["user_id"], name: "index_bulkrax_importers_on_user_id"
+  end
+
+  create_table "bulkrax_statuses", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+    t.string "status_message"
+    t.string "error_class"
+    t.text "error_message"
+    t.text "error_backtrace", limit: 16777215
+    t.integer "statusable_id"
+    t.string "statusable_type"
+    t.integer "runnable_id"
+    t.string "runnable_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "checksum_audit_logs", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
@@ -692,6 +786,8 @@ ActiveRecord::Schema.define(version: 2020_02_20_225841) do
   add_foreign_key "bulk_meta_logs", "bulk_meta_rows", column: "row_id"
   add_foreign_key "bulk_meta_relationships", "bulk_meta_rows", column: "row_id"
   add_foreign_key "bulk_meta_rows", "bulk_meta_ingests", column: "ingest_id"
+  add_foreign_key "bulkrax_exporter_runs", "bulkrax_exporters", column: "exporter_id"
+  add_foreign_key "bulkrax_importer_runs", "bulkrax_importers", column: "importer_id"
   add_foreign_key "collection_type_participants", "hyrax_collection_types"
   add_foreign_key "curation_concerns_operations", "users"
   add_foreign_key "mailboxer_conversation_opt_outs", "mailboxer_conversations", column: "conversation_id", name: "mb_opt_outs_on_conversations_id"
