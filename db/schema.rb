@@ -101,6 +101,7 @@ ActiveRecord::Schema.define(version: 2022_01_19_213325) do
     t.datetime "last_error_at"
     t.datetime "last_succeeded_at"
     t.integer "import_attempts", default: 0
+    t.index ["importerexporter_id"], name: "index_bulkrax_entries_on_importerexporter_id"
   end
 
   create_table "bulkrax_exporter_runs", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
