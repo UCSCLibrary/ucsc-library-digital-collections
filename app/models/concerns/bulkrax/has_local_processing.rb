@@ -21,6 +21,13 @@ module Bulkrax::HasLocalProcessing
     end
 
     add_controlled_fields
+
+    return unless is_a?(Bulkrax::CsvFileSetEntry)
+
+    # TODO: This needs to be removed after ScoobySnacks is
+    # taken out because resourceType shouldn't exist after that
+    parsed_metadata.delete('resourceType_attributes')
+    parsed_metadata['resource_type'] = raw_metadata['resourcetype'].split(/\s*[|]\s*/)
   end
 
   # Controlled fields expect an ActiveTriples instance as a value. Bulkrax only imports strings.
