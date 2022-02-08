@@ -197,7 +197,7 @@ GEM
       signet (~> 0.8)
       typhoeus
     builder (3.2.4)
-    bulkrax (2.1.1)
+    bulkrax (2.2.0)
       bagit (~> 0.4)
       coderay
       iso8601 (~> 0.9.0)
@@ -250,9 +250,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.12.2)
-
     concurrent-ruby (1.1.9)
-
     connection_pool (2.2.5)
     coveralls (0.8.23)
       json (>= 1.8, < 3)
@@ -884,9 +882,7 @@ GEM
       rdf-xsd (~> 3.1)
       sparql (~> 3.1)
       sxp (~> 1.1)
-
     sidekiq (6.4.0)
-
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
       redis (>= 4.2.0)
@@ -1002,7 +998,7 @@ DEPENDENCIES
   blacklight_oai_provider (>= 6.0.0)
   browse-everything
   bulk_ops!
-  bulkrax (~> 2.1)
+  bulkrax (~> 2.2)
   bundler (>= 2)
   byebug
   capistrano
