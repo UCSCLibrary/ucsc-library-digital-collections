@@ -15,17 +15,26 @@ module Bulkrax::HasLocalProcessing
   # add any special processing here, for example to reset a metadata property
   # to add a custom property from outside of the import data
   def add_local
-    parsed_metadata['rightsStatement'] = parsed_metadata.delete('rights_statement')
-    if override_rights_statement || parsed_metadata['rightsStatement'].blank?
-      parsed_metadata['rightsStatement'] = [parser.parser_fields['rights_statement']]
-    end
-
+    remap_rights_statement
+    remap_resource_type
     add_controlled_fields
+  end
 
+  private
+
+  # TODO: Remove after ScoobySnacks is removed -- rightsStatement will no longer exist
+  def remap_rights_statement
+    parsed_metadata['rightsStatement'] = parsed_metadata.delete('rights_statement')
+    return unless override_rights_statement || parsed_metadata['rightsStatement'].blank?
+
+    parsed_metadata['rightsStatement'] = [parser.parser_fields['rights_statement']]
+  end
+
+  # TODO: Rename "resourceType_attributes" to "resource_type_attributes" after
+  # ScoobySnacks is removed -- resourceType will no longer exist
+  def remap_resource_type
     return unless is_a?(Bulkrax::CsvFileSetEntry)
 
-    # TODO: This needs to be removed after ScoobySnacks is
-    # taken out because resourceType shouldn't exist after that
     parsed_metadata.delete('resourceType_attributes')
     parsed_metadata['resource_type'] = raw_metadata['resourcetype'].split(/\s*[|]\s*/)
   end
