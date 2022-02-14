@@ -16,8 +16,8 @@ module Bulkrax::HasLocalProcessing
   # to add a custom property from outside of the import data
   def add_local
     remap_rights_statement
-    add_controlled_fields
     remap_resource_type
+    add_controlled_fields
   end
 
   private
