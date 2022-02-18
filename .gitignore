@@ -12,6 +12,7 @@ capybara-*.html
 /tmp
 /db/*.sqlite3
 /db/*.sqlite3-journal
+/db/seeds.rb
 /public/system
 /coverage/
 /spec/tmp
@@ -22,13 +23,15 @@ pickle-email-*.html
 !/log/.keep
 !/tmp/.keep
 
+/dams_derivatives/*
+/fits.log
 /public/uploads/batch_metadata_ingests/*
 /public/assets/*
 /public/stream
 
 # dotenv
 # TODO Comment out this rule if environment variables can be committed
-.env
+#.env
 
 ## Environment normalization:
 /.bundle
@@ -56,3 +59,5 @@ bower.json
 
 # Ignore emacs autosave files
 .\#*
+
+vendor/engines

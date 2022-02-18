@@ -1,0 +1,18 @@
+dependencies:
+- name: memcached
+  repository: https://charts.bitnami.com/bitnami
+  version: 4.2.21
+- name: minio
+  repository: https://charts.bitnami.com/bitnami
+  version: 6.7.2
+- name: mariadb
+  repository: https://charts.bitnami.com/bitnami
+  version: 9.5.1
+- name: redis
+  repository: https://charts.bitnami.com/bitnami
+  version: 10.7.16
+- name: solr
+  repository: https://charts.bitnami.com/bitnami
+  version: 1.0.1
+digest: sha256:a479837a67dc7cf443a60293d24d03a68c5e817252f8ad9fb871960503d3aef6
+generated: "2021-09-28T15:34:13.552152-07:00"

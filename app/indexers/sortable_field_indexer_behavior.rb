@@ -5,6 +5,8 @@ module SortableFieldIndexerBehavior
     schema.sortable_fields.each do |field|
       if field.input == "date"
         next unless (date_string = Array(solr_doc[field.solr_name]).first)
+        next if date_string.blank?
+
         if date_string.to_s.match?(/\A[12][0-9]{3}[-\/][0-9]{1,2}\z/)
           year, month = date_string.split(/[-\/]/).map(&:to_i)
           date = Date.new(year,month)

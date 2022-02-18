@@ -2,6 +2,7 @@ require 'sidekiq/web'
 
 Rails.application.routes.draw do
 
+  mount Bulkrax::Engine, at: '/'
   concern :oai_provider, BlacklightOaiProvider::Routes.new
 
   mount BrowseEverything::Engine => '/browse'
@@ -46,7 +47,7 @@ Rails.application.routes.draw do
 
   post 'concern/works/:id/email' => 'hyrax/works#send_email'
   get 'concern/works/:id/email' => 'hyrax/works#show'
-
+  get 'collections', to: 'collections#show_all'
   authenticate :user, lambda { |u| u.admin? } do
     mount Sidekiq::Web => '/sidekiq'
   end

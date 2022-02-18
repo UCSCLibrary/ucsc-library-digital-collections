@@ -1,17 +1,17 @@
 development:
   adapter: solr
-  url: http://index:8983/solr/hycruz
+  url: <%= ENV['SOLR_URL'] || "http://index:8983/solr/hycruz" %>
 test: &test
   adapter: solr
-  url: http://index:8983/solr/hycruz-test
+  url: <%= ENV['SOLR_URL'] || "http://index:8983/solr/hycruz-test" %>
 sandbox:
   adapter: solr
-  url: http://digitalcollections-index.library.ucsc.edu:8983/solr/hycruz-staging
+  url: <%= ENV['SOLR_URL'] || "http://digitalcollections-index.library.ucsc.edu:8983/solr/hycruz-staging" %>
 staging:
   adapter: solr
-  url: http://digitalcollections-index.library.ucsc.edu:8983/solr/hycruz
+  url: <%= ENV['SOLR_URL'] || "http://digitalcollections-index.library.ucsc.edu:8983/solr/hycruz" %>
 production:
   adapter: solr
-  url: http://digitalcollections-index.library.ucsc.edu:8983/solr/hycruz
+  url: <%= ENV['SOLR_URL'] || "http://digitalcollections-index.library.ucsc.edu:8983/solr/hycruz" %>
 
 

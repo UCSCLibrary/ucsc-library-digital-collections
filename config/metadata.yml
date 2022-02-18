@@ -338,7 +338,7 @@ fields:
 #      - search_result   
 
   dateCreatedDisplay:
-    definition: Textual representation of the creation date (temporary fix)
+    definition: Textual representation of the creation date. Fill in this field if the creation date needs to show to to public view in a format other than MM-DD-YYYY. This field will be used for the public view, and the field above will be used in sorting and indexing this work. (temporary fix)
     label: 'Date Created'
     display_groups:
       - secondary
