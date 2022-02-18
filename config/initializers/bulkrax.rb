@@ -72,7 +72,7 @@ Bulkrax.setup do |config|
       'itemCallNumber' => { from: ['itemcallnumber'], split: /\s*[|]\s*/ },
       'keyword' => { from: ['keyword'], split: /\s*[|]\s*/ },
       'language' => { from: ['language'], split: /\s*[|]\s*/ },
-      'masterFilename' => { from: ['masterfilename'], split: /\s*[|]\s*/ },
+      'primaryFilename' => { from: ['primaryfilename'], split: /\s*[|]\s*/ },
       'metadataInheritance' => { from: ['metadatainheritance'], split: /\s*[|]\s*/ },
       'metadataSource' => { from: ['metadatasource'], split: /\s*[|]\s*/ },
       'originalPublisher' => { from: ['originalpublisher'], split: /\s*[|]\s*/ },

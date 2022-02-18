@@ -2,7 +2,7 @@
 class FileSet < ActiveFedora::Base
   include ::Bulkrax::Metadata
   # TODO: remove/repurpose after ScoobySnacks is removed
-  property :masterFilename, predicate: ::RDF::Vocab::EBUCore.filename do |index|
+  property :primaryFilename, predicate: ::RDF::Vocab::EBUCore.filename do |index|
     index.as :stored_sortable
   end
 
