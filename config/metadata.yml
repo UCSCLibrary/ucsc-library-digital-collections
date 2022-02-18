@@ -467,7 +467,7 @@ fields:
     label: Rights License
     predicate: DC:license
   
-  masterFilename:
+  primaryFilename:
     definition: "The name of the file (usually attached to this work) that is considered the master digital file to represent the work."
     predicate: EBUCore:filename
     searchable: true
@@ -475,7 +475,7 @@ fields:
     inheritable: false
     collection_inheritable: false
     full_text_searchable: true
-    label: Master File Name
+    label: Primary File Name
     data_type: string
     display_groups: 
       - secondary
