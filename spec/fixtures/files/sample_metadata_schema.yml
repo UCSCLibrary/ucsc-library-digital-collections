@@ -431,10 +431,10 @@ fields:
     label: Rights License
     predicate: DC:license
   
-  masterFilename:
+  primaryFilename:
     definition: "The name of the file (usually attached to this work) that is considered the master digital file to represent the work."
     predicate: EBUCore:filename
-    label: Master File Name
+    label: Primary File Name
     display_groups: 
       - admin_only
       - editor_primary

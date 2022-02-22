@@ -6,7 +6,7 @@
    <tbody>
     <%= render 'primary_attribute_rows', presenter: presenter %>
     <% if  ((can? :manage, Work) or (can? :review, :submissions)) %>
-        <%= presenter.attribute_to_html(:masterFilename, {label: "Master Filename"})  %>
+        <%= presenter.attribute_to_html(:primaryFilename, {label: "Primary Filename"})  %>
         <%= presenter.attribute_to_html(:accessionNumber, {label: "Accession Number"}) %>
     <% end %>
     <%= render 'relationships', presenter: @presenter %> <%# Moved from show.html.erb to here %>
