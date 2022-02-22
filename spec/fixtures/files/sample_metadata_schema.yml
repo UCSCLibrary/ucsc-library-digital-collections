@@ -432,7 +432,7 @@ fields:
     predicate: DC:license
   
   primaryFilename:
-    definition: "The name of the file (usually attached to this work) that is considered the master digital file to represent the work."
+    definition: "The name of the file (usually attached to this work) that is considered the primary digital file to represent the work."
     predicate: EBUCore:filename
     label: Primary File Name
     display_groups: 
