@@ -36,7 +36,7 @@ module Bulkrax::HasLocalProcessing
     return unless is_a?(Bulkrax::CsvFileSetEntry)
 
     parsed_metadata.delete('resourceType_attributes')
-    parsed_metadata['resource_type'] = raw_metadata['resourcetype'].split(/\s*[|]\s*/)
+    parsed_metadata['resource_type'] = raw_metadata['resourcetype']&.split(/\s*[|]\s*/)
   end
 
   # Controlled fields expect an ActiveTriples instance as a value. Bulkrax only imports strings.
