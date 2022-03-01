@@ -115,7 +115,7 @@ gem 'scooby_snacks', git: 'https://github.com/UCSCLibrary/ScoobySnacks.git'
 gem 'bulk_ops', git: 'https://github.com/UCSCLibrary/BulkOps.git', branch: 'master'
 
 # Bulkrax
-gem 'bulkrax', '~> 2.2'
+gem 'bulkrax', '~> 2.3'
 # gem 'bulkrax', path: 'vendor/engines/bulkrax'
 gem 'willow_sword', github: 'notch8/willow_sword'
 
