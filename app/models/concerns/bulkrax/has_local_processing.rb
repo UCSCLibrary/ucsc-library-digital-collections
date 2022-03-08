@@ -15,20 +15,21 @@ module Bulkrax::HasLocalProcessing
   # add any special processing here, for example to reset a metadata property
   # to add a custom property from outside of the import data
   def add_local
-    remap_rights_statement
     remap_resource_type
     add_controlled_fields
   end
 
-  private
-
-  # TODO: Remove after ScoobySnacks is removed -- rightsStatement will no longer exist
-  def remap_rights_statement
+  # OVERRIDE: Don't fill in blank rights statements. Allow them to be blank.
+  # Only override rights_statement if the user chose to override them in
+  # the Importer form.
+  def add_rights_statement
+    # OVERRIDE: Remap rights_statement to rightsStatement. Possibly remove this
+    # after ScoobySnacks is removed (rightsStatement may become rights_statement then)
     parsed_metadata['rightsStatement'] = parsed_metadata.delete('rights_statement')
-    return unless override_rights_statement || parsed_metadata['rightsStatement'].blank?
-
-    parsed_metadata['rightsStatement'] = [parser.parser_fields['rights_statement']]
+    parsed_metadata['rightsStatement'] = [parser.parser_fields['rights_statement']] if override_rights_statement
   end
+
+  private
 
   # TODO: Rename "resourceType_attributes" to "resource_type_attributes" after
   # ScoobySnacks is removed -- resourceType will no longer exist
