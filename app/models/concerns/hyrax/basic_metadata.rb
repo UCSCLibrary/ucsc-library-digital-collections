@@ -78,7 +78,11 @@ module Hyrax
 
       property :subjectTitle, predicate: ::RDF::Vocab::MODS.subjectTitle
 
+      property :dateCreated, predicate: ::RDF::Vocab::BF2.creationDate
+
       property :dateCreatedDisplay, predicate: ::RDF::Vocab::MODS.dateCreated  
+
+      property :dateCreatedIngest, predicate: ::RDF::Vocab::DC.created  
 
       id_blank = proc { |attributes| attributes[:id].blank? }
 
