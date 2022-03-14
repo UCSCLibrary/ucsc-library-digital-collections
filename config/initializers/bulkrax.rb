@@ -53,6 +53,7 @@ Bulkrax.setup do |config|
       'creator' => { from: ['creator'], split: /\s*[|]\s*/ },
       'dateCreated' => { from: ['datecreated'], split: /\s*[|]\s*/ },
       'dateCreatedDisplay' => { from: ['datecreateddisplay'], split: /\s*[|]\s*/ },
+      'dateCreatedIngest' => { from: ['datecreatedingest'], split: /\s*[|]\s*/ },
       'dateDigitized' => { from: ['datedigitized'], split: /\s*[|]\s*/ },
       'dateOfSituation' => { from: ['dateofsituation'], split: /\s*[|]\s*/ },
       'datePublished' => { from: ['datepublished'], split: /\s*[|]\s*/ },
