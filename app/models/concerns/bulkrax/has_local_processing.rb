@@ -16,6 +16,7 @@ module Bulkrax::HasLocalProcessing
   # to add a custom property from outside of the import data
   def add_local
     remap_resource_type
+    process_date_created_ingest
     add_controlled_fields
   end
 
@@ -38,6 +39,26 @@ module Bulkrax::HasLocalProcessing
 
     parsed_metadata.delete('resourceType_attributes')
     parsed_metadata['resource_type'] = raw_metadata['resourcetype']&.split(/\s*[|]\s*/)
+  end
+
+  def process_date_created_ingest
+    return unless parsed_metadata['dateCreatedIngest'].present?
+
+    parsed_metadata['dateCreatedIngest'].each do |value|
+      value = value.dup.strip
+      next if value.blank?
+
+      sortable_date = if value.match?(/^\d{4}$/)
+                        "#{value}-12-31"
+                      elsif value.match?(/^\d{4}-\d{2}-\d{2}$/)
+                        value
+                      else
+                        raise StandardError, %("#{value}" is not a valid date value for dateCreatedIngest)
+                      end
+
+      parsed_metadata['dateCreated'] ||= []
+      parsed_metadata['dateCreated'] << Date.parse(sortable_date).strftime('%FT%TZ')
+    end
   end
 
   # Controlled fields expect an ActiveTriples instance as a value. Bulkrax only imports strings.
