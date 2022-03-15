@@ -5,7 +5,7 @@ module SortableFieldIndexerBehavior
 
   def index_sortable_fields(solr_doc)
     schema.sortable_fields.each do |field|
-      if field.name == 'dateCreated' && solr_doc[schema.get_field('dateCreatedIngest').solr_name].present?
+      if field.name == 'dateCreated' && solr_doc[ingest_field.solr_name].present?
         index_from_ingested_value(field, solr_doc)
       elsif field.input == 'date'
         index_date_input(field, solr_doc)
@@ -20,9 +20,8 @@ module SortableFieldIndexerBehavior
   private
 
   def index_from_ingested_value(sortable_field, solr_doc)
-    ingest_field = schema.get_field('dateCreatedIngest')
-
     solr_doc[ingest_field.solr_name].each do |value|
+      value.strip!
       unless valid_ingested_date?(value)
         # TODO: raise error instead?
         Rails.logger.warn(%("#{value}" is not a valid date value for dateCreatedIngest, skipping indexing...))
@@ -30,8 +29,8 @@ module SortableFieldIndexerBehavior
       end
 
       sortable_date = if value.match?(/^\d{4}$/)
-                        "12-31-#{value}"
-                      elsif value.match?(/^\d{4}-\d{2}-\d{2}$/) || value.match?(/^\d{2}-\d{2}-\d{4}$/)
+                        "#{value}-12-31"
+                      elsif value.match?(/^\d{4}-\d{2}-\d{2}$/)
                         value
                       end
 
@@ -42,16 +41,14 @@ module SortableFieldIndexerBehavior
   # Match only thefollowing date formats:
   # - YYYY
   # - YYYY-MM-DD
-  # - MM-DD-YYYY
   def valid_ingested_date?(value)
     value.match?(/^\d{4}$/) ||
-      value.match?(/^\d{4}-\d{2}-\d{2}$/) ||
-      value.match?(/^\d{2}-\d{2}-\d{4}$/)
+      value.match?(/^\d{4}-\d{2}-\d{2}$/)
   end
 
   def index_date_input(field, solr_doc)
-    next unless (date_string = Array(solr_doc[field.solr_name]).first)
-    next if date_string.blank?
+    return unless (date_string = Array(solr_doc[field.solr_name]).first)
+    return if date_string.blank?
 
     if date_string.to_s.match?(/\A[12][0-9]{3}[-\/][0-9]{1,2}\z/)
       year, month = date_string.split(/[-\/]/).map(&:to_i)
@@ -62,5 +59,9 @@ module SortableFieldIndexerBehavior
       date = Date.parse(date_string)
     end
     solr_doc[field.solr_sort_name] = date.strftime('%FT%TZ')
+  end
+
+  def ingest_field
+    schema.get_field('dateCreatedIngest')
   end
 end
