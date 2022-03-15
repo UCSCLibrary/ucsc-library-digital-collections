@@ -21,7 +21,7 @@ module SortableFieldIndexerBehavior
 
   def index_from_ingested_value(sortable_field, solr_doc)
     solr_doc[ingest_field.solr_name].each do |value|
-      value.strip!
+      value = value.dup.strip
       unless valid_ingested_date?(value)
         # TODO: raise error instead?
         Rails.logger.warn(%("#{value}" is not a valid date value for dateCreatedIngest, skipping indexing...))
@@ -34,6 +34,7 @@ module SortableFieldIndexerBehavior
                         value
                       end
 
+      solr_doc[sortable_field.solr_sort_name] ||= []
       solr_doc[sortable_field.solr_sort_name] << Date.parse(sortable_date).strftime('%FT%TZ')
     end
   end
