@@ -49,7 +49,7 @@ module Bulkrax::HasLocalProcessing
       next if value.blank?
 
       sortable_date = if value.match?(/^\d{4}$/)
-                        "#{value}-12-31"
+                        "#{value}-12-31" # sort YYYY dates at the end of their year
                       elsif value.match?(/^\d{4}-\d{2}-\d{2}$/)
                         value
                       else
@@ -57,7 +57,7 @@ module Bulkrax::HasLocalProcessing
                       end
 
       parsed_metadata['dateCreated'] ||= []
-      parsed_metadata['dateCreated'] << Date.parse(sortable_date).strftime('%FT%TZ')
+      parsed_metadata['dateCreated'] << Date.parse(sortable_date).to_s
     end
   end
 
