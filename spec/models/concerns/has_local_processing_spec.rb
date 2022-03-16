@@ -11,9 +11,80 @@ RSpec.describe Bulkrax::HasLocalProcessing do
       entry.add_local
     end
 
+    it 'calls #process_date_created_ingest' do
+      expect(entry).to receive(:process_date_created_ingest)
+      entry.add_local
+    end
+
     it 'calls #add_controlled_fields' do
       expect(entry).to receive(:add_controlled_fields)
       entry.add_local
+    end
+
+    describe 'dateCreatedIngest processing' do
+      context 'when dateCreatedIngest is blank' do
+        before do
+          entry.parsed_metadata = { 'dateCreatedIngest' => [''], 'dateCreated' => ['test'] }
+        end
+
+        it 'does not change dateCreated' do
+          expect { entry.add_local }
+            .not_to change { entry.parsed_metadata['dateCreated'] }
+        end
+      end
+
+      context 'when dateCreatedIngest is a year (YYYY)' do
+        before do
+          entry.parsed_metadata = { 'dateCreatedIngest' => ['1984'], 'dateCreated' => ['test'] }
+        end
+
+        it 'converts the value to a full date and adds it to dateCreated' do
+          expect(entry.parsed_metadata['dateCreated']).to eq(['test'])
+
+          entry.add_local
+
+          expect(entry.parsed_metadata['dateCreated']).to eq(%w[test 1984-12-31])
+        end
+      end
+
+      context 'when dateCreatedIngest is a full date (YYYY-MM-DD)' do
+        before do
+          entry.parsed_metadata = { 'dateCreatedIngest' => ['1817-03-23'], 'dateCreated' => ['test'] }
+        end
+
+        it 'adds the full date to dateCreated' do
+          expect(entry.parsed_metadata['dateCreated']).to eq(['test'])
+
+          entry.add_local
+
+          expect(entry.parsed_metadata['dateCreated']).to eq(%w[test 1817-03-23])
+        end
+      end
+
+      context 'when dateCreatedIngest is not a valid date' do
+        before do
+          entry.parsed_metadata = { 'dateCreatedIngest' => ['this is not a date'], 'dateCreated' => ['test'] }
+        end
+
+        it 'raises a StandardError' do
+          expect { entry.add_local }
+            .to raise_error(StandardError, %("this is not a date" is not a valid date value for dateCreatedIngest))
+        end
+      end
+
+      context 'when dateCreatedIngest has multiple values' do
+        before do
+          entry.parsed_metadata = { 'dateCreatedIngest' => %w[1984 1817-03-23], 'dateCreated' => ['test'] }
+        end
+
+        it 'adds all valid dates to dateCreated' do
+          expect(entry.parsed_metadata['dateCreated']).to eq(['test'])
+
+          entry.add_local
+
+          expect(entry.parsed_metadata['dateCreated']).to eq(%w[test 1984-12-31 1817-03-23])
+        end
+      end
     end
   end
 
