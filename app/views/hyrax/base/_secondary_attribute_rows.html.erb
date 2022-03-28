@@ -1,6 +1,7 @@
 <%#= Custom file %>
 <% ScoobySnacks::METADATA_SCHEMA.secondary_display_fields.each do |field| %>
     <% next if (field.name == "dateCreated") && !presenter.attribute_to_html(:dateCreatedDisplay, label: "Date Created").blank? %>
+    <% next if field.name == 'dateCreatedIngest' %>
 
     <% if (html = presenter.attribute_to_html(field.name.to_sym, field.display_options)).present? %>
         <%= html %>

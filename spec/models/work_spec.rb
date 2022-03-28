@@ -143,5 +143,27 @@ RSpec.describe Work do
   it "can link to its associated solr document" do
     expect(work.solr_doc).to be_a(SolrDocument)
   end
-  
+
+  describe 'predicates' do
+    context '#dateCreated' do
+      it 'is BF2:creationDate' do
+        expect(work.send(:properties)['dateCreated'].predicate.to_s)
+          .to eq('http://id.loc.gov/ontologies/bibframe/creationDate')
+      end
+    end
+
+    context '#dateCreatedDisplay' do
+      it 'is MODS:dateCreated' do
+        expect(work.send(:properties)['dateCreatedDisplay'].predicate.to_s)
+          .to eq('http://www.loc.gov/mods/rdf/v1#dateCreated')
+      end
+    end
+
+    context '#dateCreatedIngest' do
+      it 'is DC:created' do
+        expect(work.send(:properties)['dateCreatedIngest'].predicate.to_s)
+          .to eq('http://purl.org/dc/terms/created')
+      end
+    end
+  end
 end

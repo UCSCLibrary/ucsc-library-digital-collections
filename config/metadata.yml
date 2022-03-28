@@ -327,7 +327,7 @@ fields:
     definition: Date of creation of the original resource.
     encoding: W3CDTF
     label: 'Date Created'
-    predicate: DC:date
+    predicate: BF2:creationDate
     data_type: date
     index_itemprop: dateCreated
     input: date
@@ -345,6 +345,11 @@ fields:
       - editor_primary 
       - search_result
     predicate: MODS:dateCreated  
+
+  dateCreatedIngest:
+    predicate: DC:created
+    definition: Date of creation of the original resource.
+    label: 'Date Created Ingest'
 
   dateOfSituation:
     definition: A date of a situation depicted in the work or associated with the subject of the work.

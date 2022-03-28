@@ -158,6 +158,7 @@ module ControlledIndexerBehavior
                                                 uri: id)
     rescue ActiveRecord::RecordNotUnique => e
       retry_count += 1
+      sleep 0.5
       retry_count <= 5 ? retry : raise(e)
     end
 
