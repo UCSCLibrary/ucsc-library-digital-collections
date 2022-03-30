@@ -149,17 +149,11 @@ module ControlledIndexerBehavior
 
   def mint_local_auth_url(subauth_name, value)
     id = value.parameterize
-    retry_count = 0
+    auth = Qa::LocalAuthority.find_or_create_by(name: subauth_name)
 
-    begin
-      auth = Qa::LocalAuthority.find_or_create_by(name: subauth_name)
-      Qa::LocalAuthorityEntry.find_or_create_by(local_authority: auth,
-                                                label: value,
-                                                uri: id)
-    rescue ActiveRecord::RecordNotUnique => e
-      retry_count += 1
-      sleep 0.5
-      retry_count <= 5 ? retry : raise(e)
+    Qa::LocalAuthorityEntry.find_or_create_by!(uri: id) do |entry|
+      entry.local_authority = auth
+      entry.label = value
     end
 
     local_id_to_url(id, subauth_name)
