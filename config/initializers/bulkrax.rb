@@ -59,6 +59,7 @@ Bulkrax.setup do |config|
       'datePublished' => { from: ['datepublished'], split: /\s*[|]\s*/, join: true },
       'description' => { from: ['description'], split: /\s*[|]\s*/, join: true },
       'descriptionAddress' => { from: ['descriptionaddress'], split: /\s*[|]\s*/, join: true },
+      'descriptionNeighborhood' => { from: ['descriptionneighborhood'], split: /\s*[|]\s*/, join: true },
       'descriptionStreet' => { from: ['descriptionstreet'], split: /\s*[|]\s*/, join: true },
       'displayRole' => { from: ['displayrole'], split: /\s*[|]\s*/, join: true },
       'donorProvenance' => { from: ['donorprovenance'], split: /\s*[|]\s*/, join: true },

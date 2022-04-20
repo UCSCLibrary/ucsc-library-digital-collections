@@ -404,7 +404,7 @@ fields:
     full_text_searchable: true
 
   descriptionNeighborhood:
-    definition: A neighborhood depicted in or associatd with the work
+    definition: A neighborhood depicted in or associated with the work
     label: Neighborhood
     predicate: local:neighborhood
     full_text_searchable: true
