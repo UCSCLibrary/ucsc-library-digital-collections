@@ -90,7 +90,7 @@ module Hyrax
 
       property :import_url, predicate: ::RDF::URI.new('http://scholarsphere.psu.edu/ns#importUrl'), multiple: false
 
-      property :descriptionNeighborhood, predicate: ::RDF::URI.new('http://scholarsphere.psu.edu/ns#descriptionNeighborhood'), multiple: false
+      property :descriptionNeighborhood, predicate: ::RDF::URI.new('http://scholarsphere.psu.edu/ns#descriptionNeighborhood')
 
       schema = ScoobySnacks::METADATA_SCHEMA
       schema.fields.values.each do |field|
