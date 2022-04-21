@@ -82,11 +82,15 @@ module Hyrax
 
       property :dateCreatedDisplay, predicate: ::RDF::Vocab::MODS.dateCreated  
 
-      property :dateCreatedIngest, predicate: ::RDF::Vocab::DC.created  
+      property :dateCreatedIngest, predicate: ::RDF::Vocab::DC.created
 
       property :label, predicate: ActiveFedora::RDF::Fcrepo::Model.downloadFilename, multiple: false
+
       property :relative_path, predicate: ::RDF::URI.new('http://scholarsphere.psu.edu/ns#relativePath'), multiple: false
+
       property :import_url, predicate: ::RDF::URI.new('http://scholarsphere.psu.edu/ns#importUrl'), multiple: false
+
+      property :descriptionNeighborhood, predicate: ::RDF::URI.new('http://scholarsphere.psu.edu/ns#descriptionNeighborhood')
 
       schema = ScoobySnacks::METADATA_SCHEMA
       schema.fields.values.each do |field|
