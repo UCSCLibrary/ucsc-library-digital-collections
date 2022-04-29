@@ -327,7 +327,7 @@ fields:
     definition: Date of creation of the original resource.
     encoding: W3CDTF
     label: 'Date Created'
-    predicate: DC:date
+    predicate: BF2:creationDate
     data_type: date
     index_itemprop: dateCreated
     input: date
@@ -345,6 +345,11 @@ fields:
       - editor_primary 
       - search_result
     predicate: MODS:dateCreated  
+
+  dateCreatedIngest:
+    predicate: DC:created
+    definition: Date of creation of the original resource.
+    label: 'Date Created Ingest'
 
   dateOfSituation:
     definition: A date of a situation depicted in the work or associated with the subject of the work.
@@ -399,7 +404,7 @@ fields:
     full_text_searchable: true
 
   descriptionNeighborhood:
-    definition: A neighborhood depicted in or associatd with the work
+    definition: A neighborhood depicted in or associated with the work
     label: Neighborhood
     predicate: local:neighborhood
     full_text_searchable: true
@@ -467,15 +472,15 @@ fields:
     label: Rights License
     predicate: DC:license
   
-  masterFilename:
-    definition: "The name of the file (usually attached to this work) that is considered the master digital file to represent the work."
+  primaryFilename:
+    definition: "The name of the file (usually attached to this work) that is considered the primary digital file to represent the work."
     predicate: EBUCore:filename
     searchable: true
     linked_to_search: false
     inheritable: false
     collection_inheritable: false
     full_text_searchable: true
-    label: Master File Name
+    label: Primary File Name
     data_type: string
     display_groups: 
       - secondary

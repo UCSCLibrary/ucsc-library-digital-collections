@@ -15,12 +15,50 @@ module Bulkrax::HasLocalProcessing
   # add any special processing here, for example to reset a metadata property
   # to add a custom property from outside of the import data
   def add_local
-    parsed_metadata['rightsStatement'] = parsed_metadata.delete('rights_statement')
-    if override_rights_statement || parsed_metadata['rightsStatement'].blank?
-      parsed_metadata['rightsStatement'] = [parser.parser_fields['rights_statement']]
-    end
-
+    remap_resource_type
+    process_date_created_ingest
     add_controlled_fields
+  end
+
+  # OVERRIDE: Don't fill in blank rights statements. Allow them to be blank.
+  # Only override rights_statement if the user chose to override them in
+  # the Importer form.
+  def add_rights_statement
+    # OVERRIDE: Remap rights_statement to rightsStatement. Possibly remove this
+    # after ScoobySnacks is removed (rightsStatement may become rights_statement then)
+    parsed_metadata['rightsStatement'] = parsed_metadata.delete('rights_statement')
+    parsed_metadata['rightsStatement'] = [parser.parser_fields['rights_statement']] if override_rights_statement
+  end
+
+  private
+
+  # TODO: Rename "resourceType_attributes" to "resource_type_attributes" after
+  # ScoobySnacks is removed -- resourceType will no longer exist
+  def remap_resource_type
+    return unless is_a?(Bulkrax::CsvFileSetEntry)
+
+    parsed_metadata.delete('resourceType_attributes')
+    parsed_metadata['resource_type'] = raw_metadata['resourcetype']&.split(/\s*[|]\s*/)
+  end
+
+  def process_date_created_ingest
+    return unless parsed_metadata['dateCreatedIngest'].present?
+
+    parsed_metadata['dateCreatedIngest'].each do |value|
+      value = value.dup.strip
+      next if value.blank?
+
+      sortable_date = if value.match?(/^\d{4}$/)
+                        "#{value}-12-31" # sort YYYY dates at the end of their year
+                      elsif value.match?(/^\d{4}-\d{2}-\d{2}$/)
+                        value
+                      else
+                        raise StandardError, %("#{value}" is not a valid date value for dateCreatedIngest)
+                      end
+
+      parsed_metadata['dateCreated'] ||= []
+      parsed_metadata['dateCreated'] << Date.parse(sortable_date).to_s
+    end
   end
 
   # Controlled fields expect an ActiveTriples instance as a value. Bulkrax only imports strings.

@@ -78,13 +78,38 @@ module Hyrax
 
       property :subjectTitle, predicate: ::RDF::Vocab::MODS.subjectTitle
 
+      property :dateCreated, predicate: ::RDF::Vocab::BF2.creationDate
+
       property :dateCreatedDisplay, predicate: ::RDF::Vocab::MODS.dateCreated  
+
+      property :dateCreatedIngest, predicate: ::RDF::Vocab::DC.created
+
+      property :label, predicate: ActiveFedora::RDF::Fcrepo::Model.downloadFilename, multiple: false
+
+      property :relative_path, predicate: ::RDF::URI.new('http://scholarsphere.psu.edu/ns#relativePath'), multiple: false
+
+      property :import_url, predicate: ::RDF::URI.new('http://scholarsphere.psu.edu/ns#importUrl'), multiple: false
+
+      property :descriptionNeighborhood, predicate: ::RDF::URI.new('http://scholarsphere.psu.edu/ns#descriptionNeighborhood')
+
+      schema = ScoobySnacks::METADATA_SCHEMA
+      schema.fields.values.each do |field|
+        # Define the property and its indexing unless it is already defined (e.g. in hyrax core)
+        unless respond_to? field.name.to_sym
+          property field.name.to_sym, {predicate: field.predicate, multiple: field.multiple?}  do |index| 
+            index.as *field.solr_descriptors
+            index.type field.solr_data_type
+          end
+        end
+      end
 
       id_blank = proc { |attributes| attributes[:id].blank? }
 
       class_attribute :controlled_properties
-      self.controlled_properties = [:based_near]
-      accepts_nested_attributes_for :based_near, reject_if: id_blank, allow_destroy: true
+      self.controlled_properties = schema.controlled_field_names.map(&:to_sym) | [:based_near]
+      self.controlled_properties.each do |controlled_property|
+        accepts_nested_attributes_for controlled_property, reject_if: id_blank, allow_destroy: true
+      end
     end
   end
 end

@@ -32,7 +32,7 @@ default:
   language:
     - language   
   identifier:
-    - masterFilename
+    - primaryFilename
     - itemCallNumber
   source:
     - member_of_collections_ssim
@@ -40,7 +40,7 @@ default:
 DC:
   parent_schema: default
   identifier:
-    - masterFilename
+    - primaryFilename
     - itemCallNumber
     - display_image_url
 DPLA:

@@ -1,7 +1,7 @@
 <%#= Custom file %>
 <% ScoobySnacks::METADATA_SCHEMA.admin_only_display_fields.each do |field| %>
     <% next if (field.name == "dateCreated") && !presenter.attribute_to_html(:dateCreatedDisplay, label: "Date Created").blank? %>
-    <% next if (field.name == "masterFilename") %>
+    <% next if (field.name == "primaryFilename") %>
     <% next if (field.name == "accessionNumber") %>
 
     <% if (html = presenter.attribute_to_html(field.name.to_sym, field.display_options)).present? %>

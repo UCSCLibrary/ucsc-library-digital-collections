@@ -15,6 +15,7 @@
 <%= presenter.attribute_to_html(:physicalDescription, render_as: :faceted, label: "Physical Description") %>
 <%= presenter.attribute_to_html(:donorProvenance, label: "Donor / Provenance" ) %>
 <%= presenter.attribute_to_html(:physicalLocation, render_as: :faceted, label: "Physical Location") %>
+<%= presenter.attribute_to_html(:descriptionNeighborhood, label: "Neighborhood") %>
 <%= presenter.attribute_to_html(:language, render_as: :faceted) %>
 <%= presenter.attribute_to_html(:identifier, render_as: :linked, search_field: 'identifier_tesim') %>
 <%= presenter.attribute_to_html(:keyword, render_as: :faceted) %>

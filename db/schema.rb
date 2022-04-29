@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_03_195233) do
+ActiveRecord::Schema.define(version: 2022_03_30_165510) do
 
   create_table "bookmarks", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.integer "user_id", null: false
@@ -100,7 +100,7 @@ ActiveRecord::Schema.define(version: 2021_12_03_195233) do
     t.datetime "updated_at", null: false
     t.datetime "last_error_at"
     t.datetime "last_succeeded_at"
-    t.index ["importerexporter_id"], name: "index_bulkrax_entries_on_importerexporter_id"
+    t.integer "import_attempts", default: 0
   end
 
   create_table "bulkrax_exporter_runs", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
@@ -149,6 +149,12 @@ ActiveRecord::Schema.define(version: 2021_12_03_195233) do
     t.integer "processed_relationships", default: 0
     t.integer "failed_relationships", default: 0
     t.text "invalid_records", limit: 16777215
+    t.integer "processed_file_sets", default: 0
+    t.integer "failed_file_sets", default: 0
+    t.integer "total_file_set_entries", default: 0
+    t.integer "processed_works", default: 0
+    t.integer "failed_works", default: 0
+    t.text "parents"
     t.index ["importer_id"], name: "index_bulkrax_importer_runs_on_importer_id"
   end
 
@@ -167,6 +173,16 @@ ActiveRecord::Schema.define(version: 2021_12_03_195233) do
     t.datetime "last_error_at"
     t.datetime "last_succeeded_at"
     t.index ["user_id"], name: "index_bulkrax_importers_on_user_id"
+  end
+
+  create_table "bulkrax_pending_relationships", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+    t.bigint "bulkrax_importer_run_id", null: false
+    t.string "parent_id", null: false
+    t.string "child_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "order", default: 0
+    t.index ["bulkrax_importer_run_id"], name: "index_bulkrax_pending_relationships_on_bulkrax_importer_run_id"
   end
 
   create_table "bulkrax_statuses", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
@@ -788,6 +804,7 @@ ActiveRecord::Schema.define(version: 2021_12_03_195233) do
   add_foreign_key "bulk_meta_rows", "bulk_meta_ingests", column: "ingest_id"
   add_foreign_key "bulkrax_exporter_runs", "bulkrax_exporters", column: "exporter_id"
   add_foreign_key "bulkrax_importer_runs", "bulkrax_importers", column: "importer_id"
+  add_foreign_key "bulkrax_pending_relationships", "bulkrax_importer_runs"
   add_foreign_key "collection_type_participants", "hyrax_collection_types"
   add_foreign_key "curation_concerns_operations", "users"
   add_foreign_key "mailboxer_conversation_opt_outs", "mailboxer_conversations", column: "conversation_id", name: "mb_opt_outs_on_conversations_id"

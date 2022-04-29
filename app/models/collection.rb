@@ -5,15 +5,9 @@ class Collection < ActiveFedora::Base
   # You can replace these metadata if they're not suitable
   include ::Bulkrax::Metadata
 
-  include ::ScoobySnacks::WorkModelBehavior
-
   include Hyrax::Serializers
   include GlobalID::Identification
   include Hyrax::WithEvents
-
-  # Scoobisnacks brings these properties in to the collection, but they are not used
-  # need an empty writer so that adding a work to the collection does not throw an exception
-  attr_writer :label, :relative_path, :import_url
 
   self.indexer = ::CollectionIndexer
 
