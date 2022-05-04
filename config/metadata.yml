@@ -360,7 +360,7 @@ fields:
 
   dateOfSituationDisplay:
     definition: Textual representation of a date of a situation depicted in the collection or associated with the subject of the collection. Fill in this field if the date needs to show to to public view in a format other than MM-DD-YYYY. This field will be used for the public view, and the field above will be used in sorting and indexing this collection. (temporary fix)
-    label: 'Date of Situation for Public Display'
+    label: 'Date of Situation'
     predicate: local:dateOfSituationDisplay
 
   dateOfSituationIngest:
