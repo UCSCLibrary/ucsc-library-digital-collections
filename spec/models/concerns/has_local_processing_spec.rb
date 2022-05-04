@@ -86,6 +86,72 @@ RSpec.describe Bulkrax::HasLocalProcessing do
         end
       end
     end
+
+    describe 'dateOfSituationIngest processing' do
+      context 'when dateOfSituationIngest is blank' do
+        before do
+          entry.parsed_metadata = { 'dateOfSituationIngest' => [''], 'dateOfSituation' => ['test'] }
+        end
+
+        it 'does not change dateOfSituation' do
+          expect { entry.add_local }
+            .not_to change { entry.parsed_metadata['dateOfSituation'] }
+        end
+      end
+
+      context 'when dateOfSituationIngest is a year (YYYY)' do
+        before do
+          entry.parsed_metadata = { 'dateOfSituationIngest' => ['1984'], 'dateOfSituation' => ['test'] }
+        end
+
+        it 'converts the value to a full date and adds it to dateOfSituation' do
+          expect(entry.parsed_metadata['dateOfSituation']).to eq(['test'])
+
+          entry.add_local
+
+          expect(entry.parsed_metadata['dateOfSituation']).to eq(%w[test 1984-12-31])
+        end
+      end
+
+      context 'when dateOfSituationIngest is a full date (YYYY-MM-DD)' do
+        before do
+          entry.parsed_metadata = { 'dateOfSituationIngest' => ['1817-03-23'], 'dateOfSituation' => ['test'] }
+        end
+
+        it 'adds the full date to dateOfSituation' do
+          expect(entry.parsed_metadata['dateOfSituation']).to eq(['test'])
+
+          entry.add_local
+
+          expect(entry.parsed_metadata['dateOfSituation']).to eq(%w[test 1817-03-23])
+        end
+      end
+
+      context 'when dateOfSituationIngest is not a valid date' do
+        before do
+          entry.parsed_metadata = { 'dateOfSituationIngest' => ['this is not a date'], 'dateOfSituation' => ['test'] }
+        end
+
+        it 'raises a StandardError' do
+          expect { entry.add_local }
+            .to raise_error(StandardError, %("this is not a date" is not a valid date value for dateOfSituationIngest))
+        end
+      end
+
+      context 'when dateOfSituationIngest has multiple values' do
+        before do
+          entry.parsed_metadata = { 'dateOfSituationIngest' => %w[1984 1817-03-23], 'dateOfSituation' => ['test'] }
+        end
+
+        it 'adds all valid dates to dateOfSituation' do
+          expect(entry.parsed_metadata['dateOfSituation']).to eq(['test'])
+
+          entry.add_local
+
+          expect(entry.parsed_metadata['dateOfSituation']).to eq(%w[test 1984-12-31 1817-03-23])
+        end
+      end
+    end
   end
 
   describe '#add_rights_statement' do
