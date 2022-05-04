@@ -10,13 +10,17 @@ module Bulkrax::HasLocalProcessing
     ::Qa::Authorities::Loc => 'loc',
     ::Qa::Authorities::Getty => 'getty'
   }.freeze
+  DATE_INGEST_FIELDS = %w[
+    dateCreatedIngest
+    dateOfSituationIngest
+  ].freeze
 
   # This method is called during build_metadata
   # add any special processing here, for example to reset a metadata property
   # to add a custom property from outside of the import data
   def add_local
     remap_resource_type
-    process_date_created_ingest
+    process_date_ingest_fields
     add_controlled_fields
   end
 
@@ -41,23 +45,26 @@ module Bulkrax::HasLocalProcessing
     parsed_metadata['resource_type'] = raw_metadata['resourcetype']&.split(/\s*[|]\s*/)
   end
 
-  def process_date_created_ingest
-    return unless parsed_metadata['dateCreatedIngest'].present?
+  def process_date_ingest_fields
+    DATE_INGEST_FIELDS.each do |ingest_field|
+      next unless parsed_metadata[ingest_field].present?
 
-    parsed_metadata['dateCreatedIngest'].each do |value|
-      value = value.dup.strip
-      next if value.blank?
+      sortable_field = ingest_field.sub('Ingest', '')
+      parsed_metadata[ingest_field].each do |value|
+        value = value.dup.strip
+        next if value.blank?
 
-      sortable_date = if value.match?(/^\d{4}$/)
-                        "#{value}-12-31" # sort YYYY dates at the end of their year
-                      elsif value.match?(/^\d{4}-\d{2}-\d{2}$/)
-                        value
-                      else
-                        raise StandardError, %("#{value}" is not a valid date value for dateCreatedIngest)
-                      end
+        sortable_date = if value.match?(/^\d{4}$/)
+                          "#{value}-12-31" # sort YYYY dates at the end of their year
+                        elsif value.match?(/^\d{4}-\d{2}-\d{2}$/)
+                          value
+                        else
+                          raise StandardError, %("#{value}" is not a valid date value for #{ingest_field})
+                        end
 
-      parsed_metadata['dateCreated'] ||= []
-      parsed_metadata['dateCreated'] << Date.parse(sortable_date).to_s
+        parsed_metadata[sortable_field] ||= []
+        parsed_metadata[sortable_field] << Date.parse(sortable_date).to_s
+      end
     end
   end
 

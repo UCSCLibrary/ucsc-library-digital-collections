@@ -11,8 +11,8 @@ RSpec.describe Bulkrax::HasLocalProcessing do
       entry.add_local
     end
 
-    it 'calls #process_date_created_ingest' do
-      expect(entry).to receive(:process_date_created_ingest)
+    it 'calls #process_date_ingest_fields' do
+      expect(entry).to receive(:process_date_ingest_fields)
       entry.add_local
     end
 

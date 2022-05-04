@@ -56,6 +56,8 @@ Bulkrax.setup do |config|
       'dateCreatedIngest' => { from: ['datecreatedingest'], split: /\s*[|]\s*/, join: true },
       'dateDigitized' => { from: ['datedigitized'], split: /\s*[|]\s*/, join: true },
       'dateOfSituation' => { from: ['dateofsituation'], split: /\s*[|]\s*/, join: true },
+      'dateOfSituationDisplay' => { from: ['dateofsituationdisplay'], split: /\s*[|]\s*/, join: true },
+      'dateOfSituationIngest' => { from: ['dateofsituationingest'], split: /\s*[|]\s*/, join: true },
       'datePublished' => { from: ['datepublished'], split: /\s*[|]\s*/, join: true },
       'description' => { from: ['description'], split: /\s*[|]\s*/, join: true },
       'descriptionAddress' => { from: ['descriptionaddress'], split: /\s*[|]\s*/, join: true },
