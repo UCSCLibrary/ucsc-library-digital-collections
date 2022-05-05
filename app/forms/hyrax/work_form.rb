@@ -6,16 +6,16 @@ module Hyrax
     
     include ScoobySnacks::WorkFormBehavior
 
-    # OVERRIDE: Do not handle dateCreatedIngest in form; it is for ingest purposes only
-    self.terms -= [:dateCreatedIngest]
+    # OVERRIDE: Do not handle ingest fields in form; they are for ingest purposes only
+    self.terms -= %i[dateCreatedIngest dateOfSituationIngest]
 
     self.terms.each do |term|
       delegate term, to: :model
     end
 
-    # OVERRIDE: Do not display dateCreatedIngest input in form; it is for ingest purposes only
+    # OVERRIDE: Do not display ingest inputs in form; they are for ingest purposes only
     def secondary_terms
-      super - [:dateCreatedIngest]
+      super - %i[dateCreatedIngest dateOfSituationIngest]
     end
 
 # OVERRIDE FILE from ScoobySnacks to fix unpermitted_params error when saving a new work / Sara G. & Summer
