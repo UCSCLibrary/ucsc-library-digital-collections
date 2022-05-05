@@ -24,9 +24,6 @@ module Bulkrax::HasLocalProcessing
   # Only override rights_statement if the user chose to override them in
   # the Importer form.
   def add_rights_statement
-    # OVERRIDE: Remap rights_statement to rightsStatement. Possibly remove this
-    # after ScoobySnacks is removed (rightsStatement may become rights_statement then)
-    parsed_metadata['rightsStatement'] = parsed_metadata.delete('rights_statement')
     parsed_metadata['rightsStatement'] = [parser.parser_fields['rights_statement']] if override_rights_statement
   end
 
