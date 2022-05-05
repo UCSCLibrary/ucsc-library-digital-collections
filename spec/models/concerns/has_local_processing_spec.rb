@@ -93,16 +93,6 @@ RSpec.describe Bulkrax::HasLocalProcessing do
       entry.parsed_metadata = { 'rights_statement' => 'http://rightsstatements.org/vocab/InC/1.0/' }
     end
 
-    it 'remaps rights_statement to rightsStatement' do
-      expect(entry.parsed_metadata['rights_statement']).to eq('http://rightsstatements.org/vocab/InC/1.0/')
-      expect(entry.parsed_metadata['rightsStatement']).to be_nil
-
-      entry.add_rights_statement
-
-      expect(entry.parsed_metadata['rights_statement']).to be_nil
-      expect(entry.parsed_metadata['rightsStatement']).to eq('http://rightsstatements.org/vocab/InC/1.0/')
-    end
-
     context 'when a record is imported without a rights statement' do
       before do
         entry.parsed_metadata = { 'title' => 'No Rights Statement' }
