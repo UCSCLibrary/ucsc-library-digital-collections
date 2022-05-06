@@ -25,7 +25,7 @@ module Hyrax
       self.terms = %i[
         title description representative_id thumbnail_id identifier related_url visibility collection_type_gid
         collectionCallNumber extent donorProvenance publisher publisherHomepage rightsStatement rightsHolder
-        rightsStatus accessRightssubjectName subjectPlace subjectTopic subjectTitle dateCreated dateCreatedDisplay
+        rightsStatus accessRights subjectName subjectPlace subjectTopic subjectTitle dateCreated dateCreatedDisplay
         dateOfSituation dateOfSituationDisplay resource_type harmfulLanguageStatement
       ]
 
