@@ -36,7 +36,6 @@ Bulkrax::ObjectFactory.class_eval do
       visibility
       work_members_attributes
       admin_set_id
-      member_of_collections_attributes
     ]
     # OVERRIDE: permit controlled field attribute hashes
     ::ScoobySnacks::METADATA_SCHEMA.controlled_field_names.each do |field_name|
