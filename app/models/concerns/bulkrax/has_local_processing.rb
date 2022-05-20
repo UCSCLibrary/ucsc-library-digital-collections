@@ -102,7 +102,11 @@ module Bulkrax::HasLocalProcessing
       next unless subauth_name.present?
 
       subauthority = auth_source.subauthority_for(subauth_name)
-      found_id = subauthority.search(value)&.first&.dig('id')
+      results = subauthority.search(value)
+
+      results.each do |result|
+        found_id = result['id'] if result['label'].parameterize == value.parameterize
+      end
     end
 
     found_id
