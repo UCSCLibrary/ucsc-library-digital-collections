@@ -1,5 +1,5 @@
 GIT
-  remote: git://github.com/UCSCLibrary/BulkOps.git
+  remote: https://github.com/UCSCLibrary/BulkOps.git
   revision: 5460344239669b0e50dcd2adcb44a9b259d13244
   branch: master
   specs:
@@ -7,30 +7,30 @@ GIT
       rails (~> 5)
 
 GIT
-  remote: git://github.com/UCSCLibrary/ScoobySnacks.git
-  revision: c8574d04837aeb2d298b4cd67b226418ead98866
+  remote: https://github.com/UCSCLibrary/ScoobySnacks.git
+  revision: 0f5c55592c09684bf79f17ad4db9e59c64dbac1a
   specs:
     scooby_snacks (0.3.15)
 
 GIT
-  remote: git://github.com/seuros/capistrano-sidekiq.git
-  revision: 493ade199ab357ef619f8c7bb4a2bdd8bf653598
+  remote: https://github.com/seuros/capistrano-sidekiq.git
+  revision: a465898d1b527e719486840103720cce0e9f6f5f
   specs:
-    capistrano-sidekiq (2.0.0.beta5)
+    capistrano-sidekiq (2.3.0)
       capistrano (>= 3.9.0)
       capistrano-bundler
       sidekiq (>= 6.0)
 
 GIT
-  remote: git://github.com/sinatra/sinatra.git
-  revision: 0aa8d507a4b9140c883e4110e6023e90077bd1d4
+  remote: https://github.com/sinatra/sinatra.git
+  revision: 029e27dfb63dd0084a56660030a52271db23a1fe
   specs:
-    rack-protection (2.1.0)
+    rack-protection (3.0.0)
       rack
-    sinatra (2.1.0)
+    sinatra (3.0.0)
       mustermann (~> 1.0)
       rack (~> 2.2)
-      rack-protection (= 2.1.0)
+      rack-protection (= 3.0.0)
       tilt (~> 2.0)
 
 GEM
@@ -789,7 +789,7 @@ GEM
       multipart-post
       oauth2
     ruby-progressbar (1.10.1)
-    ruby2_keywords (0.0.2)
+    ruby2_keywords (0.0.5)
     rubyzip (2.3.0)
     samvera-nesting_indexer (2.0.0)
       dry-equalizer
