@@ -26,8 +26,7 @@ class FileSet < ActiveFedora::Base
     if self.image?
       Rails.logger.debug "event: coming #{self.mime_type}"
       Hydra::Derivatives::ImageDerivatives.create(filename, outputs: image_outputs)
-      jp2k_able = ['image/tiff', 'image/tif', 'image/jpeg', 'image/jpg'].include?(self.mime_type)
-      Hydra::Derivatives::Jpeg2kImageDerivatives.create(filename, outputs: jpeg2k_image_outputs) if jp2k_able 
+      Hydra::Derivatives::Jpeg2kImageDerivatives.create(filename, outputs: jpeg2k_image_outputs) if self.mime_type == 'image/tiff'
       image_server_cache_derivatives if ["production","staging","sandbox"].include?(Rails.env.to_s)
     else
       # This is the behavior I am overwriting

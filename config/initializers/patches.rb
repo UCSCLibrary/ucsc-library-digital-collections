@@ -4,15 +4,12 @@ class Hydra::Derivatives::Processors::Jpeg2kImage
       image = MiniMagick::Image.open(source_path)
       quality = image['%[channels]'] == 'gray' ? 'gray' : 'color'
       long_dim = self.class.long_dim(image)
+      file_path = self.class.tmp_file('.tif')
       to_srgb = directives.fetch(:to_srgb, true)
       preprocess(image, resize: directives[:resize], to_srgb: to_srgb, src_quality: quality)
       if image.mime_type.to_s.include?('tif')
-        file_path = self.class.tmp_file('.tif')
         image.format 'tif'
         image.compress 'none'
-      elsif image.mime_type.to_s.include?('jpeg') || image.mime_type.to_s.include?('jpg')
-        file_path = self.class.tmp_file('.jp2')
-        image.format 'jp2'
       end
       image.write file_path
       recipe = self.class.kdu_compress_recipe(directives, quality, long_dim)
