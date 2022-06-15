@@ -152,6 +152,49 @@ RSpec.describe Bulkrax::HasLocalProcessing do
         end
       end
     end
+
+    describe '#add_controlled_fields' do
+      context 'when a non-URI value is provided' do
+        before do
+          entry.raw_metadata = { creator: 'Jane Doe' }
+        end
+
+        it 'uses the value to mint a local authority' do
+          entry.add_local
+
+          expect(entry.parsed_metadata.dig('creator_attributes', 0, 'id'))
+            .to include('/authorities/show/local/agents/jane-doe')
+        end
+      end
+
+      describe 'sanitizing user-provided URI values' do
+        context 'when value includes "https"' do
+          before do
+            entry.raw_metadata = { subjectname: 'https://www.example.com/abc123' }
+          end
+
+          it 'replaces it with "http"' do
+            entry.add_local
+
+            expect(entry.parsed_metadata.dig('subjectName_attributes', 0, 'id'))
+              .to eq('http://www.example.com/abc123')
+          end
+        end
+
+        context 'when value includes a trailing slash' do
+          before do
+            entry.raw_metadata = { genre: 'http://www.example.com/abc123/' }
+          end
+
+          it 'removes it' do
+            entry.add_local
+
+            expect(entry.parsed_metadata.dig('genre_attributes', 0, 'id'))
+              .to eq('http://www.example.com/abc123')
+          end
+        end
+      end
+    end
   end
 
   describe '#add_rights_statement' do
