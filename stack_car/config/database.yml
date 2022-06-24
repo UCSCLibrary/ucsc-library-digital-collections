@@ -1,0 +1,25 @@
+# Hi - please dont edit this file directly, instead make changes in your .env file
+
+login: &login
+  adapter: <%= ENV['DATABASE_ADAPTER'] %>
+  host: <%= ENV['DATABASE_HOST'] %>
+  username: <%= ENV['DATABASE_USER'] %>
+  password: <%= ENV['DATABASE_PASSWORD'] %>
+  database: <%= ENV['DATABASE_NAME'] %>
+  pool: 5
+  timeout: 5000
+
+
+development:
+  <<: *login
+
+test:
+  <<: *login
+  database: <%= ENV['TEST_DB'] %>
+
+staging:
+  <<: *login
+
+
+production:
+  <<: *login

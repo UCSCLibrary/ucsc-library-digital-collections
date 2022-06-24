@@ -1,12 +1,11 @@
-# This config file points to a solr server for each environment
 development:
-  url: http://index:8983/solr/hycruz
+  url: <%= ENV['SOLR_URL'] || "http://index:8983/solr/hycruz" %>
 test:
-  url: http://index:8983/solr/hycruz-test
+  url: <%= ENV['SOLR_URL'] || "http://index:8983/solr/hycruz-test" %>
 sandbox:
-  url: http://digitalcollections-index.library.ucsc.edu:8983/solr/hycruz-staging
+  url: <%= ENV['SOLR_URL'] || "http://digitalcollections-index.library.ucsc.edu:8983/solr/hycruz-staging" %>
 staging:
-  url: http://digitalcollections-index.library.ucsc.edu:8983/solr/hycruz
+  url: <%= ENV['SOLR_URL'] || "http://digitalcollections-index.library.ucsc.edu:8983/solr/hycruz" %>
 production:
-  url: http://digitalcollections-index.library.ucsc.edu:8983/solr/hycruz
+  url: <%= ENV['SOLR_URL'] || "http://digitalcollections-index.library.ucsc.edu:8983/solr/hycruz" %>
 
