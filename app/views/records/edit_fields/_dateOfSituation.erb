@@ -1,0 +1,11 @@
+<% 
+  field = ScoobySnacks::METADATA_SCHEMA.get_field('dateOfSituation')
+  input_options = {
+    label: field.label,
+    required: f.object.required?(field.name),
+    as: :datepicker,
+    hint: field.definition,
+    input_html: { class:'form-control' }
+  }
+%>
+<%= f.input key, input_options %>

@@ -22,8 +22,12 @@ module Hyrax
 
       delegate :blacklight_config, to: Hyrax::CollectionsController
 
-      self.terms = [:title, :description, :representative_id, :thumbnail_id, :identifier, 
-      :related_url, :visibility, :collection_type_gid, :collectionCallNumber, :extent, :donorProvenance, :publisher, :publisherHomepage, :rightsStatement, :rightsHolder, :rightsStatus, :accessRights,:subjectName, :subjectPlace, :subjectTopic, :subjectTitle, :dateCreated, :dateCreatedDisplay, :resource_type, :harmfulLanguageStatement]
+      self.terms = %i[
+        title description representative_id thumbnail_id identifier related_url visibility collection_type_gid
+        collectionCallNumber extent donorProvenance publisher publisherHomepage rightsStatement rightsHolder
+        rightsStatus accessRights subjectName subjectPlace subjectTopic subjectTitle dateCreated dateCreatedDisplay
+        dateOfSituation dateOfSituationDisplay resource_type harmfulLanguageStatement
+      ]
 
       self.required_fields = [:title]
 
@@ -55,12 +59,16 @@ module Hyrax
 
       # Terms that appear above the accordion
       def primary_terms
-        [:title, :description]
+        %i[title description]
       end
 
       # Terms that appear within the accordion
       def secondary_terms
-        [:related_url, :collection_type_gid, :collectionCallNumber, :extent, :donorProvenance, :publisher, :publisherHomepage, :rightsStatement, :rightsHolder, :rightsStatus, :accessRights, :subjectName, :subjectPlace, :subjectTopic, :subjectTitle, :dateCreated, :dateCreatedDisplay, :resource_type, :harmfulLanguageStatement]
+        %i[
+          related_url collection_type_gid collectionCallNumber extent donorProvenance publisher publisherHomepage
+          rightsStatement rightsHolder rightsStatus accessRights subjectName subjectPlace subjectTopic subjectTitle
+          dateCreated dateCreatedDisplay dateOfSituation dateOfSituationDisplay resource_type harmfulLanguageStatement
+        ]
       end
 
       def banner_info

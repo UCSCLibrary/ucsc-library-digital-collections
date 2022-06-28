@@ -84,6 +84,10 @@ module Hyrax
 
       property :dateCreatedIngest, predicate: ::RDF::Vocab::DC.created
 
+      property :dateOfSituationDisplay, predicate: ::RDF::URI('http://digitalcollections.library.ucsc.edu/ontology/dateOfSituationDisplay')
+
+      property :dateOfSituationIngest, predicate: ::RDF::URI('http://digitalcollections.library.ucsc.edu/ontology/dateOfSituationIngest')
+
       property :label, predicate: ActiveFedora::RDF::Fcrepo::Model.downloadFilename, multiple: false
 
       property :relative_path, predicate: ::RDF::URI.new('http://scholarsphere.psu.edu/ns#relativePath'), multiple: false

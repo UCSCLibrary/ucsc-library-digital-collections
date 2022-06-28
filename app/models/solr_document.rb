@@ -16,7 +16,7 @@ class SolrDocument
   attribute :collectionCallNumber, Solr::Array, solr_name('collectionCallNumber')
   attribute :extent, Solr::Array, solr_name('extent')
   attribute :donorProvenance, Solr::Array, solr_name('donorProvenance')
-  attribute :publisherHomepage, Solr::Array, solr_name('publisher')
+  attribute :publisherHomepage, Solr::Array, solr_name('publisherHomepage')
   attribute :rightsHolder, Solr::Array, solr_name('rightsHolder')
   attribute :rightsStatus, Solr::Array, solr_name('rightsStatus')
   attribute :subjectName, Solr::Array, solr_name('subjectName')

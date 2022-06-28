@@ -10,13 +10,17 @@ module Bulkrax::HasLocalProcessing
     ::Qa::Authorities::Loc => 'loc',
     ::Qa::Authorities::Getty => 'getty'
   }.freeze
+  DATE_INGEST_FIELDS = %w[
+    dateCreatedIngest
+    dateOfSituationIngest
+  ].freeze
 
   # This method is called during build_metadata
   # add any special processing here, for example to reset a metadata property
   # to add a custom property from outside of the import data
   def add_local
     remap_resource_type
-    process_date_created_ingest
+    process_date_ingest_fields
     add_controlled_fields
   end
 
@@ -24,9 +28,6 @@ module Bulkrax::HasLocalProcessing
   # Only override rights_statement if the user chose to override them in
   # the Importer form.
   def add_rights_statement
-    # OVERRIDE: Remap rights_statement to rightsStatement. Possibly remove this
-    # after ScoobySnacks is removed (rightsStatement may become rights_statement then)
-    parsed_metadata['rightsStatement'] = parsed_metadata.delete('rights_statement')
     parsed_metadata['rightsStatement'] = [parser.parser_fields['rights_statement']] if override_rights_statement
   end
 
@@ -41,23 +42,26 @@ module Bulkrax::HasLocalProcessing
     parsed_metadata['resource_type'] = raw_metadata['resourcetype']&.split(/\s*[|]\s*/)
   end
 
-  def process_date_created_ingest
-    return unless parsed_metadata['dateCreatedIngest'].present?
+  def process_date_ingest_fields
+    DATE_INGEST_FIELDS.each do |ingest_field|
+      next unless parsed_metadata[ingest_field].present?
 
-    parsed_metadata['dateCreatedIngest'].each do |value|
-      value = value.dup.strip
-      next if value.blank?
+      sortable_field = ingest_field.sub('Ingest', '')
+      parsed_metadata[ingest_field].each do |value|
+        value = value.dup.strip
+        next if value.blank?
 
-      sortable_date = if value.match?(/^\d{4}$/)
-                        "#{value}-12-31" # sort YYYY dates at the end of their year
-                      elsif value.match?(/^\d{4}-\d{2}-\d{2}$/)
-                        value
-                      else
-                        raise StandardError, %("#{value}" is not a valid date value for dateCreatedIngest)
-                      end
+        sortable_date = if value.match?(/^\d{4}$/)
+                          "#{value}-12-31" # sort YYYY dates at the end of their year
+                        elsif value.match?(/^\d{4}-\d{2}-\d{2}$/)
+                          value
+                        else
+                          raise StandardError, %("#{value}" is not a valid date value for #{ingest_field})
+                        end
 
-      parsed_metadata['dateCreated'] ||= []
-      parsed_metadata['dateCreated'] << Date.parse(sortable_date).to_s
+        parsed_metadata[sortable_field] ||= []
+        parsed_metadata[sortable_field] << Date.parse(sortable_date).to_s
+      end
     end
   end
 
@@ -65,26 +69,24 @@ module Bulkrax::HasLocalProcessing
   # Use the imported string values to lookup or create valid ActiveTriples URIs and add them
   # to the Entry's parsed_metadata in the format that the actor stack expects.
   def add_controlled_fields
-    metadata_schema = ::ScoobySnacks::METADATA_SCHEMA
-
     metadata_schema.controlled_field_names.each do |field_name|
       field = metadata_schema.get_field(field_name)
-      parsed_metadata.delete(field_name) # remove non-standardized values
-      raw_metadata_keys_for_field = raw_metadata.select { |k, _v| k.match?(/#{field_name.downcase}(_\d+)?/) }&.keys
-      next if raw_metadata_keys_for_field.blank?
+      raw_metadata_for_field = raw_metadata.select { |k, _v| k.match?(/#{field_name.downcase}(_\d+)?/) }
+      next if raw_metadata_for_field.blank?
 
-      raw_metadata_keys_for_field.each do |k|
-        next if raw_metadata[k].blank?
+      all_values = raw_metadata_for_field.values.compact&.map { |value| value.split(/\s*[|]\s*/) }&.flatten
+      parsed_metadata[field_name] = []
+      next if all_values.blank?
 
-        raw_metadata[k].split(/\s*[|]\s*/).uniq.each_with_index do |value, i|
-          auth_id = value if value.match?(::URI::DEFAULT_PARSER.make_regexp) # assume raw, user-provided URI is a valid authority
-          auth_id ||= search_authorities_for_id(field, value)
-          auth_id ||= create_local_authority_id(field, value)
-          next unless auth_id.present?
+      parsed_metadata.delete(field_name) # replacing field_name with field_name_attributes
+      all_values.each_with_index do |value, i|
+        auth_id = sanitize_controlled_field_uri(value) # assume user-provided URI references a valid authority
+        auth_id ||= search_authorities_for_id(field, value)
+        auth_id ||= create_local_authority_id(field, value)
+        next unless auth_id.present?
 
-          parsed_metadata["#{field_name}_attributes"] ||= {}
-          parsed_metadata["#{field_name}_attributes"][i] = { 'id' => auth_id }
-        end
+        parsed_metadata["#{field_name}_attributes"] ||= {}
+        parsed_metadata["#{field_name}_attributes"][i] = { 'id' => auth_id }
       end
     end
   end
@@ -98,7 +100,11 @@ module Bulkrax::HasLocalProcessing
       next unless subauth_name.present?
 
       subauthority = auth_source.subauthority_for(subauth_name)
-      found_id = subauthority.search(value)&.first&.dig('id')
+      results = subauthority.search(value)
+
+      results.each do |result|
+        found_id = result['id'] if result['label'].parameterize == value.parameterize
+      end
     end
 
     found_id
@@ -108,5 +114,18 @@ module Bulkrax::HasLocalProcessing
   def create_local_authority_id(field, value)
     local_subauth_name = get_subauthority_for(field: field, authority_name: 'local')
     mint_local_auth_url(local_subauth_name, value) if local_subauth_name.present?
+  end
+
+  def sanitize_controlled_field_uri(value)
+    return unless value.match?(::URI::DEFAULT_PARSER.make_regexp)
+
+    valid_value = value.strip.chomp.sub('https', 'http')
+    valid_value.chop! if valid_value.match?(%r{/$}) # remove trailing forward slash if one is present
+
+    valid_value
+  end
+
+  def metadata_schema
+    ::ScoobySnacks::METADATA_SCHEMA
   end
 end

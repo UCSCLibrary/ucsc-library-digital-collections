@@ -355,8 +355,18 @@ fields:
     definition: A date of a situation depicted in the work or associated with the subject of the work.
     label: 'Date of Situation'
     predicate: local:dateOfSituation
+    input: date
 #    data_type: date
-#    input: date
+
+  dateOfSituationDisplay:
+    definition: Textual representation of a date of a situation depicted in the collection or associated with the subject of the collection. Fill in this field if the date needs to show to to public view in a format other than MM-DD-YYYY. This field will be used for the public view, and the field above will be used in sorting and indexing this collection. (temporary fix)
+    label: 'Date of Situation'
+    predicate: local:dateOfSituationDisplay
+
+  dateOfSituationIngest:
+    definition: A date of a situation depicted in the work or associated with the subject of the work.
+    label: 'Date of Situation Ingest'
+    predicate: local:dateOfSituationIngest
 
   dateDigitized:
     definition: Date on which the resource was changed, i.e., digitized.
@@ -365,8 +375,6 @@ fields:
     index_itemprop: dateModified
     predicate: DC:modified
 #    index_helper_method: human_readable_date
-    input: date
-    data_type: date
   
   datePublished:
     definition: Date of formal issuance (e.g., publication) of the resource.
@@ -375,8 +383,6 @@ fields:
     index_itemprop: datePublished
     predicate: DC:issued
 #    index_helper_method: human_readable_date
-    input: date
-    data_type: date
   
   description:
     definition: An account of the resource.

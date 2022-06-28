@@ -76,6 +76,7 @@ en:
         subjectTitle: "Subject (Title)"
         dateCreated: "Date Created"
         dateCreatedDisplay: "Date Created for Public Display"
+        dateOfSituationDisplay: 'Date of Situation for Public Display'
         resourceType: "Resource Type"
         harmfulLanguageStatement: "Harmful Language Statement"
       hints:
@@ -98,6 +99,7 @@ en:
         subjectTitle: "The topic of the collection."
         dateCreated: "The date on which the collection was generated. This needs to be formatted with YYYY/MM/DD"
         dateCreatedDisplay: "Textual representation of the creation date. Fill in this field if the creation date needs to show to to public view in a format other than MM-DD-YYYY. This field will be used for the public view, and the field above will be used in sorting and indexing this collection. (temporary fix)"
+        dateOfSituationDisplay: 'Textual representation of a date of a situation depicted in the collection or associated with the subject of the collection. Fill in this field if the date needs to show to to public view in a format other than MM-DD-YYYY. This field will be used for the public view, and the field above will be used in sorting and indexing this collection. (temporary fix)'
         resourceType: 'General nature or type of the resource (e.g., image, text, etc.). Does not capture aboutness.'
         harmfulLanguageStatement: "A disclaimer notifying the reader about potentially harmful or offensive language in this collection."
       index:
