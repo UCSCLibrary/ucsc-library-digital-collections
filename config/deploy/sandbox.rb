@@ -10,7 +10,7 @@ server 'digitalcollections-ingests.library.ucsc.edu', user: 'hyrax', roles: %w{i
 # server 'example.com', user: 'deploy', roles: %w{app web}, other_property: :other_value
 # server 'db.example.com', user: 'deploy', roles: %w{db}
 
-
+set :deploy_to, '/srv/ucsc_sufia_sandbox'
 
 # role-based syntax
 # ==================
