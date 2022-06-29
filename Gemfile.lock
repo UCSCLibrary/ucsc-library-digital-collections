@@ -25,7 +25,7 @@ GIT
   remote: https://github.com/seuros/capistrano-sidekiq.git
   revision: 493ade199ab357ef619f8c7bb4a2bdd8bf653598
   specs:
-    capistrano-sidekiq (2.0.0.beta5)
+    capistrano-sidekiq (2.3.0)
       capistrano (>= 3.9.0)
       capistrano-bundler
       sidekiq (>= 6.0)
@@ -34,12 +34,12 @@ GIT
   remote: https://github.com/sinatra/sinatra.git
   revision: 0aa8d507a4b9140c883e4110e6023e90077bd1d4
   specs:
-    rack-protection (2.1.0)
+    rack-protection (3.0.0)
       rack
-    sinatra (2.1.0)
+    sinatra (3.0.0)
       mustermann (~> 1.0)
       rack (~> 2.2)
-      rack-protection (= 2.1.0)
+      rack-protection (= 3.0.0)
       tilt (~> 2.0)
 
 GEM

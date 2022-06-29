@@ -1,0 +1,22 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+            "name": "Launch Chrome",
+            "request": "launch",
+            "type": "pwa-chrome",
+            "url": "http://localhost:8080",
+            "webRoot": "${workspaceFolder}"
+        },
+      {
+        "name": "Listen for rdebug-ide",
+        "type": "Ruby",
+        "request": "attach",
+        "remoteHost": "127.0.0.1",
+        "remotePort": "9222",
+        "remoteWorkspaceRoot": "/app",
+        "cwd": "${workspaceRoot}"
+      }
+    ]
+  }
