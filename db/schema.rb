@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_17_180427) do
+ActiveRecord::Schema.define(version: 2022_06_09_001128) do
 
   create_table "bookmarks", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.integer "user_id", null: false
@@ -131,6 +131,8 @@ ActiveRecord::Schema.define(version: 2022_06_17_180427) do
     t.date "finish_date"
     t.string "work_visibility"
     t.string "workflow_status"
+    t.boolean "include_thumbnails", default: false
+    t.boolean "generated_metadata", default: false
     t.index ["user_id"], name: "index_bulkrax_exporters_on_user_id"
   end
 
