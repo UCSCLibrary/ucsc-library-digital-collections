@@ -9,7 +9,7 @@ namespace :hycruz  do
 #      execute "sudo systemctl restart sidekiq"
 #      execute "sudo systemctl restart sidekiq-staging"
       print "linking log file..."
-      execute "ln -s /srv/ucsc_sufia/shared/log /srv/ucsc_sufia/current/"
+      execute "ln -s #{deploy_path}/shared/log #{current_path}/"
     end
   end
 end
