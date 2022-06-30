@@ -44,7 +44,7 @@ module UcscThumbnailHelper
 
   def ucsc_thumbnail_tag(doc,image_options)
     url = if image_options[:legacy] || doc.thumbnail_id.nil? || doc.audio?
-            doc.thumbnail_path
+            doc.try(:thumbnail_path) || Hyrax::ThumbnailPathService.call(doc)
           elsif image_options[:square]
             square_thumbnail_url(doc,(image_options[:size] || ucsc_default_thumb_size))
           else
