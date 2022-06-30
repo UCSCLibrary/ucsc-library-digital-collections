@@ -131,8 +131,11 @@ ActiveRecord::Schema.define(version: 2022_06_09_001128) do
     t.date "finish_date"
     t.string "work_visibility"
     t.string "workflow_status"
+<<<<<<< HEAD
     t.boolean "include_thumbnails", default: false
     t.boolean "generated_metadata", default: false
+=======
+>>>>>>> master
     t.index ["user_id"], name: "index_bulkrax_exporters_on_user_id"
   end
 
@@ -178,13 +181,21 @@ ActiveRecord::Schema.define(version: 2022_06_09_001128) do
   end
 
   create_table "bulkrax_pending_relationships", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+<<<<<<< HEAD
     t.bigint "importer_run_id", null: false
+=======
+    t.bigint "bulkrax_importer_run_id", null: false
+>>>>>>> master
     t.string "parent_id", null: false
     t.string "child_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "order", default: 0
+<<<<<<< HEAD
     t.index ["importer_run_id"], name: "index_bulkrax_pending_relationships_on_importer_run_id"
+=======
+    t.index ["bulkrax_importer_run_id"], name: "index_bulkrax_pending_relationships_on_bulkrax_importer_run_id"
+>>>>>>> master
   end
 
   create_table "bulkrax_statuses", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
@@ -806,7 +817,11 @@ ActiveRecord::Schema.define(version: 2022_06_09_001128) do
   add_foreign_key "bulk_meta_rows", "bulk_meta_ingests", column: "ingest_id"
   add_foreign_key "bulkrax_exporter_runs", "bulkrax_exporters", column: "exporter_id"
   add_foreign_key "bulkrax_importer_runs", "bulkrax_importers", column: "importer_id"
+<<<<<<< HEAD
   add_foreign_key "bulkrax_pending_relationships", "bulkrax_importer_runs", column: "importer_run_id"
+=======
+  add_foreign_key "bulkrax_pending_relationships", "bulkrax_importer_runs"
+>>>>>>> master
   add_foreign_key "collection_type_participants", "hyrax_collection_types"
   add_foreign_key "curation_concerns_operations", "users"
   add_foreign_key "mailboxer_conversation_opt_outs", "mailboxer_conversations", column: "conversation_id", name: "mb_opt_outs_on_conversations_id"
