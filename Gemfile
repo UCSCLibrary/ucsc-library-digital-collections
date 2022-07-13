@@ -51,7 +51,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # This is the main application engine
 # We are keeping up with Hyrax 2.x, and waiting to upgrade to Hyrax 3
-gem 'hyrax', '2.9'
+gem 'hyrax', '~> 2.9.0'
 
 # This gem creates a quick solr instance for testing purposes
 # We use docker instead nowadays, so this is now disabled.
@@ -89,7 +89,7 @@ group :development, :test do
 end
 
 # hydra-role-management allows devise users to be assigned to roles in Hyrax
-#  and granted permissions based on these roles 
+#  and granted permissions based on these roles
 gem 'hydra-role-management'
 # browse-everything allows file imports from cloud platforms. We haven't used
 # it in ages, but it might be useful in some cases.
@@ -113,6 +113,13 @@ gem 'scooby_snacks', git: 'https://github.com/UCSCLibrary/ScoobySnacks.git'
 #gem 'bulk_ops', path: "/srv/bulk_ops/"
 # The following line loads the most recent ScoobySnacks version from github
 gem 'bulk_ops', git: 'https://github.com/UCSCLibrary/BulkOps.git', branch: 'master'
+
+# Bulkrax
+gem 'bulkrax', '~> 3'
+# gem 'bulkrax', path: 'vendor/engines/bulkrax'
+gem 'willow_sword', github: 'notch8/willow_sword'
+
+gem 'httparty'
 
 gem 'sinatra', git: 'https://github.com/sinatra/sinatra.git'
 
@@ -144,3 +151,7 @@ gem 'coveralls', require: false
 gem "mini_magick", ">= 4.9.4"
 
 gem 'rubyzip'
+gem 'activerecord-nulldb-adapter'
+# gem 'pronto', groups: [:development, :test]
+# gem 'pronto-rubocop', groups: [:development, :test]
+gem 'libxml-ruby', '3.1.0'

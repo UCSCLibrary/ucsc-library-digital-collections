@@ -73,7 +73,6 @@ class CatalogController < ApplicationController
 
     config.view.list.default = false
     config.view.masonry.partials = [:index]
-    config.view.slideshow.partials = [:index]
 
 
     config.show.tile_source_field = :content_metadata_image_iiif_info_ssm
@@ -120,6 +119,7 @@ class CatalogController < ApplicationController
 
     ScoobySnacks::BlacklightConfiguration.add_show_fields(config)
     config.add_show_field solr_name("subject", :stored_searchable), label: "Subject"
+    config.add_show_field solr_name("descriptionNeighborhood", :stored_searchable), label: "Neighborhood"
 #    config.add_show_field solr_name("titleDisplay"), label: "Title"
     config.add_show_field solr_name("callNumber"), label: "Call Number"
 

@@ -13,8 +13,5 @@ $(document).on('turbolinks:load', function() {
         url = $(this).attr('href');
         $(this).attr('href', url.replace(/\/collections\/[a-zA-Z_]+\//i,"/catalog/"))
     });
-
-    // In collection facet panels, set the keyword search attribute to 'q' instead of 'cq' so it displays properly
-    $('input#collection_search').attr('name','q')
     
 });

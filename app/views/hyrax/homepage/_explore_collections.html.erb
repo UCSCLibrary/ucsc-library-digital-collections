@@ -16,14 +16,5 @@
   <% end %>
   </ul>
 
-<button id="view-all-collections" class="btn btn-primary" type="button">View all collections</button>
+<a href="/collections"><button id="view-all-collections" class="btn btn-primary" type="button">View all collections</button></a>
 
-<ul id="all-collections" class="collections" style="display: none;">
-<% collections.each do |collection| %>
-    <li data-id="<%= collection.id %>">
-        <a href="/collections/<%= collection.id %>?locale=en">
-            <img src="<%= collection.display_image_url(size: '265,') %>">
-            <span><%= truncate(collection.title.first, length: 128, separator: ' ') %></span>
-        </a>
-    </li>
-<% end %>
