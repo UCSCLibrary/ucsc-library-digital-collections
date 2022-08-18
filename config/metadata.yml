@@ -58,7 +58,7 @@ fields:
     data_type: string
     display_groups: 
       - admin_only
-      - editor_primpatry
+      - editor_primary
     predicate: "DC:identifier"
 
   titleAlternative:
