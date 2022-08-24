@@ -87,7 +87,7 @@ class WorkIndexer < Hyrax::WorkIndexer
   def schema
     ScoobySnacks::METADATA_SCHEMA
   end
-
+ #commenting for dev demo
   # This method controls inheritance of metadata from parent works or collections
   # Metadata inheritance can also happen when the work is saved, in which case the
   # inherited metadata is stored in Fedora and indexed normally.
