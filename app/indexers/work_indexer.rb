@@ -105,9 +105,9 @@ class WorkIndexer < Hyrax::WorkIndexer
         
         #if child value is present and ADD inheritance holds good, add parent value to the child value
         if (solr_doc[field.solr_name].present? && ScoobySnacks::METADATA_SCHEMA.add_parent_value_display_field_names.include?(field.name))
-          parent_doc[field.solr_name].each do |field_value|
-            solr_doc[field.solr_name].push(field_value)
-          end
+          
+          solr_doc[field.solr_name].push(*parent_doc[field.solr_name])
+          
         #if child value is present and no ADD inheritance, skip
         elsif solr_doc[field.solr_name].present?
           next
