@@ -10,7 +10,7 @@ Bulkrax::ApplicationParser.class_eval do
       file.path,
       path
     )
-    FileUtils.chmod(644, path) # OVERRIDE: chmod imported file to have read permissions
+    FileUtils.chmod(0644, path) # OVERRIDE: chmod imported file to have read permissions
     path
   end
 end
