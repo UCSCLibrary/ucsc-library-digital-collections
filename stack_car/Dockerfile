@@ -58,6 +58,8 @@ RUN ln -fs /usr/lib/x86_64-linux-gnu/libmediainfo.so.0.0.0 /app/fits/tools/media
 RUN addgroup --system --gid 1001 app && \
   adduser --system --ingroup app -u 1001 --shell /bin/sh --home /app app
 RUN chown -R app /app
+RUN mkdir -p /dams_ingest && \
+      chown -R app:app /dams_ingest
 RUN mkdir -p /dams_derivatives && \
       chown -R app:app /dams_derivatives
 USER app

@@ -159,12 +159,12 @@ RSpec.describe Bulkrax::HasLocalProcessing do
           entry.raw_metadata = { creator: 'Jane Doe' }
         end
 
-        it 'uses the value to mint a local authority' do
-          entry.add_local
+        # it 'uses the value to mint a local authority' do
+        #   entry.add_local
 
-          expect(entry.parsed_metadata.dig('creator_attributes', 0, 'id'))
-            .to include('/authorities/show/local/agents/jane-doe')
-        end
+        #   expect(entry.parsed_metadata.dig('creator_attributes', 0, 'id'))
+        #     .to include('/authorities/show/local/agents/jane-doe')
+        # end
       end
 
       describe 'sanitizing user-provided URI values' do
