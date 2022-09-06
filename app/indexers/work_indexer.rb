@@ -17,6 +17,8 @@ class WorkIndexer < Hyrax::WorkIndexer
   include AncestorCollectionBehavior
   include SortableFieldIndexerBehavior
 
+  include Ucsc
+
   # This is the main method to generate a solr document from a fedora object.
   # The original fedora object is referred to here by 'object'
   def generate_solr_document
@@ -85,7 +87,7 @@ class WorkIndexer < Hyrax::WorkIndexer
   def schema
     ScoobySnacks::METADATA_SCHEMA
   end
-
+ #commenting for dev demo
   # This method controls inheritance of metadata from parent works or collections
   # Metadata inheritance can also happen when the work is saved, in which case the
   # inherited metadata is stored in Fedora and indexed normally.
@@ -93,16 +95,26 @@ class WorkIndexer < Hyrax::WorkIndexer
   # but not to be part of the preservation record.
   def inherit_fields solr_doc
     # abort unless the object is specifically flagged for this type of inheritance
-    return solr_doc unless Array(object.metadataInheritance).first.to_s.downcase.include?("index")
+    #return solr_doc unless Array(object.metadataInheritance).first.to_s.downcase.include?("index")
     # abort unless the object has a parent in the system
     return solr_doc unless object.member_of.present?
     object.member_of.each do |parent_work|
       parent_doc = SolrDocument.find(parent_work.id)
       # Loop through all inheritable fields
       ScoobySnacks::METADATA_SCHEMA.inheritable_fields.each do |field|
-        # Do not inherit if the child work has independent data
-        next if solr_doc[field.solr_name].present?
-        solr_doc[field.solr_name] = parent_doc[field.solr_name]
+        
+        #if child value is present and ADD inheritance holds good, add parent value to the child value
+        if (solr_doc[field.solr_name].present? && ScoobySnacks::METADATA_SCHEMA.add_parent_value_display_field_names.include?(field.name))
+          
+          solr_doc[field.solr_name].push(*parent_doc[field.solr_name])
+          
+        #if child value is present and no ADD inheritance, skip
+        elsif solr_doc[field.solr_name].present?
+          next
+        #if no child value present, inherit from parent
+        else
+          solr_doc[field.solr_name] = parent_doc[field.solr_name]
+        end
       end
     end
     return solr_doc

@@ -113,6 +113,8 @@ fields:
       - search_result
     facet: true
     input: textbox_autosuggest
+    inheritable: true
+    collection_inheritable: true
     
   contributor:
     definition: "A person or organization responsible for making contributions to the resource."
@@ -128,16 +130,22 @@ fields:
     searchable: true
     index_itemprop: contributor
     input: textbox_autosuggest
+    inheritable: true
+    collection_inheritable: true
 
   originalPublisher:
     predicate: MODS:publisher
     definition: The name of the entity that published, printed, distributed, released, issued, or produced the resource.
     label: Original Publisher
+    inheritable: true
+    collection_inheritable: true
   
   publisher:
     predicate: "DC:publisher"
     definition: "The organization responsible for publishing the work digitally"
     label: "Digital Publisher & Contact Info"
+    inheritable: true
+    collection_inheritable: true
 #    multiple: false
   
   publisherHomepage:
@@ -148,6 +156,8 @@ fields:
       - editor_primary
 #    multiple: false
     predicate: FOAF:homepage
+    inheritable: true
+    collection_inheritable: true
   
   resourceType:
     definition: 'General nature or type of the resource (e.g., image, text, etc.). Does not capture aboutness. '
@@ -169,6 +179,8 @@ fields:
     definition: Information about rights held in and over the resource expressed in general terms (i.e. boilerplate statements).
     label: Copyright Statement
     predicate: DC:rights
+    inheritable: true
+    collection_inheritable: true
 #    required: 'true'
     
   rightsHolder:
@@ -185,12 +197,16 @@ fields:
       - authority: local
         subauthority: agents
     input: textbox_autosuggest
+    inheritable: true
+    collection_inheritable: true
   
   scale:
     definition: Ratio of the dimensions of a form contained or embodied in a resource to the dimensions of the entity it represents, e.g., for images or cartographic resources.
     predicate: BF2:scale
     inheritable: false
     label: Scale
+    inheritable: true
+    collection_inheritable: true
 
   series:
     definition: A related resource in which the described resource is physically or logically included.
@@ -202,6 +218,8 @@ fields:
     facet: true
     searchable: true
     full_text_searchable: true
+    inheritable: true
+    collection_inheritable: true
   
   source:
     definition: A related resource from which the described resource is derived. (Use to record previous publication information, i.e. the place of publication and publisher name for physical resources).
@@ -241,6 +259,9 @@ fields:
       - secondary
       - editor_primary
       - search_result
+      - add_parent_value
+    inheritable: true
+    collection_inheritable: true
   
   subjectPlace:
     definition: Spatial characteristics of the resource.
@@ -262,6 +283,9 @@ fields:
       - secondary
       - editor_primary
       - search_result
+      - add_parent_value
+    inheritable: true
+    collection_inheritable: true
 
   
   subjectTemporal:
@@ -301,6 +325,9 @@ fields:
       - secondary
       - editor_primary
       - search_result
+      - add_parent_value
+    inheritable: true
+    collection_inheritable: true
   
   subjectTopic:
     definition: The topic of the resource.
@@ -322,6 +349,9 @@ fields:
       - secondary
       - editor_primary
       - search_result
+      - add_parent_value
+    inheritable: true
+    collection_inheritable: true
   
   dateCreated:
     definition: Date of creation of the original resource.
@@ -335,6 +365,8 @@ fields:
     display_groups:
       - secondary
       - editor_primary
+    inheritable: true
+    collection_inheritable: true
 #      - search_result   
 
   dateCreatedDisplay:
@@ -344,29 +376,39 @@ fields:
       - secondary
       - editor_primary 
       - search_result
-    predicate: MODS:dateCreated  
+    predicate: MODS:dateCreated
+    inheritable: true
+    collection_inheritable: true  
 
   dateCreatedIngest:
     predicate: DC:created
     definition: Date of creation of the original resource.
     label: 'Date Created Ingest'
+    inheritable: true
+    collection_inheritable: true
 
   dateOfSituation:
     definition: A date of a situation depicted in the work or associated with the subject of the work.
     label: 'Date of Situation'
     predicate: local:dateOfSituation
     input: date
+    inheritable: true
+    collection_inheritable: true
 #    data_type: date
 
   dateOfSituationDisplay:
     definition: Textual representation of a date of a situation depicted in the collection or associated with the subject of the collection. Fill in this field if the date needs to show to to public view in a format other than MM-DD-YYYY. This field will be used for the public view, and the field above will be used in sorting and indexing this collection. (temporary fix)
     label: 'Date of Situation'
     predicate: local:dateOfSituationDisplay
+    inheritable: true
+    collection_inheritable: true
 
   dateOfSituationIngest:
     definition: A date of a situation depicted in the work or associated with the subject of the work.
     label: 'Date of Situation Ingest'
     predicate: local:dateOfSituationIngest
+    inheritable: true
+    collection_inheritable: true
 
   dateDigitized:
     definition: Date on which the resource was changed, i.e., digitized.
@@ -374,6 +416,8 @@ fields:
     label: Date Digitized
     index_itemprop: dateModified
     predicate: DC:modified
+    inheritable: true
+    collection_inheritable: true
 #    index_helper_method: human_readable_date
   
   datePublished:
@@ -396,12 +440,16 @@ fields:
     searchable: true
     linked_to_search: false
     full_text_searachable: true
+    inheritable: true
+    collection_inheritable: true
 
   descriptionAddress:
     definition: An address depicted in or associated with the work
     label: Address
     predicate: schema:address
     full_text_searchable: true
+    inheritable: true
+    collection_inheritable: true
 
   descriptionFeature:
     definition: A Feature depicted in or associated with the work
@@ -420,6 +468,8 @@ fields:
     label: Street
     predicate: local:street
     full_text_searchable: true
+    inheritable: true
+    collection_inheritable: true
 
   descriptionTownshipRange:
     definition: A Township and/or range depicted in or associated with the work
@@ -431,6 +481,8 @@ fields:
     definition: A link to a relatd resource.
     label: Related Resource
     predicate: DC:relation
+    inheritable: true
+    collection_inheritable: true
   
   physicalFormat:
     definition: The form, and/or physical characteristics of the resource being described. The material or physical carrier of the resource. Does not capture aboutness.
@@ -447,6 +499,8 @@ fields:
     display_groups:
       - secondary
       - editor_primary
+    inheritable: false
+    collection_inheritable: false
   
   keyword:
     definition: Keywords (i.e. non-standard terms) assigned to the resource.
@@ -472,11 +526,15 @@ fields:
     display_groups:
       - secondary
       - editor_primary
+    inheritable: true
+    collection_inheritable: true
   
   rightsStatus:
     definition: An associated license for the object (i.e. Creative Commons license, software licenses, etc.). Defines use/reuse of resources.
     label: Rights License
     predicate: DC:license
+    inheritable: true
+    collection_inheritable: true
   
   primaryFilename:
     definition: "The name of the file (usually attached to this work) that is considered the primary digital file to represent the work."
@@ -497,6 +555,8 @@ fields:
     label: Physical Description
     predicate: modsrdf:extent
     display_group: primary
+    inheritable: false
+    collection_inheritable: false
   
   extent:
     definition: The size or duration of the resource.
@@ -511,8 +571,8 @@ fields:
       - secondary
       - editor_primary
     label: Access Rights
-    inheritable: false
-    collection_inheritable: false
+    inheritable: true
+    collection_inheritable: true
     predicate: DC:accessRights
     
   itemCallNumber:
@@ -532,6 +592,8 @@ fields:
     display_groups:
       - secondary
       - editor_primary
+    inheritable: true
+    collection_inheritable: true
 
   metadataSource:
     definition: Notes about the source of metadata i.e. where the descriptive information originated, who contributed to it, what issues may exist within it.
@@ -574,6 +636,8 @@ fields:
     definition: "A statement of any changes in ownership and custody of the resource since its creation that are significant for its authenticity, integrity, and interpretation."
     label: Donor/Provenance
     predicate: DC:provenance
+    inheritable: true
+    collection_inheritable: true
 
   genre:
     definition: "A genre term designates the style or technique of the intellectual content of textual materials or, for graphic materials, aspects such as vantage point, intended purpose, characteristics of the creator, publication status, or method  of representation. Does not capture aboutness. Ex. lectures; underground dance music."
@@ -583,12 +647,19 @@ fields:
         subauthority: genres
     predicate:  MODS:subjectGenre
     input: dropdown
+    inheritable: true
+    collection_inheritable: true
+    display_group: 
+      - secondary
+      - add_parent_value
 
   boxFolder:
     definition: "A call number, shelf mark or similar label of an item. Format \"Box X, Folder Y\"."
     label: "Call Number (Box/Folder)"
     usage note: "Format: \"Box X, Folder Y\"."
     predicate:  purlOnt:holding#label
+    inheritable: false    
+    collection_inheritable: false
 
 #-------------------
 # RDF Namespaces
