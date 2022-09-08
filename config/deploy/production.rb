@@ -4,7 +4,7 @@
 # You can define all roles on a single server, or split them:
 
 server 'digitalcollections.library.ucsc.edu', user: 'sufia', roles: %w{app db web}
-server 'digitalcollections-deploy.library.ucsc.edu', user: 'hyrax', roles: %w{ingest}
+server 'digitalcollections-deploy.library.ucsc.edu', user: 'jenkins', roles: %w{ingest}
 # server 'example.com', user: 'deploy', roles: %w{app web}, other_property: :other_value
 # server 'db.example.com', user: 'deploy', roles: %w{db}
 
@@ -19,7 +19,7 @@ server 'digitalcollections-deploy.library.ucsc.edu', user: 'hyrax', roles: %w{in
 # role :app, %w{deploy@example.com}, my_property: :my_value
 # role :web, %w{user1@primary.com user2@additional.com}, other_property: :other_value
 # role :db,  %w{deploy@example.com}
-role :ingest, %w{hyrax@digitalcollections-deploy.library.ucsc.edu}
+role :ingest, %w{jenkins@digitalcollections-deploy.library.ucsc.edu}
 
 # Configuration
 # =============
