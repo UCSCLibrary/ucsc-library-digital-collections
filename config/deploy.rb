@@ -1,6 +1,6 @@
 set :application, 'hycruz'
 set :repo_url, 'git@github.com:UCSCLibrary/ucsc-library-digital-collections.git'
-set :ssh_options, keys: ["deploy_id_rsa"] if File.exist?["deploy_id_rsa"]
+set :ssh_options, keys: ["deploy_id_rsa"] if File.exist?("deploy_id_rsa")
 
 set :branch, ENV['BRANCH'] if ENV['BRANCH']
 
