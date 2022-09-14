@@ -10,7 +10,7 @@ staging:
 
 sandbox:
   adapter: redis
-  url: <%= ENV['REDIS_SERVER'] || 'redis://digitalcollections-staging-sandbox.library.ucsc.edu:6380/1' %>
+  url: <%= ENV['REDIS_SERVER'] || 'redis://digitalcollections-ingests.library.ucsc.edu:6380/1' %>
 
 production:
   adapter: redis
