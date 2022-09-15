@@ -14,4 +14,4 @@ staging:
   port: 6379
 sandbox:
   host: <%= ENV['REDIS_HOST'] || "digitalcollections-staging-sandbox.library.ucsc.edu" %>
-  port: 6380
+  port: 6379
