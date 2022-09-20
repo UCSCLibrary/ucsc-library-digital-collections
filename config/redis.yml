@@ -6,12 +6,12 @@ test:
   host: <%= ENV['REDIS_HOST'] || "redis" %>
   port: 6379
 production:
-  host: <%= ENV['REDIS_HOST'] || "digitalcollections-ingests.library.ucsc.edu" %>
+  host: <%= ENV['REDIS_HOST'] || "digitalcollections.library.ucsc.edu" %>
   password: <%= ENV['REDIS_PASSWORD'] %>
   port: 6379
 staging:
-  host: <%= ENV['REDIS_HOST'] || "digitalcollections-ingests.library.ucsc.edu" %>
+  host: <%= ENV['REDIS_HOST'] || "digitalcollections-staging.library.ucsc.edu" %>
   port: 6379
 sandbox:
-  host: <%= ENV['REDIS_HOST'] || "digitalcollections-ingests.library.ucsc.edu" %>
-  port: 6380
+  host: <%= ENV['REDIS_HOST'] || "digitalcollections-staging-sandbox.library.ucsc.edu" %>
+  port: 6379

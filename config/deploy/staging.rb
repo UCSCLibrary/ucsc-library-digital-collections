@@ -3,8 +3,8 @@
 # Defines a single server with a list of roles and multiple properties.
 # You can define all roles on a single server, or split them:
 
-server 'digitalcollections-staging.library.ucsc.edu', user: 'sufia', roles: %w{app db web}
-server 'digitalcollections-ingests.library.ucsc.edu', user: 'hyrax', roles: %w{ingest}
+server 'digitalcollections-staging.library.ucsc.edu', user: 'sufia', roles: %w{app db web ingest}
+#server 'digitalcollections-ingests.library.ucsc.edu', user: 'hyrax', roles: %w{ingest}
 
 # server 'example.com', user: 'deploy', roles: %w{app db web}, my_property: :my_value
 # server 'example.com', user: 'deploy', roles: %w{app web}, other_property: :other_value
@@ -23,7 +23,7 @@ server 'digitalcollections-ingests.library.ucsc.edu', user: 'hyrax', roles: %w{i
 # role :app, %w{deploy@example.com}, my_property: :my_value
 # role :web, %w{user1@primary.com user2@additional.com}, other_property: :other_value
 # role :db,  %w{deploy@example.com}
-role :ingest, %w{hyrax@digitalcollections-ingests.library.ucsc.edu}
+#role :ingest, %w{hyrax@digitalcollections-ingests.library.ucsc.edu}
 
 
 # Configuration
