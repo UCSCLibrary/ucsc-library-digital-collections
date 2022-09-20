@@ -14,4 +14,4 @@ sandbox:
 
 production:
   adapter: redis
-  url: <%= ENV['REDIS_SERVER'] || 'redis://digitalcollections-ingests.library.ucsc.edu:6379/1' %>
+  url: <%= ENV['REDIS_SERVER'] || 'redis://digitalcollections.library.ucsc.edu:6379/1' %>
