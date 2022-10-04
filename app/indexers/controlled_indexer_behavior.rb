@@ -21,7 +21,7 @@ module ControlledIndexerBehavior
     begin
         # handle local qa table based vocabs
       if url.to_s.include?("ucsc.edu") or url.to_s.include?("http://localhost")
-        url.gsub!('http://','https://') if url.to_s.include? "library.ucsc.edu"
+        #url.gsub!('http://','https://') if url.to_s.include? "library.ucsc.edu"
         label = JSON.parse(Net::HTTP.get_response(URI(url)).body)["label"]
       # handle geonames specially
       elsif url.include? "geonames.org"
