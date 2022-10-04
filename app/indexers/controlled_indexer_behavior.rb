@@ -5,12 +5,10 @@ module ControlledIndexerBehavior
   class_methods do
 
     def fetch_remote_label(url)
-  
       if url.is_a? ActiveTriples::Resource
         resource = url
         url = resource.id.dup
       end
-
       # if it's buffered, return the buffer
       if (buffer = LdBuffer.find_by(url: url))
         if (Time.now - buffer.updated_at).seconds > 1.year
@@ -19,11 +17,10 @@ module ControlledIndexerBehavior
           return buffer.label
         end
       end
-
     begin
         # handle local qa table based vocabs
       if url.to_s.include?("ucsc.edu") or url.to_s.include?("http://localhost")
-        url.gsub!('http://','https://') if url.to_s.include? "library.ucsc.edu"
+        #url.gsub!('http://','https://') if url.to_s.include? "library.ucsc.edu"
         label = JSON.parse(Net::HTTP.get_response(URI(url)).body)["label"]
       # handle geonames specially
       elsif url.include? "geonames.org"
@@ -43,12 +40,16 @@ module ControlledIndexerBehavior
         elsif url.include?("vocab.getty.edu")
           cleaned_url.gsub!("/page/","/")
         end
-        resource = ActiveTriples::Resource.new(cleaned_url)
-        labels = resource.fetch(headers: { 'Accept'.freeze => default_accept_header }).rdf_label
-        if labels.count == 1
-          label = labels.first.dup.to_s
+        if !cleaned_url.is_a? String
+          resource = ActiveTriples::Resource.new(cleaned_url)
+          labels = resource.fetch(headers: { 'Accept'.freeze => default_accept_header }).rdf_label
+          if labels.count == 1
+            label = labels.first.dup.to_s
+          else
+            label = labels.find{|label| label.language.to_s =~ /en/ }.dup.to_s
+          end
         else
-          label = labels.find{|label| label.language.to_s =~ /en/ }.dup.to_s
+          return cleaned_url
         end
       end
         
@@ -70,7 +71,6 @@ module ControlledIndexerBehavior
           end
         end
       end
-
       raise Exception if label.to_s == url.to_s
 
       return label.to_s
