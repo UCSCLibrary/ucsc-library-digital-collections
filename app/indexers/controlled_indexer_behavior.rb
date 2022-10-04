@@ -5,6 +5,7 @@ module ControlledIndexerBehavior
   class_methods do
 
     def fetch_remote_label(url)
+      Rails.logger.info "this is the url, #{url}"
       if url.is_a? ActiveTriples::Resource
         resource = url
         url = resource.id.dup
@@ -33,6 +34,7 @@ module ControlledIndexerBehavior
         label = doc.xpath('//gn:name').first.children.first.text.dup
       # fetch from other normal authorities
       else
+        Rails.logger.info "in else now"
         # Smoothly handle some common syntax issues
         cleaned_url = url.dup
         if url[0..6] == "info:lc"
@@ -41,6 +43,7 @@ module ControlledIndexerBehavior
           cleaned_url.gsub!("/page/","/")
         end
         if !cleaned_url.is_a? String
+          Rails.logger.info "is not a string and the cleaned_url is #{cleaned_url}"
           resource = ActiveTriples::Resource.new(cleaned_url)
           labels = resource.fetch(headers: { 'Accept'.freeze => default_accept_header }).rdf_label
           if labels.count == 1
@@ -49,6 +52,7 @@ module ControlledIndexerBehavior
             label = labels.find{|label| label.language.to_s =~ /en/ }.dup.to_s
           end
         else
+          Rails.logger.info "returning cleaned url #{cleaned_url}"
           return cleaned_url
         end
       end
@@ -76,6 +80,7 @@ module ControlledIndexerBehavior
       return label.to_s
 
       rescue Exception => e
+        Rails.logger.info "next coming here"
         # IOError could result from a 500 error on the remote server
         # SocketError results if there is no server to connect to
          Rails.logger.error "Unable to fetch #{url} from the authorative source.\n#{e.message}"
