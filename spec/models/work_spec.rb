@@ -121,11 +121,11 @@ RSpec.describe Work do
 #    expect(work.dateCreated).to include("11/1967")
 #  end
 
-  # it "knows how to fix an improperly formatted Getty url" do
-  #   work.subjectTopic_attributes = [{id: "http://vocab.getty.edu/page/aat/300001581"}]
-  #   work.save
-  #   expect(SolrDocument.find(work.id).subjectTopic).to include("annulated columns")
-  # end
+  it "knows how to fix an improperly formatted Getty url" do
+    work.subjectTopic_attributes = [{id: "http://vocab.getty.edu/page/aat/300001581"}]
+    work.save
+    expect(SolrDocument.find(work.id).subjectTopic).to include("annulated columns")
+  end
 
   it "knows how to fix an improperly formatted LOC url" do
     expect(work.fix_loc_id("info:lc/authorities/sh92005191")).to eq("http://id.loc.gov/authorities/sh92005191")
