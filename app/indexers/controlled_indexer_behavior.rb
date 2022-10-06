@@ -39,6 +39,7 @@ module ControlledIndexerBehavior
           cleaned_url.gsub!("info:lc","http://id.loc.gov")
         elsif url.include?("vocab.getty.edu")
           cleaned_url.gsub!("/page/","/")
+          cleaned_url.gsub!('http://','https://')
         end
         if !cleaned_url.is_a? String
           resource = ActiveTriples::Resource.new(cleaned_url)
