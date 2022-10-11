@@ -40,8 +40,10 @@ module ControlledIndexerBehavior
         elsif url.include?("vocab.getty.edu")
           cleaned_url.gsub!("/page/","/")
           cleaned_url.gsub!('http://','https://')
-        end
-        if !cleaned_url.is_a? String
+          response = Net::HTTP.get_response(URI(cleaned_url))
+          res = Nokogiri::HTML.parse(response.body)
+          label = res.title.strip
+        elsif !cleaned_url.is_a? String
           resource = ActiveTriples::Resource.new(cleaned_url)
           labels = resource.fetch(headers: { 'Accept'.freeze => default_accept_header }).rdf_label
           if labels.count == 1
@@ -50,10 +52,17 @@ module ControlledIndexerBehavior
             label = labels.find{|label| label.language.to_s =~ /en/ }.dup.to_s
           end
         else
-          return cleaned_url
+          label = cleaned_url
         end
       end
-        
+      if label == url && url.include?("id.loc.gov")
+        url.gsub!('http://','https://')
+        request_url = URI(url)
+        request_url.path += '.html'
+        response = Net::HTTP.get_response(request_url)
+        res = Nokogiri::HTML.parse(response.body)
+        label = res.title.split('-')[0].strip
+      end
       Rails.logger.info "Adding buffer entry - label: #{label}, url:  #{url.to_s}"
       LdBuffer.create(url: url, label: label)
 
@@ -61,16 +70,6 @@ module ControlledIndexerBehavior
       if (cnt = LdBuffer.count - 5000) > 0
         ids = LdBuffer.order('created_at ASC').limit(cnt).pluck(:id)
         LdBuffer.where(id: ids).delete_all
-      end
-        
-      if label == url && url.include?("id.loc.gov")
-        #handle weird alternative syntax
-        response = JSON.parse(Net::HTTP.get_response(URI(url)).body)
-        response.each do |index, node|
-          if node["@id"] == url
-            label = node["http://www.loc.gov/mads/rdf/v1#authoritativeLabel"].first["@value"].dup
-          end
-        end
       end
       raise Exception if label.to_s == url.to_s
 
