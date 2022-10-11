@@ -72,9 +72,9 @@ RSpec.describe WorkIndexer do
     let!(:wrk){Work.create(work_properties)}
     let(:indexer){described_class.new(wrk)}
 
-    it "combines the subject fields" do
-      expect(wrk.to_solr["subject_tesim"].count).to eq(2)
-    end
+    # it "combines the subject fields" do
+    #   expect(wrk.to_solr["subject_tesim"].count).to eq(2)
+    # end
 
     it "combines the call number fields" do
       expect(wrk.to_solr["callNumber_tesim"]).to include("1","2")
