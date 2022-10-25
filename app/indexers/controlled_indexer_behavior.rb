@@ -37,6 +37,7 @@ module ControlledIndexerBehavior
         cleaned_url = url.dup
         if url[0..6] == "info:lc"
           cleaned_url.gsub!("info:lc","http://id.loc.gov")
+          label = cleaned_url
         elsif url.include?("vocab.getty.edu")
           cleaned_url.gsub!("/page/","/")
           cleaned_url.gsub!('http://','https://')
@@ -114,6 +115,7 @@ module ControlledIndexerBehavior
 
       # Loop through the different values provided for this property
       object[field_name].each do |val|
+        Rails.logger.info "value of val is #{val}"
         label = ""
         case val
         when ActiveTriples::Resource, URI::regexp
