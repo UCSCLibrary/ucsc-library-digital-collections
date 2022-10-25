@@ -115,7 +115,6 @@ module ControlledIndexerBehavior
 
       # Loop through the different values provided for this property
       object[field_name].each do |val|
-        Rails.logger.info "value of val is #{val}"
         label = ""
         case val
         when ActiveTriples::Resource, URI::regexp
