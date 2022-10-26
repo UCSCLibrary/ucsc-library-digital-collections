@@ -315,7 +315,7 @@ fields:
       - authority: loc
         subauthority: subjects
       - authority: local
-        subauthority: topics
+        subauthority: agents
     facet: true
     searchable: true
     full_text_searchable: true
@@ -339,7 +339,7 @@ fields:
       - authority: getty
         subauthority: aat
       - authority: local
-        subauthority: topics
+        subauthority: agents
     facet: true
     searchable: true
     full_text_searchable: true
