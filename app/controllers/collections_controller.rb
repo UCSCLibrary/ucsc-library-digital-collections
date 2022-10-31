@@ -17,9 +17,9 @@ class CollectionsController < Hyrax::CollectionsController
     url_for(options.reverse_merge(action: 'index', controller: 'catalog').deep_merge(f: {"ancestor_collection_titles_ssim" => Array(@collection.title)}))
   end
   def show_all
-    builder = Hyrax::CollectionSearchBuilder.new(self).with(params.except(:q))
-      @response = repository.search(builder)
-      @collections = @response.documents.select{ |col| ["open","campus"].include?(col.visibility)}
+    builder = Ucsc::CollectionSearchBuilder.new(self).with(params.except(:q))
+    @response = repository.search(builder)
+    @collections = @response.documents.select{ |col| ["open","campus"].include?(col.visibility)}
     rescue Blacklight::Exceptions::ECONNREFUSED, Blacklight::Exceptions::InvalidRequest
       []
     end
