@@ -55,6 +55,8 @@ class WorkIndexer < Hyrax::WorkIndexer
       # The inherit fields method controls inheritance of metadata from parent works
       solr_doc = inherit_fields(solr_doc)
 
+      solr_doc = inherit_fields_from_parent_collection(solr_doc)
+
       # index the sortable fields
       solr_doc = index_sortable_fields(solr_doc)
 
@@ -105,13 +107,35 @@ class WorkIndexer < Hyrax::WorkIndexer
         
         #if child value is present and ADD inheritance holds good, add parent value to the child value
         if (solr_doc[field.solr_name].present? && ScoobySnacks::METADATA_SCHEMA.add_parent_value_display_field_names.include?(field.name))
-          
           solr_doc[field.solr_name].push(*parent_doc[field.solr_name])
           
         #if child value is present and no ADD inheritance, skip
         elsif solr_doc[field.solr_name].present?
           next
         #if no child value present, inherit from parent
+        else
+          solr_doc[field.solr_name] = parent_doc[field.solr_name]
+        end
+      end
+    end
+    return solr_doc
+  end
+
+  #collection to work inhertance
+  def inherit_fields_from_parent_collection solr_doc
+    return solr_doc unless object.member_of_collections.present?
+    object.member_of_collections.each do |parent_work|
+      parent_doc = SolrDocument.find(parent_work.id)
+      # Loop through all collection inheritable fields
+      ScoobySnacks::METADATA_SCHEMA.collection_inheritable_fields.each do |field|
+        
+        #if child value is present and ADD inheritance holds good, add parent collection value to the child work 
+        if (solr_doc[field.solr_name].present? && ScoobySnacks::METADATA_SCHEMA.add_parent_value_display_field_names.include?(field.name))
+          solr_doc[field.solr_name].push(*parent_doc[field.solr_name]) 
+        #if child value is present and no ADD inheritance, skip
+        elsif solr_doc[field.solr_name].present?
+          next
+        #if no child value present, inherit from parent collection
         else
           solr_doc[field.solr_name] = parent_doc[field.solr_name]
         end
