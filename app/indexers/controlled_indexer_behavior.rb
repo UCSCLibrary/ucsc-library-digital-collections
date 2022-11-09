@@ -35,10 +35,7 @@ module ControlledIndexerBehavior
       else
         # Smoothly handle some common syntax issues
         cleaned_url = url.dup
-        if url[0..6] == "info:lc"
-          cleaned_url.gsub!("info:lc","http://id.loc.gov")
-          label = cleaned_url
-        elsif url.include?("vocab.getty.edu")
+        if url.include?("vocab.getty.edu")
           cleaned_url.gsub!("/page/","/")
           cleaned_url.gsub!('http://','https://')
           response = Net::HTTP.get_response(URI(cleaned_url))
@@ -56,7 +53,8 @@ module ControlledIndexerBehavior
           label = cleaned_url
         end
       end
-      if label == url && url.include?("id.loc.gov")
+      if label == url && (url.include?("id.loc.gov") || url.include?("info:lc"))
+        url.gsub!("info:lc","http://id.loc.gov")
         url.gsub!('http://','https://')
         request_url = URI(url)
         request_url.path += '.html'
