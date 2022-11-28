@@ -37,8 +37,9 @@ This project relies on a specific directory structure in order for it to reliabl
 > mkdir dams_derivatives
 
 # Start the application using Stack Car
-> cd hyrax
-> sc up
+> cd hyrax; sc up
+# or
+> cd hyrax/stack_car; docker-compose up
 ```
 
 It may take a few minutes for the app to start up. When the **hycruz** logs '`Listening on tcp://0.0.0.0:3000`', navigate to `http://localhost:3000` in your browser to view the site.
