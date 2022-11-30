@@ -5,12 +5,10 @@ module ControlledIndexerBehavior
   class_methods do
 
     def fetch_remote_label(url)
-  
       if url.is_a? ActiveTriples::Resource
         resource = url
         url = resource.id.dup
       end
-
       # if it's buffered, return the buffer
       if (buffer = LdBuffer.find_by(url: url))
         if (Time.now - buffer.updated_at).seconds > 1.year
@@ -19,11 +17,10 @@ module ControlledIndexerBehavior
           return buffer.label
         end
       end
-
     begin
         # handle local qa table based vocabs
       if url.to_s.include?("ucsc.edu") or url.to_s.include?("http://localhost")
-        url.gsub!('http://','https://') if url.to_s.include? "library.ucsc.edu"
+        #url.gsub!('http://','https://') if url.to_s.include? "library.ucsc.edu"
         label = JSON.parse(Net::HTTP.get_response(URI(url)).body)["label"]
       # handle geonames specially
       elsif url.include? "geonames.org"
@@ -38,20 +35,33 @@ module ControlledIndexerBehavior
       else
         # Smoothly handle some common syntax issues
         cleaned_url = url.dup
-        if url[0..6] == "info:lc"
-          cleaned_url.gsub!("info:lc","http://id.loc.gov")
-        elsif url.include?("vocab.getty.edu")
+        if url.include?("vocab.getty.edu")
           cleaned_url.gsub!("/page/","/")
-        end
-        resource = ActiveTriples::Resource.new(cleaned_url)
-        labels = resource.fetch(headers: { 'Accept'.freeze => default_accept_header }).rdf_label
-        if labels.count == 1
-          label = labels.first.dup.to_s
+          cleaned_url.gsub!('http://','https://')
+          response = Net::HTTP.get_response(URI(cleaned_url))
+          res = Nokogiri::HTML.parse(response.body)
+          label = res.title.strip
+        elsif !cleaned_url.is_a? String
+          resource = ActiveTriples::Resource.new(cleaned_url)
+          labels = resource.fetch(headers: { 'Accept'.freeze => default_accept_header }).rdf_label
+          if labels.count == 1
+            label = labels.first.dup.to_s
+          else
+            label = labels.find{|label| label.language.to_s =~ /en/ }.dup.to_s
+          end
         else
-          label = labels.find{|label| label.language.to_s =~ /en/ }.dup.to_s
+          label = cleaned_url
         end
       end
-        
+      if label == url && (url.include?("id.loc.gov") || url.include?("info:lc"))
+        url.gsub!("info:lc","http://id.loc.gov")
+        url.gsub!('http://','https://')
+        request_url = URI(url)
+        request_url.path += '.html'
+        response = Net::HTTP.get_response(request_url)
+        res = Nokogiri::HTML.parse(response.body)
+        label = res.title.split('-')[0].strip
+      end
       Rails.logger.info "Adding buffer entry - label: #{label}, url:  #{url.to_s}"
       LdBuffer.create(url: url, label: label)
 
@@ -60,17 +70,6 @@ module ControlledIndexerBehavior
         ids = LdBuffer.order('created_at ASC').limit(cnt).pluck(:id)
         LdBuffer.where(id: ids).delete_all
       end
-        
-      if label == url && url.include?("id.loc.gov")
-        #handle weird alternative syntax
-        response = JSON.parse(Net::HTTP.get_response(URI(url)).body)
-        response.each do |index, node|
-          if node["@id"] == url
-            label = node["http://www.loc.gov/mads/rdf/v1#authoritativeLabel"].first["@value"].dup
-          end
-        end
-      end
-
       raise Exception if label.to_s == url.to_s
 
       return label.to_s
