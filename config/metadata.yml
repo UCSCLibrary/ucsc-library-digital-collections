@@ -176,7 +176,7 @@ fields:
 #    multiple: false
 
   rightsStatement:
-    definition: Information about rights held in and over the resource expressed in general terms (i.e. boilerplate statements).
+    definition: An associated license for the object (i.e. Creative Commons license, software licenses, etc.). Defines use/reuse of resources.
     label: Copyright Statement
     predicate: DC:rights
     inheritable: true
@@ -530,7 +530,7 @@ fields:
     collection_inheritable: true
   
   rightsStatus:
-    definition: An associated license for the object (i.e. Creative Commons license, software licenses, etc.). Defines use/reuse of resources.
+    definition: Information about rights held in and over the resource expressed in general terms (i.e. boilerplate statements).
     label: Rights License
     predicate: DC:license
     inheritable: true
