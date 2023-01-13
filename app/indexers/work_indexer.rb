@@ -104,17 +104,17 @@ class WorkIndexer < Hyrax::WorkIndexer
       parent_doc = SolrDocument.find(parent_work.id)
       # Loop through all inheritable fields
       ScoobySnacks::METADATA_SCHEMA.inheritable_fields.each do |field|
-        
         #if child value is present and ADD inheritance holds good, add parent value to the child value
-        if (solr_doc[field.solr_name].present? && ScoobySnacks::METADATA_SCHEMA.add_parent_value_display_field_names.include?(field.name))
+        if (solr_doc[field.solr_name]!= parent_doc[field.solr_name] && ScoobySnacks::METADATA_SCHEMA.add_parent_value_display_field_names.include?(field.name))
           solr_doc[field.solr_name].push(*parent_doc[field.solr_name])
-          
-        #if child value is present and no ADD inheritance, skip
-        elsif solr_doc[field.solr_name].present?
-          next
-        #if no child value present, inherit from parent
-        else
-          solr_doc[field.solr_name] = parent_doc[field.solr_name]
+        #commenting the below code and not removing it since we might need it for future use.  
+        # #if child value is present and no ADD inheritance, skip
+        # elsif solr_doc[field.solr_name].present?
+        #   next
+        # #if no child value present, inherit from parent
+        # else
+        #   Rails.logger.info "exactly coming here"
+        #   solr_doc[field.solr_name] = parent_doc[field.solr_name]
         end
       end
     end
@@ -130,14 +130,15 @@ class WorkIndexer < Hyrax::WorkIndexer
       ScoobySnacks::METADATA_SCHEMA.collection_inheritable_fields.each do |field|
         
         #if child value is present and ADD inheritance holds good, add parent collection value to the child work 
-        if (solr_doc[field.solr_name].present? && ScoobySnacks::METADATA_SCHEMA.add_parent_value_display_field_names.include?(field.name))
+        if (solr_doc[field.solr_name]!= parent_doc[field.solr_name] && ScoobySnacks::METADATA_SCHEMA.add_parent_value_display_field_names.include?(field.name))
           solr_doc[field.solr_name].push(*parent_doc[field.solr_name]) 
-        #if child value is present and no ADD inheritance, skip
-        elsif solr_doc[field.solr_name].present?
-          next
-        #if no child value present, inherit from parent collection
-        else
-          solr_doc[field.solr_name] = parent_doc[field.solr_name]
+        #commenting the below code and not removing it since we might need it for future use. 
+        # #if child value is present and no ADD inheritance, skip
+        # elsif solr_doc[field.solr_name].present?
+        #   next
+        # #if no child value present, inherit from parent collection
+        # else
+        #   solr_doc[field.solr_name] = parent_doc[field.solr_name]
         end
       end
     end
