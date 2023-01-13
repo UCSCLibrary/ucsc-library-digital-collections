@@ -104,18 +104,7 @@ class WorkIndexer < Hyrax::WorkIndexer
       parent_doc = SolrDocument.find(parent_work.id)
       # Loop through all inheritable fields
       ScoobySnacks::METADATA_SCHEMA.inheritable_fields.each do |field|
-        #ADD inheritance
-        if (solr_doc[field.solr_name]!= parent_doc[field.solr_name] && ScoobySnacks::METADATA_SCHEMA.add_parent_value_display_field_names.include?(field.name))
-          solr_doc[field.solr_name].push(*parent_doc[field.solr_name])
-        #commenting the below code and not removing it since we might need it for future use.  
-        # #if child value is present and no ADD inheritance, skip
-        # elsif solr_doc[field.solr_name].present?
-        #   next
-        # #if no child value present, inherit from parent
-        # else
-        #   Rails.logger.info "exactly coming here"
-        #   solr_doc[field.solr_name] = parent_doc[field.solr_name]
-        end
+        inherit_field(solr_doc)
       end
     end
     return solr_doc
@@ -128,22 +117,27 @@ class WorkIndexer < Hyrax::WorkIndexer
       parent_doc = SolrDocument.find(parent_work.id)
       # Loop through all collection inheritable fields
       ScoobySnacks::METADATA_SCHEMA.collection_inheritable_fields.each do |field|
-        
-        #ADD inheritance 
-        if (solr_doc[field.solr_name]!= parent_doc[field.solr_name] && ScoobySnacks::METADATA_SCHEMA.add_parent_value_display_field_names.include?(field.name))
-          solr_doc[field.solr_name].push(*parent_doc[field.solr_name]) 
-        #commenting the below code and not removing it since we might need it for future use. 
-        # #if child value is present and no ADD inheritance, skip
-        # elsif solr_doc[field.solr_name].present?
-        #   next
-        # #if no child value present, inherit from parent collection
-        # else
-        #   solr_doc[field.solr_name] = parent_doc[field.solr_name]
-        end
+        inherit_field(solr_doc)
       end
     end
     return solr_doc
   end
+  
+  #inherit fields based on metadata.yml
+  def inherit_field solr_doc
+    #ADD inheritance 
+    if (solr_doc[field.solr_name]!= parent_doc[field.solr_name] && ScoobySnacks::METADATA_SCHEMA.add_parent_value_display_field_names.include?(field.name))
+      solr_doc[field.solr_name].push(*parent_doc[field.solr_name]) 
+    #commenting the below code and not removing it since we might need it for future use. 
+    # #if child value is present and no ADD inheritance, skip
+    # elsif solr_doc[field.solr_name].present?
+    #   next
+    # #if no child value present, inherit from parent collection
+    # else
+    #   solr_doc[field.solr_name] = parent_doc[field.solr_name]
+    end
+  end
+    
 
   # This is my custom code to define a new index based on multiple solr fields
   # I believe that this functionality is now supported natively in solr,
