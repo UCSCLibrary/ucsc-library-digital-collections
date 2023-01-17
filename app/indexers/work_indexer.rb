@@ -104,7 +104,7 @@ class WorkIndexer < Hyrax::WorkIndexer
       parent_doc = SolrDocument.find(parent_work.id)
       # Loop through all inheritable fields
       ScoobySnacks::METADATA_SCHEMA.inheritable_fields.each do |field|
-        inherit_field(solr_doc, field)
+        inherit_field(solr_doc, field, parent_doc)
       end
     end
     return solr_doc
@@ -117,14 +117,14 @@ class WorkIndexer < Hyrax::WorkIndexer
       parent_doc = SolrDocument.find(parent_work.id)
       # Loop through all collection inheritable fields
       ScoobySnacks::METADATA_SCHEMA.collection_inheritable_fields.each do |field|
-        inherit_field(solr_doc, field)
+        inherit_field(solr_doc, field, parent_doc)
       end
     end
     return solr_doc
   end
 
   #inherit fields based on metadata.yml
-  def inherit_field(solr_doc, field)
+  def inherit_field(solr_doc, field, parent_doc)
     #ADD inheritance 
     if (solr_doc[field.solr_name]!= parent_doc[field.solr_name] && ScoobySnacks::METADATA_SCHEMA.add_parent_value_display_field_names.include?(field.name))
       solr_doc[field.solr_name].push(*parent_doc[field.solr_name]) 
