@@ -133,11 +133,7 @@ class Work < ActiveFedora::Base
         elsif self.send(field.name).present?
           next
         else 
-          if field.controlled?
-            self.send("#{field.name}_attributes=",parent.send(field.name).map{|resource| {id: resource.id}})
-          else
-            self.send("#{field.name}=",parent.send(field.name))
-          end
+          inherit_field(field,parent)
         end
       end
     end
@@ -150,14 +146,18 @@ class Work < ActiveFedora::Base
         elsif self.send(field.name).present?
           next
         else 
-          if field.controlled?
-            self.send("#{field.name}_attributes=",parent.send(field.name).map{|resource| {id: resource.id}})
-          else
-            self.send("#{field.name}=",parent.send(field.name))
-          end
+          inherit_field(field,parent)
         end
       end
     end
+  end
+
+  def inherit_field(field, parent) 
+      if field.controlled?
+        self.send("#{field.name}_attributes=",parent.send(field.name).map{|resource| {id: resource.id}})
+      else
+        self.send("#{field.name}=",parent.send(field.name))
+      end
   end
 
 end
