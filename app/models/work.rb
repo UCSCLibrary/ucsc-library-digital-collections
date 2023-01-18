@@ -128,11 +128,12 @@ class Work < ActiveFedora::Base
       parent = ActiveFedora::Base.find(parent_doc.id)
       schema.inheritable_fields.each do |field| 
         next unless parent.respond_to?(field.name)
-        next if self.send(field.name).present?
-        if field.controlled?
-          self.send("#{field.name}_attributes=",parent.send(field.name).map{|resource| {id: resource.id}})
-        else
-          self.send("#{field.name}=",parent.send(field.name))
+        if (self.send(field.name).present? && schema.add_parent_value_display_field_names.include?(field.name))
+          self.send("#{field.name}=",parent.send(field.name) + self.send(field.name))
+        elsif self.send(field.name).present?
+          next
+        else 
+          inherit_field(field,parent)
         end
       end
     end
@@ -140,14 +141,23 @@ class Work < ActiveFedora::Base
       parent = ActiveFedora::Base.find(parent_doc.id)
       schema.collection_inheritable_fields.each do |field| 
         next unless parent.respond_to?(field.name)
-        next if self.send(field.name).present?
-        if field.controlled?
-          self.send("#{field.name}_attributes=",parent.send(field.name).map{|resource| {id: resource.id}})
-        else
-          self.send("#{field.name}=",parent.send(field.name))
+        if (self.send(field.name).present? && schema.add_parent_value_display_field_names.include?(field.name))
+          self.send("#{field.name}=",parent.send(field.name) + self.send(field.name))
+        elsif self.send(field.name).present?
+          next
+        else 
+          inherit_field(field,parent)
         end
       end
     end
+  end
+
+  def inherit_field(field, parent) 
+      if field.controlled?
+        self.send("#{field.name}_attributes=",parent.send(field.name).map{|resource| {id: resource.id}})
+      else
+        self.send("#{field.name}=",parent.send(field.name))
+      end
   end
 
 end
