@@ -54,9 +54,10 @@ module ControlledIndexerBehavior
         end
       end
       if label == url && (url.include?("id.loc.gov") || url.include?("info:lc"))
-        url.gsub!("info:lc","http://id.loc.gov")
-        url.gsub!('http://','https://')
-        request_url = URI(url)
+        cleaned_url = url.dup
+        cleaned_url.gsub!("info:lc","http://id.loc.gov")
+        cleaned_url.gsub!('http://','https://')
+        request_url = URI(cleaned_url)
         request_url.path += '.html'
         response = Net::HTTP.get_response(request_url)
         res = Nokogiri::HTML.parse(response.body)
