@@ -13,7 +13,7 @@ class TextboxAutosuggestInput < ControlledVocabularyInput
     options[:'aria-labelledby'] = label_id
     @rendered_first_element = true
     if value.is_a? String
-      options[:value] = ::WorkIndexer.fetch_remote_label(value)
+      options[:value] = ::WorkIndexer.fetch_remote_label(value) || "Unable to fetch label for #{value}"
       options[:readonly] = true
       text_field(options) + raw("<span class=\"glyphicon glyphicon-floppy-disk\"></span>") + raw("<button type=\"button\" class=\"btn btn-link remove\"><span class=\"glyphicon glyphicon-remove\"></span></button>")  + raw("<button type=\"button\" style=\"display:none\" class=\"btn btn-link restore\"><span class=\"glyphicon glyphicon-share-alt\"></span></button>")
     else
