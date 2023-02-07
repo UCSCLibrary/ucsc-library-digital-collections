@@ -61,7 +61,7 @@ module ControlledIndexerBehavior
         request_url.path += '.html'
         response = Net::HTTP.get_response(request_url)
         res = Nokogiri::HTML.parse(response.body)
-        label = res.title.split('-')[0].strip
+        label = res.title.split(' - ')[0].strip
       end
       Rails.logger.info "Adding buffer entry - label: #{label}, url:  #{url.to_s}"
       LdBuffer.create(url: url, label: label)
