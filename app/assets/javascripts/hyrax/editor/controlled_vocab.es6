@@ -99,6 +99,5 @@ export default class MultiControlledVocab extends FieldManager {
         event.preventDefault()
         let field = $(event.target).parents(this.fieldWrapperClass)
         field.find('[data-destroy]').val('true')
-        field.remove()
     }
 }
