@@ -4,6 +4,31 @@ module ControlledIndexerBehavior
 
   class_methods do
 
+    def sanitize_url(url)
+      cleaned_url = url.dup
+      # Geonames: fetch rdf not the html
+      if url.include?("geonames.org")
+        if url =~ /geonames.org\/[0-9]+.*\z/ && !url.include?("/about.rdf")
+          cleaned_url = url.gsub(/(geonames.org\/[0-9]+).*\z/,"\\1/about.rdf")
+        end
+        cleaned_url
+      # Getty
+      elsif url.include?("vocab.getty.edu")
+        cleaned_url = cleaned_url.gsub("/page/","/")
+        cleaned_url = cleaned_url.gsub('http://','https://')
+      # Library of Congress
+      elsif (url.include?("id.loc.gov") || url.include?("info:lc"))
+        cleaned_url = cleaned_url.gsub("info:lc","http://id.loc.gov")
+        cleaned_url = cleaned_url.gsub('http://','https://')
+        cleaned_url += '.html'
+      # In the local dev env the host is the container ID, change to localhost
+      elsif url.include?("authorities/show/local") && !url.include?("library.ucsc.edu")
+        cleaned_url = cleaned_url.gsub(/http:\/\/[a-z0-9]+\//,"http://localhost:3000/")
+      else
+        cleaned_url
+      end
+    end
+
     def fetch_remote_label(url)
       if url.is_a? ActiveTriples::Resource
         resource = url
@@ -18,30 +43,25 @@ module ControlledIndexerBehavior
         end
       end
     begin
-        # handle local qa table based vocabs
-      if url.to_s.include?("ucsc.edu") or url.to_s.include?("http://localhost")
-        #url.gsub!('http://','https://') if url.to_s.include? "library.ucsc.edu"
-        label = JSON.parse(Net::HTTP.get_response(URI(url)).body)["label"]
-      # handle geonames specially
+      cleaned_url = sanitize_url(url.dup)
+
+      # Hostname varies for local vocabs, use path to identify
+      if url.to_s.include?("authorities/show/local")
+        label = JSON.parse(Net::HTTP.get_response(URI(cleaned_url)).body)["label"]
       elsif url.include? "geonames.org"
-        # make sure we fetch the rdf record, not the normal html one
-        if (res_url = url.dup) =~ /geonames.org\/[0-9]+.*\z/ && !res_url.include?("/about.rdf")
-          res_url = url.gsub(/(geonames.org\/[0-9]+).*\z/,"\\1/about.rdf")
-        end
-        # Interpret the xml result ourselves
-        doc = Nokogiri::XML(open(res_url))
+        doc = Nokogiri::XML(open(cleaned_url))
         label = doc.xpath('//gn:name').first.children.first.text.dup
-      # fetch from other normal authorities
+      elsif url.include?("vocab.getty.edu")
+        response = Net::HTTP.get_response(URI(cleaned_url))
+        res = Nokogiri::HTML.parse(response.body)
+        label = res.title.strip
+      elsif (url.include?("id.loc.gov") || url.include?("info:lc"))
+        response = Net::HTTP.get_response(URI(cleaned_url))
+        res = Nokogiri::HTML.parse(response.body)
+        label = res.title.split(' - ')[0].strip
       else
         # Smoothly handle some common syntax issues
-        cleaned_url = url.dup
-        if url.include?("vocab.getty.edu")
-          cleaned_url.gsub!("/page/","/")
-          cleaned_url.gsub!('http://','https://')
-          response = Net::HTTP.get_response(URI(cleaned_url))
-          res = Nokogiri::HTML.parse(response.body)
-          label = res.title.strip
-        elsif !cleaned_url.is_a? String
+        if !cleaned_url.is_a? String
           resource = ActiveTriples::Resource.new(cleaned_url)
           labels = resource.fetch(headers: { 'Accept'.freeze => default_accept_header }).rdf_label
           if labels.count == 1
@@ -53,16 +73,7 @@ module ControlledIndexerBehavior
           label = cleaned_url
         end
       end
-      if label == url && (url.include?("id.loc.gov") || url.include?("info:lc"))
-        cleaned_url = url.dup
-        cleaned_url.gsub!("info:lc","http://id.loc.gov")
-        cleaned_url.gsub!('http://','https://')
-        request_url = URI(cleaned_url)
-        request_url.path += '.html'
-        response = Net::HTTP.get_response(request_url)
-        res = Nokogiri::HTML.parse(response.body)
-        label = res.title.split(' - ')[0].strip
-      end
+
       Rails.logger.info "Adding buffer entry - label: #{label}, url:  #{url.to_s}"
       LdBuffer.create(url: url, label: label)
 
@@ -78,7 +89,7 @@ module ControlledIndexerBehavior
       rescue Exception => e
         # IOError could result from a 500 error on the remote server
         # SocketError results if there is no server to connect to
-         Rails.logger.error "Unable to fetch #{url} from the authorative source.\n#{e.message}"
+         Rails.logger.error "Unable to fetch #{cleaned_url} from the authorative source.\n#{e.message}"
          return false
       end
     end
@@ -125,8 +136,8 @@ module ControlledIndexerBehavior
           # This is just a normal string (from a legacy model, etc)
           # Go ahead and create a new entry in the appropriate local vocab, if there is one
           subauth_name = get_subauthority_for(field: field, authority_name: 'local')
-          next unless subauth_name.present? # If have a random string and no local vocab, just move on for now
-
+          # Don't index if we're missing subauthority or the value is blank
+          next unless subauth_name.present? && !val.blank?
           mint_local_auth_url(subauth_name, val) if subauth_name.present?
           label = val
         else
