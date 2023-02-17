@@ -283,6 +283,8 @@ fields:
       - secondary
       - editor_primary
       - search_result
+    inheritable: false
+    collection_inheritable: false
 
   
   subjectTemporal:
