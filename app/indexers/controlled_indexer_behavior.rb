@@ -21,9 +21,6 @@ module ControlledIndexerBehavior
         cleaned_url = cleaned_url.gsub("info:lc","http://id.loc.gov")
         cleaned_url = cleaned_url.gsub('http://','https://')
         cleaned_url += '.html'
-      # In the local dev env the host is the container ID, change to localhost
-      elsif url.include?("authorities/show/local") && !url.include?("library.ucsc.edu")
-        cleaned_url = cleaned_url.gsub(/http:\/\/[a-z0-9]+\//,"http://localhost:3000/")
       else
         cleaned_url
       end
@@ -44,9 +41,11 @@ module ControlledIndexerBehavior
       end
     begin
       cleaned_url = sanitize_url(url.dup)
-
-      # Hostname varies for local vocabs, use path to identify
-      if url.to_s.include?("authorities/show/local")
+      # If not buffered, get the label from the vocabulary authority
+      if url.include?("authorities/show/local") && !url.include?("library.ucsc.edu")
+        #local vocab on local devenv, hack the label from the url
+        label = URI(cleaned_url).path.split('/').last.titleize
+      elsif url.include?("library.ucsc.edu")
         label = JSON.parse(Net::HTTP.get_response(URI(cleaned_url)).body)["label"]
       elsif url.include? "geonames.org"
         doc = Nokogiri::XML(open(cleaned_url))

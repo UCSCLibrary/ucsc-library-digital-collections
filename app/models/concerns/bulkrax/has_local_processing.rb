@@ -71,7 +71,13 @@ module Bulkrax::HasLocalProcessing
   def add_controlled_fields
     metadata_schema.controlled_field_names.each do |field_name|
       field = metadata_schema.get_field(field_name)
-      raw_metadata_for_field = raw_metadata.select { |k, _v| k.match?(/#{field_name.downcase}(_\d+)?/) }
+      raw_metadata_for_field = {}
+      raw_metadata.each do |k, v|
+        # Handle both camelCase and snake_case
+        if k.match?(/#{field_name.downcase}(_\d+)?/) || k.match?(/#{field_name.underscore}(_\d+)?/)
+          raw_metadata_for_field[k] = v
+        end
+      end
       next if raw_metadata_for_field.blank?
 
       all_values = raw_metadata_for_field.values.compact&.map { |value| value.split(/\s*[|]\s*/) }&.flatten
