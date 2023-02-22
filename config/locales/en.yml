@@ -21,10 +21,14 @@
 
 en:
   hello: "Hello world"
-  # Hyrax bug makes these strings not appear when defined in hyrax.en.yml
   hyrax:
+    collection_type:
+      default_title: "Untitled"
     dashboard:
       my:
         heading:
           collection_type: "Collection Type"
+          type: "Type"
           visibility: "Visibility"
+          collection:
+            visibility: "Visibility of Collection"
