@@ -1,5 +1,6 @@
+include Blacklight::Facet
 class CollectionsController < Hyrax::CollectionsController
-  layout :resolve_layout
+  #layout :resolve_layout
   self.presenter_class = Ucsc::CollectionPresenter
   skip_load_and_authorize_resource :only => :show_all
   load_and_authorize_resource except: [:index, :create], instance_name: :collection
@@ -22,5 +23,22 @@ class CollectionsController < Hyrax::CollectionsController
     @collections = @response.documents.select{ |col| ["open","campus"].include?(col.visibility)}
     rescue Blacklight::Exceptions::ECONNREFUSED, Blacklight::Exceptions::InvalidRequest
       []
+    end
+    
+
+    def facet
+      @facet = blacklight_config.facet_fields[params[:id]]
+      raise ActionController::RoutingError, 'Not Found' unless @facet
+      @response = get_facet_field_response(@facet.key, params)
+      @display_facet = @response.aggregations[@facet.field]
+      @pagination = facet_paginator(@facet, @display_facet)
+      respond_to do |format|
+        format.html do
+          # Draw the partial for the "more" facet modal window:
+          return render layout: false if request.xhr?
+          # Otherwise draw the facet selector for users who have javascript disabled.
+        end
+        format.json
+      end
     end
 end

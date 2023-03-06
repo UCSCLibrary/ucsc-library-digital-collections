@@ -48,6 +48,8 @@ Rails.application.routes.draw do
   post 'concern/works/:id/email' => 'hyrax/works#send_email'
   get 'concern/works/:id/email' => 'hyrax/works#show'
   get 'collections', to: 'collections#show_all'
+  get '/collections/:id/facet' => 'collections#facet'
+
   authenticate :user, lambda { |u| u.admin? } do
     mount Sidekiq::Web => '/sidekiq'
   end
@@ -68,7 +70,7 @@ Rails.application.routes.draw do
 
   get '/records/:id' => 'records#show'
   get '/authorize/:id' => 'ucsc/authorization#authorize'
-
+  
   resources :solr_documents, only: [:show], path: '/catalog', controller: 'catalog' do
     concerns :exportable
   end
