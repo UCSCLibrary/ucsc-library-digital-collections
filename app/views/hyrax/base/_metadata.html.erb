@@ -1,7 +1,12 @@
 <%#= Customized from Hyrax 2.4.0 
   #  whole file altered %>
-<!-- <h2><%= t('.header') %></h2> -->
-<h2 class="metadata">About this item:</h2>
+<% if presenter.is_parent %>
+<h2 class="metadata"><%= t('.header_parent') %>:</h2>
+<h2 class="metadata mobile" onclick="mobileMetadataToggle()"><%= t('.header_parent') %> <span class="glyphicon glyphicon-chevron-up" aria-hidden="true" id="mobileExpand"></span><span class="glyphicon glyphicon-chevron-down" aria-hidden="true" id="mobileCollapse"></span></h2>
+<% else %>
+<h2 class="metadata"><%= t('.header') %>:</h2>
+<% end %>
+
 <table class="<%= dom_class(presenter) %> attributes" <%= presenter.microdata_type_to_html %>>
    <tbody>
     <%= render 'primary_attribute_rows', presenter: presenter %>
@@ -31,10 +36,13 @@
 </div>
 
 <script>
-
- function toggleMoreMetadata() {
-     jQuery('#more-metadata').toggle;
-     jQuery('#show-more-metadata').toggle;
- }
-
+function mobileMetadataToggle() {
+    jQuery('table.attributes, #collection-metadata').toggle();
+    jQuery('#mobileExpand, #mobileCollapse').toggle();
+    if(jQuery('#hide-more-metadata').is(":visible")) {
+        jQuery('div.more-metadata').toggle();
+    } else {
+        jQuery('#show-more-metadata').toggle();
+    }
+}
 </script>

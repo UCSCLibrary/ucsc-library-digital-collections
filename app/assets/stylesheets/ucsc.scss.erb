@@ -693,6 +693,23 @@ table.work.attributes {
     }
 }
 
+/* Parent object metadata on mobile */
+@media all and (max-width: 767px) {
+    .item-set .metadata,
+    .item-set #mobileCollapse,
+    .item-set table.attributes,
+    .item-set #collection-metadata,
+    .item-set #show-more-metadata { display: none; }
+    .item-set .metadata.mobile {
+        display: block;
+        color: #2e74b2;
+        cursor: pointer;
+    }
+}
+@media all and (min-width: 768px) {
+    .item-set .metadata.mobile { display: none; }
+}
+
 /* Download, Share, and Cite buttons */
 #download-share-cite {
     height: 40px;
@@ -939,6 +956,16 @@ div#documents.gallery {
             opacity: 1;
         }
         .tooltip-arrow { display: none; }
+        .image-set {
+            width: 30px;
+            height:30px;
+            border-radius: 50%;
+            position: absolute;
+            right: 15px;
+            top: 112px;
+            background: #fff url(<%= asset_path('multi-item.png') %>) no-repeat center;
+            background-size: 50%;
+        }
     }
 }
 
