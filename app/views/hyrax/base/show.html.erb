@@ -3,7 +3,9 @@
 <% provide :page_title, @presenter.page_title %>
 
 <%= render 'shared/citations' %>
-<div itemscope itemtype="http://schema.org/CreativeWork" class="row">
+<% item_classes = "row" %>
+<% item_classes+= " item-set" if !@presenter.audio? && @presenter.is_parent %>
+<div itemscope itemtype="http://schema.org/CreativeWork" class="<%= item_classes %>">
     <div class="col-sm-12">
         <header>
             <%= render 'work_title', presenter: @presenter %>
@@ -21,7 +23,7 @@
             
             <div class="col-sm-6">
                 <div id="download-share-cite">
-                    <% if (@presenter.image? && !@presenter.audio?) %>
+                    <% if (@presenter.image? && !@presenter.audio? && !@presenter.is_parent) %>
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#downloadWork">
                             <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> Download</button>
                     <% end  %>

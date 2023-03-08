@@ -43,7 +43,7 @@ module Ucsc
         return 'primary_audio_player'
       elsif image? && (image = representative_presenter).present?
         return "uv_image_primary" if solr_document.file_set_ids.count > 1
-        return "basic_image_primary" if parent_image?
+        return nil if is_parent
         return "campus_lockout" if campus_lockout?(representative_presenter.solr_document)
         case universal_viewer?(uv_override)
         when "true"
@@ -56,8 +56,8 @@ module Ucsc
       end
     end
 
-    def parent_image?
-      solr_document.member_work_ids.present? && (file_set_ids - solr_document.member_work_ids).blank?
+    def is_parent
+      solr_document.member_work_ids.present? #&& (file_set_ids - solr_document.member_work_ids).blank?
     end
 
     def campus_lockout? fs
@@ -93,6 +93,15 @@ module Ucsc
     def collections
       return nil unless solr_document.member_of_collection_ids.present?
       @collection ||= solr_document.member_of_collection_ids.map{|id| SolrDocument.find(id)}
+    end
+
+    def work_title
+      titles = solr_document.title
+      # Parent audio works display their title on their children works
+      if audio? && (all_av_files.count > 0) && parent.present?
+        titles = parent.audio? ? parent.title : title
+      end
+      titles.first
     end
 
     def page_title

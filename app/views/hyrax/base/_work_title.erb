@@ -1,10 +1,3 @@
 <%#= Customized from Hyrax 2.4.0
   #  Whole file customized %>
-<% titles = presenter.title %>
-<% if presenter.audio? and (presenter.all_av_files.count > 0) and presenter.parent.present? %>
-    <% titles = presenter.parent.audio? ? presenter.parent.title : presenter.title %>
-<% end %>
-<% titles.each_with_index do |title, index| %>
-    <h1><%= title %></h1>
-<% end %>
-
+<h1><%= presenter.work_title %><% if presenter.is_parent && !presenter.audio? %> (Image Set)<% end %></h1>

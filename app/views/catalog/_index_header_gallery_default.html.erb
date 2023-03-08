@@ -16,7 +16,12 @@
         <%= t('blacklight.search.documents.counter', counter: counter) %>
       </span>
     <% end %>
-    <%= link_to_document document, truncate(document.title.first, length: 35, separator: ' '), {counter: counter, "data-toggle" => 'tooltip', 'title' => document.title.first} %>
+    <% if document.image? && !document.member_work_ids.blank? %>
+      <% title = truncate(document.title.first, length: 24, separator: ' ') + " (Image Set)" %>
+    <% else %>
+      <% title = truncate(document.title.first, length: 35, separator: ' ') %>
+    <% end %>
+    <%= link_to_document document, title, {counter: counter, "data-toggle" => 'tooltip', 'title' => document.title.first} %>
   </h3>
   <%= document_actions %>
 </header>
