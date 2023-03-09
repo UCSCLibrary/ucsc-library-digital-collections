@@ -58,6 +58,8 @@ module ControlledIndexerBehavior
         response = Net::HTTP.get_response(URI(cleaned_url))
         res = Nokogiri::HTML.parse(response.body)
         label = res.title.split(' - ')[0].strip
+      elsif url.include?("purl.org/dc/dcmitype")
+        label = URI(url).path.split('/').last.gsub!(/([A-Z])/," \\1").strip
       else
         # Smoothly handle some common syntax issues
         if !cleaned_url.is_a? String
