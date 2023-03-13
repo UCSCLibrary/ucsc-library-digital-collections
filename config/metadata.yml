@@ -172,7 +172,7 @@ fields:
         subauthority: dcmi_types
     facet: true
     inheritable: false
-    input: dropdown
+    input: textbox_autosuggest
 #    multiple: false
 
   rightsStatement:

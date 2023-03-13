@@ -128,6 +128,14 @@ module Bulkrax::HasLocalProcessing
     valid_value = value.strip.chomp.sub('https', 'http')
     valid_value.chop! if valid_value.match?(%r{/$}) # remove trailing forward slash if one is present
 
+    # We've decided to use the local vocab instead of purl.org
+    if valid_value.include?("purl.org/dc/dcmitype")
+      id = URI(valid_value).path.split('/').last
+      id.gsub!(/([A-Z])/," \\1") # Split camel-case into multiple words
+      id = id.strip.parameterize # then convert to a url format
+      valid_value = "#{CatalogController.root_url}/authorities/show/local/dcmi_types/#{id}"
+    end
+
     valid_value
   end
 
