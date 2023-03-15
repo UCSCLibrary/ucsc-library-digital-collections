@@ -31,10 +31,6 @@ module UcscRecordsHelper
       vocabularies = field.vocabularies || [field.vocabulary]
       
       #Create options for authority select text box
-      Rails.logger.debug "here are some vocabularies:"
-      Rails.logger.debug vocabularies.inspect
-      
-
       authority_options = vocabularies.reject{|voc| voc['authority'].nil?}.map do |voc| 
         voc_name = voc['authority'].titleize
         voc_url = "/authorities/search/#{voc['authority']}"

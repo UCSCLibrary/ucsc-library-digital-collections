@@ -21,3 +21,14 @@
 
 en:
   hello: "Hello world"
+  hyrax:
+    collection_type:
+      default_title: "Untitled"
+    dashboard:
+      my:
+        heading:
+          collection_type: "Collection Type"
+          type: "Type"
+          visibility: "Visibility"
+          collection:
+            visibility: "Visibility of Collection"
