@@ -3,6 +3,9 @@
 <div class="document col-xs-6 col-md-3">
   <div class="thumbnail">
     <%= render_thumbnail_tag(document, {'data-toggle' => 'tooltip', 'title' => document.title.first, :square => true}, :counter => document_counter_with_offset(document_counter)) %>
+    <% if document.image? && !document.member_work_ids.blank? %>
+      <div class="image-set"></div>
+    <% end %>
     <div class="caption">
       <%= render_document_partials document, blacklight_config.view_config(:gallery).partials, :document_counter => document_counter %>
     </div>

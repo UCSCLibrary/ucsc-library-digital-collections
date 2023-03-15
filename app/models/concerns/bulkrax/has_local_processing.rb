@@ -71,7 +71,13 @@ module Bulkrax::HasLocalProcessing
   def add_controlled_fields
     metadata_schema.controlled_field_names.each do |field_name|
       field = metadata_schema.get_field(field_name)
-      raw_metadata_for_field = raw_metadata.select { |k, _v| k.match?(/#{field_name.downcase}(_\d+)?/) }
+      raw_metadata_for_field = {}
+      raw_metadata.each do |k, v|
+        # Handle both camelCase and snake_case
+        if k.match?(/#{field_name.downcase}(_\d+)?/) || k.match?(/#{field_name.underscore}(_\d+)?/)
+          raw_metadata_for_field[k] = v
+        end
+      end
       next if raw_metadata_for_field.blank?
 
       all_values = raw_metadata_for_field.values.compact&.map { |value| value.split(/\s*[|]\s*/) }&.flatten
@@ -121,6 +127,14 @@ module Bulkrax::HasLocalProcessing
 
     valid_value = value.strip.chomp.sub('https', 'http')
     valid_value.chop! if valid_value.match?(%r{/$}) # remove trailing forward slash if one is present
+
+    # We've decided to use the local vocab instead of purl.org
+    if valid_value.include?("purl.org/dc/dcmitype")
+      id = URI(valid_value).path.split('/').last
+      id.gsub!(/([A-Z])/," \\1") # Split camel-case into multiple words
+      id = id.strip.parameterize # then convert to a url format
+      valid_value = "#{CatalogController.root_url}/authorities/show/local/dcmi_types/#{id}"
+    end
 
     valid_value
   end

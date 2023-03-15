@@ -173,7 +173,8 @@ en:
         citations: "Cite"
         header:  "Export citation as:"
       metadata:
-        header: Description
+        header: "About this item"
+        header_parent: "About this set"
     pagination:
       previous: "<span class='glyphicon glyphicon-chevron-left' aria-hidden='true'></span> Previous"
       next: "Next <span class='glyphicon glyphicon-chevron-right' aria-hidden='true'></span>"
