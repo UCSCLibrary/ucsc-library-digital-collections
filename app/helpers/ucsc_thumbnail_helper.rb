@@ -1,15 +1,20 @@
 module UcscThumbnailHelper
 
   def square_thumbnail_region(doc, size="150,")
-    doc = SolrDocument.find(doc) if doc.is_a?(String)
-    size = "#{size}," unless (size.is_a?(String) && size.include?(','))
-    hh = Array(doc.height).first.to_i
-    ww = Array(doc.width).first.to_i
-    if hh > ww
-      square_region = "0,#{(hh-ww)/2},#{ww},#{ww}"
-    else
-      square_region =  "#{(ww-hh)/2},0,#{hh},#{hh}"
-    end
+    # commenting out the code to calculate thumbnail region
+    # Below code causes errors when the height and width are huge.
+    # TODO : fix this in Fedora - see why image region is huge
+    # For now using square region for all thumbnails
+    # doc = SolrDocument.find(doc) if doc.is_a?(String)
+    # size = "#{size}," unless (size.is_a?(String) && size.include?(','))
+    # hh = Array(doc.height).first.to_i
+    # ww = Array(doc.width).first.to_i
+    # if hh > ww
+    #   square_region = "0,#{(hh-ww)/2},#{ww},#{ww}"
+    # else
+    #   square_region =  "#{(ww-hh)/2},0,#{hh},#{hh}"
+    # end
+    square_region = "square"
   end
 
   def square_thumbnail_url(doc,size="150,")
