@@ -35,7 +35,9 @@
     <span id="hide-more-metadata" onclick="jQuery('.more-metadata').toggle()"><a>Show less information -</a></span>
 </div>
 
+<% if presenter.is_parent %>
 <script>
+// Toggle button for item-set metadata on mobile
 function mobileMetadataToggle() {
     jQuery('table.attributes, #collection-metadata').toggle();
     jQuery('#mobileExpand, #mobileCollapse').toggle();
@@ -45,4 +47,24 @@ function mobileMetadataToggle() {
         jQuery('#show-more-metadata').toggle();
     }
 }
+// Reset the presentation of item-set metadata when the browser is resized.
+// Resizing debounce code courtesy of
+// https://medium.com/@vaibhavar/ui-performance-window-resize-handler-debouncing-2ec5f7432165
+var fnResize = function(){
+    if ($(window).width() > 767) {
+        jQuery('table.attributes, #show-more-metadata, #collection-metadata').show();
+        jQuery('div.more-metadata').hide();
+    } else {
+        jQuery('table.attributes, #show-more-metadata, div.more-metadata, #collection-metadata').hide();
+    }
+}
+var fnResizeCallTimer = null;
+var fnResizeCaller = function(){
+    clearTimeout(fnResizeCallTimer);
+    fnResizeCallTimer = setTimeout(fnResize, 200);
+}
+jQuery(document).ready(function(){
+    jQuery(window).on("resize", fnResizeCaller);
+});
 </script>
+<% end %>
