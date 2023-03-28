@@ -118,23 +118,21 @@ module Bulkrax::HasLocalProcessing
 
   # @return [String, nil] URI for local authority, or nil if one could not be created
   def create_local_authority_id(field, value)
+    # If purl.org get the label from the end of the URI
+    if value.include?("purl.org/dc/dcmitype")
+      value = URI(value).path.split('/').last
+      value = value.gsub!(/([A-Z])/," \\1").strip # Split camel-case into multiple words
+    end
     local_subauth_name = get_subauthority_for(field: field, authority_name: 'local')
     mint_local_auth_url(local_subauth_name, value) if local_subauth_name.present?
   end
 
   def sanitize_controlled_field_uri(value)
     return unless value.match?(::URI::DEFAULT_PARSER.make_regexp)
+    return if value.include?("purl.org/dc/dcmitype") # Turn purl.org into local vocab
 
     valid_value = value.strip.chomp.sub('https', 'http')
     valid_value.chop! if valid_value.match?(%r{/$}) # remove trailing forward slash if one is present
-
-    # We've decided to use the local vocab instead of purl.org
-    if valid_value.include?("purl.org/dc/dcmitype")
-      id = URI(valid_value).path.split('/').last
-      id.gsub!(/([A-Z])/," \\1") # Split camel-case into multiple words
-      id = id.strip.parameterize # then convert to a url format
-      valid_value = "#{CatalogController.root_url}/authorities/show/local/dcmi_types/#{id}"
-    end
 
     valid_value
   end
