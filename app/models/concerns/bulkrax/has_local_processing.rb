@@ -139,7 +139,7 @@ module Bulkrax::HasLocalProcessing
 
     # Ensure local terms exist before proceeding
     if valid_value.include?("authorities/show/local")
-      id = URI(valid_value).path.split('/').last
+      id = URI(valid_value).path.split('/').last.titleize
       valid_value = create_local_authority_id(field, id)
     end
 
