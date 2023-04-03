@@ -3,7 +3,7 @@
   #  Manually adding the legacy UA ID for now %>
 
 <%# Only track on production %>
-<% if Hyrax.config.analytics && Hyrax.config.google_analytics_id? && Rails.env.development? %>
+<% if Hyrax.config.analytics && Hyrax.config.google_analytics_id? && Rails.env.production? %>
 <% tracking_id = Hyrax.config.google_analytics_id %>
 
 <!-- Google tag (gtag.js) -->
