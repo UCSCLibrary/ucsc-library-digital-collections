@@ -21,6 +21,7 @@ $(document).on('turbolinks:load', function() {
         url = $(this).attr('href');
         urlParam = url.replace(/\/collections\/[a-zA-Z_]+\//i, "/catalog/")
         finalUrl = urlParam + queryParam
+        finalUrl.replace("locale=en", "");
         $(this).attr('href', finalUrl)
     });
 
