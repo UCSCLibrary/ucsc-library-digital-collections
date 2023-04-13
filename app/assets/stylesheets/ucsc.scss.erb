@@ -871,18 +871,31 @@ h5.harmful-language-statement {
     display: flex;
     flex-flow: row wrap;
     margin-bottom: 30px;
+    .media { margin-bottom: 30px; }
     .media:first-child {
         margin-top: 15px;
     }
+    .media-body { position: relative; }
+    p.media-description { margin: 0 0 25px; }
+    .media-count {
+        position: absolute;
+        bottom: -10px;
+        font-weight: bold;
+    }
     .media-object {
-        height: 100px;
+        height: 150px;
         object-fit: cover;
     }
 }
 @media all and (max-width: 767px) {
     #all-collections .media {
-        h4 { margin-top: 25px; }
+        margin-left: 15px;
         p { display: none; }
+        h4 {
+            display: table-cell;
+            height: 150px;
+            vertical-align: middle;
+        }
     }
 
 }
@@ -1281,7 +1294,9 @@ all and (min-width: 992px) and (-webkit-transform-3d) {
         }
         #facet-panel-collapse {
             color: #fff;
+            background-color: #20477d;
             border-top: none;
+            .input-group { margin: 8px; }
             .panel-default > .panel-heading {
                 border-radius: 0;
                 background-color: #20477d;

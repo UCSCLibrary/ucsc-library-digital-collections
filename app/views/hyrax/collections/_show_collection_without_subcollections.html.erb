@@ -59,11 +59,7 @@
 
     <!-- Search bar -->
     <%#= Removed row class and moved search_form render to custom _facets partial %>
-    <div class="hyc-blacklight hyc-bl-search hyc-body">
-      <div>
-        <%= render 'facets' %>
-      </div>
-    </div>
+    <%= render 'facets' %>
   </div>
 
   <div class="col-sm-8">
@@ -71,18 +67,18 @@
 
     <%# This is a hacky replacement for the constraints box,
       # which wasn't working on the collection page  %>
-    <% if params['q'].present? %>
+    <% if params['cq'].present? %>
       <div id="appliedParams" class="clearfix constraints-container">
         <span class="constraints-label">Filtering by:</span>
         <span class="btn-group appliedFilter constraint filter filter-creator_sim">
           <span class="constraint-value btn btn-sm btn-default btn-disabled">
-            <span class="filterValue" title="<%= params['q']%>"><%= params['q'] %></span>
+            <span class="filterValue" title="<%= params['cq']%>"><%= params['cq'] %></span>
           </span>
           <%# The following line opens a security hole, if users add parameters that have special meaning for url_for%>
           <%# Instead, the parameters should be permitted properly in the controller before being used here %>
-          <a class="btn btn-default btn-sm remove dropdown-toggle" href="<%= url_for(params.except(:q).to_unsafe_h) %>">
+          <a class="btn btn-default btn-sm remove dropdown-toggle" href="<%= url_for(params.except(:cq).to_unsafe_h) %>">
             <span class="glyphicon glyphicon-remove"></span>
-            <span class="sr-only">Remove constraint "<%= params['q'] %>"</span>
+            <span class="sr-only">Remove constraint "<%= params['cq'] %>"</span>
           </a>
         </span>
       </div>
