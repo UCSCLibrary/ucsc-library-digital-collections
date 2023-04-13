@@ -108,7 +108,7 @@ en:
       az:
         title: "About the UCSC Library Digital Collections"
         description: "Explore over 100,000 digitized items from UCSC Special Collections & Archives. This site is a living database with new photographs, documents, maps, audio and video added regularly. While only a small fraction of the Library’s archival collections are digitized, you can learn more about the unique archives from which these items originate in the Collection Guides linked to each item."
-        heading: "A-Z List of Collections"
+        heading: "All Collections"
         search: "Search for a collection..."
     collection_type:
       default_title: "Collection"
