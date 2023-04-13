@@ -1,14 +1,21 @@
 <%#= Custom file %>
-<% if has_facet_values?  %>
-<div id="facets" class="facets sidenav">
-  <div class="top-panel-heading panel-heading">
-    <button type="button" class="facets-toggle" data-toggle="collapse" data-target="#facet-panel-collapse">
-      <span>Show Filters <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></span>
-    </button>
-  </div>
-  <div id="facet-panel-collapse" class="collapse panel-group">
-    <%= render 'search_form', presenter: @presenter, url: hyrax.collection_path(@presenter.id) %>
-    <%= render_facet_partials %>
+<div class="hyc-blacklight hyc-bl-search hyc-body">
+  <div id="facets" class="facets sidenav">
+    <div class="top-panel-heading panel-heading">
+      <button type="button" class="facets-toggle" data-toggle="collapse" data-target="#facet-panel-collapse">
+        <span>Show Filters <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></span>
+      </button>
+    </div>
+    <div id="facet-panel-collapse" class="collapse panel-group">
+      <% if params[:action] == "show" %>
+        <%= render 'search_form', presenter: @presenter, url: hyrax.collection_path(@presenter.id) %>
+      <% elsif params[:action] == "index" %>
+        <%# Search A-Z Collections %>
+        <%= render 'search_form_az' %>
+      <% end %>
+      <% if has_facet_values?  %>
+        <%= render_facet_partials %>
+      <% end %>
+    </div>
   </div>
 </div>
-<% end %>
