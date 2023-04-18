@@ -27,9 +27,9 @@
 				<% if params['q'] || params['f'] %>
 					<% results = @response.response['numFound'] %>
 					<% if results == 1 %>
-						<h4>1 result</h4>
+						<h4>1 collection</h4>
 					<% else %>
-						<h4><%= results %> results</h4>
+						<h4><%= results %> collections</h4>
 					<% end %>
 				<% else # print the non-search A-Z heading %>
 					<h4><%= t("hyrax.collections.az.heading") %></h4>
