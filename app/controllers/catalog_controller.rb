@@ -167,7 +167,7 @@ class CatalogController < ApplicationController
     # except in the relevancy case).
     # label is key, solr field is value
 
-    config.add_sort_field "score desc, #{uploaded_field} desc", label: "relevance"
+    config.add_sort_field "score desc, #{uploaded_field} desc", label: "Title"
     ScoobySnacks::BlacklightConfiguration.add_sort_fields(config)
     
     # If there are more than this many search results, no spelling ("did you
