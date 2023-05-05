@@ -22,7 +22,7 @@ module Ucsc
     end
 
     # We should delegate this to the solrDocument, which should have it already indexed (for works at least).
-    def display_image_url(size="800,")
+    def display_image_url(size="1000,")
       if representative_id
         return "" unless current_ability.can?(:read, representative_id)
         representative_image = SolrDocument.find(representative_id)
