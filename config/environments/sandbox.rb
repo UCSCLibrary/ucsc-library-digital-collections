@@ -80,13 +80,6 @@ Rails.application.configure do
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
 
-  # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
-  # the I18n.default_locale when a translation cannot be found).
-  config.i18n.fallbacks = true
-  config.i18n.available_locales = [:en]
-  config.i18n.default_locale = :'en'
-  config.i18n.enforce_available_locales = false
-
   # Send deprecation notices to registered listeners.
   config.active_support.deprecation = :notify
 
