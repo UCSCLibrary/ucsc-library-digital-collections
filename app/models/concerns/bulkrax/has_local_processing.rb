@@ -86,7 +86,7 @@ module Bulkrax::HasLocalProcessing
 
       parsed_metadata.delete(field_name) # replacing field_name with field_name_attributes
       all_values.each_with_index do |value, i|
-        auth_id = sanitize_controlled_field_uri(value) # assume user-provided URI references a valid authority
+        auth_id = sanitize_controlled_field_uri(field, value)
         auth_id ||= search_authorities_for_id(field, value)
         auth_id ||= create_local_authority_id(field, value)
         next unless auth_id.present?
@@ -122,7 +122,8 @@ module Bulkrax::HasLocalProcessing
     mint_local_auth_url(local_subauth_name, value) if local_subauth_name.present?
   end
 
-  def sanitize_controlled_field_uri(value)
+  def sanitize_controlled_field_uri(field, value)
+    # We assume user-provided URI references a valid authority
     return unless value.match?(::URI::DEFAULT_PARSER.make_regexp)
 
     valid_value = value.strip.chomp.sub('https', 'http')
@@ -134,6 +135,12 @@ module Bulkrax::HasLocalProcessing
       id.gsub!(/([A-Z])/," \\1") # Split camel-case into multiple words
       id = id.strip.parameterize # then convert to a url format
       valid_value = "#{CatalogController.root_url}/authorities/show/local/dcmi_types/#{id}"
+    end
+
+    # Ensure local terms exist before proceeding
+    if valid_value.include?("authorities/show/local")
+      id = URI(valid_value).path.split('/').last.titleize
+      valid_value = create_local_authority_id(field, id)
     end
 
     valid_value

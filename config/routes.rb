@@ -11,7 +11,7 @@ Rails.application.routes.draw do
 
   get '/admin/workflows(.:format)', to: 'admin/workflows#index'
 
-  resources :collections, only: :show do # public landing show page
+  resources :collections, only: [:index, :show] do # public landing show page
     member do
       get 'page/:page', action: :index
       get 'facet/:id', action: :facet, as: :dashboard_facet
@@ -47,7 +47,6 @@ Rails.application.routes.draw do
 
   post 'concern/works/:id/email' => 'hyrax/works#send_email'
   get 'concern/works/:id/email' => 'hyrax/works#show'
-  get 'collections', to: 'collections#show_all'
   authenticate :user, lambda { |u| u.admin? } do
     mount Sidekiq::Web => '/sidekiq'
   end

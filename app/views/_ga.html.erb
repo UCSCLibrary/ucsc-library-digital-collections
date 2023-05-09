@@ -1,0 +1,24 @@
+<%#= Overwritten from Hyrax 2.9.6
+  #  Complete rewrite to use new gtag instead of ga.js
+  #  Manually adding the legacy UA ID for now %>
+
+<%# Only track on production %>
+<% if Hyrax.config.analytics && Hyrax.config.google_analytics_id? && Rails.env.production? %>
+<% tracking_id = Hyrax.config.google_analytics_id %>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=<%= tracking_id %>"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '<%= tracking_id %>', {"groups":"default","anonymize_ip":true,"link_attribution":true,"allow_ad_personalization_signals":false});
+  gtag('config', 'UA-2259271-24',   {"groups":"default","anonymize_ip":true,"link_attribution":true,"allow_ad_personalization_signals":false});
+</script>
+<% else %>
+<!-- Enabled in configuration: <%= Hyrax.config.analytics %>-->
+<!-- ID: <%= Hyrax.config.google_analytics_id %> -->
+<!-- Google Analytics is disabled on non-production environments -->
+<!-- End Google Analytics -->
+<% end %>
