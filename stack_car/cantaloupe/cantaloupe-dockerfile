@@ -12,6 +12,9 @@ ENV LD_LIBRARY_PATH /usr/share/kakadu:$LD_LIBRARY_PATH
 
 EXPOSE 8182
 
+# Stretch moved to archive.debian.org
+RUN echo "deb http://archive.debian.org/debian stretch main" > /etc/apt/sources.list
+
 RUN apt-get update \
  && apt-get -y install imagemagick \
  && apt-get -y install graphicsmagick \
