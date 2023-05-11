@@ -16,9 +16,7 @@ x-app: &app
     - assets:/app/samvera/hyrax-webapp/public/assets
     - cache:/app/samvera/hyrax-webapp/tmp/cache
     - gems:/srv/bundle:Z
-    - ../dams_derivatives:/dams_derivatives
     - ../example_media:/srv/hycruz/public/example_media
-    - ..:/app/samvera/hyrax-webapp
 
 services:
   web:
