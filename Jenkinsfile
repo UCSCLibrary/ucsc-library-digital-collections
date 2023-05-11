@@ -78,7 +78,7 @@ pipeline {    // Every declarative pipeline starts with this line
       steps {
         // This is almost exactly like the test stage,
         // except the script tells rspec only to run the smoke tests
-        sh 'cd stack_car; chmod +x run-smoke-tests-when-ready.sh; BRANCH=${GIT_BRANCH/origin\\//} docker exec hycruz stack_car/run-smoke-tests-when-ready.sh'
+        sh 'BRANCH=${GIT_BRANCH/origin\\//} docker exec hycruz stack_car/run-smoke-tests-when-ready.sh'
       }
     }
     
