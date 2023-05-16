@@ -415,6 +415,7 @@ fields:
     label: Date Digitized
     index_itemprop: dateModified
     predicate: DC:modified
+    display_group: admin_only
     inheritable: true
     collection_inheritable: true
 #    index_helper_method: human_readable_date
