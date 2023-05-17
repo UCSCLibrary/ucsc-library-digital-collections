@@ -20,8 +20,22 @@ pipeline {
       steps {
         /*
         The 'sh' Jenkins command runs a command in a bash shell.
+        Jenkins owns the app folder, we need looser perms for the app to run properly
         */
-        sh 'rm -rf tmp/pids; mkdir -p tmp/pids; chmod -R 777 tmp/pids'
+        sh '''
+          rm -rf tmp/pids
+          mkdir -p tmp/pids
+          chmod -R 777 tmp/pids
+          mkdir -p coverage
+          chmod 777 coverage
+          chmod 666 Gemfile.lock
+          chmod 777 log
+          chmod 666 log/test.log
+          chmod 666 log/capistrano.log
+          chmod 777 db/schema.rb
+          mkdir -p tmp/sockets
+          chmod 777 tmp/sockets
+          '''
         dir('stack_car') {
           sh 'docker-compose build;docker-compose up -d'
         }
@@ -36,20 +50,8 @@ pipeline {
           The docker container for our webapp is named 'hycruz'.
           The script 'run-tests-when-ready.sh' waits until the test environment is online
           and then runs the rspec test suite
-          Jenkins owns the app folder, we need looser perms for the app to run properly
           */
-          sh '''
-            mkdir -p coverage
-            chmod 777 coverage
-            chmod 666 Gemfile.lock
-            chmod 777 log
-            chmod 666 log/test.log
-            chmod 666 log/capistrano.log
-            chmod 777 db/schema.rb
-            mkdir tmp/sockets
-            chmod 777 tmp/sockets
-            docker exec -e COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN hycruz stack_car/run-tests-when-ready.sh
-            '''
+          sh 'docker exec -e COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN hycruz stack_car/run-tests-when-ready.sh'
       }
     }
     
