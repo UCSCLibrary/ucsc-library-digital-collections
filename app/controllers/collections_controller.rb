@@ -16,7 +16,7 @@ class CollectionsController < Hyrax::CollectionsController
     # Sort the works by title only for Aerials photographs collection
     if @collection.title.first == "UC Santa Cruz Aerial Photographs Collection" && params[:q].blank? && params[:cq].blank? && params[:f].blank?
       sort_fields = self.blacklight_config.sort_fields["score desc, system_create_dtsi desc"]
-      sort_fields["sort"] = "title_si asc"
+      sort_fields["sort"] = "title_ssi asc"
     end
     
     # hide collection facet when searching within one collection
