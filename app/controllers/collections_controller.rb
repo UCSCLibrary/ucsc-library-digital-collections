@@ -1,4 +1,3 @@
-require 'scooby_snacks/blacklight_configuration'
 class CollectionsController < Hyrax::CollectionsController
   layout :resolve_layout
   self.presenter_class = Ucsc::CollectionPresenter
