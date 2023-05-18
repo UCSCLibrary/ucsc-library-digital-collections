@@ -43,8 +43,7 @@
 				</div>
 				<div class="media-body">
 					<h4 class="media-heading">
-						<%#= sorting all the works in a collection by title so that all works display in order%>
-						<a href="/collections/<%= collection.id %>?sort=title_si+asc&locale=en"><%= collection.title.first %></a>
+						<a href="/collections/<%= collection.id %>?locale=en"><%= collection.title.first %></a>
 					</h4>
 					<p class="media-description"><%= collection.description.first if collection.description.present? %></p>
 					<p class="media-count"><%= @presenter.total_viewable_items(collection.id, current_ability) %> items</p>
