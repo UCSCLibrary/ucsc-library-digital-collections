@@ -14,7 +14,6 @@ class CollectionsController < Hyrax::CollectionsController
   before_action only: :show do
     self.class.copy_blacklight_config_from(::CatalogController)
     # Sort the works by title only for Aerials photographs collection
-    Rails.logger.info "these are params #{params}"
     if @collection.title.first == "UC Santa Cruz Aerial Photographs Collection" && params[:q].blank? && params[:cq].blank? && params[:f].blank?
       sort_fields = self.blacklight_config.sort_fields["score desc, system_create_dtsi desc"]
       sort_fields["sort"] = "title_si asc"
