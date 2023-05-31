@@ -1,16 +1,12 @@
 <ul class="facet-values list-unstyled">
   <% paginator = facet_paginator(facet_field, display_facet) %>
   <% paginator.items.each do |item|%>
-  
-  <%facet_config = facet_configuration_for_field(facet_field)%>
-  <%= facet_config%>
-  
   <a href = '#'>
   <li>
   <%= label_tag :items, :class => "checkbox inline" do %>
     <%= check_box_tag :items, :style => "float:left"%> 
       <span style="float:left"><%= facet_display_value(facet_field, item) %></span>
-      <span style="float:right"><%= number_with_delimiter(item.hits) %></span>
+      <span style="float:right"><%= render_facet_count(item.hits) %></span>
   <%end%>
   </li>
   </a>
