@@ -31,9 +31,11 @@ module Bulkrax
       pending_relationships.each(&:destroy)
 
       # OVERRIDE: trigger job to inherit metadata after relationships are created
-      child_records[:works]&.each do |work|
-        ::InheritMetadataJob.perform_later(work_id: work.id)
-      end
+      # Mar 23: Turning off inheritance. If we decide to permanently remove inheritance this
+      # job will not need to be overwritten.
+      #child_records[:works]&.each do |work|
+      #  ::InheritMetadataJob.perform_later(work_id: work.id)
+      #end
     rescue ::StandardError => e
       parent_entry ? parent_entry.status_info(e) : child_entry.status_info(e)
       Bulkrax::ImporterRun.find(importer_run_id).increment!(:failed_relationships) # rubocop:disable Rails/SkipsModelValidations
