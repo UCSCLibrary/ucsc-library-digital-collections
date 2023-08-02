@@ -2,6 +2,7 @@
 # 
 class FileSetIndexer < Hyrax::FileSetIndexer
   include AncestorCollectionBehavior
+  include WorkTypeIndexerBehavior
   def generate_solr_document
     super.tap do |solr_doc|
       # Indexing the original file may no longer be necessary
@@ -28,6 +29,9 @@ class FileSetIndexer < Hyrax::FileSetIndexer
       else
         solr_doc["visibility_ssi"] = "restricted"
       end
+
+      # index booleans for the type of fileset, which helps determine the work type
+      solr_doc = index_fileset_type(solr_doc)
     end
   end
 end

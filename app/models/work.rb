@@ -76,7 +76,7 @@ class Work < ActiveFedora::Base
       end
     end
     
-    inherit_metadata
+    #inherit_metadata
     rv = super *args
     cache_manifest
     return rv
@@ -120,40 +120,40 @@ class Work < ActiveFedora::Base
 
   private
 
-  def inherit_metadata
-    # Inheriting here is the default, so skip it only if another valid option is explicitly specified
-    return if ["index","display","none","false","no","off"].any?{|valid_option| Array(metadataInheritance).first.to_s.downcase.include?(valid_option)}
-    schema = ScoobySnacks::METADATA_SCHEMA
-    member_of.each do |parent_doc|
-      parent = ActiveFedora::Base.find(parent_doc.id)
-      schema.inheritable_fields.each do |field| 
-        next unless parent.respond_to?(field.name)
-        if (self.send(field.name).present? && schema.add_parent_value_display_field_names.include?(field.name))
-          self.send("#{field.name}=",parent.send(field.name) + self.send(field.name))
-        elsif self.send(field.name).present?
-          next
-        else 
-          inherit_field(field,parent)
-        end
-      end
-    end
-    member_of_collections.each do |parent_doc|
-      parent = ActiveFedora::Base.find(parent_doc.id)
-      schema.collection_inheritable_fields.each do |field| 
-        next unless parent.respond_to?(field.name)
-        if (self.send(field.name).present? && schema.add_parent_value_display_field_names.include?(field.name))
-          self.send("#{field.name}=",parent.send(field.name) + self.send(field.name))
-        elsif self.send(field.name).present?
-          next
-        else 
-          inherit_field(field,parent)
-        end
-      end
-    end
-  end
+  # def inherit_metadata
+  #   # Inheriting here is the default, so skip it only if another valid option is explicitly specified
+  #   return if ["index","display","none","false","no","off"].any?{|valid_option| Array(metadataInheritance).first.to_s.downcase.include?(valid_option)}
+  #   schema = ScoobySnacks::METADATA_SCHEMA
+  #   member_of.each do |parent_doc|
+  #     parent = ActiveFedora::Base.find(parent_doc.id)
+  #     schema.inheritable_fields.each do |field| 
+  #       next unless parent.respond_to?(field.name)
+  #       if (self.send(field.name).present? && schema.add_parent_value_display_field_names.include?(field.name))
+  #         self.send("#{field.name}=",parent.send(field.name) + self.send(field.name))
+  #       elsif self.send(field.name).present?
+  #         next
+  #       else 
+  #         inherit_field(field,parent)
+  #       end
+  #     end
+  #   end
+  #   member_of_collections.each do |parent_doc|
+  #     parent = ActiveFedora::Base.find(parent_doc.id)
+  #     schema.collection_inheritable_fields.each do |field| 
+  #       next unless parent.respond_to?(field.name)
+  #       if (self.send(field.name).present? && schema.add_parent_value_display_field_names.include?(field.name))
+  #         self.send("#{field.name}=",parent.send(field.name) + self.send(field.name))
+  #       elsif self.send(field.name).present?
+  #         next
+  #       else 
+  #         inherit_field(field,parent)
+  #       end
+  #     end
+  #   end
+  # end
 
-  def inherit_field(field, parent) 
-    self.send("#{field.name}=",parent.send(field.name))
-  end
+  # def inherit_field(field, parent) 
+  #   self.send("#{field.name}=",parent.send(field.name))
+  # end
 
 end

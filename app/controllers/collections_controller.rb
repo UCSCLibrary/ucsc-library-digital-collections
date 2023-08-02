@@ -12,6 +12,12 @@ class CollectionsController < Hyrax::CollectionsController
   # Restore defaults for collection landing page, remove 'collection' facet
   before_action only: :show do
     self.class.copy_blacklight_config_from(::CatalogController)
+    # Sort the works by title only for Aerials photographs collection and Cabrillo Music festival
+    if (@collection.title.first == "UC Santa Cruz Aerial Photographs Collection" || @collection.title.first == "Cabrillo Music Festival of Contemporary Music Recordings Collection") && params[:q].blank? && params[:cq].blank? && params[:f].blank?
+      sort_fields = self.blacklight_config.sort_fields["score desc, system_create_dtsi desc"]
+      sort_fields["sort"] = "title_ssi asc"
+    end
+    
     # hide collection facet when searching within one collection
     self.blacklight_config.facet_fields.delete('ancestor_collection_titles_ssim')
   end

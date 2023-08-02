@@ -17,6 +17,9 @@ class WorkIndexer < Hyrax::WorkIndexer
   include AncestorCollectionBehavior
   include SortableFieldIndexerBehavior
 
+  # Index the type of work, ie image vs audio, so it can be presented correctly
+  include WorkTypeIndexerBehavior
+
   include Ucsc
 
   # This is the main method to generate a solr document from a fedora object.
@@ -30,6 +33,9 @@ class WorkIndexer < Hyrax::WorkIndexer
       # work show pages, iiif manifests, etc
       solr_doc['file_set_ids_ssim'] = object.file_set_ids
       solr_doc['member_ids_ssim'] = object.ordered_member_ids
+
+      # index booleans for the type of work, which helps determine details for the presentation
+      solr_doc = index_work_type(solr_doc)
 
       # This block collects the representative images of all
       # child image filesets and child image works and indexes them under 'hasRelatedImage_ssim'
