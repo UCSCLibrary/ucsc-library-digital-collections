@@ -7,9 +7,14 @@ module SortableFieldIndexerBehavior
         next unless (date_string = Array(solr_doc[field.solr_name]).first)
         next if date_string.blank?
 
-        if date_string.to_s.match?(/\A[12][0-9]{3}[-\/][0-9]{1,2}\z/)
+        # Match YYYY-YYYY and use the first year (ex: 1970-1971 becomes 1970)
+        if date_string.to_s.match?(/\A[0-9]{4}[-\/][0-9]{4}\z/)
+          date = Date.new(date_string.split(/[-\/]/).first.to_i)
+        # Match YYYY-MM or YYYY-M where YYYY starts with 1 or 2 (ex: 2023-01)
+        elsif date_string.to_s.match?(/\A[12][0-9]{3}[-\/][0-9]{1,2}\z/)
           year, month = date_string.split(/[-\/]/).map(&:to_i)
           date = Date.new(year,month)
+        # Match YYYY that starts with 1 or 2 (ex: 1960)
         elsif date_string.to_s.match?(/\A[12][0-9]{3}\z/)
           date = Date.new(date_string.to_i)
         else

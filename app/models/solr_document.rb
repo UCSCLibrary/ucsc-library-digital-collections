@@ -141,17 +141,26 @@ class SolrDocument
     return false unless ["audio","video","image"].include? type.to_s
   end
 
+  # After a reindex is complete, the default should be changed from audio_legacy? to false
   def audio?
-    #todo index this
+    fetch('audio?_bsi', audio_legacy?)
+  end
+
+  # This method can be removed after the next re-index is completed
+  def audio_legacy?
     return true if FileSet.audio_mime_types.include? mime_type
     return true if resourceType.any?{|restype| ["audio","sound"].include? restype.to_s.downcase}
     return true if file_set_ids.any?{|id| SolrDocument.find(id).audio?}  
     member_work_ids.present? && member_work_ids.all?{|id| SolrDocument.find(id).audio?}
   end
- 
+
+  # After a reindex is complete, the default should be changed from image_legacy? to false
   def image?
-    #todo index this
-    return true if super
+    fetch('image?_bsi', image_legacy?)
+  end
+
+  # This method can be removed after the next re-index is completed
+  def image_legacy?
     return true if FileSet.image_mime_types.include? mime_type
     return true if resourceType.any?{|restype| ["photograph","image","picture","photo"].include? restype.to_s.downcase}
     return true if file_set_ids.any?{|id| SolrDocument.find(id).image?}  
