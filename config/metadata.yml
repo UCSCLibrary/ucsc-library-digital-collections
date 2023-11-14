@@ -161,7 +161,7 @@ fields:
   
   resourceType:
     definition: 'General nature or type of the resource (e.g., image, text, etc.). Does not capture aboutness. '
-    label: Type
+    label: Resource Type
     searchable: true
     predicate: DC:type
     display_groups: 
@@ -210,7 +210,7 @@ fields:
 
   series:
     definition: A related resource in which the described resource is physically or logically included.
-    label: Series Title
+    label: Series
     predicate: opaque:seriesName
     display_groups: 
       - primary
@@ -242,7 +242,7 @@ fields:
   
   subjectName:
     definition: A name of the person that the resource is about.
-    label: Subject (People)
+    label: People
     predicate: FOAF:name
     vocabularies:
       - authority: loc
@@ -265,7 +265,7 @@ fields:
   
   subjectPlace:
     definition: Spatial characteristics of the resource.
-    label: Subject (Place)
+    label: Place
     predicate: DC:spatial
     vocabularies: 
       - authority: geonames
@@ -315,7 +315,7 @@ fields:
         subauthority: subjects
       - authority: local
         subauthority: agents
-    facet: true
+    facet: false
     searchable: true
     full_text_searchable: true
     index_itemprop: about
@@ -330,7 +330,7 @@ fields:
   
   subjectTopic:
     definition: The topic of the resource.
-    label: Subject (Topic)
+    label: Topic
     predicate: DC:subject
     vocabularies: 
       - authority: loc

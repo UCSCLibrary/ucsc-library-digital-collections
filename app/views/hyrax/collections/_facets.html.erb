@@ -14,7 +14,9 @@
         <%= render 'search_form_az' %>
       <% end %>
       <% if has_facet_values?  %>
-        <%= render_facet_partials %>
+        <div class="facet-panel-group">
+          <%= render_facet_partials %>
+        </div>
       <% end %>
     </div>
   </div>
