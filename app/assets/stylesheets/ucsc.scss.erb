@@ -1168,10 +1168,6 @@ all and (min-width: 992px) and (-webkit-transform-3d) {
     }
 }
 
-
-
-
-
 /* Results Sort and Per Page */
 .hyc-bl-sort,
 #sortAndPerPage {
@@ -1242,6 +1238,10 @@ all and (min-width: 992px) and (-webkit-transform-3d) {
     }
     #facet-panel-collapse {
         padding-right: 0;
+        .facet-panel-group {
+            display: flex;
+            flex-direction: column;
+        }
         .panel-default > .panel-heading {
             background-color: #fff;
             color: #757575;
@@ -1253,6 +1253,13 @@ all and (min-width: 992px) and (-webkit-transform-3d) {
             border-radius: 0;
             margin-top: 20px;
         }
+        .panel.blacklight-series_sim { order: 1; }
+        .panel.blacklight-subjectplace_sim { order: 2; }
+        .panel.blacklight-subjecttopic_sim { order: 3; }
+        .panel.blacklight-subjectname_sim { order: 4; }
+        .panel.blacklight-creator_sim { order: 5; }
+        .panel.blacklight-resourcetype_sim { order: 6; }
+        .panel.blacklight-ancestor_collection_titles_ssim { order: 7; }
         /* Swap the glyphicons per style guide */
         .panel-heading.collapse-toggle .panel-title::after {
             content: "\e113";
