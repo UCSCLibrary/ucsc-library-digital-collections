@@ -297,7 +297,6 @@ fields:
         subauthority: aat
       - authority: local
         subauthority: time_periods
-    facet: true
     searchable: true
     full_text_searchable: true
     input: textbox_autosuggest
@@ -315,7 +314,6 @@ fields:
         subauthority: subjects
       - authority: local
         subauthority: agents
-    facet: false
     searchable: true
     full_text_searchable: true
     index_itemprop: about
@@ -511,7 +509,6 @@ fields:
     display_groups:
       - secondary
       - search_result
-    facet: true
     searchable: true
     full_text_searchable: true
   
