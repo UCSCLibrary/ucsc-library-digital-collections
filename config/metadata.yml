@@ -161,7 +161,7 @@ fields:
   
   resourceType:
     definition: 'General nature or type of the resource (e.g., image, text, etc.). Does not capture aboutness. '
-    label: Resource Type
+    label: Type
     searchable: true
     predicate: DC:type
     display_groups: 
@@ -185,7 +185,7 @@ fields:
     
   rightsHolder:
     definition: A person or organization owning or managing rights over the resource.
-    label: Copyright Holder
+    label: Rights Holder
     predicate: DC:rightsHolder
     data_type: string
     display_groups:
@@ -307,7 +307,7 @@ fields:
 
   subjectTitle:
     definition: The title of a work that is the subject of this work.
-    label: Subject (Title)
+    label: Subject Title
     predicate: MODS:subjectTitle
     vocabularies: 
       - authority: loc
@@ -349,7 +349,7 @@ fields:
       - add_parent_value
     inheritable: false
     collection_inheritable: false
-  
+  # label retained as "Date Created" since this property is not displayed on the UI
   dateCreated:
     definition: Date of creation of the original resource.
     encoding: W3CDTF
@@ -485,7 +485,7 @@ fields:
   
   physicalFormat:
     definition: The form, and/or physical characteristics of the resource being described. The material or physical carrier of the resource. Does not capture aboutness.
-    label: "Source Format"
+    label: "Physical Format"
     predicate: DC:medium
     vocabularies: 
       - authority: getty
@@ -529,7 +529,7 @@ fields:
   
   rightsStatus:
     definition: Information about rights held in and over the resource expressed in general terms (i.e. boilerplate statements).
-    label: Rights License
+    label: Rights Statement
     predicate: DC:license
     inheritable: false
     collection_inheritable: false
@@ -653,7 +653,7 @@ fields:
 
   boxFolder:
     definition: "A call number, shelf mark or similar label of an item. Format \"Box X, Folder Y\"."
-    label: "Call Number (Box/Folder)"
+    label: "Box/Folder"
     usage note: "Format: \"Box X, Folder Y\"."
     predicate:  purlOnt:holding#label
     inheritable: false    
