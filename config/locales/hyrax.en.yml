@@ -56,7 +56,7 @@ en:
       show:
         works_in_collection: results
         description_heading: "Collection Contents"
-        harmful_language_statement_heading: "Harmful Language Statement"
+        harmful_language_statement_heading: "Notice of Harmful Language"
       labels:
         title: 'Title'
         description: 'Abstract or Summary'
@@ -73,12 +73,12 @@ en:
         subjectName: "Subject (Person)"
         subjectPlace: "Subject (Place)"
         subjectTopic: "Subject (Topic)"
-        subjectTitle: "Subject (Title)"
+        subjectTitle: "Subject Title"
         dateCreated: "Date Created"
         dateCreatedDisplay: "Date Created for Public Display"
         dateOfSituationDisplay: 'Date of Situation for Public Display'
-        resourceType: "Resource Type"
-        harmfulLanguageStatement: "Harmful Language Statement"
+        resourceType: "Type"
+        harmfulLanguageStatement: "Notice of Harmful Language"
       hints:
         title: "A name to aid in identifying a collection."
         description: 'Free-text notes about the collection. Examples include abstracts of a paper or citation information for a journal article.'
