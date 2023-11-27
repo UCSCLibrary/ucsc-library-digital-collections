@@ -43,6 +43,7 @@ en:
           subject_tesim: Subject
           title_tesim: Title
           admin_set: In Administrative Set
+          contributor: Contributor
       sort:
           label_html: 'Sort<span class="d-none d-sm-inline"> by %{field}</span>'
   hyrax:
