@@ -51,13 +51,11 @@ fields:
   accessionNumber:
     definition: "An archival accession number for the resource."
     label: "Accession Number"
-    inheritable: false
-    collection_inheritable: false
     searchable: true
     linked_to_search: false
     data_type: string
-    display_groups: 
-      - admin_only
+    display_groups:
+      - secondary
       - editor_primary
     predicate: "DC:identifier"
 
